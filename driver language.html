@@ -1,0 +1,1675 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Language</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.languageIcon{
+width:90px;
+height:90px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.8;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+
+.languageOption{
+display:flex;
+align-items:center;
+gap:15px;
+padding:20px 15px;
+background:#292929;
+border:2px solid #555;
+border-radius:12px;
+margin:15px 0;
+cursor:pointer;
+}
+
+.languageOption.selected{
+border-color:#FFD600;
+background:#332E10;
+}
+
+.languageOption input{
+width:23px;
+height:23px;
+accent-color:#FFD600;
+flex-shrink:0;
+}
+
+.languageName{
+font-size:22px;
+font-weight:bold;
+line-height:1.6;
+}
+
+.languageDescription{
+font-size:13px;
+color:#CCC;
+margin-top:4px;
+}
+
+.action{
+display:block;
+width:100%;
+padding:16px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.9;
+}
+
+.success{
+background:#163322;
+border:1px solid #4ADE80;
+border-radius:10px;
+padding:15px;
+color:#4ADE80;
+line-height:1.8;
+margin:15px 0;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+margin:15px 0;
+}
+
+.yellow{
+color:#FFD600;
+}
+
+.green{
+color:#4ADE80;
+}
+
+#status,
+#saveStatus{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+}
+
+button:disabled,
+input:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<div class="languageIcon">
+
+<svg width="52" height="52"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<circle cx="12" cy="12" r="10"/>
+<path d="M2 12h20"/>
+<ellipse cx="12" cy="12" rx="4" ry="10"/>
+<path d="M4 6h16"/>
+<path d="M4 18h16"/>
+
+</svg>
+
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="accountDetails"></h3>
+
+<div class="row">
+
+<span data-t="driverName"></span>
+
+<strong id="driverName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>Driver ID</span>
+
+<strong id="driverId"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="accountStatus"></span>
+
+<strong class="green"
+data-t="approved"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="currentLanguage"></span>
+
+<strong id="currentLanguage"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="accountLanguage"></span>
+
+<strong id="accountLanguage">—</strong>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="selectLanguage"></h3>
+
+<p class="note"
+data-t="languageDescription"></p>
+
+<form id="languageForm">
+
+<label class="languageOption"
+data-language="si">
+
+<input
+type="radio"
+name="language"
+value="si"
+required>
+
+<div>
+
+<div class="languageName">
+සිංහල
+</div>
+
+<div class="languageDescription">
+Sinhala
+</div>
+
+</div>
+
+</label>
+
+<label class="languageOption"
+data-language="en">
+
+<input
+type="radio"
+name="language"
+value="en"
+required>
+
+<div>
+
+<div class="languageName">
+English
+</div>
+
+<div class="languageDescription">
+ඉංග්‍රීසි / ஆங்கிலம்
+</div>
+
+</div>
+
+</label>
+
+<label class="languageOption"
+data-language="ta">
+
+<input
+type="radio"
+name="language"
+value="ta"
+required>
+
+<div>
+
+<div class="languageName">
+தமிழ்
+</div>
+
+<div class="languageDescription">
+Tamil
+</div>
+
+</div>
+
+</label>
+
+<button
+id="saveButton"
+type="submit"
+class="action"
+data-t="saveLanguage"
+disabled></button>
+
+</form>
+
+<p id="saveStatus"
+role="status"
+aria-live="polite"></p>
+
+<div id="successPanel"
+class="success" hidden>
+
+<span data-t="saved"></span>
+
+</div>
+
+<div id="warningPanel"
+class="warning" hidden>
+
+<span data-t="localSaveFailed"></span>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="affectedServices"></h3>
+
+<p data-t="service1"></p>
+
+<p data-t="service2"></p>
+
+<p data-t="service3"></p>
+
+<p data-t="service4"></p>
+
+<p data-t="service5"></p>
+
+<p data-t="service6"></p>
+
+<p data-t="service7"></p>
+
+<p data-t="service8"></p>
+
+<p class="note"
+data-t="translationNote"></p>
+
+</section>
+
+<button id="dashboardButton"
+class="action"
+data-t="dashboard"></button>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const LANGUAGE_KEY="myride_language";
+
+const LANGUAGES=["si","en","ta"];
+
+const LANGUAGE_NAMES={
+
+si:"සිංහල",
+
+en:"English",
+
+ta:"தமிழ்"
+
+};
+
+const translations={
+
+si:{
+
+heading:"රියදුරු භාෂා සැකසුම්",
+accountDetails:"මගේ රියදුරු ගිණුම",
+driverName:"රියදුරුගේ නම",
+accountStatus:"ගිණුමේ තත්ත්වය",
+approved:"අනුමත රියදුරෙකි",
+currentLanguage:"දැනට භාවිතා කරන භාෂාව",
+accountLanguage:"ගිණුමේ සුරැකි භාෂාව",
+selectLanguage:"ඔබගේ භාෂාව තෝරන්න",
+languageDescription:"ඔබට පහසු භාෂාව තෝරා සුරකින්න.",
+saveLanguage:"භාෂාව වෙනස් කර සුරකින්න",
+saved:"ඔබගේ භාෂා සැකසුම සාර්ථකව සුරැකී ඇත.",
+affectedServices:"භාෂා සැකසුම අදාළ වන සේවා",
+service1:"✓ Driver Dashboard සහ මෙනු",
+service2:"✓ අලුත් හයර් සහ Booking විස්තර",
+service3:"✓ සක්‍රිය හයර් සහ Trip Meter",
+service4:"✓ ආදායම් සහ කොමිස් වාර්තා",
+service5:"✓ ගෙවීම් සහ පැමිණිලි",
+service6:"✓ රියදුරු නීති සහ කොන්දේසි",
+service7:"✓ පද්ධති දැනුම්දීම්",
+service8:"✓ රියදුරු සහාය සහ SOS",
+translationNote:"පරිවර්තනය කර ඇති පද්ධති අන්තර්ගතය තෝරාගත් භාෂාවෙන් පෙන්වයි. වෙනත් පුද්ගලයන් ඇතුළත් කළ නම් සහ පණිවිඩ ස්වයංක්‍රීයව පරිවර්තනය නොවේ.",
+dashboard:"Driver Dashboard වෙත යන්න",
+back:"← ආපසු",
+login:"Driver Login",
+checking:"රියදුරු ගිණුම පරීක්ෂා කරමින්...",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+error:"පද්ධතිය සම්බන්ධ කරගත නොහැක.",
+saving:"භාෂා සැකසුම සුරකිමින්...",
+saveFailed:"භාෂා සැකසුම සුරැකුණු බව තහවුරු කළ නොහැක. නැවත උත්සාහ කරන්න.",
+localSaveFailed:"ගිණුමේ භාෂාව සුරැකී ඇත. නමුත් Browser එකේ භාෂාව සුරැකීමට නොහැකි විය.",
+invalidLanguage:"වලංගු භාෂාවක් තෝරන්න.",
+notSaved:"තවම සුරැකී නැත",
+unsaved:"භාෂා වෙනස්කම් සුරැකී නැත. පිටුවෙන් ඉවත් වන්නද?"
+
+},
+
+en:{
+
+heading:"Driver Language Settings",
+accountDetails:"My Driver Account",
+driverName:"Driver Name",
+accountStatus:"Account Status",
+approved:"Approved Driver",
+currentLanguage:"Current Display Language",
+accountLanguage:"Saved Account Language",
+selectLanguage:"Select Your Language",
+languageDescription:"Choose your preferred language and save it.",
+saveLanguage:"Change and Save Language",
+saved:"Your language preference has been successfully saved.",
+affectedServices:"Services Using Your Language Preference",
+service1:"✓ Driver Dashboard and Menus",
+service2:"✓ New Hires and Booking Details",
+service3:"✓ Active Ride and Trip Meter",
+service4:"✓ Income and Commission Reports",
+service5:"✓ Payments and Complaints",
+service6:"✓ Driver Terms and Conditions",
+service7:"✓ System Notifications",
+service8:"✓ Driver Help and SOS",
+translationNote:"Translated system content uses your selected language. Names and messages entered by other people are not automatically translated.",
+dashboard:"Go to Driver Dashboard",
+back:"← Back",
+login:"Driver Login",
+checking:"Verifying driver account...",
+denied:"Access to this page is not authorized.",
+offline:"No internet connection.",
+error:"Unable to connect to the system.",
+saving:"Saving language preference...",
+saveFailed:"Unable to confirm that your language was saved. Please retry.",
+localSaveFailed:"Your account language was saved, but the browser could not store the preference locally.",
+invalidLanguage:"Select a valid language.",
+notSaved:"Not Saved Yet",
+unsaved:"Language changes have not been saved. Leave this page?"
+
+},
+
+ta:{
+
+heading:"சாரதி மொழி அமைப்புகள்",
+accountDetails:"எனது சாரதி கணக்கு",
+driverName:"சாரதியின் பெயர்",
+accountStatus:"கணக்கு நிலை",
+approved:"அங்கீகரிக்கப்பட்ட சாரதி",
+currentLanguage:"தற்போதைய காட்சி மொழி",
+accountLanguage:"கணக்கில் சேமித்த மொழி",
+selectLanguage:"உங்கள் மொழியை தேர்ந்தெடுக்கவும்",
+languageDescription:"உங்களுக்கு விருப்பமான மொழியை தேர்ந்தெடுத்து சேமிக்கவும்.",
+saveLanguage:"மொழியை மாற்றி சேமிக்கவும்",
+saved:"உங்கள் மொழி அமைப்பு வெற்றிகரமாக சேமிக்கப்பட்டது.",
+affectedServices:"மொழி அமைப்பு பயன்படுத்தப்படும் சேவைகள்",
+service1:"✓ சாரதி முதன்மைப் பக்கம் மற்றும் மெனுக்கள்",
+service2:"✓ புதிய பயணங்கள் மற்றும் முன்பதிவு விவரங்கள்",
+service3:"✓ செயலில் உள்ள பயணம் மற்றும் பயண மீட்டர்",
+service4:"✓ வருமானம் மற்றும் கமிஷன் அறிக்கைகள்",
+service5:"✓ கொடுப்பனவுகள் மற்றும் புகார்கள்",
+service6:"✓ சாரதி விதிமுறைகள் மற்றும் நிபந்தனைகள்",
+service7:"✓ கணினி அறிவிப்புகள்",
+service8:"✓ சாரதி உதவி மற்றும் SOS",
+translationNote:"மொழிபெயர்க்கப்பட்ட கணினி உள்ளடக்கம் தேர்ந்தெடுத்த மொழியில் காட்டப்படும். மற்றவர்கள் உள்ளிட்ட பெயர்கள் மற்றும் செய்திகள் தானாக மொழிபெயர்க்கப்படாது.",
+dashboard:"சாரதி முதன்மைப் பக்கத்திற்கு செல்லவும்",
+back:"← திரும்பவும்",
+login:"சாரதி உள்நுழைவு",
+checking:"சாரதி கணக்கு சரிபார்க்கப்படுகிறது...",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+error:"அமைப்புடன் இணைக்க முடியவில்லை.",
+saving:"மொழி அமைப்பு சேமிக்கப்படுகிறது...",
+saveFailed:"மொழி சேமிக்கப்பட்டதை உறுதிப்படுத்த முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+localSaveFailed:"கணக்கின் மொழி சேமிக்கப்பட்டது. ஆனால் உலாவியில் சேமிக்க முடியவில்லை.",
+invalidLanguage:"சரியான மொழியை தேர்ந்தெடுக்கவும்.",
+notSaved:"இன்னும் சேமிக்கப்படவில்லை",
+unsaved:"மொழி மாற்றங்கள் சேமிக்கப்படவில்லை. வெளியேற விரும்புகிறீர்களா?"
+
+}
+
+};
+
+// INITIAL LANGUAGE
+
+const params=new URLSearchParams(location.search);
+
+let storedLanguage="si";
+
+try{
+
+storedLanguage=
+
+localStorage.getItem(LANGUAGE_KEY)||"si";
+
+}catch(e){}
+
+let lang=
+
+LANGUAGES.includes(params.get("lang"))
+
+?params.get("lang")
+
+:LANGUAGES.includes(storedLanguage)
+
+?storedLanguage:"si";
+
+let selectedLanguage=lang;
+
+let accountLanguage=null;
+
+let selectionChanged=false;
+
+function t(key){
+
+return translations[lang][key]||key;
+
+}
+
+function applyLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+document.title="MY RIDE - "+t("heading");
+
+$("currentLanguage").textContent=
+
+LANGUAGE_NAMES[lang];
+
+$("accountLanguage").textContent=
+
+LANGUAGES.includes(accountLanguage)
+
+?LANGUAGE_NAMES[accountLanguage]
+
+:t("notSaved");
+
+$("loginLink").href=
+
+"./driver-login.html?lang="+lang;
+
+$("backButton").href=
+
+"./driver-dashboard.html?lang="+lang;
+
+}
+
+function updateSelection(){
+
+document.querySelectorAll(
+
+'input[name="language"]'
+
+).forEach(input=>{
+
+input.checked=
+
+input.value===selectedLanguage;
+
+});
+
+document.querySelectorAll(
+
+".languageOption"
+
+).forEach(option=>{
+
+option.classList.toggle(
+
+"selected",
+
+option.dataset.language===selectedLanguage
+
+);
+
+});
+
+}
+
+applyLanguage();
+
+updateSelection();
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+
+let db=null;
+
+let functions=null;
+
+let uid=null;
+
+let driver=null;
+
+let authorized=false;
+
+let saving=false;
+
+let checkingSession=false;
+
+let generation=0;
+
+let driverUnsubscribe=null;
+
+let gpsWatch=null;
+
+let gpsSending=false;
+
+let lastGpsSent=0;
+
+let pendingRequest=null;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t("error"));
+
+}
+
+// SESSION SECURITY
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(
+
+driver.availability
+
+)
+
+||!Number.isFinite(c.latitude)
+
+||!Number.isFinite(c.longitude)
+
+||!Number.isFinite(c.accuracy)
+
+||c.accuracy<0
+
+||c.accuracy>100
+
+||c.latitude<5.85
+
+||c.latitude>9.9
+
+||c.longitude<79.5
+
+||c.longitude>82
+
+||Date.now()-position.timestamp>30000
+
+||position.timestamp>Date.now()+5000
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:c.latitude,
+
+lon:c.longitude,
+
+accuracy:c.accuracy,
+
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+}catch(e){
+
+// Backend must expire stale GPS data.
+
+}finally{
+
+gpsSending=false;
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// FORM CONTROLS
+
+function updateControls(){
+
+const enabled=
+
+validSession()
+
+&&driver!==null
+
+&&!saving;
+
+document.querySelectorAll(
+
+'input[name="language"]'
+
+).forEach(input=>{
+
+input.disabled=!enabled;
+
+});
+
+$("saveButton").disabled=
+
+!enabled
+
+||!LANGUAGES.includes(selectedLanguage)
+
+||(
+
+selectedLanguage===lang
+
+&&selectedLanguage===accountLanguage
+
+);
+
+$("dashboardButton").disabled=saving;
+
+}
+
+// LANGUAGE SELECTION
+
+document.querySelectorAll(
+
+'input[name="language"]'
+
+).forEach(input=>{
+
+input.addEventListener("change",()=>{
+
+if(!validSession()
+
+||!driver
+
+||saving
+
+||!LANGUAGES.includes(input.value)){
+
+updateSelection();
+
+return;
+
+}
+
+selectedLanguage=input.value;
+
+selectionChanged=
+
+selectedLanguage!==lang
+
+||selectedLanguage!==accountLanguage;
+
+$("successPanel").hidden=true;
+
+$("warningPanel").hidden=true;
+
+$("saveStatus").textContent="";
+
+updateSelection();
+
+updateControls();
+
+});
+
+});
+
+// SAVE LANGUAGE TO FIREBASE
+
+$("languageForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(!validSession()
+
+||!driver
+
+||saving)return;
+
+if(!LANGUAGES.includes(selectedLanguage)){
+
+$("saveStatus").textContent=
+
+t("invalidLanguage");
+
+return;
+
+}
+
+const requestedLanguage=selectedLanguage;
+
+const currentGeneration=generation;
+
+if(!pendingRequest
+
+||pendingRequest.language!==requestedLanguage){
+
+pendingRequest={
+
+language:requestedLanguage,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+saving=true;
+
+$("successPanel").hidden=true;
+
+$("warningPanel").hidden=true;
+
+$("saveStatus").textContent=t("saving");
+
+updateControls();
+
+try{
+
+const result=await serverCall(
+
+"updateDriverLanguage",
+
+{
+
+language:requestedLanguage,
+
+requestId:pendingRequest.requestId
+
+}
+
+);
+
+if(currentGeneration!==generation
+
+||!driver)return;
+
+if(result?.saved!==true
+
+||result.driverUid!==uid
+
+||result.language!==requestedLanguage){
+
+throw new Error("Language not confirmed");
+
+}
+
+accountLanguage=requestedLanguage;
+
+lang=requestedLanguage;
+
+selectedLanguage=requestedLanguage;
+
+selectionChanged=false;
+
+pendingRequest=null;
+
+let localSaved=false;
+
+try{
+
+localStorage.setItem(
+
+LANGUAGE_KEY,
+
+lang
+
+);
+
+localSaved=
+
+localStorage.getItem(LANGUAGE_KEY)===lang;
+
+}catch(e){
+
+localSaved=false;
+
+}
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+try{
+
+history.replaceState(
+
+null,
+
+"",
+
+url.toString()
+
+);
+
+}catch(e){}
+
+applyLanguage();
+
+updateSelection();
+
+$("saveStatus").textContent="";
+
+$("successPanel").hidden=false;
+
+$("warningPanel").hidden=localSaved;
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("saveStatus").textContent=
+
+t("saveFailed");
+
+}finally{
+
+if(currentGeneration===generation){
+
+saving=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// RETURN TO DASHBOARD
+
+function canLeave(){
+
+if(saving)return false;
+
+if(selectionChanged){
+
+return confirm(t("unsaved"));
+
+}
+
+return true;
+
+}
+
+$("dashboardButton").onclick=()=>{
+
+if(!validSession()||!driver)return;
+
+if(!canLeave())return;
+
+location.assign(
+
+"./driver-dashboard.html?lang="+lang
+
+);
+
+};
+
+$("backButton").addEventListener(
+
+"click",
+
+event=>{
+
+if(!canLeave()){
+
+event.preventDefault();
+
+}
+
+}
+
+);
+
+// CLEAR PRIVATE INFORMATION
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+saving=false;
+
+accountLanguage=null;
+
+pendingRequest=null;
+
+selectionChanged=false;
+
+selectedLanguage=lang;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+stopGps();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("accountLanguage").textContent="—";
+
+$("saveStatus").textContent="";
+
+$("successPanel").hidden=true;
+
+$("warningPanel").hidden=true;
+
+$("content").hidden=true;
+
+updateSelection();
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t("denied"));
+
+}
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps();
+
+$("content").hidden=true;
+
+status(t("checking"));
+
+updateControls();
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true
+
+||typeof data.fullName!=="string"
+
+||!data.fullName.trim()
+
+||!validId(data.driverId)){
+
+denyAccess();
+
+return;
+
+}
+
+const firstLoad=driver===null;
+
+driver=data;
+
+$("driverName").textContent=
+
+data.fullName;
+
+$("driverId").textContent=
+
+data.driverId;
+
+if(LANGUAGES.includes(data.language)){
+
+accountLanguage=data.language;
+
+}else{
+
+accountLanguage=null;
+
+}
+
+if(firstLoad
+
+&&!selectionChanged
+
+&&!saving){
+
+selectedLanguage=
+
+accountLanguage||lang;
+
+}
+
+$("accountLanguage").textContent=
+
+accountLanguage
+
+?LANGUAGE_NAMES[accountLanguage]
+
+:t("notSaved");
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(
+
+data.availability
+
+)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+updateSelection();
+
+updateControls();
+
+status("");
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t("offline"));
+
+return;
+
+}
+
+status(t("checking"));
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+
+||!driver
+
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyDriverSession"
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+
+||result.uid!==uid
+
+||result.status!=="approved"
+
+||result.activationComplete!==true
+
+||result.documentsValid!==true){
+
+denyAccess();
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+checkingSession=false;
+
+}
+
+},60000);
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t("offline"));
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
