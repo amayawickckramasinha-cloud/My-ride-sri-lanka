@@ -1,0 +1,1504 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+
+<title>MY RIDE - My Payments</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:550px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:36px;
+margin-bottom:5px;
+}
+
+.country{
+text-align:center;
+color:#FFD600;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.6;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:18px;
+margin:20px 0;
+}
+
+.amount{
+background:#202020;
+border:1px solid #FFD600;
+border-radius:15px;
+padding:25px 12px;
+text-align:center;
+margin:20px 0;
+}
+
+#fare{
+color:#FFD600;
+font-size:36px;
+font-weight:bold;
+margin-top:15px;
+overflow-wrap:anywhere;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+}
+
+.row strong{
+color:#FFD600;
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+label{
+display:block;
+margin:15px 0 8px;
+font-weight:bold;
+line-height:1.6;
+}
+
+input,select{
+width:100%;
+padding:15px;
+background:#252525;
+color:white;
+border:1px solid #666;
+border-radius:9px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:16px;
+margin:12px 0;
+border:0;
+border-radius:10px;
+background:#FFD600;
+color:#111;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+#status{
+text-align:center;
+color:#FFD600;
+line-height:1.8;
+}
+
+#paymentStatus{
+font-weight:bold;
+}
+
+.note{
+color:#CCC;
+font-size:14px;
+line-height:1.8;
+}
+
+.back{
+display:block;
+text-align:center;
+color:#FFD600;
+text-decoration:none;
+padding:25px;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">SRI LANKA</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="paymentPanel" hidden>
+
+<div class="amount">
+
+<div data-t="finalFare"></div>
+
+<div id="fare">—</div>
+
+</div>
+
+<div class="panel">
+
+<div class="row">
+<span data-t="bookingId"></span>
+<strong id="bookingId"></strong>
+</div>
+
+<div class="row">
+<span data-t="paymentStatus"></span>
+<strong id="paymentStatus"></strong>
+</div>
+
+<div class="row">
+<span data-t="paidAmount"></span>
+<strong id="paidAmount"></strong>
+</div>
+
+<div class="row">
+<span data-t="balance"></span>
+<strong id="balance"></strong>
+</div>
+
+<div class="row">
+<span data-t="method"></span>
+<strong id="savedMethod"></strong>
+</div>
+
+<div class="row"
+id="savedReferenceRow" hidden>
+
+<span data-t="reference"></span>
+<strong id="savedReference"></strong>
+
+</div>
+
+</div>
+
+<form id="paymentForm" hidden>
+
+<label for="method"
+data-t="chooseMethod"></label>
+
+<select id="method" required>
+
+<option value=""
+data-t="choose"></option>
+
+<option value="cash"
+data-t="cash"></option>
+
+<option value="bank"
+data-t="bank"></option>
+
+</select>
+
+<section id="cashPanel"
+class="panel" hidden>
+
+<p class="note"
+data-t="cashNote"></p>
+
+</section>
+
+<section id="bankPanel"
+class="panel" hidden>
+
+<h2 data-t="bankDetails"></h2>
+
+<div class="row">
+<span data-t="bankName"></span>
+<strong id="bankName">—</strong>
+</div>
+
+<div class="row">
+<span data-t="branch"></span>
+<strong id="branch">—</strong>
+</div>
+
+<div class="row">
+<span data-t="accountName"></span>
+<strong id="accountName">—</strong>
+</div>
+
+<div class="row">
+<span data-t="accountNumber"></span>
+<strong id="accountNumber">—</strong>
+</div>
+
+<button type="button"
+id="copyAccount"
+data-t="copyAccount"
+disabled></button>
+
+<label for="reference"
+data-t="reference"></label>
+
+<input id="reference"
+type="text"
+maxlength="100"
+autocomplete="off">
+
+<p class="note"
+data-t="bankNote"></p>
+
+</section>
+
+<button type="submit"
+id="submitPayment"
+data-t="submit"
+disabled></button>
+
+</form>
+
+<p id="paidMessage"
+class="note"
+data-t="thanks"
+hidden></p>
+
+</section>
+
+<button id="retryButton"
+data-t="retry"
+hidden></button>
+
+<a id="backButton"
+class="back"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+
+// LANGUAGE SYSTEM
+
+const languages=["si","en","ta"];
+
+const params=
+new URLSearchParams(location.search);
+
+let savedLanguage=null;
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language");
+
+}catch(error){}
+
+const requestedLanguage=params.get("lang");
+
+const lang=
+languages.includes(requestedLanguage)
+?requestedLanguage
+:languages.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"මගේ ගෙවීම්",
+finalFare:"අවසන් ගමන් ගාස්තුව",
+bookingId:"Booking ID",
+paymentStatus:"ගෙවීම් තත්ත්වය",
+paidAmount:"තහවුරු කළ ගෙවීම්",
+balance:"ගෙවීමට ඇති මුදල",
+method:"ගෙවීමේ ක්‍රමය",
+chooseMethod:"ගෙවීමේ ක්‍රමය තෝරන්න",
+choose:"තෝරන්න",
+cash:"මුදල් ගෙවීම",
+bank:"බැංකු හුවමාරුව",
+bankDetails:"බැංකු ගිණුම් විස්තර",
+bankName:"බැංකුව",
+branch:"ශාඛාව",
+accountName:"ගිණුමේ නම",
+accountNumber:"ගිණුම් අංකය",
+copyAccount:"ගිණුම් අංකය Copy කරන්න",
+reference:"ගෙවීම් Reference Number",
+submit:"ගෙවීම් තොරතුරු යොමු කරන්න",
+cashNote:"අදාළ මුදල රියදුරාට ගෙවන්න. රියදුරා ගෙවීම තහවුරු කළ පසු තත්ත්වය යාවත්කාලීන වේ.",
+bankNote:"බැංකු හුවමාරුව සිදු කළ පසු Reference Number එක ඇතුළත් කරන්න. ගෙවීම පරීක්ෂා කර තහවුරු කළ යුතුයි.",
+unpaid:"ගෙවා නැත",
+pending:"තහවුරු කිරීම බලාපොරොත්තුවෙන්",
+paid:"ගෙවීම තහවුරු කර ඇත",
+partial:"කොටසක් ගෙවා ඇත",
+rejected:"ගෙවීම තහවුරු කර නැත",
+unknown:"තහවුරු වී නැත",
+thanks:"MY RIDE සමඟ සම්බන්ධ වූ ඔබට ස්තූතියි!",
+connecting:"පද්ධතියට සම්බන්ධ වෙමින්...",
+missing:"ගෙවීමට අදාළ Booking එකක් නොමැත.",
+notCompleted:"ගමන අවසන් වූ පසු ගෙවීම් කළ හැකියි.",
+auth:"පාරිභෝගික සැසිය අවශ්‍යයි.",
+denied:"මෙම ගෙවීම් බැලීමට අවසර නැත.",
+error:"පද්ධතියට සම්බන්ධ විය නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+bankUnavailable:"බැංකු ගිණුම් විස්තර තවම ලබාගත නොහැක.",
+referenceError:"නිවැරදි Reference Number එක ඇතුළත් කරන්න.",
+sending:"ගෙවීම් තොරතුරු යොමු කරමින්...",
+sent:"ගෙවීම් ඉල්ලීම ලැබී ඇත. තහවුරු කිරීම බලාපොරොත්තුවෙන් සිටින්න.",
+submitError:"ගෙවීම් ඉල්ලීම යොමු කළ නොහැක. තත්ත්වය පරීක්ෂා කර නැවත උත්සාහ කරන්න.",
+copied:"ගිණුම් අංකය Copy කර ඇත.",
+copyError:"ගිණුම් අංකය අතින් Copy කරන්න.",
+retry:"නැවත සම්බන්ධ වන්න",
+back:"← පාරිභෝගික සේවා"
+
+},
+
+en:{
+
+heading:"My Payments",
+finalFare:"Final Ride Fare",
+bookingId:"Booking ID",
+paymentStatus:"Payment Status",
+paidAmount:"Verified Payments",
+balance:"Outstanding Balance",
+method:"Payment Method",
+chooseMethod:"Choose Payment Method",
+choose:"Select",
+cash:"Cash Payment",
+bank:"Bank Transfer",
+bankDetails:"Bank Account Details",
+bankName:"Bank",
+branch:"Branch",
+accountName:"Account Name",
+accountNumber:"Account Number",
+copyAccount:"Copy Account Number",
+reference:"Payment Reference Number",
+submit:"Submit Payment Details",
+cashNote:"Pay the driver directly. The payment status will update after the driver confirms receipt.",
+bankNote:"Enter the reference number after completing the bank transfer. Payment must be verified.",
+unpaid:"Unpaid",
+pending:"Awaiting Verification",
+paid:"Payment Verified",
+partial:"Partially Paid",
+rejected:"Payment Not Verified",
+unknown:"Not Verified",
+thanks:"Thank you for choosing MY RIDE!",
+connecting:"Connecting to the system...",
+missing:"No booking found for payment.",
+notCompleted:"Payment is available after the ride is completed.",
+auth:"A customer session is required.",
+denied:"You cannot access this payment.",
+error:"Unable to connect to the system.",
+offline:"No internet connection.",
+bankUnavailable:"Bank account details are unavailable.",
+referenceError:"Enter a valid payment reference number.",
+sending:"Submitting payment details...",
+sent:"Payment request received. Please wait for verification.",
+submitError:"Unable to submit payment. Check the status and try again.",
+copied:"Account number copied.",
+copyError:"Please copy the account number manually.",
+retry:"Reconnect",
+back:"← Customer Services"
+
+},
+
+ta:{
+
+heading:"எனது கொடுப்பனவுகள்",
+finalFare:"இறுதிப் பயணக் கட்டணம்",
+bookingId:"முன்பதிவு எண்",
+paymentStatus:"கொடுப்பனவு நிலை",
+paidAmount:"உறுதிப்படுத்தப்பட்ட தொகை",
+balance:"செலுத்த வேண்டிய தொகை",
+method:"கொடுப்பனவு முறை",
+chooseMethod:"கொடுப்பனவு முறையைத் தேர்ந்தெடுக்கவும்",
+choose:"தேர்ந்தெடுக்கவும்",
+cash:"பணமாக செலுத்துதல்",
+bank:"வங்கிப் பரிமாற்றம்",
+bankDetails:"வங்கிக் கணக்கு விவரங்கள்",
+bankName:"வங்கி",
+branch:"கிளை",
+accountName:"கணக்கின் பெயர்",
+accountNumber:"கணக்கு எண்",
+copyAccount:"கணக்கு எண்ணை நகலெடுக்கவும்",
+reference:"பரிமாற்றக் குறிப்பு எண்",
+submit:"கொடுப்பனவு விவரங்களை அனுப்பவும்",
+cashNote:"சாரதியிடம் பணத்தைச் செலுத்தவும். சாரதி உறுதிப்படுத்திய பின் நிலை புதுப்பிக்கப்படும்.",
+bankNote:"வங்கிப் பரிமாற்றத்திற்குப் பிறகு குறிப்பு எண்ணை உள்ளிடவும். கொடுப்பனவு சரிபார்க்கப்பட வேண்டும்.",
+unpaid:"செலுத்தப்படவில்லை",
+pending:"சரிபார்ப்புக்காக காத்திருக்கிறது",
+paid:"கொடுப்பனவு உறுதிப்படுத்தப்பட்டது",
+partial:"பகுதி தொகை செலுத்தப்பட்டது",
+rejected:"கொடுப்பனவு உறுதிப்படுத்தப்படவில்லை",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+thanks:"MY RIDE சேவையைத் தேர்ந்தெடுத்ததற்கு நன்றி!",
+connecting:"அமைப்புடன் இணைக்கப்படுகிறது...",
+missing:"கொடுப்பனவுக்கான முன்பதிவு இல்லை.",
+notCompleted:"பயணம் முடிந்த பிறகு பணம் செலுத்தலாம்.",
+auth:"வாடிக்கையாளர் அமர்வு தேவை.",
+denied:"இந்தக் கொடுப்பனவைப் பார்க்க அனுமதி இல்லை.",
+error:"அமைப்புடன் இணைக்க முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+bankUnavailable:"வங்கிக் கணக்கு விவரங்கள் கிடைக்கவில்லை.",
+referenceError:"சரியான குறிப்பு எண்ணை உள்ளிடவும்.",
+sending:"கொடுப்பனவு விவரங்கள் அனுப்பப்படுகின்றன...",
+sent:"கொடுப்பனவு கோரிக்கை பெறப்பட்டது. சரிபார்ப்புக்காக காத்திருக்கவும்.",
+submitError:"கோரிக்கையை அனுப்ப முடியவில்லை. நிலையைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
+copied:"கணக்கு எண் நகலெடுக்கப்பட்டது.",
+copyError:"கணக்கு எண்ணை கைமுறையாக நகலெடுக்கவும்.",
+retry:"மீண்டும் இணைக்கவும்",
+back:"← வாடிக்கையாளர் சேவைகள்"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+$("backButton").href=
+"./customer.html?lang="+lang;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(error){
+
+status(t.error);
+
+}
+
+
+// BOOKING IDENTIFICATION
+
+let bookingId=params.get("booking");
+
+if(!bookingId){
+
+try{
+
+bookingId=sessionStorage.getItem(
+"myride_confirmed_booking_id"
+);
+
+}catch(error){}
+
+}
+
+function validBookingId(id){
+
+return typeof id==="string"
+
+&& /^[A-Za-z0-9_-]{1,128}$/.test(id);
+
+}
+
+
+// PAYMENT STATE
+
+let currentUser=null;
+
+let bookingUnsubscribe=null;
+
+let paymentUnsubscribe=null;
+
+let bankUnsubscribe=null;
+
+let currentBooking=null;
+
+let currentPayment=null;
+
+let bankDetails=null;
+
+let submitting=false;
+
+let connectionGeneration=0;
+
+
+// MONEY FORMAT
+
+function money(amount){
+
+if(!Number.isFinite(amount)
+||amount<0){
+
+return "—";
+
+}
+
+return "LKR "+amount.toLocaleString(
+
+"en-LK",
+
+{
+
+minimumFractionDigits:2,
+
+maximumFractionDigits:2
+
+}
+
+);
+
+}
+
+
+// PAYMENT STATUS
+
+function paymentText(value){
+
+const allowed=[
+
+"unpaid",
+
+"pending",
+
+"paid",
+
+"partial",
+
+"rejected"
+
+];
+
+return allowed.includes(value)
+?t[value]:t.unknown;
+
+}
+
+
+// BANK ACCOUNT VALIDATION
+
+function validBank(data){
+
+return data
+
+&& data.enabled===true
+
+&& typeof data.bankName==="string"
+
+&& data.bankName.trim().length>0
+
+&& typeof data.branch==="string"
+
+&& typeof data.accountName==="string"
+
+&& data.accountName.trim().length>0
+
+&& typeof data.accountNumber==="string"
+
+&& /^[0-9 -]{5,40}$/.test(
+data.accountNumber
+);
+
+}
+
+
+// DISPLAY BANK ACCOUNT
+
+function displayBank(){
+
+const available=validBank(bankDetails);
+
+$("bankName").textContent=
+
+available?bankDetails.bankName:"—";
+
+$("branch").textContent=
+
+available?bankDetails.branch:"—";
+
+$("accountName").textContent=
+
+available?bankDetails.accountName:"—";
+
+$("accountNumber").textContent=
+
+available?bankDetails.accountNumber:"—";
+
+$("copyAccount").disabled=!available;
+
+}
+
+
+// COPY ACCOUNT NUMBER
+
+$("copyAccount").onclick=async()=>{
+
+if(!validBank(bankDetails))return;
+
+try{
+
+await navigator.clipboard.writeText(
+
+bankDetails.accountNumber
+
+);
+
+status(t.copied);
+
+}catch(error){
+
+status(t.copyError);
+
+}
+
+};
+
+
+// PAYMENT METHOD CONTROL
+
+function canSubmit(){
+
+if(submitting
+
+||!currentUser
+
+||!currentBooking
+
+||!currentPayment
+
+||currentBooking.status!=="completed"
+
+||!navigator.onLine){
+
+return false;
+
+}
+
+if(!["unpaid","partial","rejected"]
+.includes(currentPayment.status)){
+
+return false;
+
+}
+
+const method=$("method").value;
+
+if(method==="cash")return true;
+
+if(method==="bank"){
+
+return validBank(bankDetails)
+
+&& $("reference").value.trim().length>=3;
+
+}
+
+return false;
+
+}
+
+function updateMethod(){
+
+const method=$("method").value;
+
+$("cashPanel").hidden=method!=="cash";
+
+$("bankPanel").hidden=method!=="bank";
+
+$("reference").required=method==="bank";
+
+$("submitPayment").disabled=!canSubmit();
+
+if(method==="bank"){
+
+displayBank();
+
+if(!validBank(bankDetails)){
+
+status(t.bankUnavailable);
+
+}
+
+}
+
+}
+
+$("method").onchange=()=>{
+
+status("");
+
+updateMethod();
+
+};
+
+$("reference").oninput=updateMethod;
+
+
+// DISPLAY PAYMENT DATA
+
+function displayPayment(){
+
+if(!currentBooking||!currentPayment){
+
+return;
+
+}
+
+const finalFare=
+
+currentBooking.finalMeter?.finalFare;
+
+const paid=currentPayment.paidAmount;
+
+const paymentState=currentPayment.status;
+
+if(!Number.isFinite(finalFare)
+
+||finalFare<0
+
+||!Number.isFinite(paid)
+
+||paid<0
+
+||paid>finalFare
+
+||!["unpaid","pending","paid","partial","rejected"]
+.includes(paymentState)
+
+||(paymentState==="paid"&&paid!==finalFare)
+
+||(paymentState==="unpaid"&&paid!==0)
+
+||(paymentState==="partial"
+&&(paid<=0||paid>=finalFare))){
+
+$("paymentPanel").hidden=true;
+
+status(t.error);
+
+return;
+
+}
+
+$("fare").textContent=money(finalFare);
+
+$("bookingId").textContent=bookingId;
+
+$("paymentStatus").textContent=
+
+paymentText(paymentState);
+
+$("paymentStatus").style.color=
+
+paymentState==="paid"
+
+?"#4ADE80":"#FFD600";
+
+$("paidAmount").textContent=money(paid);
+
+$("balance").textContent=
+
+money(Math.max(0,finalFare-paid));
+
+const method=currentPayment.method;
+
+$("savedMethod").textContent=
+
+method==="cash"?t.cash:
+
+method==="bank"?t.bank:t.unknown;
+
+const reference=currentPayment.reference;
+
+$("savedReferenceRow").hidden=
+
+typeof reference!=="string"
+
+||!reference.trim();
+
+$("savedReference").textContent=
+
+typeof reference==="string"?reference:"";
+
+$("paymentPanel").hidden=false;
+
+$("paidMessage").hidden=
+
+paymentState!=="paid";
+
+$("paymentForm").hidden=
+
+!["unpaid","partial","rejected"]
+.includes(paymentState)
+
+||paid>=finalFare;
+
+status("");
+
+updateMethod();
+
+}
+
+
+// PAYMENT SUBSCRIPTION
+
+function subscribePayment(){
+
+if(paymentUnsubscribe)return;
+
+const generation=connectionGeneration;
+
+const paymentRef=doc(
+
+db,
+
+"bookings",
+
+bookingId,
+
+"payment",
+
+"current"
+
+);
+
+paymentUnsubscribe=onSnapshot(
+
+paymentRef,
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(generation!==connectionGeneration)return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()){
+
+currentPayment=null;
+
+$("paymentPanel").hidden=true;
+
+status(t.connecting);
+
+return;
+
+}
+
+currentPayment=snapshot.data();
+
+displayPayment();
+
+},
+
+error=>{
+
+if(generation!==connectionGeneration)return;
+
+currentPayment=null;
+
+$("paymentPanel").hidden=true;
+
+status(
+
+error.code==="permission-denied"
+
+?t.denied:t.error
+
+);
+
+$("retryButton").hidden=false;
+
+}
+
+);
+
+}
+
+
+// ADMIN BANK SETTINGS SUBSCRIPTION
+
+function subscribeBank(){
+
+if(bankUnsubscribe)return;
+
+const generation=connectionGeneration;
+
+const bankRef=doc(
+
+db,
+
+"publicSettings",
+
+"customerPayment"
+
+);
+
+bankUnsubscribe=onSnapshot(
+
+bankRef,
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(generation!==connectionGeneration)return;
+
+bankDetails=
+
+snapshot.exists()
+
+&&!snapshot.metadata.fromCache
+
+&&!snapshot.metadata.hasPendingWrites
+
+?snapshot.data():null;
+
+displayBank();
+
+updateMethod();
+
+},
+
+()=>{
+
+if(generation!==connectionGeneration)return;
+
+bankDetails=null;
+
+displayBank();
+
+updateMethod();
+
+}
+
+);
+
+}
+
+
+// SECURE PAYMENT REQUEST
+
+$("paymentForm").addEventListener(
+
+"submit",
+
+async event=>{
+
+event.preventDefault();
+
+if(!canSubmit())return;
+
+const method=$("method").value;
+
+const reference=
+
+$("reference").value.trim();
+
+if(method==="bank"
+
+&&(reference.length<3
+
+||reference.length>100)){
+
+status(t.referenceError);
+
+return;
+
+}
+
+if(!functions){
+
+status(t.error);
+
+return;
+
+}
+
+const generation=connectionGeneration;
+
+submitting=true;
+
+updateMethod();
+
+status(t.sending);
+
+try{
+
+const submitPaymentRequest=httpsCallable(
+
+functions,
+
+"submitCustomerPayment"
+
+);
+
+const response=await submitPaymentRequest({
+
+bookingId,
+
+method,
+
+reference:method==="bank"?reference:null,
+
+bankSettingsVersion:method==="bank"
+
+?bankDetails.version??null:null
+
+});
+
+if(generation!==connectionGeneration)return;
+
+if(response.data?.accepted!==true){
+
+throw new Error("Request not accepted");
+
+}
+
+status(t.sent);
+
+$("paymentForm").hidden=true;
+
+}catch(error){
+
+if(generation===connectionGeneration){
+
+status(t.submitError);
+
+}
+
+}finally{
+
+if(generation===connectionGeneration){
+
+submitting=false;
+
+updateMethod();
+
+}
+
+}
+
+}
+
+);
+
+
+// STOP LISTENERS
+
+function stopPaymentListeners(){
+
+if(paymentUnsubscribe){
+
+paymentUnsubscribe();
+
+paymentUnsubscribe=null;
+
+}
+
+if(bankUnsubscribe){
+
+bankUnsubscribe();
+
+bankUnsubscribe=null;
+
+}
+
+currentPayment=null;
+
+bankDetails=null;
+
+$("paymentPanel").hidden=true;
+
+$("submitPayment").disabled=true;
+
+}
+
+
+// DISCONNECT
+
+function disconnect(){
+
+connectionGeneration++;
+
+if(bookingUnsubscribe){
+
+bookingUnsubscribe();
+
+bookingUnsubscribe=null;
+
+}
+
+stopPaymentListeners();
+
+currentBooking=null;
+
+submitting=false;
+
+$("reference").value="";
+
+$("method").value="";
+
+$("savedReference").textContent="";
+
+}
+
+
+// AUTHORIZED BOOKING CONNECTION
+
+function connect(){
+
+disconnect();
+
+$("retryButton").hidden=true;
+
+if(!validBookingId(bookingId)){
+
+status(t.missing);
+
+return;
+
+}
+
+if(!auth||!db){
+
+status(t.error);
+
+return;
+
+}
+
+if(!currentUser){
+
+status(t.auth);
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+$("retryButton").hidden=false;
+
+return;
+
+}
+
+status(t.connecting);
+
+const generation=connectionGeneration;
+
+const bookingRef=doc(
+
+db,
+
+"bookings",
+
+bookingId
+
+);
+
+bookingUnsubscribe=onSnapshot(
+
+bookingRef,
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(generation!==connectionGeneration)return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+currentBooking=null;
+
+stopPaymentListeners();
+
+status(t.connecting);
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+currentBooking=null;
+
+stopPaymentListeners();
+
+status(t.missing);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(data.customerUid!==currentUser?.uid){
+
+disconnect();
+
+status(t.denied);
+
+return;
+
+}
+
+if(data.status!=="completed"){
+
+currentBooking=null;
+
+stopPaymentListeners();
+
+status(t.notCompleted);
+
+return;
+
+}
+
+currentBooking=data;
+
+subscribePayment();
+
+subscribeBank();
+
+displayPayment();
+
+},
+
+error=>{
+
+if(generation!==connectionGeneration)return;
+
+disconnect();
+
+status(
+
+error.code==="permission-denied"
+
+?t.denied:t.error
+
+);
+
+$("retryButton").hidden=false;
+
+}
+
+);
+
+}
+
+
+// AUTHENTICATION
+
+if(auth&&db){
+
+onAuthStateChanged(
+
+auth,
+
+user=>{
+
+currentUser=user;
+
+connect();
+
+},
+
+()=>{
+
+disconnect();
+
+status(t.auth);
+
+}
+
+);
+
+}
+
+
+// NETWORK RECOVERY
+
+$("retryButton").onclick=connect;
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+disconnect();
+
+status(t.offline);
+
+$("retryButton").hidden=false;
+
+}
+
+);
+
+window.addEventListener(
+
+"online",
+
+connect
+
+);
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted){
+
+connect();
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
