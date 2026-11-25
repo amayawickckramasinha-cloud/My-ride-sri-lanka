@@ -1,0 +1,1134 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+
+<title>MY RIDE - Driver Status</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:550px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:36px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.6;
+}
+
+.panel{
+background:#202020;
+border:1px solid #FFD600;
+border-radius:16px;
+padding:22px;
+margin:20px 0;
+text-align:center;
+}
+
+#statusIcon{
+font-size:55px;
+margin:15px;
+}
+
+#statusTitle{
+font-size:23px;
+font-weight:bold;
+color:#FFD600;
+line-height:1.6;
+}
+
+#statusMessage{
+line-height:1.9;
+color:#DDD;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+gap:15px;
+padding:15px 0;
+border-bottom:1px solid #444;
+text-align:left;
+}
+
+.row strong{
+color:#FFD600;
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+.reason{
+background:#292929;
+border:1px solid #555;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:16px;
+margin:15px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+.note{
+color:#AAA;
+font-size:14px;
+line-height:1.8;
+text-align:center;
+}
+
+#connectionStatus{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+
+.back{
+display:block;
+color:#FFD600;
+text-align:center;
+text-decoration:none;
+padding:25px;
+}
+
+footer{
+color:#AAA;
+font-size:12px;
+text-align:center;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="connectionStatus"
+role="status"
+aria-live="polite"></p>
+
+<section id="statusPanel"
+class="panel" hidden>
+
+<div id="statusIcon"></div>
+
+<div id="statusTitle"></div>
+
+<p id="statusMessage"></p>
+
+<div class="row">
+
+<span data-t="driverId"></span>
+
+<strong id="driverId">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="driverName"></span>
+
+<strong id="driverName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="registeredDate"></span>
+
+<strong id="registeredDate">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="vehicle"></span>
+
+<strong id="vehicle">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="status"></span>
+
+<strong id="driverStatus">—</strong>
+
+</div>
+
+<section id="reasonPanel"
+class="reason" hidden>
+
+<strong data-t="reason"></strong>
+
+<p id="reasonText"></p>
+
+</section>
+
+<p id="approvalNote"
+class="note" hidden></p>
+
+<a id="loginButton"
+class="action"
+data-t="login" hidden></a>
+
+</section>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+<a id="registerButton"
+class="action"
+data-t="register" hidden></a>
+
+<p class="note"
+data-t="securityNote"></p>
+
+<a id="backButton"
+class="back"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const allowed=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+allowed.includes(params.get("lang"))
+
+?params.get("lang")
+
+:allowed.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"රියදුරු ලියාපදිංචියේ තත්ත්වය",
+
+driverId:"රියදුරු අංකය",
+
+driverName:"රියදුරුගේ නම",
+
+registeredDate:"ලියාපදිංචි දිනය",
+
+vehicle:"වාහන වර්ගය",
+
+status:"ගිණුමේ තත්ත්වය",
+
+reason:"පරිපාලකගේ හේතුව",
+
+pending:"අනුමැතිය බලාපොරොත්තුවෙන්",
+
+pendingMessage:"ඔබගේ ලියාපදිංචිය පරිපාලක විසින් පරීක්ෂා කරමින් පවතී. අනුමැතිය ලැබෙන තෙක් රැඳී සිටින්න.",
+
+approved:"ඔබගේ ලියාපදිංචිය අනුමත කර ඇත",
+
+approvedMessage:"සුබ පැතුම්! ඔබ MY RIDE රියදුරෙකු ලෙස අනුමත කර ඇත.",
+
+activationNote:"ඔබට ලබාදෙන ආරක්ෂිත Activation Link එක භාවිතයෙන් මුරපදය සකස් කරන්න. WhatsApp සඳහා එකඟ වී ඇත්නම් එම සේවාව හරහා දැනුම්දීම ලැබිය හැකියි.",
+
+activated:"ඔබගේ ගිණුම සක්‍රිය කර ඇත",
+
+activatedMessage:"ඔබගේ ගිණුම සක්‍රියයි. රියදුරු Login පිටුව භාවිතා කරන්න.",
+
+rejected:"ලියාපදිංචිය ප්‍රතික්ෂේප කර ඇත",
+
+rejectedMessage:"ඔබගේ අයදුම්පත අනුමත කර නැත.",
+
+suspended:"ගිණුම තාවකාලිකව අත්හිටුවා ඇත",
+
+suspendedMessage:"ඔබට දැනට රියදුරු සේවා ලබාගත නොහැක.",
+
+blocked:"ගිණුම අවහිර කර ඇත",
+
+blockedMessage:"ඔබගේ රියදුරු ගිණුමට ප්‍රවේශය තහනම් කර ඇත.",
+
+connecting:"පද්ධතියට සම්බන්ධ වෙමින්...",
+
+connected:"ගිණුමේ තත්ත්වය යාවත්කාලීනයි.",
+
+missing:"ඔබගේ ලියාපදිංචිය හමු නොවීය.",
+
+auth:"ලියාපදිංචි දුරකථන අංකය තහවුරු කළ සැසිය අවශ්‍යයි.",
+
+denied:"මෙම දත්ත බැලීමට අවසර නැත.",
+
+error:"පද්ධතියට සම්බන්ධ විය නොහැක.",
+
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+
+unknown:"තත්ත්වය තහවුරු කර නැත.",
+
+refresh:"තත්ත්වය නැවත පරීක්ෂා කරන්න",
+
+register:"රියදුරු ලියාපදිංචිය",
+
+login:"රියදුරු Login",
+
+securityNote:"ඔබගේ OTP අංකය, මුරපදය හෝ Activation Link එක වෙනත් අයෙකුට ලබා නොදෙන්න.",
+
+back:"← ප්‍රධාන මෙනුව",
+
+bike:"Scooter / Bike",
+
+tuk:"ත්‍රිරෝද රථය",
+
+car:"කාර් රථය",
+
+van:"වෑන් රථය"
+
+},
+
+en:{
+
+heading:"Driver Registration Status",
+
+driverId:"Driver ID",
+
+driverName:"Driver Name",
+
+registeredDate:"Registration Date",
+
+vehicle:"Vehicle Type",
+
+status:"Account Status",
+
+reason:"Administrator's Reason",
+
+pending:"Awaiting Approval",
+
+pendingMessage:"Your registration is being reviewed by the administrator. Please wait for approval.",
+
+approved:"Registration Approved",
+
+approvedMessage:"Congratulations! You have been approved as a MY RIDE driver.",
+
+activationNote:"Create your password using the secure activation link provided to you. You may receive a WhatsApp notification if you have consented to that service.",
+
+activated:"Account Activated",
+
+activatedMessage:"Your account is active. Use the driver login page.",
+
+rejected:"Registration Rejected",
+
+rejectedMessage:"Your application has not been approved.",
+
+suspended:"Account Suspended",
+
+suspendedMessage:"Driver services are currently unavailable to your account.",
+
+blocked:"Account Blocked",
+
+blockedMessage:"Access to your driver account has been blocked.",
+
+connecting:"Connecting to the system...",
+
+connected:"Account status is up to date.",
+
+missing:"Your registration was not found.",
+
+auth:"A verified registration phone session is required.",
+
+denied:"You cannot access these details.",
+
+error:"Unable to connect to the system.",
+
+offline:"No internet connection.",
+
+unknown:"Account status is not verified.",
+
+refresh:"Refresh Status",
+
+register:"Driver Registration",
+
+login:"Driver Login",
+
+securityNote:"Never share your OTP, password or activation link with anyone.",
+
+back:"← Main Menu",
+
+bike:"Scooter / Bike",
+
+tuk:"Three Wheeler",
+
+car:"Car",
+
+van:"Van"
+
+},
+
+ta:{
+
+heading:"சாரதி பதிவு நிலை",
+
+driverId:"சாரதி எண்",
+
+driverName:"சாரதியின் பெயர்",
+
+registeredDate:"பதிவு தேதி",
+
+vehicle:"வாகன வகை",
+
+status:"கணக்கு நிலை",
+
+reason:"நிர்வாகத்தின் காரணம்",
+
+pending:"அனுமதிக்காக காத்திருக்கிறது",
+
+pendingMessage:"உங்கள் பதிவு நிர்வாகத்தால் பரிசீலிக்கப்படுகிறது. அனுமதி கிடைக்கும் வரை காத்திருக்கவும்.",
+
+approved:"பதிவு அங்கீகரிக்கப்பட்டது",
+
+approvedMessage:"வாழ்த்துகள்! நீங்கள் MY RIDE சாரதியாக அங்கீகரிக்கப்பட்டுள்ளீர்கள்.",
+
+activationNote:"உங்களுக்கு வழங்கப்படும் பாதுகாப்பான இணைப்பைப் பயன்படுத்தி கடவுச்சொல்லை உருவாக்கவும். ஒப்புதல் வழங்கியிருந்தால் WhatsApp அறிவிப்பு கிடைக்கலாம்.",
+
+activated:"கணக்கு செயல்படுத்தப்பட்டது",
+
+activatedMessage:"உங்கள் கணக்கு செயல்பாட்டில் உள்ளது. சாரதி உள்நுழைவு பக்கத்தைப் பயன்படுத்தவும்.",
+
+rejected:"பதிவு நிராகரிக்கப்பட்டது",
+
+rejectedMessage:"உங்கள் விண்ணப்பம் அங்கீகரிக்கப்படவில்லை.",
+
+suspended:"கணக்கு இடைநிறுத்தப்பட்டுள்ளது",
+
+suspendedMessage:"தற்போது சாரதி சேவைகளைப் பயன்படுத்த முடியாது.",
+
+blocked:"கணக்கு தடுக்கப்பட்டுள்ளது",
+
+blockedMessage:"உங்கள் சாரதி கணக்கிற்கான அணுகல் தடுக்கப்பட்டுள்ளது.",
+
+connecting:"அமைப்புடன் இணைக்கப்படுகிறது...",
+
+connected:"கணக்கு நிலை புதுப்பிக்கப்பட்டுள்ளது.",
+
+missing:"உங்கள் பதிவு கிடைக்கவில்லை.",
+
+auth:"சரிபார்க்கப்பட்ட பதிவு தொலைபேசி அமர்வு தேவை.",
+
+denied:"இந்த விவரங்களைப் பார்க்க அனுமதி இல்லை.",
+
+error:"அமைப்புடன் இணைக்க முடியவில்லை.",
+
+offline:"இணைய இணைப்பு இல்லை.",
+
+unknown:"கணக்கு நிலை உறுதிப்படுத்தப்படவில்லை.",
+
+refresh:"நிலையை மீண்டும் சரிபார்க்கவும்",
+
+register:"சாரதி பதிவு",
+
+login:"சாரதி உள்நுழைவு",
+
+securityNote:"OTP, கடவுச்சொல் அல்லது செயல்படுத்தும் இணைப்பை மற்றவர்களுடன் பகிர வேண்டாம்.",
+
+back:"← முதன்மை பட்டியல்",
+
+bike:"மோட்டார் சைக்கிள்",
+
+tuk:"முச்சக்கர வண்டி",
+
+car:"கார்",
+
+van:"வேன்"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+$("backButton").href=
+"./menu.html?lang="+lang;
+
+$("registerButton").href=
+"./driver-register.html?lang="+lang;
+
+$("loginButton").href=
+"./driver-login.html?lang="+lang;
+
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let currentUser=null;
+let unsubscribe=null;
+let generation=0;
+
+function connection(message){
+
+$("connectionStatus").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+}catch(e){
+
+connection(t.error);
+
+}
+
+
+// STATUS SETTINGS
+
+const statusSettings={
+
+pending:{
+
+icon:"⏳",
+
+color:"#FFD600",
+
+title:t.pending,
+
+message:t.pendingMessage
+
+},
+
+approved:{
+
+icon:"✓",
+
+color:"#4ADE80",
+
+title:t.approved,
+
+message:t.approvedMessage
+
+},
+
+activated:{
+
+icon:"✓",
+
+color:"#4ADE80",
+
+title:t.activated,
+
+message:t.activatedMessage
+
+},
+
+rejected:{
+
+icon:"✖",
+
+color:"#FF6464",
+
+title:t.rejected,
+
+message:t.rejectedMessage
+
+},
+
+suspended:{
+
+icon:"⚠",
+
+color:"#FFA500",
+
+title:t.suspended,
+
+message:t.suspendedMessage
+
+},
+
+blocked:{
+
+icon:"🔒",
+
+color:"#FF6464",
+
+title:t.blocked,
+
+message:t.blockedMessage
+
+}
+
+};
+
+
+// FORMAT REGISTRATION DATE
+
+function formatDate(value){
+
+const date=value?.toDate?.();
+
+if(!(date instanceof Date)
+
+||Number.isNaN(date.getTime())){
+
+return "—";
+
+}
+
+return date.toLocaleString(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+year:"numeric",
+
+month:"short",
+
+day:"numeric",
+
+hour:"2-digit",
+
+minute:"2-digit"
+
+}
+
+);
+
+}
+
+
+// CLEAR PRIVATE DATA
+
+function clearStatus(){
+
+$("statusPanel").hidden=true;
+
+$("reasonPanel").hidden=true;
+
+$("approvalNote").hidden=true;
+
+$("loginButton").hidden=true;
+
+$("registerButton").hidden=true;
+
+$("driverId").textContent="—";
+
+$("driverName").textContent="—";
+
+$("registeredDate").textContent="—";
+
+$("vehicle").textContent="—";
+
+$("driverStatus").textContent="—";
+
+$("reasonText").textContent="";
+
+$("approvalNote").textContent="";
+
+}
+
+
+// DISPLAY DRIVER STATUS
+
+function displayStatus(data){
+
+clearStatus();
+
+if(data.uid!==currentUser?.uid){
+
+connection(t.denied);
+
+return;
+
+}
+
+let state=data.status;
+
+if(state==="approved"
+
+&&data.activationComplete===true){
+
+state="activated";
+
+}
+
+if(!Object.hasOwn(statusSettings,state)){
+
+connection(t.unknown);
+
+return;
+
+}
+
+if(state==="activated"
+
+&&data.activationComplete!==true){
+
+connection(t.unknown);
+
+return;
+
+}
+
+const settings=statusSettings[state];
+
+$("statusIcon").textContent=settings.icon;
+
+$("statusIcon").style.color=settings.color;
+
+$("statusTitle").textContent=settings.title;
+
+$("statusTitle").style.color=settings.color;
+
+$("statusMessage").textContent=settings.message;
+
+$("driverId").textContent=
+
+typeof data.driverId==="string"
+
+?data.driverId:"—";
+
+$("driverName").textContent=
+
+typeof data.fullName==="string"
+
+?data.fullName:"—";
+
+$("registeredDate").textContent=
+
+formatDate(data.createdAt);
+
+$("vehicle").textContent=
+
+["bike","tuk","car","van"].includes(data.vehicleType)
+
+?t[data.vehicleType]:"—";
+
+$("driverStatus").textContent=
+
+state.toUpperCase();
+
+$("driverStatus").style.color=settings.color;
+
+
+// ADMIN REASON
+
+if(["rejected","suspended","blocked"].includes(state)
+
+&&typeof data.statusReason==="string"
+
+&&data.statusReason.trim()){
+
+$("reasonText").textContent=data.statusReason;
+
+$("reasonPanel").hidden=false;
+
+}
+
+
+// APPROVED DRIVER
+
+if(state==="approved"){
+
+$("approvalNote").textContent=t.activationNote;
+
+$("approvalNote").hidden=false;
+
+}
+
+
+// ACTIVATED DRIVER
+
+if(state==="activated"){
+
+$("loginButton").hidden=false;
+
+}
+
+$("statusPanel").hidden=false;
+
+connection(t.connected);
+
+}
+
+
+// DISCONNECT
+
+function disconnect(){
+
+generation++;
+
+if(unsubscribe){
+
+unsubscribe();
+
+unsubscribe=null;
+
+}
+
+clearStatus();
+
+}
+
+
+// SECURE REAL-TIME STATUS
+
+function connect(){
+
+disconnect();
+
+if(!auth||!db){
+
+connection(t.error);
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+connection(t.offline);
+
+return;
+
+}
+
+if(!currentUser
+
+||!currentUser.phoneNumber){
+
+connection(t.auth);
+
+$("registerButton").hidden=false;
+
+return;
+
+}
+
+connection(t.connecting);
+
+const currentGeneration=generation;
+
+const uid=currentUser.uid;
+
+const driverRef=doc(
+
+db,
+
+"drivers",
+
+uid
+
+);
+
+unsubscribe=onSnapshot(
+
+driverRef,
+
+{
+
+includeMetadataChanges:true
+
+},
+
+snapshot=>{
+
+if(currentGeneration!==generation)return;
+
+if(auth.currentUser?.uid!==uid){
+
+disconnect();
+
+connection(t.denied);
+
+return;
+
+}
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+clearStatus();
+
+connection(t.connecting);
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+clearStatus();
+
+connection(t.missing);
+
+$("registerButton").hidden=false;
+
+return;
+
+}
+
+displayStatus(snapshot.data());
+
+},
+
+error=>{
+
+if(currentGeneration!==generation)return;
+
+disconnect();
+
+connection(
+
+error.code==="permission-denied"
+
+?t.denied:t.error
+
+);
+
+}
+
+);
+
+}
+
+
+// AUTHENTICATION
+
+if(auth&&db){
+
+onAuthStateChanged(
+
+auth,
+
+user=>{
+
+currentUser=user;
+
+connect();
+
+},
+
+()=>{
+
+currentUser=null;
+
+disconnect();
+
+connection(t.auth);
+
+}
+
+);
+
+}
+
+
+// REFRESH STATUS
+
+$("refreshButton").onclick=connect;
+
+
+// INTERNET CONNECTION
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+disconnect();
+
+connection(t.offline);
+
+}
+
+);
+
+window.addEventListener(
+
+"online",
+
+connect
+
+);
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted){
+
+connect();
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
