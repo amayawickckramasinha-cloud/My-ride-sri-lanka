@@ -1,0 +1,1009 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Login</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:500px;
+margin:auto;
+padding:20px;
+}
+
+.logo{
+width:90px;
+height:90px;
+margin:25px auto 10px;
+background:#FFD600;
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:36px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:14px;
+padding:20px;
+margin:20px 0;
+}
+
+label{
+display:block;
+margin:18px 0 8px;
+font-weight:bold;
+line-height:1.7;
+}
+
+input{
+width:100%;
+padding:15px;
+background:#292929;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:16px;
+margin:15px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.check{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:normal;
+}
+
+.check input{
+width:20px;
+height:20px;
+accent-color:#FFD600;
+}
+
+.note{
+color:#BBB;
+font-size:14px;
+line-height:1.8;
+text-align:center;
+}
+
+#status{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+.back{
+display:block;
+text-align:center;
+color:#FFD600;
+text-decoration:none;
+padding:20px;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<div class="logo">
+
+<svg width="65" height="65"
+viewBox="0 0 100 100">
+
+<path
+d="M20 45 L29 24 H71 L80 45 Z"
+fill="#111"/>
+
+<rect x="12" y="43"
+width="76" height="30"
+rx="9" fill="#111"/>
+
+<rect x="18" y="66"
+width="13" height="15"
+rx="4" fill="#111"/>
+
+<rect x="69" y="66"
+width="13" height="15"
+rx="4" fill="#111"/>
+
+<circle cx="26" cy="56"
+r="6" fill="#FFD600"/>
+
+<circle cx="74" cy="56"
+r="6" fill="#FFD600"/>
+
+<path d="M32 29 H68 L74 42 H26 Z"
+fill="#FFD600"/>
+
+</svg>
+
+</div>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<form id="loginForm"
+class="panel">
+
+<label for="phone"
+data-t="phone"></label>
+
+<input id="phone"
+type="tel"
+autocomplete="username"
+maxlength="16"
+placeholder="07XXXXXXXX"
+required>
+
+<label for="password"
+data-t="password"></label>
+
+<input id="password"
+type="password"
+autocomplete="current-password"
+maxlength="128"
+required>
+
+<label class="check">
+
+<input id="showPassword"
+type="checkbox">
+
+<span data-t="showPassword"></span>
+
+</label>
+
+<button id="loginButton"
+type="submit"
+data-t="login"
+disabled></button>
+
+<a id="forgotButton"
+class="action secondary"
+data-t="forgot"></a>
+
+</form>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accountPanel"
+class="panel" hidden>
+
+<h2 id="accountTitle"></h2>
+
+<p id="accountMessage"
+class="note"></p>
+
+<a id="pendingButton"
+class="action secondary"
+data-t="checkStatus"></a>
+
+</section>
+
+<a id="registerButton"
+class="action secondary"
+data-t="register"></a>
+
+<p class="note"
+data-t="security"></p>
+
+<a id="backButton"
+class="back"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+signInWithCustomToken,
+signOut,
+setPersistence,
+browserSessionPersistence
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"රියදුරු ගිණුමට ඇතුළු වීම",
+
+phone:"ලියාපදිංචි දුරකථන අංකය",
+
+password:"මුරපදය",
+
+showPassword:"මුරපදය පෙන්වන්න",
+
+login:"ගිණුමට ඇතුළු වන්න",
+
+forgot:"මුරපදය අමතක වී ඇත",
+
+register:"අලුත් රියදුරෙකු ලෙස ලියාපදිංචි වන්න",
+
+checkStatus:"ලියාපදිංචියේ තත්ත්වය පරීක්ෂා කරන්න",
+
+security:"ඔබගේ මුරපදය සහ OTP අංකය වෙනත් අයෙකුට ලබා නොදෙන්න.",
+
+back:"← ප්‍රධාන මෙනුව",
+
+connecting:"පද්ධතියට සම්බන්ධ වෙමින්...",
+
+checking:"ගිණුම සහ අනුමැතිය පරීක්ෂා කරමින්...",
+
+phoneError:"නිවැරදි දුරකථන අංකයක් ඇතුළත් කරන්න.",
+
+passwordError:"මුරපදය ඇතුළත් කරන්න.",
+
+invalid:"දුරකථන අංකය හෝ මුරපදය වැරදියි.",
+
+pending:"අනුමැතිය ලැබී නොමැත",
+
+pendingMessage:"පරිපාලක අනුමැතිය ලැබෙන තෙක් රැඳී සිටින්න.",
+
+activation:"ගිණුම සක්‍රිය කර නැත",
+
+activationMessage:"ඔබට ලබාදුන් Activation Link එකෙන් මුරපදය සකස් කරන්න.",
+
+rejected:"ලියාපදිංචිය ප්‍රතික්ෂේප කර ඇත",
+
+rejectedMessage:"වැඩි විස්තර සඳහා පරිපාලක සම්බන්ධ කරගන්න.",
+
+suspended:"ගිණුම අත්හිටුවා ඇත",
+
+suspendedMessage:"ඔබට දැනට රියදුරු සේවා ලබාගත නොහැක.",
+
+blocked:"ගිණුම අවහිර කර ඇත",
+
+blockedMessage:"මෙම ගිණුමට ප්‍රවේශ වීමට අවසර නැත.",
+
+expired:"බලපත්‍ර හෝ රක්ෂණ කල් ඉකුත් වී ඇත",
+
+expiredMessage:"අදාළ බලපත්‍ර අලුත් කර පරිපාලක අනුමැතිය ලබාගන්න.",
+
+maintenance:"පද්ධතිය තාවකාලිකව අත්හිටුවා ඇත",
+
+maintenanceMessage:"පසුව නැවත උත්සාහ කරන්න.",
+
+limit:"Login උත්සාහ සීමාව ඉක්මවා ඇත. පසුව උත්සාහ කරන්න.",
+
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+
+error:"පද්ධතියට සම්බන්ධ විය නොහැක. නැවත උත්සාහ කරන්න.",
+
+success:"ගිණුම තහවුරු කර ඇත."
+
+},
+
+en:{
+
+heading:"Driver Login",
+
+phone:"Registered Phone Number",
+
+password:"Password",
+
+showPassword:"Show Password",
+
+login:"Login",
+
+forgot:"Forgot Password",
+
+register:"Register as a New Driver",
+
+checkStatus:"Check Registration Status",
+
+security:"Never share your password or OTP with anyone.",
+
+back:"← Main Menu",
+
+connecting:"Connecting to the system...",
+
+checking:"Verifying account and approval...",
+
+phoneError:"Enter a valid phone number.",
+
+passwordError:"Enter your password.",
+
+invalid:"Incorrect phone number or password.",
+
+pending:"Awaiting Approval",
+
+pendingMessage:"Please wait for administrator approval.",
+
+activation:"Account Not Activated",
+
+activationMessage:"Create your password using your secure activation link.",
+
+rejected:"Registration Rejected",
+
+rejectedMessage:"Contact the administrator for further information.",
+
+suspended:"Account Suspended",
+
+suspendedMessage:"Driver services are currently unavailable.",
+
+blocked:"Account Blocked",
+
+blockedMessage:"Access to this account is prohibited.",
+
+expired:"Licence or Insurance Expired",
+
+expiredMessage:"Renew the required documents and obtain administrator approval.",
+
+maintenance:"System Temporarily Unavailable",
+
+maintenanceMessage:"Please try again later.",
+
+limit:"Too many login attempts. Try again later.",
+
+offline:"No internet connection.",
+
+error:"Unable to connect. Please try again.",
+
+success:"Account verified."
+
+},
+
+ta:{
+
+heading:"சாரதி உள்நுழைவு",
+
+phone:"பதிவு செய்யப்பட்ட தொலைபேசி எண்",
+
+password:"கடவுச்சொல்",
+
+showPassword:"கடவுச்சொல்லைக் காட்டவும்",
+
+login:"உள்நுழையவும்",
+
+forgot:"கடவுச்சொல் மறந்துவிட்டது",
+
+register:"புதிய சாரதியாக பதிவு செய்யவும்",
+
+checkStatus:"பதிவு நிலையை சரிபார்க்கவும்",
+
+security:"கடவுச்சொல் அல்லது OTP எண்ணை மற்றவர்களுடன் பகிர வேண்டாம்.",
+
+back:"← முதன்மை பட்டியல்",
+
+connecting:"அமைப்புடன் இணைக்கப்படுகிறது...",
+
+checking:"கணக்கு மற்றும் அனுமதி சரிபார்க்கப்படுகிறது...",
+
+phoneError:"சரியான தொலைபேசி எண்ணை உள்ளிடவும்.",
+
+passwordError:"கடவுச்சொல்லை உள்ளிடவும்.",
+
+invalid:"தவறான தொலைபேசி எண் அல்லது கடவுச்சொல்.",
+
+pending:"அனுமதிக்காக காத்திருக்கிறது",
+
+pendingMessage:"நிர்வாக அனுமதி கிடைக்கும் வரை காத்திருக்கவும்.",
+
+activation:"கணக்கு செயல்படுத்தப்படவில்லை",
+
+activationMessage:"பாதுகாப்பான இணைப்பைப் பயன்படுத்தி கடவுச்சொல்லை உருவாக்கவும்.",
+
+rejected:"பதிவு நிராகரிக்கப்பட்டது",
+
+rejectedMessage:"மேலும் தகவல்களுக்கு நிர்வாகத்தைத் தொடர்புகொள்ளவும்.",
+
+suspended:"கணக்கு இடைநிறுத்தப்பட்டுள்ளது",
+
+suspendedMessage:"தற்போது சாரதி சேவைகளைப் பயன்படுத்த முடியாது.",
+
+blocked:"கணக்கு தடுக்கப்பட்டுள்ளது",
+
+blockedMessage:"இந்த கணக்கை அணுக அனுமதி இல்லை.",
+
+expired:"உரிமம் அல்லது காப்பீடு காலாவதியானது",
+
+expiredMessage:"தேவையான ஆவணங்களை புதுப்பித்து நிர்வாக அனுமதியைப் பெறவும்.",
+
+maintenance:"அமைப்பு தற்காலிகமாக கிடைக்கவில்லை",
+
+maintenanceMessage:"பின்னர் மீண்டும் முயற்சிக்கவும்.",
+
+limit:"அதிகமான உள்நுழைவு முயற்சிகள். பின்னர் முயற்சிக்கவும்.",
+
+offline:"இணைய இணைப்பு இல்லை.",
+
+error:"இணைக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+
+success:"கணக்கு சரிபார்க்கப்பட்டது."
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+$("forgotButton").href=
+"./driver-reset.html?lang="+lang;
+
+$("registerButton").href=
+"./driver-register.html?lang="+lang;
+
+$("pendingButton").href=
+"./driver-pending.html?lang="+lang;
+
+$("backButton").href=
+"./menu.html?lang="+lang;
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let functions=null;
+let busy=false;
+let ready=false;
+let completed=false;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+function updateButtons(){
+
+$("loginButton").disabled=
+
+!ready||busy||completed||!navigator.onLine;
+
+}
+
+async function initialize(){
+
+status(t.connecting);
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+ready=true;
+
+status("");
+
+}catch(e){
+
+ready=false;
+
+status(t.error);
+
+}
+
+updateButtons();
+
+}
+
+// PHONE VALIDATION
+
+function normalizePhone(value){
+
+const phone=value.replace(/[\s-]/g,"");
+
+if(!/^(?:\+94|94|0)7\d{8}$/.test(phone)){
+
+return null;
+
+}
+
+return "+94"+phone.slice(-9);
+
+}
+
+// SHOW PASSWORD
+
+$("showPassword").onchange=()=>{
+
+$("password").type=
+
+$("showPassword").checked
+
+?"text":"password";
+
+};
+
+// ACCOUNT STATUS MESSAGES
+
+const accountStates={
+
+pending:[t.pending,t.pendingMessage],
+
+not_activated:[t.activation,t.activationMessage],
+
+rejected:[t.rejected,t.rejectedMessage],
+
+suspended:[t.suspended,t.suspendedMessage],
+
+blocked:[t.blocked,t.blockedMessage],
+
+documents_expired:[t.expired,t.expiredMessage],
+
+maintenance:[t.maintenance,t.maintenanceMessage]
+
+};
+
+function showAccountStatus(state){
+
+if(!Object.hasOwn(accountStates,state)){
+
+status(t.invalid);
+
+return;
+
+}
+
+const details=accountStates[state];
+
+$("accountTitle").textContent=details[0];
+
+$("accountMessage").textContent=details[1];
+
+$("accountPanel").hidden=false;
+
+status("");
+
+}
+
+// SECURE DRIVER LOGIN
+
+$("loginForm").addEventListener(
+
+"submit",
+
+async event=>{
+
+event.preventDefault();
+
+if(busy||!ready||completed)return;
+
+$("accountPanel").hidden=true;
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+const phone=normalizePhone(
+
+$("phone").value
+
+);
+
+const password=$("password").value;
+
+if(!phone){
+
+status(t.phoneError);
+
+return;
+
+}
+
+if(!password||password.length>128){
+
+status(t.passwordError);
+
+return;
+
+}
+
+busy=true;
+
+$("phone").disabled=true;
+
+$("password").disabled=true;
+
+updateButtons();
+
+status(t.checking);
+
+let signedIn=false;
+
+try{
+
+// Password verification and rate limits
+// must be handled by the secure backend.
+
+const loginDriver=httpsCallable(
+
+functions,
+
+"loginDriver"
+
+);
+
+const response=await loginDriver({
+
+phone,
+
+password
+
+});
+
+const result=response.data;
+
+if(result?.authenticated!==true){
+
+status(t.invalid);
+
+return;
+
+}
+
+// Account status may only be returned
+// after valid credentials are verified.
+
+if(result.allowed!==true){
+
+showAccountStatus(result.status);
+
+return;
+
+}
+
+if(typeof result.customToken!=="string"
+
+||!result.customToken){
+
+throw new Error("Missing session token");
+
+}
+
+// Create authenticated Firebase session.
+
+const credential=await signInWithCustomToken(
+
+auth,
+
+result.customToken
+
+);
+
+signedIn=true;
+
+const tokenResult=
+
+await credential.user.getIdTokenResult(true);
+
+if(tokenResult.claims.driver!==true){
+
+throw new Error("Driver role required");
+
+}
+
+// Recheck approval and account eligibility
+// against the authoritative backend.
+
+const verifySession=httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+);
+
+const verification=await verifySession({});
+
+const account=verification.data;
+
+if(account?.authorized!==true
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true
+
+||account.uid!==credential.user.uid){
+
+await signOut(auth);
+
+signedIn=false;
+
+if(account?.status){
+
+showAccountStatus(account.status);
+
+}else{
+
+status(t.invalid);
+
+}
+
+return;
+
+}
+
+completed=true;
+
+$("password").value="";
+
+status(t.success);
+
+location.replace(
+
+"./driver-dashboard.html?lang="+lang
+
+);
+
+}catch(e){
+
+if(signedIn){
+
+try{
+
+await signOut(auth);
+
+}catch(error){}
+
+}
+
+if(e.code==="functions/resource-exhausted"
+
+||e.code==="auth/too-many-requests"){
+
+status(t.limit);
+
+}else if(
+
+e.code==="functions/unauthenticated"
+
+||e.code==="functions/permission-denied"
+
+){
+
+status(t.invalid);
+
+}else{
+
+status(t.error);
+
+}
+
+}finally{
+
+$("password").value="";
+
+$("phone").disabled=false;
+
+$("password").disabled=false;
+
+busy=false;
+
+updateButtons();
+
+}
+
+}
+
+);
+
+// INTERNET CONNECTION
+
+window.addEventListener("offline",()=>{
+
+status(t.offline);
+
+updateButtons();
+
+});
+
+window.addEventListener("online",()=>{
+
+if(!busy&&!completed){
+
+status("");
+
+}
+
+updateButtons();
+
+});
+
+// CLEAR PASSWORD ON PAGE EXIT
+
+window.addEventListener("pagehide",()=>{
+
+$("password").value="";
+
+$("showPassword").checked=false;
+
+$("password").type="password";
+
+});
+
+initialize();
+
+</script>
+
+</body>
+</html>
