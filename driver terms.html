@@ -1,0 +1,2485 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Terms</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.termsIcon{
+width:90px;
+height:90px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.8;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+
+.termsList{
+padding-left:25px;
+}
+
+.termsList li{
+padding:12px 4px;
+border-bottom:1px solid #444;
+line-height:1.9;
+font-size:14px;
+overflow-wrap:anywhere;
+}
+
+.termsList li::marker{
+color:#FFD600;
+font-weight:bold;
+}
+
+.termsText{
+white-space:pre-wrap;
+line-height:1.9;
+font-size:14px;
+overflow-wrap:anywhere;
+}
+
+.action{
+display:block;
+width:100%;
+padding:16px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.checkboxRow{
+display:flex;
+align-items:flex-start;
+gap:12px;
+padding:15px 0;
+line-height:1.8;
+border-bottom:1px solid #444;
+}
+
+.checkboxRow input{
+width:23px;
+height:23px;
+accent-color:#FFD600;
+flex-shrink:0;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.9;
+}
+
+.success{
+background:#163322;
+border:1px solid #4ADE80;
+border-radius:10px;
+padding:15px;
+color:#4ADE80;
+line-height:1.8;
+margin:15px 0;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+margin:15px 0;
+}
+
+.yellow{
+color:#FFD600;
+}
+
+.green{
+color:#4ADE80;
+}
+
+.red{
+color:#FF6464;
+}
+
+.commissionRate{
+text-align:center;
+font-size:44px;
+font-weight:bold;
+color:#FFD600;
+margin:20px 0;
+}
+
+#status,
+#saveStatus{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+overflow-wrap:anywhere;
+}
+
+button:disabled,
+input:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<div class="termsIcon">
+
+<svg width="50" height="50"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+<path d="M14 2v6h6"/>
+<path d="M8 12h8"/>
+<path d="M8 16h8"/>
+<path d="M8 8h2"/>
+
+</svg>
+
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="driverDetails"></h3>
+
+<div class="row">
+
+<span data-t="driverName"></span>
+
+<strong id="driverName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>Driver ID</span>
+
+<strong id="driverId"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="currentVersion"></span>
+
+<strong id="currentVersion">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="acceptedVersion"></span>
+
+<strong id="acceptedVersion">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="publishedDate"></span>
+
+<strong id="publishedDate">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="effectiveDate"></span>
+
+<strong id="effectiveDate">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="acceptedDate"></span>
+
+<strong id="acceptedDate">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="agreementStatus"></span>
+
+<strong id="agreementStatus">—</strong>
+
+</div>
+
+</section>
+
+<div id="updateWarning"
+class="warning" hidden>
+
+<span data-t="newTerms"></span>
+
+</div>
+
+<div id="acceptedPanel"
+class="success" hidden>
+
+<span data-t="alreadyAccepted"></span>
+
+</div>
+
+<section class="panel">
+
+<h3 data-t="rulesHeading"></h3>
+
+<p id="draftNote"
+class="note"
+data-t="draftNote"></p>
+
+<ol id="rulesList"
+class="termsList"></ol>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="commissionHeading"></h3>
+
+<div id="commissionRate"
+class="commissionRate">
+—
+</div>
+
+<div class="row">
+
+<span data-t="deadline"></span>
+
+<strong id="deadlineDays">—</strong>
+
+</div>
+
+<div id="commissionText"
+class="termsText"></div>
+
+<a id="commissionLink"
+class="action secondary"
+data-t="commissionReport"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="privacyHeading"></h3>
+
+<div id="privacyText"
+class="termsText"></div>
+
+</section>
+
+<section id="agreementPanel"
+class="panel" hidden>
+
+<h3 data-t="acceptHeading"></h3>
+
+<form id="agreementForm">
+
+<div class="checkboxRow">
+
+<input
+id="termsConsent"
+type="checkbox"
+required>
+
+<label for="termsConsent"
+data-t="termsConsent"></label>
+
+</div>
+
+<div class="checkboxRow">
+
+<input
+id="commissionConsent"
+type="checkbox"
+required>
+
+<label for="commissionConsent"
+data-t="commissionConsent"></label>
+
+</div>
+
+<div class="checkboxRow">
+
+<input
+id="gpsConsent"
+type="checkbox"
+required>
+
+<label for="gpsConsent"
+data-t="gpsConsent"></label>
+
+</div>
+
+<div class="checkboxRow">
+
+<input
+id="privacyConsent"
+type="checkbox"
+required>
+
+<label for="privacyConsent"
+data-t="privacyConsent"></label>
+
+</div>
+
+<p class="note"
+data-t="recordNote"></p>
+
+<button id="acceptButton"
+type="submit"
+class="action"
+data-t="acceptTerms"
+disabled></button>
+
+</form>
+
+</section>
+
+<p id="saveStatus"
+role="status"
+aria-live="polite"></p>
+
+<button id="refreshButton"
+class="action secondary"
+data-t="refresh"></button>
+
+<a id="helpLink"
+class="action secondary"
+data-t="help"></a>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const LANGUAGES=["si","en","ta"];
+
+const params=new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+LANGUAGES.includes(params.get("lang"))
+
+?params.get("lang")
+
+:LANGUAGES.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"රියදුරු නීති සහ කොන්දේසි",
+driverDetails:"රියදුරු ගිවිසුමේ විස්තර",
+driverName:"රියදුරුගේ නම",
+currentVersion:"වත්මන් කොන්දේසි අනුවාදය",
+acceptedVersion:"එකඟ වූ අනුවාදය",
+publishedDate:"ප්‍රකාශයට පත් කළ දිනය",
+effectiveDate:"ක්‍රියාත්මක වන දිනය",
+acceptedDate:"එකඟ වූ දිනය සහ වේලාව",
+agreementStatus:"ගිවිසුමේ තත්ත්වය",
+accepted:"එකඟ වී ඇත",
+pending:"එකඟතාව අවශ්‍යයි",
+unknown:"තහවුරු කර නැත",
+newTerms:"නව කොන්දේසි ප්‍රකාශයට පත් කර ඇත. ඒවා කියවා එකඟ වන්න. අදාළ කොන්දේසි ක්‍රියාත්මක වූ පසු එකඟතාව නොමැති රියදුරන්ට අලුත් හයර් ලබාගැනීම සීමා කළ හැක.",
+alreadyAccepted:"ඔබ වත්මන් නීති සහ කොන්දේසි සඳහා එකඟ වී ඇත.",
+rulesHeading:"රියදුරු නීති සහ කොන්දේසි",
+draftNote:"පහත දැක්වෙන්නේ මූලික කෙටුම්පත් කොන්දේසියි. Admin විසින් නිල කොන්දේසි ප්‍රකාශයට පත් කරන තුරු ඒවාට එකඟතාව සුරැකිය නොහැක.",
+commissionHeading:"MY RIDE කොමිස් ගිවිසුම",
+deadline:"කොමිස් ගෙවීමේ කාලසීමාව",
+days:"දින",
+commissionReport:"මගේ කොමිස් වාර්තාව",
+privacyHeading:"පෞද්ගලිකත්වය සහ GPS භාවිතය",
+acceptHeading:"රියදුරුගේ එකඟතාව",
+termsConsent:"මා ඉහත සියලු නීති සහ කොන්දේසි කියවා තේරුම්ගෙන ඒවාට එකඟ වෙමි.",
+commissionConsent:"MY RIDE කොමිස් ගාස්තුව සහ ගෙවීමේ කොන්දේසි සඳහා එකඟ වෙමි.",
+gpsConsent:"සේවා සැපයීම සහ ආරක්ෂාව සඳහා විස්තර කර ඇති GPS භාවිතයට එකඟ වෙමි.",
+privacyConsent:"පෞද්ගලිකත්ව ප්‍රතිපත්තිය කියවා තේරුම්ගෙන ඇති බව තහවුරු කරමි.",
+recordNote:"ඔබගේ එකඟතාව, කොන්දේසි අනුවාදය සහ Server දිනය හා වේලාව ගිණුමේ සුරැකේ.",
+acceptTerms:"නීති සහ කොන්දේසි පිළිගන්න",
+confirmAccept:"මෙම කොන්දේසි සඳහා ඔබගේ එකඟතාව සුරැකීමට අවශ්‍යද?",
+saving:"එකඟතාව සුරකිමින්...",
+saved:"ඔබගේ එකඟතාව සාර්ථකව සුරැකී ඇත.",
+saveFailed:"එකඟතාව සුරැකුණු බව තහවුරු කළ නොහැක. නැවත උත්සාහ කරන්න.",
+selectAll:"අදාළ සියලු එකඟතා සලකුණු කරන්න.",
+termsChanged:"කොන්දේසි වෙනස් වී ඇත. අලුත් කොන්දේසි නැවත කියවන්න.",
+notPublished:"නිල කොන්දේසි තවම ලබාගත නොහැක.",
+refresh:"නැවත පරීක්ෂා කරන්න",
+help:"රියදුරු සහාය",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+error:"කොන්දේසි ලබාගත නොහැක."
+
+},
+
+en:{
+
+heading:"Driver Terms & Conditions",
+driverDetails:"Driver Agreement Details",
+driverName:"Driver Name",
+currentVersion:"Current Terms Version",
+acceptedVersion:"Accepted Version",
+publishedDate:"Publication Date",
+effectiveDate:"Effective Date",
+acceptedDate:"Acceptance Date and Time",
+agreementStatus:"Agreement Status",
+accepted:"Accepted",
+pending:"Acceptance Required",
+unknown:"Not Confirmed",
+newTerms:"New terms have been published. Read and accept them. Once the applicable terms take effect, new hires may be restricted until acceptance.",
+alreadyAccepted:"You have accepted the current terms and conditions.",
+rulesHeading:"Driver Rules and Conditions",
+draftNote:"The following are initial draft terms. Acceptance cannot be recorded until Admin publishes the official terms.",
+commissionHeading:"MY RIDE Commission Agreement",
+deadline:"Commission Payment Deadline",
+days:"days",
+commissionReport:"My Commission Report",
+privacyHeading:"Privacy and GPS Usage",
+acceptHeading:"Driver Agreement",
+termsConsent:"I have read, understood and agree to all the terms and conditions above.",
+commissionConsent:"I agree to the MY RIDE commission and payment conditions.",
+gpsConsent:"I agree to the described GPS usage for service delivery and safety.",
+privacyConsent:"I confirm that I have read and understood the privacy policy.",
+recordNote:"Your acceptance, terms version and server date and time will be recorded in your account.",
+acceptTerms:"Accept Terms and Conditions",
+confirmAccept:"Do you want to record your acceptance of these terms?",
+saving:"Saving your agreement...",
+saved:"Your agreement has been successfully recorded.",
+saveFailed:"Unable to confirm acceptance. Please retry.",
+selectAll:"Select all required agreement checkboxes.",
+termsChanged:"The terms have changed. Read the updated terms again.",
+notPublished:"Official terms are not currently available.",
+refresh:"Refresh",
+help:"Driver Help",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"Verifying account...",
+denied:"Access to this page is not authorized.",
+offline:"No internet connection.",
+error:"Unable to load terms."
+
+},
+
+ta:{
+
+heading:"சாரதி விதிமுறைகள் மற்றும் நிபந்தனைகள்",
+driverDetails:"சாரதி ஒப்பந்த விவரங்கள்",
+driverName:"சாரதியின் பெயர்",
+currentVersion:"தற்போதைய விதிமுறை பதிப்பு",
+acceptedVersion:"ஏற்றுக்கொண்ட பதிப்பு",
+publishedDate:"வெளியீட்டு தேதி",
+effectiveDate:"நடைமுறைக்கு வரும் தேதி",
+acceptedDate:"ஒப்புதல் தேதி மற்றும் நேரம்",
+agreementStatus:"ஒப்பந்த நிலை",
+accepted:"ஏற்றுக்கொள்ளப்பட்டது",
+pending:"ஒப்புதல் தேவை",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+newTerms:"புதிய விதிமுறைகள் வெளியிடப்பட்டுள்ளன. அவற்றை படித்து ஏற்றுக்கொள்ளவும். விதிமுறைகள் நடைமுறைக்கு வந்த பிறகு ஒப்புதல் வழங்கும் வரை புதிய பயணங்கள் கட்டுப்படுத்தப்படலாம்.",
+alreadyAccepted:"தற்போதைய விதிமுறைகளை நீங்கள் ஏற்றுக்கொண்டுள்ளீர்கள்.",
+rulesHeading:"சாரதி விதிமுறைகள்",
+draftNote:"கீழே ஆரம்ப வரைவு விதிமுறைகள் உள்ளன. நிர்வாகி அதிகாரப்பூர்வ விதிமுறைகளை வெளியிடும் வரை ஒப்புதலை பதிவு செய்ய முடியாது.",
+commissionHeading:"MY RIDE கமிஷன் ஒப்பந்தம்",
+deadline:"கமிஷன் செலுத்தும் காலக்கெடு",
+days:"நாட்கள்",
+commissionReport:"எனது கமிஷன் அறிக்கை",
+privacyHeading:"தனியுரிமை மற்றும் GPS பயன்பாடு",
+acceptHeading:"சாரதி ஒப்புதல்",
+termsConsent:"மேலுள்ள அனைத்து விதிமுறைகளையும் படித்து புரிந்துகொண்டு ஏற்றுக்கொள்கிறேன்.",
+commissionConsent:"MY RIDE கமிஷன் மற்றும் கொடுப்பனவு நிபந்தனைகளை ஏற்றுக்கொள்கிறேன்.",
+gpsConsent:"சேவை மற்றும் பாதுகாப்பிற்காக விவரிக்கப்பட்ட GPS பயன்பாட்டை ஏற்றுக்கொள்கிறேன்.",
+privacyConsent:"தனியுரிமை கொள்கையை படித்து புரிந்துகொண்டதை உறுதிப்படுத்துகிறேன்.",
+recordNote:"உங்கள் ஒப்புதல், விதிமுறை பதிப்பு மற்றும் சேவையக தேதி நேரம் கணக்கில் பதிவு செய்யப்படும்.",
+acceptTerms:"விதிமுறைகளை ஏற்றுக்கொள்ளவும்",
+confirmAccept:"இந்த விதிமுறைகளுக்கான உங்கள் ஒப்புதலை பதிவு செய்ய விரும்புகிறீர்களா?",
+saving:"ஒப்புதல் சேமிக்கப்படுகிறது...",
+saved:"உங்கள் ஒப்புதல் வெற்றிகரமாக பதிவு செய்யப்பட்டது.",
+saveFailed:"ஒப்புதல் சேமிக்கப்பட்டதை உறுதிப்படுத்த முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+selectAll:"தேவையான அனைத்து ஒப்புதல் பெட்டிகளையும் தேர்ந்தெடுக்கவும்.",
+termsChanged:"விதிமுறைகள் மாற்றப்பட்டுள்ளன. புதிய விதிமுறைகளை மீண்டும் படிக்கவும்.",
+notPublished:"அதிகாரப்பூர்வ விதிமுறைகள் தற்போது கிடைக்கவில்லை.",
+refresh:"புதுப்பிக்கவும்",
+help:"சாரதி உதவி",
+back:"← சாரதி முதன்மைப் பக்கம்",
+login:"சாரதி உள்நுழைவு",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+error:"விதிமுறைகளை பெற முடியவில்லை."
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(element=>{
+
+element.textContent=t[element.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+// INITIAL DRAFT RULES - 27
+
+const defaultRules={
+
+si:[
+
+"රියදුරු ලියාපදිංචියේදී සත්‍ය සහ නිවැරදි තොරතුරු ලබාදිය යුතුය.",
+
+"වලංගු රියදුරු බලපත්‍රයක් තිබිය යුතුය.",
+
+"මගී ප්‍රවාහනය සඳහා අදාළ වලංගු වාහන රක්ෂණයක් තිබිය යුතුය.",
+
+"වාහනය සඳහා වලංගු ආදායම් බලපත්‍රයක් තිබිය යුතුය.",
+
+"MY RIDE Admin අනුමැතිය ලැබීමෙන් පසු පමණක් සේවා සැපයිය හැක.",
+
+"ලියාපදිංචි කර අනුමත කළ රියදුරු සහ වාහනය පමණක් භාවිතා කළ යුතුය.",
+
+"රියදුරු ගිණුම, Password හෝ OTP වෙනත් පුද්ගලයන් සමඟ බෙදා නොගත යුතුය.",
+
+"හයර් ලබාගැනීම සඳහා Online තත්ත්වය සහ අවශ්‍ය GPS පහසුකම් ක්‍රියාත්මකව තිබිය යුතුය.",
+
+"හයර් එකක් පිළිගත් පසු එකඟ වූ මගී ලබාගැනීමේ ස්ථානයට පැමිණිය යුතුය.",
+
+"සාධාරණ හෝ ආරක්ෂක හේතුවක් නොමැතිව පිළිගත් හයර් එකක් අත්හැර නොදැමිය යුතුය.",
+
+"මගීන් සමඟ ආචාරශීලීව සහ වෘත්තීයමය ලෙස කටයුතු කළ යුතුය.",
+
+"මගියා වාහනයට නැග ගමන ආරම්භ කළ පසු පමණක් START TRIP ක්‍රියාත්මක කළ යුතුය.",
+
+"ගමන් දුර, වේලාව, GPS හෝ ගාස්තු වංචනික ලෙස වෙනස් කිරීම තහනම් වේ.",
+
+"MY RIDE විසින් අවසර ලබාදී නොමැති අමතර ගාස්තු මගීන්ගෙන් අය නොකළ යුතුය.",
+
+"ගමන අවසන් වූ වහාම END TRIP ක්‍රියාත්මක කර ගමන අවසන් කළ යුතුය.",
+
+"සක්‍රිය හයර් එක අවසන් කරන තුරු වෙනත් සක්‍රිය හයර් එකක් ආරම්භ නොකළ යුතුය.",
+
+"සම්පූර්ණ කරන ලද සෑම හයර් එකකටම අදාළ MY RIDE කොමිස් මුදල ගෙවිය යුතුය.",
+
+"කොමිස් ගෙවීම මඟහැරීමට ව්‍යාජ හයර් හෝ ගමන් වාර්තා සකස් කිරීම තහනම් වේ.",
+
+"මගියාගේ දුරකථන අංකය පෞද්ගලික හෝ අනවසර කටයුතු සඳහා භාවිතා නොකළ යුතුය.",
+
+"මත්පැන් හෝ මත්ද්‍රව්‍ය බලපෑම යටතේ වාහන ධාවනය කිරීම තහනම් වේ.",
+
+"ශ්‍රී ලංකාවේ අදාළ මාර්ග නීති සහ ප්‍රවාහන නීති පිළිපැදිය යුතුය.",
+
+"වාහනය ආරක්ෂිතව, පිරිසිදුව සහ ධාවනයට සුදුසු තත්ත්වයෙන් පවත්වාගත යුතුය.",
+
+"වාහනයේ අනුමත මගී ධාරිතාව ඉක්මවා මගීන් ප්‍රවාහනය නොකළ යුතුය.",
+
+"රියදුරු බලපත්‍රය, රක්ෂණය සහ ආදායම් බලපත්‍රය කල් ඉකුත් වීමට පෙර අලුත් කළ යුතුය.",
+
+"ව්‍යාජ GPS ස්ථාන හෝ ස්ථාන වංචා කිරීමේ මෘදුකාංග භාවිතා කිරීම තහනම් වේ.",
+
+"මගීන්ගේ පෞද්ගලික තොරතුරු අනවසරයෙන් වෙනත් පුද්ගලයන්ට ලබාදීම තහනම් වේ.",
+
+"නීති උල්ලංඝනය කිරීම් සම්බන්ධයෙන් Admin පරීක්ෂණයකින් පසු අදාළ ගිණුම් සීමා කිරීම, අත්හිටුවීම හෝ අවසන් කිරීම සිදු කළ හැක."
+
+],
+
+en:[
+
+"Provide truthful and accurate information during driver registration.",
+
+"Maintain a valid driving licence.",
+
+"Maintain valid vehicle insurance appropriate for passenger transport.",
+
+"Maintain a valid vehicle revenue licence.",
+
+"Provide services only after receiving MY RIDE Admin approval.",
+
+"Use only the registered and approved driver and vehicle.",
+
+"Do not share driver accounts, passwords or OTPs with other people.",
+
+"Maintain online availability and required GPS access when receiving hires.",
+
+"After accepting a hire, attend the agreed passenger pickup location.",
+
+"Do not abandon an accepted hire without a reasonable or safety-related justification.",
+
+"Treat passengers respectfully and professionally.",
+
+"Activate START TRIP only after the passenger has boarded and the journey begins.",
+
+"Do not fraudulently manipulate distance, time, GPS or fares.",
+
+"Do not charge passengers unauthorized additional fees.",
+
+"Activate END TRIP promptly when the journey is completed.",
+
+"Do not begin another active hire until the current active hire is completed.",
+
+"Pay the applicable MY RIDE commission for every completed hire.",
+
+"Do not create fraudulent trips or records to avoid commission payments.",
+
+"Do not use passenger telephone numbers for personal or unauthorized purposes.",
+
+"Do not drive under the influence of alcohol or drugs.",
+
+"Comply with applicable Sri Lankan road and transport laws.",
+
+"Maintain the vehicle in a safe, clean and roadworthy condition.",
+
+"Do not exceed the approved passenger capacity of the vehicle.",
+
+"Renew driving licences, insurance and revenue licences before expiry.",
+
+"Do not use fake GPS locations or location manipulation software.",
+
+"Do not disclose passenger personal information without authorization.",
+
+"Following an Admin review, violations may result in account restrictions, suspension or termination."
+
+],
+
+ta:[
+
+"சாரதி பதிவின்போது உண்மையான மற்றும் சரியான தகவல்களை வழங்க வேண்டும்.",
+
+"செல்லுபடியாகும் சாரதி அனுமதிப்பத்திரம் வைத்திருக்க வேண்டும்.",
+
+"பயணிகள் போக்குவரத்திற்கான செல்லுபடியாகும் வாகன காப்புறுதி வைத்திருக்க வேண்டும்.",
+
+"செல்லுபடியாகும் வாகன வருமான அனுமதிப்பத்திரம் வைத்திருக்க வேண்டும்.",
+
+"MY RIDE நிர்வாக அனுமதி கிடைத்த பிறகே சேவை வழங்க வேண்டும்.",
+
+"பதிவு செய்யப்பட்டு அங்கீகரிக்கப்பட்ட சாரதி மற்றும் வாகனத்தை மட்டுமே பயன்படுத்த வேண்டும்.",
+
+"சாரதி கணக்கு, கடவுச்சொல் அல்லது OTP ஆகியவற்றை மற்றவர்களுடன் பகிரக்கூடாது.",
+
+"பயணங்களை பெறும்போது Online நிலை மற்றும் தேவையான GPS வசதியை இயக்க வேண்டும்.",
+
+"பயணத்தை ஏற்றுக்கொண்ட பிறகு ஒப்புக்கொண்ட பயணி ஏற்றும் இடத்திற்கு செல்ல வேண்டும்.",
+
+"நியாயமான அல்லது பாதுகாப்பு காரணமின்றி ஏற்றுக்கொண்ட பயணத்தை கைவிடக்கூடாது.",
+
+"பயணிகளுடன் மரியாதையாகவும் தொழில்முறையாகவும் நடந்துகொள்ள வேண்டும்.",
+
+"பயணி வாகனத்தில் ஏறி பயணம் ஆரம்பித்த பிறகே START TRIP இயக்க வேண்டும்.",
+
+"தூரம், நேரம், GPS அல்லது கட்டணத்தை மோசடியாக மாற்றக்கூடாது.",
+
+"அனுமதிக்கப்படாத கூடுதல் கட்டணங்களை பயணிகளிடம் வசூலிக்கக்கூடாது.",
+
+"பயணம் முடிந்தவுடன் END TRIP இயக்க வேண்டும்.",
+
+"தற்போதைய பயணம் முடியும் வரை மற்றொரு செயலில் உள்ள பயணத்தை ஆரம்பிக்கக்கூடாது.",
+
+"முடிக்கப்பட்ட ஒவ்வொரு பயணத்திற்கும் பொருந்தும் MY RIDE கமிஷனை செலுத்த வேண்டும்.",
+
+"கமிஷனை தவிர்ப்பதற்காக போலியான பயண பதிவுகளை உருவாக்கக்கூடாது.",
+
+"பயணியின் தொலைபேசி எண்ணை தனிப்பட்ட அல்லது அனுமதியற்ற நோக்கத்திற்கு பயன்படுத்தக்கூடாது.",
+
+"மது அல்லது போதைப்பொருள் தாக்கத்தில் வாகனம் ஓட்டக்கூடாது.",
+
+"இலங்கையின் பொருந்தும் சாலை மற்றும் போக்குவரத்து சட்டங்களை பின்பற்ற வேண்டும்.",
+
+"வாகனத்தை பாதுகாப்பாகவும் சுத்தமாகவும் ஓட்டுவதற்கு ஏற்ற நிலையிலும் பராமரிக்க வேண்டும்.",
+
+"அங்கீகரிக்கப்பட்ட பயணிகள் கொள்ளளவை மீறக்கூடாது.",
+
+"சாரதி அனுமதிப்பத்திரம், காப்புறுதி மற்றும் வருமான அனுமதிப்பத்திரத்தை காலாவதியாகும் முன் புதுப்பிக்க வேண்டும்.",
+
+"போலி GPS இருப்பிடங்கள் அல்லது இருப்பிட மோசடி மென்பொருளை பயன்படுத்தக்கூடாது.",
+
+"பயணிகளின் தனிப்பட்ட தகவல்களை அனுமதியின்றி வெளியிடக்கூடாது.",
+
+"நிர்வாக விசாரணைக்கு பிறகு விதிமுறை மீறல்களுக்கு கணக்கு கட்டுப்பாடு, இடைநிறுத்தம் அல்லது முடித்தல் மேற்கொள்ளப்படலாம்."
+
+]
+
+};
+
+// INITIAL DRAFT COMMISSION TERMS
+
+const defaultCommission={
+
+si:
+
+"1. සම්පූර්ණ කරන ලද හයර් ආදායමෙන් 5% MY RIDE කොමිස් මුදල ලෙස ගණනය කෙරේ.\n\n"+
+
+"2. ඉතිරි 95% රියදුරුගේ හයර් ආදායම වේ.\n\n"+
+
+"3. Highway සහ Parking ගාස්තු කොමිස් ගණනයට ඇතුළත් නොවේ.\n\n"+
+
+"4. අදාළ කොමිස් මුදල හයර් එක අවසන් වූ වේලාවේ සිට දින 7ක් ඇතුළත ගෙවිය යුතුය.\n\n"+
+
+"5. බැංකු ගෙවීම් සඳහා නිවැරදි Reference සහ ගෙවීම් සාක්ෂි යොමු කළ යුතුය.\n\n"+
+
+"6. Admin තහවුරු කිරීමෙන් පසු කොමිස් ගෙවීමේ තත්ත්වය යාවත්කාලීන කෙරේ.\n\n"+
+
+"7. කොමිස් ගාස්තු වෙනස්කම් නිල වශයෙන් දැනුම්දිය යුතු අතර පෙර සම්පූර්ණ කළ හයර් සඳහා පසුගාමීව යෙදිය නොයුතුය.",
+
+en:
+
+"1. MY RIDE commission is calculated at 5% of completed hire income.\n\n"+
+
+"2. The remaining 95% is the driver's hire income.\n\n"+
+
+"3. Highway and parking charges are excluded from commission calculations.\n\n"+
+
+"4. Commission must be paid within 7 days of completing the hire.\n\n"+
+
+"5. Accurate bank references and payment evidence must be submitted.\n\n"+
+
+"6. Commission payment status is updated following Admin verification.\n\n"+
+
+"7. Commission changes must be officially communicated and must not be applied retrospectively to completed hires.",
+
+ta:
+
+"1. முடிக்கப்பட்ட பயண வருமானத்தில் 5% MY RIDE கமிஷனாக கணக்கிடப்படும்.\n\n"+
+
+"2. மீதமுள்ள 95% சாரதியின் பயண வருமானமாகும்.\n\n"+
+
+"3. நெடுஞ்சாலை மற்றும் வாகன நிறுத்த கட்டணங்கள் கமிஷனில் சேர்க்கப்படாது.\n\n"+
+
+"4. பயணம் முடிந்த நேரத்திலிருந்து 7 நாட்களுக்குள் கமிஷனை செலுத்த வேண்டும்.\n\n"+
+
+"5. சரியான வங்கி குறிப்பு மற்றும் கொடுப்பனவு ஆதாரங்களை சமர்ப்பிக்க வேண்டும்.\n\n"+
+
+"6. நிர்வாக சரிபார்ப்புக்கு பிறகு கொடுப்பனவு நிலை புதுப்பிக்கப்படும்.\n\n"+
+
+"7. கமிஷன் மாற்றங்கள் அதிகாரப்பூர்வமாக அறிவிக்கப்பட வேண்டும். முடிக்கப்பட்ட பயணங்களுக்கு பின்னோக்கி பயன்படுத்தக்கூடாது."
+
+};
+
+// INITIAL DRAFT PRIVACY TERMS
+
+const defaultPrivacy={
+
+si:
+
+"1. රියදුරුගේ ලියාපදිංචි තොරතුරු ගිණුම් තහවුරු කිරීම, සේවා සැපයීම, ආරක්ෂාව සහ අදාළ නීතිමය අවශ්‍යතා සඳහා භාවිතා කෙරේ.\n\n"+
+
+"2. Online සිටින විට සහ සක්‍රිය හයර් අතරතුර GPS ස්ථානය සේවා ගැළපීම, ගමන් නිරීක්ෂණය සහ ගාස්තු ගණනය සඳහා භාවිතා කළ හැක.\n\n"+
+
+"3. අදාළ හයර් එකේ මගියාට අවශ්‍ය රියදුරු නම, දුරකථන අංකය සහ අවශ්‍ය කාලසීමාව සඳහා සජීවී ස්ථානය ලබාදිය හැක.\n\n"+
+
+"4. රියදුරුගේ NIC, බලපත්‍ර සහ රක්ෂණ තොරතුරු සාමාන්‍ය මගීන්ට ප්‍රදර්ශනය නොකළ යුතුය.\n\n"+
+
+"5. පෞද්ගලික දත්ත සඳහා ප්‍රවේශය බලයලත් පුද්ගලයන්ට සහ අවශ්‍ය සේවා පද්ධතිවලට සීමා කළ යුතුය.\n\n"+
+
+"6. WhatsApp පණිවිඩ සඳහා අදාළ වෙනම අවසරය සහ පණිවිඩ සැකසුම් භාවිතා කළ යුතුය.\n\n"+
+
+"7. දත්ත නිවැරදි කිරීම, ඉවත් කිරීම සහ පෞද්ගලිකත්ව ගැටලු සඳහා නිල Admin සහාය මාර්ගය භාවිතා කළ හැක. නීතිමය සහ ගිණුම් වාර්තා රඳවාගැනීමේ අවශ්‍යතා අදාළ වේ.",
+
+en:
+
+"1. Driver registration information is used for account verification, service delivery, safety and applicable legal requirements.\n\n"+
+
+"2. GPS location may be used while online and during active hires for matching, trip tracking and fare calculation.\n\n"+
+
+"3. The relevant passenger may receive the driver's name, phone number and live location for the necessary service period.\n\n"+
+
+"4. Driver NIC, licence and insurance details must not be displayed to ordinary passengers.\n\n"+
+
+"5. Personal data access must be restricted to authorized persons and necessary service systems.\n\n"+
+
+"6. WhatsApp communications must follow the applicable separate permissions and messaging settings.\n\n"+
+
+"7. Data correction, deletion and privacy requests may be submitted through official Admin support, subject to applicable legal and accounting retention requirements.",
+
+ta:
+
+"1. சாரதி பதிவு தகவல்கள் கணக்கு சரிபார்ப்பு, சேவை, பாதுகாப்பு மற்றும் சட்ட தேவைகளுக்கு பயன்படுத்தப்படும்.\n\n"+
+
+"2. Online நிலையில் மற்றும் செயலில் உள்ள பயணங்களில் GPS இருப்பிடம் பயண பொருத்தம், கண்காணிப்பு மற்றும் கட்டண கணக்கீட்டிற்கு பயன்படுத்தப்படலாம்.\n\n"+
+
+"3. தொடர்புடைய பயணிக்கு சாரதியின் பெயர், தொலைபேசி எண் மற்றும் தேவையான சேவை காலத்திற்கு நேரடி இருப்பிடம் வழங்கப்படலாம்.\n\n"+
+
+"4. சாரதியின் NIC, அனுமதிப்பத்திரம் மற்றும் காப்புறுதி விவரங்களை சாதாரண பயணிகளுக்கு காட்டக்கூடாது.\n\n"+
+
+"5. தனிப்பட்ட தகவல்களுக்கான அணுகல் அங்கீகரிக்கப்பட்ட நபர்கள் மற்றும் தேவையான சேவை அமைப்புகளுக்கு மட்டுப்படுத்தப்பட வேண்டும்.\n\n"+
+
+"6. WhatsApp தகவல்தொடர்புகளுக்கு பொருந்தும் தனி அனுமதிகள் மற்றும் செய்தி அமைப்புகளை பயன்படுத்த வேண்டும்.\n\n"+
+
+"7. தகவல் திருத்தம், நீக்கம் மற்றும் தனியுரிமை கோரிக்கைகளை அதிகாரப்பூர்வ நிர்வாக உதவி மூலம் சமர்ப்பிக்கலாம். சட்ட மற்றும் கணக்கியல் பதிவு பாதுகாப்பு தேவைகள் பொருந்தும்."
+
+};
+
+// PAGE LINKS
+
+const links={
+
+loginLink:"driver-login.html",
+
+backButton:"driver-dashboard.html",
+
+helpLink:"driver-help.html",
+
+commissionLink:"driver-commission.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+
+let currentTerms=null;
+let acceptance=null;
+
+let termsLoaded=false;
+let acceptanceLoaded=false;
+
+let generation=0;
+let saving=false;
+let checkingSession=false;
+
+let driverUnsubscribe=null;
+let termsUnsubscribe=null;
+let acceptanceUnsubscribe=null;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+let pendingRequest=null;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validVersion(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9._-]{1,100}$/.test(value);
+
+}
+
+function validHash(value){
+
+return typeof value==="string"
+
+&&/^[a-f0-9]{64}$/i.test(value);
+
+}
+
+function validText(value,min,max){
+
+return typeof value==="string"
+
+&&value.trim().length>=min
+
+&&value.length<=max;
+
+}
+
+function timestampMs(value){
+
+const ms=value?.toMillis?.();
+
+return Number.isFinite(ms)&&ms>0
+
+?ms:null;
+
+}
+
+function formatDate(value){
+
+const ms=timestampMs(value);
+
+if(!ms)return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(ms));
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(driver.availability)
+
+||!Number.isFinite(c.latitude)
+
+||!Number.isFinite(c.longitude)
+
+||!Number.isFinite(c.accuracy)
+
+||c.accuracy<0
+
+||c.accuracy>100
+
+||c.latitude<5.85
+
+||c.latitude>9.9
+
+||c.longitude<79.5
+
+||c.longitude>82
+
+||Date.now()-position.timestamp>30000
+
+||position.timestamp>Date.now()+5000
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:c.latitude,
+
+lon:c.longitude,
+
+accuracy:c.accuracy,
+
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+}catch(e){
+
+// Backend must expire stale GPS data.
+
+}finally{
+
+gpsSending=false;
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// SAFE TERMS DISPLAY
+
+function renderRules(rules){
+
+const list=$("rulesList");
+
+list.replaceChildren();
+
+rules.forEach(rule=>{
+
+const item=document.createElement("li");
+
+item.textContent=rule;
+
+list.appendChild(item);
+
+});
+
+}
+
+function showDraftTerms(){
+
+renderRules(defaultRules[lang]);
+
+$("commissionRate").textContent="5%";
+
+$("deadlineDays").textContent="7 "+t.days;
+
+$("commissionText").textContent=
+
+defaultCommission[lang];
+
+$("privacyText").textContent=
+
+defaultPrivacy[lang];
+
+$("draftNote").hidden=false;
+
+$("currentVersion").textContent="—";
+
+$("publishedDate").textContent="—";
+
+$("effectiveDate").textContent="—";
+
+$("agreementPanel").hidden=true;
+
+}
+
+showDraftTerms();
+
+// PUBLISHED TERMS VALIDATION
+
+function validTerms(data){
+
+if(!data
+
+||data.published!==true
+
+||!validVersion(data.version)
+
+||!validHash(data.contentHash)
+
+||!timestampMs(data.publishedAt)
+
+||!timestampMs(data.effectiveAt)
+
+||timestampMs(data.effectiveAt)<timestampMs(data.publishedAt)
+
+||!Number.isFinite(data.commissionRate)
+
+||data.commissionRate<0
+
+||data.commissionRate>100
+
+||!Number.isInteger(data.paymentDeadlineDays)
+
+||data.paymentDeadlineDays<1
+
+||data.paymentDeadlineDays>365
+
+||!data.translations){
+
+return false;
+
+}
+
+return LANGUAGES.every(language=>{
+
+const content=data.translations[language];
+
+return content
+
+&&Array.isArray(content.rules)
+
+&&content.rules.length>=1
+
+&&content.rules.length<=100
+
+&&content.rules.every(
+
+rule=>validText(rule,1,5000)
+
+)
+
+&&validText(content.commissionText,1,30000)
+
+&&validText(content.privacyText,1,30000);
+
+});
+
+}
+
+function validAcceptance(data){
+
+return data
+
+&&data.driverUid===uid
+
+&&validVersion(data.version)
+
+&&validHash(data.contentHash)
+
+&&LANGUAGES.includes(data.language)
+
+&&data.termsAccepted===true
+
+&&data.commissionAccepted===true
+
+&&data.gpsAccepted===true
+
+&&data.privacyAcknowledged===true
+
+&&timestampMs(data.acceptedAt)!==null;
+
+}
+
+// CONSENT CONTROLS
+
+const CONSENT_IDS=[
+
+"termsConsent",
+
+"commissionConsent",
+
+"gpsConsent",
+
+"privacyConsent"
+
+];
+
+function resetConsent(){
+
+CONSENT_IDS.forEach(id=>{
+
+$(id).checked=false;
+
+});
+
+}
+
+function allConsents(){
+
+return CONSENT_IDS.every(
+
+id=>$(id).checked===true
+
+);
+
+}
+
+function alreadyAccepted(){
+
+return currentTerms!==null
+
+&&acceptance!==null
+
+&&acceptance.version===currentTerms.version
+
+&&acceptance.contentHash===currentTerms.contentHash;
+
+}
+
+function updateControls(){
+
+const enabled=
+
+validSession()
+
+&&driver!==null
+
+&&currentTerms!==null
+
+&&termsLoaded
+
+&&acceptanceLoaded
+
+&&!alreadyAccepted()
+
+&&!saving;
+
+CONSENT_IDS.forEach(id=>{
+
+$(id).disabled=!enabled;
+
+});
+
+$("acceptButton").disabled=
+
+!enabled||!allConsents();
+
+}
+
+CONSENT_IDS.forEach(id=>{
+
+$(id).addEventListener(
+
+"change",
+
+updateControls
+
+);
+
+});
+
+// DISPLAY CURRENT AGREEMENT
+
+function renderAgreement(){
+
+$("acceptedVersion").textContent=
+
+acceptance?.version||"—";
+
+$("acceptedDate").textContent=
+
+acceptance
+
+?formatDate(acceptance.acceptedAt)
+
+:"—";
+
+$("acceptedPanel").hidden=true;
+
+$("updateWarning").hidden=true;
+
+$("agreementPanel").hidden=true;
+
+if(!termsLoaded
+
+||!acceptanceLoaded
+
+||!currentTerms){
+
+$("agreementStatus").textContent=t.unknown;
+
+$("agreementStatus").className="yellow";
+
+updateControls();
+
+return;
+
+}
+
+if(alreadyAccepted()){
+
+$("agreementStatus").textContent=t.accepted;
+
+$("agreementStatus").className="green";
+
+$("acceptedPanel").hidden=false;
+
+}else{
+
+$("agreementStatus").textContent=t.pending;
+
+$("agreementStatus").className="red";
+
+$("updateWarning").hidden=false;
+
+$("agreementPanel").hidden=false;
+
+}
+
+updateControls();
+
+}
+
+// DISPLAY PUBLISHED TERMS
+
+function displayTerms(data){
+
+const previousVersion=currentTerms?.version;
+
+const previousHash=currentTerms?.contentHash;
+
+currentTerms=data;
+
+const changed=
+
+previousVersion!==data.version
+
+||previousHash!==data.contentHash;
+
+if(changed){
+
+resetConsent();
+
+pendingRequest=null;
+
+if(previousVersion){
+
+$("saveStatus").textContent=t.termsChanged;
+
+}
+
+}
+
+const content=data.translations[lang];
+
+renderRules(content.rules);
+
+$("commissionRate").textContent=
+
+data.commissionRate+"%";
+
+$("deadlineDays").textContent=
+
+data.paymentDeadlineDays+" "+t.days;
+
+$("commissionText").textContent=
+
+content.commissionText;
+
+$("privacyText").textContent=
+
+content.privacyText;
+
+$("currentVersion").textContent=
+
+data.version;
+
+$("publishedDate").textContent=
+
+formatDate(data.publishedAt);
+
+$("effectiveDate").textContent=
+
+formatDate(data.effectiveAt);
+
+$("draftNote").hidden=true;
+
+renderAgreement();
+
+}
+
+// LIVE ADMIN TERMS
+
+function subscribeTerms(){
+
+if(termsUnsubscribe){
+
+termsUnsubscribe();
+
+termsUnsubscribe=null;
+
+}
+
+currentTerms=null;
+
+termsLoaded=false;
+
+resetConsent();
+
+showDraftTerms();
+
+renderAgreement();
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+termsUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"publicSettings",
+
+"driverTerms"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession()
+
+||!driver)return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+currentTerms=null;
+
+termsLoaded=false;
+
+resetConsent();
+
+showDraftTerms();
+
+renderAgreement();
+
+return;
+
+}
+
+if(!snapshot.exists()
+
+||!validTerms(snapshot.data())){
+
+currentTerms=null;
+
+termsLoaded=false;
+
+showDraftTerms();
+
+renderAgreement();
+
+$("saveStatus").textContent=t.notPublished;
+
+return;
+
+}
+
+termsLoaded=true;
+
+displayTerms(snapshot.data());
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+currentTerms=null;
+
+termsLoaded=false;
+
+showDraftTerms();
+
+renderAgreement();
+
+$("saveStatus").textContent=t.error;
+
+}
+
+);
+
+}
+
+// DRIVER ACCEPTANCE RECORD
+
+function subscribeAcceptance(){
+
+if(acceptanceUnsubscribe){
+
+acceptanceUnsubscribe();
+
+acceptanceUnsubscribe=null;
+
+}
+
+acceptance=null;
+
+acceptanceLoaded=false;
+
+renderAgreement();
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+acceptanceUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"drivers",
+
+uid,
+
+"agreements",
+
+"current"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession()
+
+||!driver)return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+acceptance=null;
+
+acceptanceLoaded=false;
+
+renderAgreement();
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+acceptance=null;
+
+acceptanceLoaded=true;
+
+renderAgreement();
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!validAcceptance(data)){
+
+acceptance=null;
+
+acceptanceLoaded=false;
+
+renderAgreement();
+
+$("saveStatus").textContent=t.error;
+
+return;
+
+}
+
+acceptance=data;
+
+acceptanceLoaded=true;
+
+renderAgreement();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+acceptance=null;
+
+acceptanceLoaded=false;
+
+renderAgreement();
+
+$("saveStatus").textContent=t.error;
+
+}
+
+);
+
+}
+
+// SAVE DRIVER AGREEMENT
+
+$("agreementForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(!validSession()
+
+||!driver
+
+||!currentTerms
+
+||!termsLoaded
+
+||!acceptanceLoaded
+
+||alreadyAccepted()
+
+||saving)return;
+
+if(!allConsents()){
+
+$("saveStatus").textContent=t.selectAll;
+
+return;
+
+}
+
+if(!confirm(t.confirmAccept))return;
+
+const currentGeneration=generation;
+
+const version=currentTerms.version;
+
+const contentHash=currentTerms.contentHash;
+
+if(!pendingRequest
+
+||pendingRequest.version!==version
+
+||pendingRequest.contentHash!==contentHash){
+
+pendingRequest={
+
+version,
+
+contentHash,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+saving=true;
+
+updateControls();
+
+$("saveStatus").textContent=t.saving;
+
+try{
+
+const result=await serverCall(
+
+"acceptDriverTerms",
+
+{
+
+requestId:pendingRequest.requestId,
+
+version,
+
+contentHash,
+
+language:lang,
+
+termsAccepted:true,
+
+commissionAccepted:true,
+
+gpsAccepted:true,
+
+privacyAcknowledged:true
+
+}
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.accepted!==true
+
+||result.driverUid!==uid
+
+||result.version!==version
+
+||result.contentHash!==contentHash){
+
+throw new Error("Acceptance not confirmed");
+
+}
+
+pendingRequest=null;
+
+resetConsent();
+
+if(!currentTerms
+
+||currentTerms.version!==version
+
+||currentTerms.contentHash!==contentHash){
+
+$("saveStatus").textContent=t.termsChanged;
+
+return;
+
+}
+
+$("saveStatus").textContent=t.saved;
+
+// Reload authoritative acceptance record.
+
+subscribeAcceptance();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+if(e.code==="functions/failed-precondition"){
+
+$("saveStatus").textContent=t.termsChanged;
+
+subscribeTerms();
+
+subscribeAcceptance();
+
+}else{
+
+$("saveStatus").textContent=t.saveFailed;
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+saving=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// CLEAR PRIVATE INFORMATION
+
+function stopTermsListeners(){
+
+if(termsUnsubscribe){
+
+termsUnsubscribe();
+
+termsUnsubscribe=null;
+
+}
+
+if(acceptanceUnsubscribe){
+
+acceptanceUnsubscribe();
+
+acceptanceUnsubscribe=null;
+
+}
+
+currentTerms=null;
+
+acceptance=null;
+
+termsLoaded=false;
+
+acceptanceLoaded=false;
+
+pendingRequest=null;
+
+resetConsent();
+
+showDraftTerms();
+
+renderAgreement();
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+saving=false;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+stopGps();
+
+stopTermsListeners();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("saveStatus").textContent="";
+
+$("content").hidden=true;
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps();
+
+stopTermsListeners();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||!validText(data.fullName,1,150)
+
+||!validId(data.driverId)){
+
+denyAccess();
+
+return;
+
+}
+
+const firstLoad=driver===null;
+
+driver=data;
+
+$("driverName").textContent=
+
+data.fullName;
+
+$("driverId").textContent=
+
+data.driverId;
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(
+
+data.availability
+
+)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(firstLoad||!termsUnsubscribe){
+
+subscribeTerms();
+
+}
+
+if(firstLoad||!acceptanceUnsubscribe){
+
+subscribeAcceptance();
+
+}
+
+renderAgreement();
+
+status("");
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverTermsSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+
+||!driver
+
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyDriverTermsSession"
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+
+||result.uid!==uid
+
+||result.status!=="approved"
+
+||result.activationComplete!==true){
+
+denyAccess();
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+checkingSession=false;
+
+}
+
+},60000);
+
+// REFRESH BUTTON
+
+$("refreshButton").onclick=()=>{
+
+if(saving)return;
+
+if(validSession()&&driver){
+
+$("saveStatus").textContent="";
+
+subscribeTerms();
+
+subscribeAcceptance();
+
+}else if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+};
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
