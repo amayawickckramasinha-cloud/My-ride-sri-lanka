@@ -1,0 +1,1455 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+
+<title>MY RIDE - Active Ride</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:550px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:36px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.6;
+}
+
+#status{
+text-align:center;
+color:#FFD600;
+line-height:1.8;
+padding:15px;
+}
+
+.meter{
+background:#202020;
+border:1px solid #FFD600;
+border-radius:16px;
+padding:30px 15px;
+text-align:center;
+margin:20px 0;
+}
+
+.meter-label{
+color:#CCC;
+font-size:16px;
+line-height:1.6;
+}
+
+#fare{
+color:#FFD600;
+font-size:38px;
+font-weight:bold;
+margin-top:15px;
+overflow-wrap:anywhere;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.small-meter{
+background:#202020;
+border:1px solid #444;
+border-radius:12px;
+padding:20px 8px;
+text-align:center;
+}
+
+.value{
+font-size:25px;
+font-weight:bold;
+margin-top:12px;
+color:white;
+font-variant-numeric:tabular-nums;
+}
+
+.symbol{
+font-size:30px;
+margin-bottom:10px;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:12px;
+padding:16px;
+margin:20px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid #444;
+}
+
+.row strong{
+color:#FFD600;
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:16px;
+margin:12px 0;
+border:0;
+border-radius:10px;
+background:#FFD600;
+color:#111;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+}
+
+.back{
+display:block;
+text-align:center;
+color:#FFD600;
+padding:25px;
+text-decoration:none;
+}
+
+#liveIndicator{
+text-align:center;
+color:#4ADE80;
+font-weight:bold;
+padding:12px;
+}
+
+.note{
+text-align:center;
+color:#AAA;
+font-size:13px;
+line-height:1.7;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 id="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="meterPanel" hidden>
+
+<div id="liveIndicator" hidden></div>
+
+<div class="meter">
+
+<div id="fareLabel"
+class="meter-label"></div>
+
+<div id="fare">—</div>
+
+</div>
+
+<div class="grid">
+
+<div class="small-meter">
+
+<div class="symbol">🛣️</div>
+
+<div class="meter-label"
+data-t="distance"></div>
+
+<div class="value"
+id="distance">—</div>
+
+</div>
+
+<div class="small-meter">
+
+<div class="symbol">⏱️</div>
+
+<div class="meter-label"
+data-t="duration"></div>
+
+<div class="value"
+id="duration">—</div>
+
+</div>
+
+</div>
+
+<section id="detailsPanel"
+class="panel">
+
+<div class="row">
+
+<span data-t="period"></span>
+
+<strong id="period">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="weather"></span>
+
+<strong id="weather">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="road"></span>
+
+<strong id="road">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="discount"></span>
+
+<strong id="discount">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="gps"></span>
+
+<strong id="gps">—</strong>
+
+</div>
+
+</section>
+
+<p id="updated"
+class="note"></p>
+
+<p id="thanks"
+class="note"
+data-t="thanks"
+hidden></p>
+
+<a id="paymentButton"
+class="action"
+data-t="payment"
+hidden></a>
+
+</section>
+
+<a id="trackingButton"
+class="action"
+data-t="tracking"
+hidden></a>
+
+<button id="retryButton"
+data-t="retry"
+hidden></button>
+
+<a id="backButton"
+class="back"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+
+// LANGUAGE SYSTEM
+
+const languages=["si","en","ta"];
+
+const params=
+new URLSearchParams(location.search);
+
+let savedLanguage=null;
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language");
+
+}catch(error){}
+
+const requestedLanguage=params.get("lang");
+
+const lang=
+languages.includes(requestedLanguage)
+?requestedLanguage
+:languages.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"දැනට ගමන් කරන හයර් එක",
+fare:"දැනට ගමන් ගාස්තුව",
+finalFare:"අවසන් ගමන් ගාස්තුව",
+distance:"ගමන් කළ දුර",
+duration:"ගමන් කාලය",
+period:"දිවා / රාත්‍රී",
+day:"දිවා",
+night:"රාත්‍රී",
+weather:"කාලගුණය",
+rain:"වැසි සහිතයි",
+dry:"වැසි රහිතයි",
+mixed:"මිශ්‍ර තත්ත්වය",
+road:"මාර්ග තත්ත්වය",
+normal:"සාමාන්‍ය මාර්ගය",
+difficult:"දුෂ්කර මාර්ගය",
+discount:"දුර අනුව වට්ටම",
+gps:"GPS තත්ත්වය",
+gpsActive:"සක්‍රියයි",
+gpsInactive:"අක්‍රියයි",
+live:"● ගමන ක්‍රියාත්මකයි",
+connecting:"පද්ධතියට සම්බන්ධ වෙමින්...",
+waiting:"රියදුරා ගමන ආරම්භ කරන තෙක් රැඳී සිටින්න.",
+active:"ඔබගේ ගමන ක්‍රියාත්මකයි.",
+completed:"ඔබගේ ගමන අවසන් වී ඇත.",
+cancelled:"මෙම හයර් එක අවලංගු කර ඇත.",
+missing:"සක්‍රිය හයර් එකක් නොමැත.",
+auth:"පාරිභෝගික සැසිය අවශ්‍යයි.",
+denied:"මෙම ගමන බැලීමට අවසර නැත.",
+error:"පද්ධතියට සම්බන්ධ විය නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+stale:"මීටර් දත්ත යාවත්කාලීන වන තෙක් රැඳී සිටින්න.",
+meterWaiting:"මීටර් දත්ත බලාපොරොත්තුවෙන්...",
+unknown:"තහවුරු වී නැත",
+updated:"අවසන් යාවත්කාලීන කිරීම",
+thanks:"MY RIDE සමඟ ගමන් කළ ඔබට ස්තූතියි!",
+payment:"මගේ ගෙවීම්",
+tracking:"රියදුරා එන මාර්ගය",
+retry:"නැවත සම්බන්ධ වන්න",
+back:"← පාරිභෝගික සේවා"
+
+},
+
+en:{
+
+heading:"Active Ride",
+fare:"Current Ride Fare",
+finalFare:"Final Ride Fare",
+distance:"Distance Travelled",
+duration:"Travel Duration",
+period:"Day / Night",
+day:"Day",
+night:"Night",
+weather:"Weather",
+rain:"Rainy",
+dry:"Dry",
+mixed:"Mixed Conditions",
+road:"Road Condition",
+normal:"Normal Road",
+difficult:"Difficult Road",
+discount:"Distance Discount",
+gps:"GPS Status",
+gpsActive:"Active",
+gpsInactive:"Inactive",
+live:"● Ride In Progress",
+connecting:"Connecting to the system...",
+waiting:"Waiting for the driver to start your ride.",
+active:"Your ride is in progress.",
+completed:"Your ride has been completed.",
+cancelled:"This ride has been cancelled.",
+missing:"No active ride found.",
+auth:"A customer session is required.",
+denied:"You cannot access this ride.",
+error:"Unable to connect to the system.",
+offline:"No internet connection.",
+stale:"Waiting for updated meter data.",
+meterWaiting:"Waiting for meter data...",
+unknown:"Not Verified",
+updated:"Last Updated",
+thanks:"Thank you for travelling with MY RIDE!",
+payment:"My Payments",
+tracking:"Track Driver",
+retry:"Reconnect",
+back:"← Customer Services"
+
+},
+
+ta:{
+
+heading:"தற்போதைய பயணம்",
+fare:"தற்போதைய பயணக் கட்டணம்",
+finalFare:"இறுதிப் பயணக் கட்டணம்",
+distance:"பயணித்த தூரம்",
+duration:"பயண நேரம்",
+period:"பகல் / இரவு",
+day:"பகல்",
+night:"இரவு",
+weather:"வானிலை",
+rain:"மழையுடன்",
+dry:"மழையின்றி",
+mixed:"கலப்பு நிலை",
+road:"சாலை நிலை",
+normal:"சாதாரண சாலை",
+difficult:"கடினமான சாலை",
+discount:"தூரத் தள்ளுபடி",
+gps:"GPS நிலை",
+gpsActive:"செயலில் உள்ளது",
+gpsInactive:"செயலில் இல்லை",
+live:"● பயணம் நடைபெறுகிறது",
+connecting:"அமைப்புடன் இணைக்கப்படுகிறது...",
+waiting:"சாரதி பயணத்தைத் தொடங்கும் வரை காத்திருக்கவும்.",
+active:"உங்கள் பயணம் நடைபெறுகிறது.",
+completed:"உங்கள் பயணம் முடிந்துவிட்டது.",
+cancelled:"இந்தப் பயணம் ரத்து செய்யப்பட்டது.",
+missing:"செயலில் உள்ள பயணம் இல்லை.",
+auth:"வாடிக்கையாளர் அமர்வு தேவை.",
+denied:"இந்தப் பயணத்தைப் பார்க்க அனுமதி இல்லை.",
+error:"அமைப்புடன் இணைக்க முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+stale:"புதுப்பிக்கப்பட்ட மீட்டர் தரவுக்காக காத்திருக்கவும்.",
+meterWaiting:"மீட்டர் தரவுக்காக காத்திருக்கிறது...",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+updated:"கடைசியாக புதுப்பிக்கப்பட்டது",
+thanks:"MY RIDE உடன் பயணித்ததற்கு நன்றி!",
+payment:"எனது கொடுப்பனவுகள்",
+tracking:"சாரதியின் பாதை",
+retry:"மீண்டும் இணைக்கவும்",
+back:"← வாடிக்கையாளர் சேவைகள்"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+$("heading").textContent=t.heading;
+
+$("fareLabel").textContent=t.fare;
+
+$("liveIndicator").textContent=t.live;
+
+$("backButton").href=
+"./customer.html?lang="+lang;
+
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+}catch(error){
+
+status(t.error);
+
+}
+
+
+// BOOKING IDENTIFICATION
+
+let bookingId=params.get("booking");
+
+if(!bookingId){
+
+try{
+
+bookingId=sessionStorage.getItem(
+"myride_confirmed_booking_id"
+);
+
+}catch(error){}
+
+}
+
+function validBookingId(id){
+
+return typeof id==="string"
+
+&& /^[A-Za-z0-9_-]{1,128}$/.test(id);
+
+}
+
+
+// LIVE METER STATE
+
+let currentUser=null;
+
+let bookingUnsubscribe=null;
+
+let meterUnsubscribe=null;
+
+let freshnessTimer=null;
+
+let currentMeter=null;
+
+let rideStatus=null;
+
+let lastUpdated=0;
+
+let meterGeneration=0;
+
+
+// FORMAT FARE
+
+function money(amount){
+
+if(!Number.isFinite(amount)
+||amount<0){
+
+return "—";
+
+}
+
+return "LKR "+amount.toLocaleString(
+
+"en-LK",
+
+{
+
+minimumFractionDigits:2,
+
+maximumFractionDigits:2
+
+}
+
+);
+
+}
+
+
+// FORMAT DISTANCE
+
+function formatDistance(metres){
+
+if(!Number.isFinite(metres)
+||metres<0){
+
+return "—";
+
+}
+
+return (metres/1000).toFixed(2)+" KM";
+
+}
+
+
+// FORMAT DURATION
+
+function formatDuration(seconds){
+
+if(!Number.isFinite(seconds)
+||seconds<0){
+
+return "—";
+
+}
+
+const total=Math.floor(seconds);
+
+const hours=Math.floor(total/3600);
+
+const minutes=Math.floor(
+(total%3600)/60
+);
+
+const secs=total%60;
+
+return [
+
+hours,
+
+minutes,
+
+secs
+
+].map(value=>
+
+String(value).padStart(2,"0")
+
+).join(":");
+
+}
+
+
+// VALIDATE SERVER METER
+
+function validMeter(data){
+
+return data
+
+&& Number.isFinite(data.distanceMeters)
+
+&& data.distanceMeters>=0
+
+&& Number.isFinite(data.durationSeconds)
+
+&& data.durationSeconds>=0
+
+&& Number.isFinite(data.currentFare)
+
+&& data.currentFare>=0;
+
+}
+
+
+// CLEAR METER
+
+function clearMeter(){
+
+currentMeter=null;
+
+lastUpdated=0;
+
+$("meterPanel").hidden=true;
+
+$("liveIndicator").hidden=true;
+
+$("paymentButton").hidden=true;
+
+$("thanks").hidden=true;
+
+$("fare").textContent="—";
+
+$("distance").textContent="—";
+
+$("duration").textContent="—";
+
+$("period").textContent="—";
+
+$("weather").textContent="—";
+
+$("road").textContent="—";
+
+$("discount").textContent="—";
+
+$("gps").textContent="—";
+
+$("updated").textContent="";
+
+}
+
+
+// STOP LIVE METER
+
+function stopMeter(){
+
+meterGeneration++;
+
+if(meterUnsubscribe){
+
+meterUnsubscribe();
+
+meterUnsubscribe=null;
+
+}
+
+if(freshnessTimer){
+
+clearInterval(freshnessTimer);
+
+freshnessTimer=null;
+
+}
+
+currentMeter=null;
+
+lastUpdated=0;
+
+}
+
+
+// DISPLAY WEATHER
+
+function weatherText(value){
+
+if(value==="rain")return t.rain;
+
+if(value==="dry")return t.dry;
+
+if(value==="mixed")return t.mixed;
+
+return t.unknown;
+
+}
+
+
+// DISPLAY ROAD CONDITION
+
+function roadText(value){
+
+if(value==="normal")return t.normal;
+
+if(value==="difficult")return t.difficult;
+
+if(value==="mixed")return t.mixed;
+
+return t.unknown;
+
+}
+
+
+// DISPLAY SERVER METER
+
+function displayMeter(data){
+
+if(rideStatus!=="active")return;
+
+if(!validMeter(data)){
+
+clearMeter();
+
+status(t.meterWaiting);
+
+return;
+
+}
+
+const updatedAt=
+
+data.updatedAt?.toMillis?.();
+
+if(!Number.isFinite(updatedAt)
+
+||updatedAt>Date.now()+30000){
+
+clearMeter();
+
+status(t.stale);
+
+return;
+
+}
+
+currentMeter=data;
+
+lastUpdated=updatedAt;
+
+$("heading").textContent=t.heading;
+
+$("fareLabel").textContent=t.fare;
+
+$("fare").textContent=
+
+money(data.currentFare);
+
+$("distance").textContent=
+
+formatDistance(data.distanceMeters);
+
+$("duration").textContent=
+
+formatDuration(data.durationSeconds);
+
+$("period").textContent=
+
+data.period==="night"?t.night:
+
+data.period==="day"?t.day:t.unknown;
+
+$("weather").textContent=
+
+weatherText(data.weatherStatus);
+
+$("road").textContent=
+
+roadText(data.roadStatus);
+
+$("discount").textContent=
+
+money(data.distanceDiscount);
+
+$("gps").textContent=
+
+data.gpsActive===true?t.gpsActive:
+
+data.gpsActive===false?t.gpsInactive:
+
+t.unknown;
+
+$("updated").textContent=
+
+t.updated+": "+
+
+new Date(updatedAt).toLocaleTimeString(
+
+"en-GB",
+
+{
+
+timeZone:"Asia/Colombo"
+
+}
+
+);
+
+$("meterPanel").hidden=false;
+
+$("detailsPanel").hidden=false;
+
+$("thanks").hidden=true;
+
+$("paymentButton").hidden=true;
+
+checkFreshness();
+
+}
+
+
+// GPS AND METER FRESHNESS
+
+function checkFreshness(){
+
+if(!currentMeter
+
+||rideStatus!=="active")return;
+
+const age=Date.now()-lastUpdated;
+
+if(age>30000||!navigator.onLine){
+
+$("liveIndicator").hidden=true;
+
+$("gps").textContent=t.unknown;
+
+status(
+
+navigator.onLine
+
+?t.stale
+
+:t.offline
+
+);
+
+return;
+
+}
+
+$("liveIndicator").hidden=false;
+
+status(t.active);
+
+}
+
+
+// LIVE FIREBASE METER
+
+function subscribeMeter(){
+
+if(meterUnsubscribe)return;
+
+const generation=++meterGeneration;
+
+const meterRef=doc(
+
+db,
+
+"bookings",
+
+bookingId,
+
+"meter",
+
+"current"
+
+);
+
+meterUnsubscribe=onSnapshot(
+
+meterRef,
+
+{
+
+includeMetadataChanges:true
+
+},
+
+snapshot=>{
+
+if(generation!==meterGeneration
+
+||rideStatus!=="active")return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+clearMeter();
+
+status(t.meterWaiting);
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+clearMeter();
+
+status(t.meterWaiting);
+
+return;
+
+}
+
+displayMeter(snapshot.data());
+
+},
+
+error=>{
+
+if(generation!==meterGeneration)return;
+
+stopMeter();
+
+clearMeter();
+
+status(
+
+error.code==="permission-denied"
+
+?t.denied:t.error
+
+);
+
+$("retryButton").hidden=false;
+
+}
+
+);
+
+freshnessTimer=setInterval(
+
+checkFreshness,
+
+1000
+
+);
+
+}
+
+
+// FINAL RIDE RESULT
+
+function displayFinalRide(data){
+
+stopMeter();
+
+clearMeter();
+
+const final=data.finalMeter;
+
+if(!final
+
+||!Number.isFinite(final.finalFare)
+
+||final.finalFare<0
+
+||!Number.isFinite(final.distanceMeters)
+
+||final.distanceMeters<0
+
+||!Number.isFinite(final.durationSeconds)
+
+||final.durationSeconds<0){
+
+status(t.meterWaiting);
+
+return;
+
+}
+
+$("heading").textContent=t.completed;
+
+$("fareLabel").textContent=t.finalFare;
+
+$("fare").textContent=
+
+money(final.finalFare);
+
+$("distance").textContent=
+
+formatDistance(final.distanceMeters);
+
+$("duration").textContent=
+
+formatDuration(final.durationSeconds);
+
+$("meterPanel").hidden=false;
+
+$("detailsPanel").hidden=true;
+
+$("liveIndicator").hidden=true;
+
+$("updated").textContent="";
+
+$("thanks").hidden=false;
+
+$("paymentButton").href=
+
+"./payments.html?lang="+lang
+
++"&booking="+encodeURIComponent(bookingId);
+
+$("paymentButton").hidden=false;
+
+status(t.completed);
+
+}
+
+
+// BOOKING STATUS SYSTEM
+
+function displayBooking(data){
+
+rideStatus=data.status;
+
+$("trackingButton").hidden=true;
+
+$("retryButton").hidden=true;
+
+switch(data.status){
+
+case "active":
+
+$("heading").textContent=t.heading;
+
+if(!currentMeter){
+
+status(t.meterWaiting);
+
+}
+
+subscribeMeter();
+
+break;
+
+case "accepted":
+
+case "arrived":
+
+stopMeter();
+
+clearMeter();
+
+status(t.waiting);
+
+$("trackingButton").href=
+
+"./tracking.html?lang="+lang
+
++"&booking="+encodeURIComponent(bookingId);
+
+$("trackingButton").hidden=false;
+
+break;
+
+case "completed":
+
+displayFinalRide(data);
+
+break;
+
+case "cancelled":
+
+stopMeter();
+
+clearMeter();
+
+status(t.cancelled);
+
+break;
+
+default:
+
+stopMeter();
+
+clearMeter();
+
+status(t.waiting);
+
+}
+
+}
+
+
+// DISCONNECT
+
+function disconnect(){
+
+if(bookingUnsubscribe){
+
+bookingUnsubscribe();
+
+bookingUnsubscribe=null;
+
+}
+
+rideStatus=null;
+
+stopMeter();
+
+clearMeter();
+
+$("trackingButton").hidden=true;
+
+}
+
+
+// SECURE BOOKING CONNECTION
+
+function connect(){
+
+disconnect();
+
+$("heading").textContent=t.heading;
+
+$("retryButton").hidden=true;
+
+if(!validBookingId(bookingId)){
+
+status(t.missing);
+
+return;
+
+}
+
+if(!auth||!db){
+
+status(t.error);
+
+return;
+
+}
+
+if(!currentUser){
+
+status(t.auth);
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+$("retryButton").hidden=false;
+
+return;
+
+}
+
+status(t.connecting);
+
+const bookingRef=doc(
+
+db,
+
+"bookings",
+
+bookingId
+
+);
+
+bookingUnsubscribe=onSnapshot(
+
+bookingRef,
+
+{
+
+includeMetadataChanges:true
+
+},
+
+snapshot=>{
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+rideStatus=null;
+
+stopMeter();
+
+clearMeter();
+
+$("trackingButton").hidden=true;
+
+status(t.connecting);
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+rideStatus=null;
+
+stopMeter();
+
+clearMeter();
+
+$("trackingButton").hidden=true;
+
+status(t.missing);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(data.customerUid!==currentUser?.uid){
+
+disconnect();
+
+status(t.denied);
+
+return;
+
+}
+
+displayBooking(data);
+
+},
+
+error=>{
+
+disconnect();
+
+status(
+
+error.code==="permission-denied"
+
+?t.denied:t.error
+
+);
+
+$("retryButton").hidden=false;
+
+}
+
+);
+
+}
+
+
+// AUTHENTICATION CHECK
+
+if(auth&&db){
+
+onAuthStateChanged(
+
+auth,
+
+user=>{
+
+currentUser=user;
+
+connect();
+
+},
+
+()=>{
+
+disconnect();
+
+status(t.auth);
+
+}
+
+);
+
+}
+
+
+// NETWORK RECOVERY
+
+$("retryButton").onclick=connect;
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+disconnect();
+
+status(t.offline);
+
+$("retryButton").hidden=false;
+
+}
+
+);
+
+window.addEventListener(
+
+"online",
+
+connect
+
+);
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted){
+
+connect();
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
