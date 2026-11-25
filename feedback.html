@@ -1,0 +1,1105 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+
+<title>MY RIDE - Feedback</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:550px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:36px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.6;
+}
+
+label{
+display:block;
+font-weight:bold;
+margin:20px 0 8px;
+line-height:1.6;
+}
+
+input,select,textarea{
+width:100%;
+padding:15px;
+background:#252525;
+color:white;
+border:1px solid #666;
+border-radius:9px;
+font-size:16px;
+font-family:inherit;
+}
+
+textarea{
+min-height:160px;
+resize:vertical;
+}
+
+button{
+width:100%;
+padding:16px;
+margin:20px 0 10px;
+border:0;
+border-radius:10px;
+background:#FFD600;
+color:#111;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:18px;
+margin:20px 0;
+}
+
+#status{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+
+#referenceId{
+color:#FFD600;
+font-size:22px;
+font-weight:bold;
+overflow-wrap:anywhere;
+}
+
+.note{
+font-size:14px;
+color:#CCC;
+line-height:1.8;
+}
+
+.counter{
+text-align:right;
+color:#AAA;
+font-size:12px;
+margin-top:6px;
+}
+
+.back{
+display:block;
+text-align:center;
+color:#FFD600;
+padding:25px;
+text-decoration:none;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">SRI LANKA</div>
+
+<h2 data-t="heading"></h2>
+
+<p class="note" data-t="intro"></p>
+
+<form id="feedbackForm">
+
+<label for="name"
+data-t="name"></label>
+
+<input id="name"
+type="text"
+autocomplete="name"
+maxlength="100"
+required>
+
+<label for="phone"
+data-t="phone"></label>
+
+<input id="phone"
+type="tel"
+autocomplete="tel"
+placeholder="07XXXXXXXX"
+maxlength="16"
+required>
+
+<label for="bookingId"
+data-t="bookingId"></label>
+
+<input id="bookingId"
+type="text"
+maxlength="128"
+autocomplete="off">
+
+<label for="type"
+data-t="type"></label>
+
+<select id="type" required>
+
+<option value=""
+data-t="choose"></option>
+
+<option value="feedback"
+data-t="feedback"></option>
+
+<option value="complaint"
+data-t="complaint"></option>
+
+<option value="question"
+data-t="question"></option>
+
+</select>
+
+<label for="message"
+data-t="message"></label>
+
+<textarea id="message"
+minlength="10"
+maxlength="2000"
+required></textarea>
+
+<div class="counter"
+id="counter">0 / 2000</div>
+
+<p class="note"
+data-t="privacy"></p>
+
+<button type="submit"
+id="submitButton"
+data-t="submit"
+disabled></button>
+
+</form>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="successPanel"
+class="panel" hidden>
+
+<h2 data-t="success"></h2>
+
+<p data-t="reference"></p>
+
+<div id="referenceId"></div>
+
+<p class="note"
+data-t="review"></p>
+
+<button type="button"
+id="copyButton"
+data-t="copy"></button>
+
+<button type="button"
+id="newButton"
+data-t="newMessage"></button>
+
+</section>
+
+<a id="backButton"
+class="back"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signInAnonymously
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+
+// LANGUAGE SYSTEM
+
+const languages=["si","en","ta"];
+
+const params=
+new URLSearchParams(location.search);
+
+let savedLanguage=null;
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language");
+
+}catch(error){}
+
+const requestedLanguage=params.get("lang");
+
+const lang=
+languages.includes(requestedLanguage)
+?requestedLanguage
+:languages.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"අදහස් සහ පැමිණිලි",
+
+intro:"ඔබගේ අදහස්, පැමිණිලි සහ ප්‍රශ්න MY RIDE පරිපාලක වෙත යොමු කරන්න.",
+
+name:"01. සම්පූර්ණ නම",
+
+phone:"02. දුරකථන අංකය",
+
+bookingId:"03. Booking ID (තිබේ නම්)",
+
+type:"04. යොමු කිරීමේ වර්ගය",
+
+choose:"තෝරන්න",
+
+feedback:"අදහසක්",
+
+complaint:"පැමිණිල්ලක්",
+
+question:"ප්‍රශ්නයක්",
+
+message:"05. සම්පූර්ණ විස්තරය",
+
+privacy:"මුරපද, OTP අංක හෝ බැංකු රහස්‍ය තොරතුරු ඇතුළත් නොකරන්න.",
+
+submit:"පරිපාලක වෙත යොමු කරන්න",
+
+success:"සාර්ථකව යොමු කර ඇත",
+
+reference:"ඔබගේ යොමු අංකය",
+
+review:"පරිපාලක විසින් ඔබගේ පණිවිඩය පරීක්ෂා කරනු ඇත. යොමු අංකය සුරක්ෂිතව තබාගන්න.",
+
+copy:"යොමු අංකය Copy කරන්න",
+
+newMessage:"තවත් පණිවිඩයක් යොමු කරන්න",
+
+back:"← පාරිභෝගික සේවා",
+
+connecting:"පද්ධතියට සම්බන්ධ වෙමින්...",
+
+ready:"",
+
+sending:"පණිවිඩය යොමු කරමින්...",
+
+sent:"ඔබගේ පණිවිඩය ලැබී ඇත.",
+
+error:"පණිවිඩය යොමු කළ නොහැක. නැවත උත්සාහ කරන්න.",
+
+authError:"පාරිභෝගික සැසිය සකස් කළ නොහැක.",
+
+phoneError:"නිවැරදි ශ්‍රී ලංකා ජංගම දුරකථන අංකයක් ඇතුළත් කරන්න.",
+
+bookingError:"නිවැරදි Booking ID එක ඇතුළත් කරන්න.",
+
+invalid:"අවශ්‍ය සියලු දත්ත නිවැරදිව ඇතුළත් කරන්න.",
+
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+
+copied:"යොමු අංකය Copy කර ඇත.",
+
+copyError:"යොමු අංකය අතින් Copy කරන්න.",
+
+limit:"පණිවිඩ යොමු කිරීමේ සීමාව ඉක්මවා ඇත. පසුව උත්සාහ කරන්න."
+
+},
+
+en:{
+
+heading:"Feedback & Complaints",
+
+intro:"Send your feedback, complaints and questions to MY RIDE administration.",
+
+name:"01. Full Name",
+
+phone:"02. Phone Number",
+
+bookingId:"03. Booking ID (if available)",
+
+type:"04. Submission Type",
+
+choose:"Select",
+
+feedback:"Feedback",
+
+complaint:"Complaint",
+
+question:"Question",
+
+message:"05. Full Description",
+
+privacy:"Do not include passwords, OTP codes or confidential banking information.",
+
+submit:"Send to Administration",
+
+success:"Successfully Submitted",
+
+reference:"Your Reference Number",
+
+review:"The administration will review your message. Keep your reference number safe.",
+
+copy:"Copy Reference Number",
+
+newMessage:"Submit Another Message",
+
+back:"← Customer Services",
+
+connecting:"Connecting to the system...",
+
+ready:"",
+
+sending:"Submitting your message...",
+
+sent:"Your message has been received.",
+
+error:"Unable to submit your message. Please try again.",
+
+authError:"Unable to establish a customer session.",
+
+phoneError:"Enter a valid Sri Lankan mobile number.",
+
+bookingError:"Enter a valid Booking ID.",
+
+invalid:"Enter all required information correctly.",
+
+offline:"No internet connection.",
+
+copied:"Reference number copied.",
+
+copyError:"Please copy the reference number manually.",
+
+limit:"Submission limit exceeded. Please try again later."
+
+},
+
+ta:{
+
+heading:"கருத்துகள் மற்றும் புகார்கள்",
+
+intro:"உங்கள் கருத்துகள், புகார்கள் மற்றும் கேள்விகளை MY RIDE நிர்வாகத்திற்கு அனுப்பவும்.",
+
+name:"01. முழுப் பெயர்",
+
+phone:"02. தொலைபேசி எண்",
+
+bookingId:"03. முன்பதிவு எண் (இருந்தால்)",
+
+type:"04. செய்தியின் வகை",
+
+choose:"தேர்ந்தெடுக்கவும்",
+
+feedback:"கருத்து",
+
+complaint:"புகார்",
+
+question:"கேள்வி",
+
+message:"05. முழு விவரம்",
+
+privacy:"கடவுச்சொற்கள், OTP எண்கள் அல்லது ரகசிய வங்கித் தகவல்களை உள்ளிட வேண்டாம்.",
+
+submit:"நிர்வாகத்திற்கு அனுப்பவும்",
+
+success:"வெற்றிகரமாக அனுப்பப்பட்டது",
+
+reference:"உங்கள் குறிப்பு எண்",
+
+review:"நிர்வாகம் உங்கள் செய்தியைப் பரிசீலிக்கும். குறிப்பு எண்ணைப் பாதுகாப்பாக வைத்திருக்கவும்.",
+
+copy:"குறிப்பு எண்ணை நகலெடுக்கவும்",
+
+newMessage:"மற்றொரு செய்தியை அனுப்பவும்",
+
+back:"← வாடிக்கையாளர் சேவைகள்",
+
+connecting:"அமைப்புடன் இணைக்கப்படுகிறது...",
+
+ready:"",
+
+sending:"செய்தி அனுப்பப்படுகிறது...",
+
+sent:"உங்கள் செய்தி பெறப்பட்டது.",
+
+error:"செய்தியை அனுப்ப முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+
+authError:"வாடிக்கையாளர் அமர்வை உருவாக்க முடியவில்லை.",
+
+phoneError:"சரியான இலங்கை கைபேசி எண்ணை உள்ளிடவும்.",
+
+bookingError:"சரியான முன்பதிவு எண்ணை உள்ளிடவும்.",
+
+invalid:"தேவையான தகவல்களைச் சரியாக உள்ளிடவும்.",
+
+offline:"இணைய இணைப்பு இல்லை.",
+
+copied:"குறிப்பு எண் நகலெடுக்கப்பட்டது.",
+
+copyError:"குறிப்பு எண்ணை கைமுறையாக நகலெடுக்கவும்.",
+
+limit:"செய்தி அனுப்பும் வரம்பு மீறப்பட்டது. பின்னர் முயற்சிக்கவும்."
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+$("backButton").href=
+"./customer.html?lang="+lang;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+
+let functions=null;
+
+let currentUser=null;
+
+let submitting=false;
+
+let signingIn=false;
+
+let submitted=false;
+
+let referenceId="";
+
+let requestId=null;
+
+let requestPayload=null;
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+}catch(error){
+
+status(t.error);
+
+}
+
+
+// AUTOMATIC BOOKING ID
+
+let bookingId=params.get("booking");
+
+if(!bookingId){
+
+try{
+
+bookingId=sessionStorage.getItem(
+
+"myride_confirmed_booking_id"
+
+);
+
+}catch(error){}
+
+}
+
+if(bookingId
+
+&& /^[A-Za-z0-9_-]{1,128}$/.test(bookingId)){
+
+$("bookingId").value=bookingId;
+
+}
+
+
+// CHARACTER COUNTER
+
+$("message").addEventListener(
+
+"input",
+
+()=>{
+
+$("counter").textContent=
+
+$("message").value.length+" / 2000";
+
+}
+
+);
+
+
+// SUBMIT BUTTON CONTROL
+
+function updateButton(){
+
+$("submitButton").disabled=
+
+!currentUser
+
+||!functions
+
+||submitting
+
+||submitted
+
+||!navigator.onLine;
+
+}
+
+
+// CUSTOMER AUTHENTICATION
+
+async function ensureSession(){
+
+if(!auth||signingIn)return;
+
+if(auth.currentUser){
+
+currentUser=auth.currentUser;
+
+updateButton();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+signingIn=true;
+
+status(t.connecting);
+
+try{
+
+const credential=
+
+await signInAnonymously(auth);
+
+currentUser=credential.user;
+
+status(t.ready);
+
+}catch(error){
+
+currentUser=null;
+
+status(t.authError);
+
+}finally{
+
+signingIn=false;
+
+updateButton();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(
+
+auth,
+
+user=>{
+
+currentUser=user;
+
+if(user){
+
+if(!submitting&&!submitted){
+
+status(t.ready);
+
+}
+
+updateButton();
+
+}else{
+
+updateButton();
+
+ensureSession();
+
+}
+
+},
+
+()=>{
+
+currentUser=null;
+
+status(t.authError);
+
+updateButton();
+
+}
+
+);
+
+}
+
+
+// VALIDATE CUSTOMER MESSAGE
+
+function getFormData(){
+
+const name=
+
+$("name").value.trim();
+
+const phone=
+
+$("phone").value.replace(/[\s-]/g,"");
+
+const booking=
+
+$("bookingId").value.trim();
+
+const type=
+
+$("type").value;
+
+const message=
+
+$("message").value.trim();
+
+if(!name
+
+||name.length>100
+
+||message.length<10
+
+||message.length>2000
+
+||!["feedback","complaint","question"]
+
+.includes(type)){
+
+status(t.invalid);
+
+return null;
+
+}
+
+if(!/^(?:\+94|94|0)7\d{8}$/.test(phone)){
+
+status(t.phoneError);
+
+return null;
+
+}
+
+if(booking
+
+&&!/^[A-Za-z0-9_-]{1,128}$/.test(booking)){
+
+status(t.bookingError);
+
+return null;
+
+}
+
+return {
+
+name,
+
+phone,
+
+bookingId:booking||null,
+
+type,
+
+message,
+
+language:lang
+
+};
+
+}
+
+
+// FORM LOCK
+
+function lockForm(locked){
+
+$("feedbackForm")
+
+.querySelectorAll("input,select,textarea")
+
+.forEach(el=>{
+
+el.disabled=locked;
+
+});
+
+}
+
+
+// SECURE FEEDBACK SUBMISSION
+
+$("feedbackForm").addEventListener(
+
+"submit",
+
+async event=>{
+
+event.preventDefault();
+
+if(submitting||submitted)return;
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+if(!currentUser||!functions){
+
+status(t.authError);
+
+return;
+
+}
+
+const data=getFormData();
+
+if(!data)return;
+
+
+// Reuse the same request ID on retry
+// to help the backend prevent duplicates.
+
+const payload=JSON.stringify(data);
+
+if(!requestId||requestPayload!==payload){
+
+requestId=crypto.randomUUID();
+
+requestPayload=payload;
+
+}
+
+const userUid=currentUser.uid;
+
+submitting=true;
+
+lockForm(true);
+
+updateButton();
+
+status(t.sending);
+
+try{
+
+const submitFeedback=httpsCallable(
+
+functions,
+
+"submitCustomerFeedback"
+
+);
+
+const response=await submitFeedback({
+
+...data,
+
+requestId
+
+});
+
+if(currentUser?.uid!==userUid){
+
+throw new Error("Session changed");
+
+}
+
+const result=response.data;
+
+if(result?.accepted!==true
+
+||typeof result.referenceId!=="string"
+
+||! /^[A-Za-z0-9_-]{1,128}$/
+
+.test(result.referenceId)){
+
+throw new Error("Invalid response");
+
+}
+
+referenceId=result.referenceId;
+
+submitted=true;
+
+$("referenceId").textContent=
+
+referenceId;
+
+$("feedbackForm").hidden=true;
+
+$("successPanel").hidden=false;
+
+status(t.sent);
+
+}catch(error){
+
+status(
+
+error.code==="functions/resource-exhausted"
+
+?t.limit:t.error
+
+);
+
+}finally{
+
+submitting=false;
+
+lockForm(false);
+
+updateButton();
+
+}
+
+}
+
+);
+
+
+// COPY REFERENCE NUMBER
+
+$("copyButton").onclick=async()=>{
+
+if(!referenceId)return;
+
+try{
+
+await navigator.clipboard.writeText(
+
+referenceId
+
+);
+
+status(t.copied);
+
+}catch(error){
+
+status(t.copyError);
+
+}
+
+};
+
+
+// NEW MESSAGE
+
+$("newButton").onclick=()=>{
+
+if(submitting)return;
+
+submitted=false;
+
+referenceId="";
+
+requestId=null;
+
+requestPayload=null;
+
+$("referenceId").textContent="";
+
+$("message").value="";
+
+$("type").value="";
+
+$("counter").textContent="0 / 2000";
+
+$("successPanel").hidden=true;
+
+$("feedbackForm").hidden=false;
+
+status("");
+
+updateButton();
+
+};
+
+
+// INTERNET CONNECTION
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+status(t.offline);
+
+updateButton();
+
+}
+
+);
+
+window.addEventListener(
+
+"online",
+
+()=>{
+
+if(!currentUser){
+
+ensureSession();
+
+}else{
+
+if(!submitting&&!submitted){
+
+status(t.ready);
+
+}
+
+updateButton();
+
+}
+
+}
+
+);
+
+updateButton();
+
+</script>
+
+</body>
+</html>
