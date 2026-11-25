@@ -1,0 +1,2448 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Licence Renewal</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+h2{
+text-align:center;
+line-height:1.7;
+}
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+.documentIcon{
+width:90px;
+height:90px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+.document{
+background:#292929;
+border:1px solid #555;
+border-left:5px solid #FFD600;
+border-radius:12px;
+padding:15px;
+margin:15px 0;
+}
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.8;
+}
+.row span{
+color:#CCC;
+}
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+label{
+display:block;
+font-size:14px;
+font-weight:bold;
+line-height:1.8;
+margin-top:12px;
+}
+input:not([type=checkbox]),
+select,
+textarea{
+width:100%;
+padding:14px;
+background:#292929;
+color:#fff;
+border:1px solid #555;
+border-radius:9px;
+font-size:16px;
+margin:8px 0 15px;
+font-family:inherit;
+color-scheme:dark;
+}
+textarea{
+min-height:100px;
+resize:vertical;
+}
+input[type=checkbox]{
+width:19px;
+height:19px;
+accent-color:#FFD600;
+vertical-align:middle;
+}
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+margin:15px 0;
+}
+.notice{
+background:#302C17;
+border:1px solid #FFD600;
+border-radius:10px;
+padding:15px;
+line-height:1.8;
+margin:15px 0;
+}
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.9;
+}
+.history{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+overflow-wrap:anywhere;
+}
+.green{
+color:#4ADE80;
+}
+.yellow{
+color:#FFD600;
+}
+.orange{
+color:#FFA500;
+}
+.red{
+color:#FF6464;
+}
+#status,
+#formStatus,
+#historyStatus{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+overflow-wrap:anywhere;
+}
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+[hidden]{
+display:none!important;
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<h1>MY RIDE</h1>
+<div class="country">SRI LANKA</div>
+
+<div class="documentIcon">
+<svg width="50" height="50"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+<rect x="3" y="4" width="18" height="16" rx="2"/>
+<circle cx="8" cy="10" r="2"/>
+<path d="M5 16c0-4 6-4 6 0"/>
+<path d="M14 9h4"/>
+<path d="M14 13h4"/>
+<path d="M14 17h4"/>
+</svg>
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status" role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+<p data-t="denied"></p>
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="driverDetails"></h3>
+
+<div class="row">
+<span data-t="driverName"></span>
+<strong id="driverName">—</strong>
+</div>
+
+<div class="row">
+<span>Driver ID</span>
+<strong id="driverId" class="yellow">—</strong>
+</div>
+
+<div class="row">
+<span data-t="vehicleNumber"></span>
+<strong id="vehicleNumber">—</strong>
+</div>
+
+<div class="row">
+<span data-t="accountStatus"></span>
+<strong id="accountStatus">—</strong>
+</div>
+
+<div class="row">
+<span data-t="eligibility"></span>
+<strong id="eligibility">—</strong>
+</div>
+
+<div id="expiredWarning"
+class="warning" hidden
+data-t="expiredWarning"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="currentDocuments"></h3>
+
+<div id="documentList"></div>
+
+<button id="refreshButton"
+class="action secondary"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="renewDocument"></h3>
+
+<div class="notice"
+data-t="approvalNotice"></div>
+
+<div id="busyNotice"
+class="warning" hidden
+data-t="busyNotice"></div>
+
+<form id="renewalForm">
+
+<label for="documentType"
+data-t="documentType"></label>
+
+<select id="documentType" required>
+<option value="" data-t="chooseDocument"></option>
+<option value="licence" data-t="licence"></option>
+<option value="insurance" data-t="insurance"></option>
+<option value="revenue" data-t="revenue"></option>
+</select>
+
+<div id="numberField" hidden>
+
+<label for="newNumber"
+data-t="newNumber"></label>
+
+<input id="newNumber"
+type="text"
+maxlength="80"
+autocomplete="off">
+
+</div>
+
+<label for="newExpiry"
+data-t="newExpiry"></label>
+
+<input id="newExpiry"
+type="date"
+required>
+
+<label for="renewalNote"
+data-t="renewalNote"></label>
+
+<textarea id="renewalNote"
+maxlength="500"></textarea>
+
+<label>
+<input id="declaration"
+type="checkbox" required>
+<span data-t="declaration"></span>
+</label>
+
+<p class="note"
+data-t="originalDocuments"></p>
+
+<button id="submitButton"
+class="action"
+type="submit"
+data-t="submit"></button>
+
+<p id="formStatus"
+role="status"
+aria-live="polite"></p>
+
+</form>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="renewalHistory"></h3>
+
+<label for="historyFilter"
+data-t="filterStatus"></label>
+
+<select id="historyFilter">
+<option value="all" data-t="all"></option>
+<option value="pending" data-t="pending"></option>
+<option value="approved" data-t="approved"></option>
+<option value="rejected" data-t="rejected"></option>
+</select>
+
+<p id="historyStatus"
+role="status"></p>
+
+<div id="historyList"></div>
+
+<button id="loadMoreButton"
+class="action secondary"
+data-t="loadMore" hidden></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="renewalRules"></h3>
+
+<p data-t="rule1"></p>
+<p data-t="rule2"></p>
+<p data-t="rule3"></p>
+<p data-t="rule4"></p>
+<p data-t="rule5"></p>
+<p data-t="rule6"></p>
+
+</section>
+
+<a id="profileLink"
+class="action secondary"
+data-t="profile"></a>
+
+<a id="helpLink"
+class="action secondary"
+data-t="help"></a>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const LANGUAGES=["si","en","ta"];
+const params=new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+}catch(e){}
+
+const lang=
+LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+heading:"රියදුරු බලපත්‍ර අලුත් කිරීම",
+driverDetails:"රියදුරු ගිණුමේ විස්තර",
+driverName:"රියදුරුගේ නම",
+vehicleNumber:"වාහන ලියාපදිංචි අංකය",
+accountStatus:"ගිණුමේ තත්ත්වය",
+eligibility:"හයර් ලබාගැනීමේ සුදුසුකම",
+eligible:"සුදුසුකම් ඇත",
+notEligible:"සුදුසුකම් නොමැත",
+currentDocuments:"දැනට ඇති බලපත්‍ර",
+licence:"රියදුරු බලපත්‍රය",
+insurance:"වාහන රක්ෂණය",
+revenue:"ආදායම් බලපත්‍රය",
+documentNumber:"බලපත්‍ර අංකය",
+expiryDate:"කල් ඉකුත්වීමේ දිනය",
+remainingDays:"ඉතිරි දින",
+days:"දින",
+expiredDays:"කල් ඉකුත් වී දින",
+expiresToday:"අද කල් ඉකුත් වේ",
+valid:"වලංගුයි",
+warning30:"දින 30ක් ඇතුළත කල් ඉකුත් වේ",
+warning15:"දින 15ක් ඇතුළත කල් ඉකුත් වේ",
+warning7:"දින 7ක් ඇතුළත කල් ඉකුත් වේ",
+expired:"කල් ඉකුත් වී ඇත",
+unknown:"තහවුරු කර නැත",
+documentStatus:"බලපත්‍ර තත්ත්වය",
+renew:"අලුත් කිරීම",
+refresh:"නැවත පරීක්ෂා කරන්න",
+renewDocument:"බලපත්‍ර අලුත් කිරීමේ ඉල්ලීම",
+approvalNotice:"නව බලපත්‍ර තොරතුරු Admin විසින් අනුමත කළ පසුව පමණක් ගිණුමට ඇතුළත් වේ.",
+expiredWarning:"ඔබගේ බලපත්‍රවල වලංගුභාවය තහවුරු වී නොමැත. අලුත් හයර් ලබාගැනීම සඳහා Admin අනුමැතිය අවශ්‍ය විය හැක.",
+busyNotice:"සක්‍රිය හයර් එකක් අතරතුර බලපත්‍ර අලුත් කිරීමේ ඉල්ලීමක් යොමු කළ නොහැක.",
+documentType:"අලුත් කරන බලපත්‍රය",
+chooseDocument:"බලපත්‍රය තෝරන්න",
+newNumber:"නව බලපත්‍ර අංකය",
+newExpiry:"නව කල් ඉකුත්වීමේ දිනය",
+renewalNote:"අමතර විස්තර (අත්‍යවශ්‍ය නොවේ)",
+declaration:"මා ලබාදෙන බලපත්‍ර තොරතුරු සත්‍ය සහ නිවැරදි බව තහවුරු කරමි.",
+originalDocuments:"Admin විසින් ඉල්ලා සිටින විට මුල් බලපත්‍ර පරීක්ෂාවට ඉදිරිපත් කළ යුතුය.",
+submit:"Admin වෙත අනුමැතිය සඳහා යවන්න",
+confirmSubmit:"බලපත්‍ර අලුත් කිරීමේ ඉල්ලීම Admin වෙත යවන්නද?",
+renewalHistory:"බලපත්‍ර අලුත් කිරීමේ ඉතිහාසය",
+filterStatus:"ඉල්ලීමේ තත්ත්වය",
+all:"සියල්ල",
+pending:"අනුමැතිය බලාපොරොත්තුවෙන්",
+approved:"අනුමත කර ඇත",
+rejected:"ප්‍රතික්ෂේප කර ඇත",
+reference:"ඉල්ලීම් අංකය",
+submittedDate:"යොමු කළ දිනය",
+reviewedDate:"පරීක්ෂා කළ දිනය",
+adminReason:"Admin හේතුව",
+requestStatus:"ඉල්ලීමේ තත්ත්වය",
+loadMore:"තවත් වාර්තා බලන්න",
+pendingExists:"මෙම බලපත්‍රයට අනුමැතිය බලාපොරොත්තුවෙන් ඉල්ලීමක් තිබේ.",
+invalidNumber:"නිවැරදි බලපත්‍ර අංකයක් ඇතුළත් කරන්න.",
+invalidExpiry:"දැනට ඇති දිනයට සහ අද දිනයට වඩා ඉදිරි දිනයක් ඇතුළත් කරන්න.",
+sent:"ඉල්ලීම සාර්ථකව යොමු කර ඇත.",
+failed:"ඉල්ලීම යැවීම තහවුරු කළ නොහැක.",
+sending:"ඉල්ලීම යවමින්...",
+loading:"දත්ත ලබාගනිමින්...",
+empty:"අදාළ වාර්තා නොමැත.",
+error:"බලපත්‍ර තොරතුරු ලබාගත නොහැක.",
+checking:"රියදුරු ගිණුම පරීක්ෂා කරමින්...",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+renewalRules:"බලපත්‍ර අලුත් කිරීමේ කොන්දේසි",
+rule1:"✓ සියලු බලපත්‍ර වලංගු තත්ත්වයේ තබාගත යුතුය.",
+rule2:"✓ කල් ඉකුත්වීමට පෙර බලපත්‍ර අලුත් කළ යුතුය.",
+rule3:"✓ ව්‍යාජ බලපත්‍ර තොරතුරු ලබාදීම තහනම් වේ.",
+rule4:"✓ Admin අනුමැතියකින් තොරව බලපත්‍ර වෙනස් කළ නොහැක.",
+rule5:"✓ අවශ්‍ය බලපත්‍ර කල් ඉකුත් වූ විට අලුත් හයර් ලබාගැනීම සීමා වේ.",
+rule6:"✓ Admin ඉල්ලා සිටින විට මුල් ලේඛන ඉදිරිපත් කළ යුතුය.",
+login:"Driver Login",
+profile:"රියදුරු පෞද්ගලික විස්තර",
+help:"රියදුරු සහාය",
+back:"← Driver Dashboard"
+},
+
+en:{
+heading:"Driver Licence Renewal",
+driverDetails:"Driver Account Details",
+driverName:"Driver Name",
+vehicleNumber:"Vehicle Registration Number",
+accountStatus:"Account Status",
+eligibility:"Ride Eligibility",
+eligible:"Eligible",
+notEligible:"Not Eligible",
+currentDocuments:"Current Documents",
+licence:"Driving Licence",
+insurance:"Vehicle Insurance",
+revenue:"Revenue Licence",
+documentNumber:"Document Number",
+expiryDate:"Expiry Date",
+remainingDays:"Remaining Days",
+days:"days",
+expiredDays:"Expired for",
+expiresToday:"Expires Today",
+valid:"Valid",
+warning30:"Expires Within 30 Days",
+warning15:"Expires Within 15 Days",
+warning7:"Expires Within 7 Days",
+expired:"Expired",
+unknown:"Not Confirmed",
+documentStatus:"Document Status",
+renew:"Renew",
+refresh:"Refresh",
+renewDocument:"Document Renewal Request",
+approvalNotice:"New document details will be applied to your account only after Admin approval.",
+expiredWarning:"Your document validity is not confirmed. Admin approval may be required before receiving new rides.",
+busyNotice:"Renewal requests cannot be submitted during an active ride.",
+documentType:"Document to Renew",
+chooseDocument:"Select Document",
+newNumber:"New Document Number",
+newExpiry:"New Expiry Date",
+renewalNote:"Additional Details (Optional)",
+declaration:"I confirm that the document information provided is true and accurate.",
+originalDocuments:"Original documents must be presented for verification when requested by Admin.",
+submit:"Submit for Admin Approval",
+confirmSubmit:"Submit this renewal request to Admin?",
+renewalHistory:"Document Renewal History",
+filterStatus:"Request Status",
+all:"All",
+pending:"Pending Approval",
+approved:"Approved",
+rejected:"Rejected",
+reference:"Request Reference",
+submittedDate:"Submitted Date",
+reviewedDate:"Reviewed Date",
+adminReason:"Admin Reason",
+requestStatus:"Request Status",
+loadMore:"Load More Records",
+pendingExists:"A pending request already exists for this document.",
+invalidNumber:"Enter a valid document number.",
+invalidExpiry:"Enter an expiry date later than today and the current expiry date.",
+sent:"Request submitted successfully.",
+failed:"Unable to confirm request submission.",
+sending:"Submitting request...",
+loading:"Loading data...",
+empty:"No matching records.",
+error:"Unable to load document information.",
+checking:"Verifying driver account...",
+denied:"Access to this page is not authorized.",
+offline:"No internet connection.",
+renewalRules:"Document Renewal Conditions",
+rule1:"✓ All required documents must remain valid.",
+rule2:"✓ Renew documents before expiry.",
+rule3:"✓ Providing false document information is prohibited.",
+rule4:"✓ Documents cannot be changed without Admin approval.",
+rule5:"✓ New ride eligibility is restricted when required documents expire.",
+rule6:"✓ Present original documents when requested by Admin.",
+login:"Driver Login",
+profile:"Driver Profile",
+help:"Driver Help",
+back:"← Driver Dashboard"
+},
+
+ta:{
+heading:"சாரதி ஆவண புதுப்பித்தல்",
+driverDetails:"சாரதி கணக்கு விவரங்கள்",
+driverName:"சாரதியின் பெயர்",
+vehicleNumber:"வாகன பதிவு இலக்கம்",
+accountStatus:"கணக்கு நிலை",
+eligibility:"பயண சேவை தகுதி",
+eligible:"தகுதியுள்ளது",
+notEligible:"தகுதியில்லை",
+currentDocuments:"தற்போதைய ஆவணங்கள்",
+licence:"சாரதி அனுமதிப்பத்திரம்",
+insurance:"வாகன காப்புறுதி",
+revenue:"வருமான அனுமதிப்பத்திரம்",
+documentNumber:"ஆவண இலக்கம்",
+expiryDate:"காலாவதி தேதி",
+remainingDays:"மீதமுள்ள நாட்கள்",
+days:"நாட்கள்",
+expiredDays:"காலாவதியாகி",
+expiresToday:"இன்று காலாவதியாகிறது",
+valid:"செல்லுபடியாகும்",
+warning30:"30 நாட்களுக்குள் காலாவதியாகும்",
+warning15:"15 நாட்களுக்குள் காலாவதியாகும்",
+warning7:"7 நாட்களுக்குள் காலாவதியாகும்",
+expired:"காலாவதியானது",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+documentStatus:"ஆவண நிலை",
+renew:"புதுப்பிக்கவும்",
+refresh:"மீண்டும் சரிபார்க்கவும்",
+renewDocument:"ஆவண புதுப்பித்தல் கோரிக்கை",
+approvalNotice:"நிர்வாக அங்கீகாரத்தின் பின்னரே புதிய ஆவண விவரங்கள் கணக்கில் சேர்க்கப்படும்.",
+expiredWarning:"உங்கள் ஆவணங்களின் செல்லுபடித்தன்மை உறுதிப்படுத்தப்படவில்லை. புதிய பயணங்களுக்கு நிர்வாக அங்கீகாரம் தேவைப்படலாம்.",
+busyNotice:"செயலில் உள்ள பயணத்தின் போது புதுப்பித்தல் கோரிக்கையை அனுப்ப முடியாது.",
+documentType:"புதுப்பிக்க வேண்டிய ஆவணம்",
+chooseDocument:"ஆவணத்தை தேர்ந்தெடுக்கவும்",
+newNumber:"புதிய ஆவண இலக்கம்",
+newExpiry:"புதிய காலாவதி தேதி",
+renewalNote:"கூடுதல் விவரங்கள் (விருப்பம்)",
+declaration:"வழங்கப்பட்ட ஆவண தகவல்கள் உண்மையானவை மற்றும் சரியானவை என உறுதிப்படுத்துகிறேன்.",
+originalDocuments:"நிர்வாகம் கோரும்போது அசல் ஆவணங்களை சரிபார்ப்பிற்கு வழங்க வேண்டும்.",
+submit:"நிர்வாக அங்கீகாரத்திற்கு அனுப்பவும்",
+confirmSubmit:"இந்த புதுப்பித்தல் கோரிக்கையை நிர்வாகத்திற்கு அனுப்பவா?",
+renewalHistory:"ஆவண புதுப்பித்தல் வரலாறு",
+filterStatus:"கோரிக்கை நிலை",
+all:"அனைத்தும்",
+pending:"அங்கீகாரத்திற்காக காத்திருக்கிறது",
+approved:"அங்கீகரிக்கப்பட்டது",
+rejected:"நிராகரிக்கப்பட்டது",
+reference:"கோரிக்கை இலக்கம்",
+submittedDate:"அனுப்பிய தேதி",
+reviewedDate:"பரிசீலித்த தேதி",
+adminReason:"நிர்வாக காரணம்",
+requestStatus:"கோரிக்கை நிலை",
+loadMore:"மேலும் பதிவுகளை பார்க்கவும்",
+pendingExists:"இந்த ஆவணத்திற்கு நிலுவையில் உள்ள கோரிக்கை ஏற்கனவே உள்ளது.",
+invalidNumber:"சரியான ஆவண இலக்கத்தை உள்ளிடவும்.",
+invalidExpiry:"இன்றைய தேதிக்கும் தற்போதைய காலாவதி தேதிக்கும் பிற்பட்ட தேதியை உள்ளிடவும்.",
+sent:"கோரிக்கை வெற்றிகரமாக அனுப்பப்பட்டது.",
+failed:"கோரிக்கை அனுப்பப்பட்டதை உறுதிப்படுத்த முடியவில்லை.",
+sending:"கோரிக்கை அனுப்பப்படுகிறது...",
+loading:"தரவு பெறப்படுகிறது...",
+empty:"பொருத்தமான பதிவுகள் இல்லை.",
+error:"ஆவண தகவல்களை பெற முடியவில்லை.",
+checking:"சாரதி கணக்கு சரிபார்க்கப்படுகிறது...",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+renewalRules:"ஆவண புதுப்பித்தல் நிபந்தனைகள்",
+rule1:"✓ தேவையான அனைத்து ஆவணங்களும் செல்லுபடியாக இருக்க வேண்டும்.",
+rule2:"✓ காலாவதிக்கு முன் ஆவணங்களை புதுப்பிக்க வேண்டும்.",
+rule3:"✓ போலியான ஆவண தகவல்களை வழங்குவது தடைசெய்யப்பட்டுள்ளது.",
+rule4:"✓ நிர்வாக அங்கீகாரம் இல்லாமல் ஆவணங்களை மாற்ற முடியாது.",
+rule5:"✓ தேவையான ஆவணங்கள் காலாவதியானால் புதிய பயணங்கள் கட்டுப்படுத்தப்படும்.",
+rule6:"✓ நிர்வாகம் கோரும்போது அசல் ஆவணங்களை வழங்க வேண்டும்.",
+login:"சாரதி உள்நுழைவு",
+profile:"சாரதி சுயவிவரம்",
+help:"சாரதி உதவி",
+back:"← சாரதி முதன்மைப் பக்கம்"
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+el.textContent=t[el.dataset.t];
+});
+
+document.title="MY RIDE - "+t.heading;
+
+// PAGE LINKS
+
+const links={
+loginLink:"driver-login.html",
+backButton:"driver-dashboard.html",
+profileLink:"driver-profile.html",
+helpLink:"driver-help.html"
+};
+
+Object.entries(links).forEach(([id,page])=>{
+$(id).href="./"+page+"?lang="+lang;
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+projectId:"my-ride-sri-lanka",
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+messagingSenderId:"88909447786",
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+let generation=0;
+
+let driverUnsubscribe=null;
+let renewalUnsubscribe=null;
+
+let documents=null;
+let pendingTypes=[];
+
+let records=[];
+let nextCursor=null;
+let historyGeneration=0;
+let documentGeneration=0;
+
+let loading=false;
+let submitting=false;
+let checkingSession=false;
+
+let pendingRequest=null;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+let serverOffset=null;
+let serverSyncAt=0;
+
+let previousRevision=null;
+
+const TYPES=[
+"licence",
+"insurance",
+"revenue"
+];
+
+const DAY_MS=86400000;
+
+function status(message){
+$("status").textContent=message;
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+provider:new ReCaptchaEnterpriseProvider(
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+),
+isTokenAutoRefreshEnabled:true
+});
+
+auth=getAuth(app);
+db=getFirestore(app);
+functions=getFunctions(app);
+
+}catch(e){
+status(t.error);
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+return authorized
+&&uid!==null
+&&auth?.currentUser?.uid===uid
+&&navigator.onLine;
+}
+
+function validId(value){
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+}
+
+function validText(value,min,max){
+return typeof value==="string"
+&&value.trim().length>=min
+&&value.length<=max;
+}
+
+function validTime(value){
+return Number.isFinite(value)
+&&value>0
+&&value<=8640000000000000;
+}
+
+function validDate(value){
+
+if(typeof value!=="string"
+||!/^\d{4}-\d{2}-\d{2}$/.test(value)){
+return false;
+}
+
+const ms=Date.parse(value+"T00:00:00Z");
+
+return Number.isFinite(ms)
+&&new Date(ms).toISOString().slice(0,10)===value;
+
+}
+
+function busy(){
+return driver?.availability==="busy"
+||Boolean(driver?.activeBookingId);
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+throw new Error("Unauthorized");
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+functions,name
+)(data);
+
+if(!validSession()
+||currentGeneration!==generation){
+throw new Error("Session changed");
+}
+
+return response.data;
+
+}
+
+// SRI LANKA SERVER TIME
+
+async function syncServerTime(){
+
+const currentGeneration=generation;
+const start=Date.now();
+
+const result=await serverCall(
+"getDriverServerTime"
+);
+
+const end=Date.now();
+
+if(currentGeneration!==generation)return;
+
+if(!validTime(result?.serverTimeMs)
+||end-start>10000){
+throw new Error("Invalid server time");
+}
+
+serverOffset=
+result.serverTimeMs-(start+end)/2;
+
+serverSyncAt=end;
+
+}
+
+function serverNow(){
+
+if(serverOffset===null
+||Date.now()-serverSyncAt>120000){
+return null;
+}
+
+return Date.now()+serverOffset;
+
+}
+
+function sriLankaToday(){
+
+const now=serverNow();
+
+if(now===null)return null;
+
+return new Date(now+330*60000)
+.toISOString().slice(0,10);
+
+}
+
+function remainingDays(expiry){
+
+const today=sriLankaToday();
+
+if(!today||!validDate(expiry)){
+return null;
+}
+
+return Math.round(
+(
+Date.parse(expiry+"T00:00:00Z")
+-Date.parse(today+"T00:00:00Z")
+)/DAY_MS
+);
+
+}
+
+function formatDate(ms){
+
+if(!validTime(ms))return "—";
+
+return new Intl.DateTimeFormat(
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+{
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"short"
+}
+).format(new Date(ms));
+
+}
+
+// DOCUMENT STATUS
+
+function expiryStatus(expiry){
+
+const days=remainingDays(expiry);
+
+if(days===null){
+return {
+label:t.unknown,
+color:"yellow",
+days:null
+};
+}
+
+if(days<0){
+return {
+label:t.expired,
+color:"red",
+days
+};
+}
+
+if(days===0){
+return {
+label:t.expiresToday,
+color:"red",
+days
+};
+}
+
+if(days<=7){
+return {
+label:t.warning7,
+color:"red",
+days
+};
+}
+
+if(days<=15){
+return {
+label:t.warning15,
+color:"orange",
+days
+};
+}
+
+if(days<=30){
+return {
+label:t.warning30,
+color:"yellow",
+days
+};
+}
+
+return {
+label:t.valid,
+color:"green",
+days
+};
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+||!navigator.geolocation
+||!validSession())return;
+
+const currentGeneration=generation;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(currentGeneration!==generation
+||!validSession()
+||!driver
+||!["online","busy"].includes(
+driver.availability
+)
+||(
+driver.documentsValid!==true
+&&driver.availability!=="busy"
+)
+||!Number.isFinite(c.latitude)
+||!Number.isFinite(c.longitude)
+||!Number.isFinite(c.accuracy)
+||c.accuracy<0
+||c.accuracy>100
+||c.latitude<5.85
+||c.latitude>9.9
+||c.longitude<79.5
+||c.longitude>82
+||Date.now()-position.timestamp>30000
+||position.timestamp>Date.now()+5000
+||gpsSending
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+"updateDriverLocation",
+{
+lat:c.latitude,
+lon:c.longitude,
+accuracy:c.accuracy,
+capturedAtMs:position.timestamp
+}
+);
+
+}catch(e){
+
+// Backend must expire stale GPS data.
+
+}finally{
+
+if(currentGeneration===generation){
+gpsSending=false;
+}
+
+}
+
+},
+
+()=>{},
+
+{
+enableHighAccuracy:true,
+maximumAge:5000,
+timeout:15000
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// SAFE DOM
+
+function element(tag,className,text){
+
+const node=document.createElement(tag);
+
+if(className){
+node.className=className;
+}
+
+if(text!==undefined){
+node.textContent=text;
+}
+
+return node;
+
+}
+
+function addRow(container,label,value,color=""){
+
+const row=element("div","row");
+
+row.append(
+element("span","",label),
+element("strong",color,value)
+);
+
+container.appendChild(row);
+
+}
+
+// DOCUMENT DATA VALIDATION
+
+function validDocuments(data){
+
+if(!data
+||data.driverUid!==uid
+||!validText(data.vehicleNumber,1,40)
+||typeof data.documentsValid!=="boolean"
+||!data.documents
+||!Array.isArray(data.pendingTypes)
+||!data.pendingTypes.every(
+type=>TYPES.includes(type)
+)){
+
+return false;
+
+}
+
+return TYPES.every(type=>{
+
+const item=data.documents[type];
+
+return item
+&&validDate(item.expiryDate)
+&&(
+type==="revenue"
+?(
+item.number===null
+||validText(item.number,1,80)
+)
+:validText(item.number,1,80)
+);
+
+});
+
+}
+
+// DISPLAY DOCUMENTS
+
+function renderDocuments(){
+
+const container=$("documentList");
+
+container.replaceChildren();
+
+if(!documents)return;
+
+$("vehicleNumber").textContent=
+documents.vehicleNumber;
+
+let expired=false;
+
+TYPES.forEach(type=>{
+
+const item=documents.documents[type];
+
+const expiry=expiryStatus(item.expiryDate);
+
+if(expiry.days===null
+||expiry.days<0){
+expired=true;
+}
+
+const card=element(
+"article",
+"document"
+);
+
+card.appendChild(
+element("h3","",t[type])
+);
+
+if(item.number){
+
+addRow(
+card,
+t.documentNumber,
+item.number
+);
+
+}
+
+addRow(
+card,
+t.expiryDate,
+item.expiryDate
+);
+
+const daysText=
+expiry.days===null
+?"—"
+:expiry.days<0
+?t.expiredDays+" "
++Math.abs(expiry.days)+" "+t.days
+:expiry.days+" "+t.days;
+
+addRow(
+card,
+t.remainingDays,
+daysText,
+expiry.color
+);
+
+addRow(
+card,
+t.documentStatus,
+expiry.label,
+expiry.color
+);
+
+const pending=pendingTypes.includes(type);
+
+if(pending){
+
+addRow(
+card,
+t.requestStatus,
+t.pending,
+"yellow"
+);
+
+}
+
+const button=element(
+"button",
+"action",
+pending?t.pending:t.renew
+);
+
+button.type="button";
+
+button.disabled=
+pending
+||submitting
+||busy()
+||!validSession()
+||serverNow()===null;
+
+button.onclick=()=>{
+
+$("documentType").value=type;
+
+updateRenewalFields();
+
+$("renewalForm").scrollIntoView({
+behavior:"smooth"
+});
+
+};
+
+card.appendChild(button);
+
+container.appendChild(card);
+
+});
+
+const eligible=
+!expired
+&&documents.documentsValid===true
+&&driver?.documentsValid===true;
+
+$("eligibility").textContent=
+eligible?t.eligible:t.notEligible;
+
+$("eligibility").className=
+eligible?"green":"red";
+
+$("expiredWarning").hidden=eligible;
+
+updateControls();
+
+}
+
+// LOAD DOCUMENT DETAILS
+
+async function loadDocuments(){
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+const requestGeneration=++documentGeneration;
+
+try{
+
+if(serverNow()===null){
+await syncServerTime();
+}
+
+const result=await serverCall(
+"getDriverRenewalDocuments"
+);
+
+if(currentGeneration!==generation
+||requestGeneration!==documentGeneration
+||!driver)return;
+
+if(result?.success!==true
+||!validDocuments(result.data)){
+throw new Error("Invalid documents");
+}
+
+documents=result.data;
+
+pendingTypes=[
+...new Set(documents.pendingTypes)
+];
+
+renderDocuments();
+
+updateRenewalFields(false);
+
+status("");
+
+}catch(e){
+
+if(currentGeneration!==generation
+||requestGeneration!==documentGeneration)return;
+
+documents=null;
+pendingTypes=[];
+
+$("documentList").replaceChildren();
+
+$("vehicleNumber").textContent="—";
+
+$("eligibility").textContent=t.unknown;
+
+$("expiredWarning").hidden=false;
+
+status(t.error);
+
+updateControls();
+
+}
+
+}
+
+// RENEWAL FORM
+
+function updateRenewalFields(reset=true){
+
+const type=$("documentType").value;
+
+const requiresNumber=
+type==="licence"
+||type==="insurance";
+
+$("numberField").hidden=!requiresNumber;
+
+$("newNumber").required=requiresNumber;
+
+if(reset){
+
+$("newNumber").value="";
+
+$("newExpiry").value="";
+
+$("renewalNote").value="";
+
+$("declaration").checked=false;
+
+$("formStatus").textContent="";
+
+pendingRequest=null;
+
+if(requiresNumber&&documents){
+
+$("newNumber").value=
+documents.documents[type].number||"";
+
+}
+
+}
+
+const today=sriLankaToday();
+
+if(today&&documents&&TYPES.includes(type)){
+
+const currentExpiry=
+documents.documents[type].expiryDate;
+
+const baseDate=
+currentExpiry>today
+?currentExpiry
+:today;
+
+$("newExpiry").min=
+new Date(
+Date.parse(baseDate+"T00:00:00Z")
++DAY_MS
+).toISOString().slice(0,10);
+
+}else{
+
+$("newExpiry").removeAttribute("min");
+
+}
+
+if(pendingTypes.includes(type)){
+
+$("formStatus").textContent=
+t.pendingExists;
+
+}
+
+updateControls();
+
+}
+
+$("documentType").onchange=()=>{
+
+updateRenewalFields();
+
+};
+
+function updateControls(){
+
+const enabled=
+validSession()
+&&driver!==null
+&&documents!==null;
+
+const type=$("documentType").value;
+
+const pending=
+pendingTypes.includes(type);
+
+$("busyNotice").hidden=!busy();
+
+$("documentType").disabled=
+!enabled||submitting||busy();
+
+$("newNumber").disabled=
+!enabled||submitting||busy()||pending;
+
+$("newExpiry").disabled=
+!enabled||submitting||busy()||pending;
+
+$("renewalNote").disabled=
+!enabled||submitting||busy()||pending;
+
+$("declaration").disabled=
+!enabled||submitting||busy()||pending;
+
+$("submitButton").disabled=
+!enabled
+||submitting
+||busy()
+||pending
+||!TYPES.includes(type)
+||serverNow()===null;
+
+$("refreshButton").disabled=
+!validSession()
+||!driver
+||submitting;
+
+$("historyFilter").disabled=
+!validSession()
+||!driver
+||submitting;
+
+$("loadMoreButton").disabled=
+!validSession()
+||loading
+||submitting
+||!nextCursor;
+
+}
+
+// SUBMIT RENEWAL REQUEST
+
+$("renewalForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(!validSession()
+||!driver
+||!documents
+||submitting
+||busy())return;
+
+const type=$("documentType").value;
+
+if(!TYPES.includes(type))return;
+
+if(pendingTypes.includes(type)){
+
+$("formStatus").textContent=
+t.pendingExists;
+
+return;
+
+}
+
+const number=
+type==="revenue"
+?null
+:$("newNumber").value.trim();
+
+const expiry=$("newExpiry").value;
+
+const note=$("renewalNote").value.trim();
+
+const today=sriLankaToday();
+
+if(type!=="revenue"
+&&(
+!validText(number,2,80)
+||/[\u0000-\u001F\u007F]/.test(number)
+)){
+
+$("formStatus").textContent=
+t.invalidNumber;
+
+return;
+
+}
+
+if(!today
+||!validDate(expiry)
+||expiry<=today
+||expiry<=documents.documents[type].expiryDate){
+
+$("formStatus").textContent=
+t.invalidExpiry;
+
+return;
+
+}
+
+if(note.length>500
+||!$("declaration").checked){
+
+return;
+
+}
+
+if(!confirm(t.confirmSubmit))return;
+
+const payload={
+documentType:type,
+newDocumentNumber:number,
+newExpiryDate:expiry,
+expectedCurrentExpiry:
+documents.documents[type].expiryDate,
+note,
+language:lang,
+declarationAccepted:true
+};
+
+const signature=JSON.stringify(payload);
+
+if(!pendingRequest
+||pendingRequest.signature!==signature){
+
+pendingRequest={
+signature,
+requestId:crypto.randomUUID()
+};
+
+}
+
+const currentGeneration=generation;
+
+submitting=true;
+
+$("formStatus").textContent=t.sending;
+
+renderDocuments();
+
+updateControls();
+
+try{
+
+const result=await serverCall(
+"submitDriverRenewalRequest",
+{
+...payload,
+requestId:pendingRequest.requestId
+}
+);
+
+if(currentGeneration!==generation
+||!driver)return;
+
+if(result?.accepted!==true
+||result.driverUid!==uid
+||result.status!=="pending"
+||!validId(result.requestId)){
+
+throw new Error("Request not confirmed");
+
+}
+
+pendingTypes=[
+...new Set([...pendingTypes,type])
+];
+
+pendingRequest=null;
+
+$("renewalForm").reset();
+
+updateRenewalFields();
+
+$("formStatus").textContent=
+t.sent+" "+t.reference+": "
++result.requestId;
+
+await loadDocuments();
+
+await loadHistory(false);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("formStatus").textContent=t.failed;
+
+}finally{
+
+if(currentGeneration===generation){
+
+submitting=false;
+
+renderDocuments();
+
+updateControls();
+
+}
+
+}
+
+};
+
+// RENEWAL HISTORY VALIDATION
+
+function validRecord(record){
+
+return record
+&&record.driverUid===uid
+&&validId(record.requestId)
+&&TYPES.includes(record.documentType)
+&&["pending","approved","rejected"]
+.includes(record.status)
+&&validDate(record.oldExpiryDate)
+&&validDate(record.newExpiryDate)
+&&validTime(record.createdAtMs)
+&&(
+record.reviewedAtMs===null
+||validTime(record.reviewedAtMs)
+)
+&&(
+record.adminReason===null
+||validText(record.adminReason,1,2000)
+);
+
+}
+
+// DISPLAY RENEWAL HISTORY
+
+function renderHistory(){
+
+const container=$("historyList");
+
+container.replaceChildren();
+
+records.forEach(record=>{
+
+const card=element(
+"article",
+"history"
+);
+
+card.appendChild(
+element(
+"h3",
+"",
+t[record.documentType]
+)
+);
+
+addRow(
+card,
+t.reference,
+record.requestId
+);
+
+addRow(
+card,
+t.expiryDate,
+record.oldExpiryDate
+);
+
+addRow(
+card,
+t.newExpiry,
+record.newExpiryDate
+);
+
+addRow(
+card,
+t.submittedDate,
+formatDate(record.createdAtMs)
+);
+
+addRow(
+card,
+t.requestStatus,
+t[record.status],
+record.status==="approved"
+?"green"
+:record.status==="rejected"
+?"red":"yellow"
+);
+
+if(record.reviewedAtMs!==null){
+
+addRow(
+card,
+t.reviewedDate,
+formatDate(record.reviewedAtMs)
+);
+
+}
+
+if(record.adminReason){
+
+addRow(
+card,
+t.adminReason,
+record.adminReason
+);
+
+}
+
+container.appendChild(card);
+
+});
+
+$("loadMoreButton").hidden=!nextCursor;
+
+updateControls();
+
+}
+
+// LOAD RENEWAL HISTORY
+
+async function loadHistory(append=false){
+
+if(!validSession()||!driver)return;
+
+if(append&&(loading||!nextCursor))return;
+
+const currentGeneration=generation;
+const requestGeneration=++historyGeneration;
+
+const cursor=append?nextCursor:null;
+
+const filter=$("historyFilter").value;
+
+if(!append){
+
+records=[];
+nextCursor=null;
+
+}
+
+loading=true;
+
+$("historyStatus").textContent=t.loading;
+
+renderHistory();
+
+try{
+
+const result=await serverCall(
+"getDriverRenewalHistory",
+{
+status:filter==="all"?null:filter,
+limit:20,
+cursor
+}
+);
+
+if(currentGeneration!==generation
+||requestGeneration!==historyGeneration
+||!driver)return;
+
+if(result?.success!==true
+||result.driverUid!==uid
+||!Array.isArray(result.records)
+||result.records.length>20
+||!result.records.every(validRecord)
+||!result.records.every(record=>
+filter==="all"||record.status===filter
+)
+||!(
+result.nextCursor===null
+||validText(result.nextCursor,1,2048)
+)){
+
+throw new Error("Invalid history");
+
+}
+
+if(result.nextCursor!==null
+&&result.nextCursor===cursor){
+
+throw new Error("Invalid pagination");
+
+}
+
+const combined=new Map();
+
+if(append){
+
+records.forEach(record=>{
+
+combined.set(record.requestId,record);
+
+});
+
+}
+
+result.records.forEach(record=>{
+
+combined.set(record.requestId,record);
+
+});
+
+records=Array.from(combined.values())
+.sort((a,b)=>b.createdAtMs-a.createdAtMs);
+
+nextCursor=result.nextCursor;
+
+$("historyStatus").textContent=
+records.length===0?t.empty:"";
+
+renderHistory();
+
+}catch(e){
+
+if(currentGeneration!==generation
+||requestGeneration!==historyGeneration)return;
+
+$("historyStatus").textContent=t.error;
+
+}finally{
+
+if(currentGeneration===generation
+&&requestGeneration===historyGeneration){
+
+loading=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("historyFilter").onchange=()=>{
+
+loadHistory(false);
+
+};
+
+$("loadMoreButton").onclick=()=>{
+
+loadHistory(true);
+
+};
+
+$("refreshButton").onclick=async()=>{
+
+if(!validSession()||submitting)return;
+
+try{
+
+await syncServerTime();
+
+await loadDocuments();
+
+await loadHistory(false);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+};
+
+// LIVE ADMIN APPROVAL MONITORING
+
+function subscribeRenewalState(){
+
+if(renewalUnsubscribe){
+
+renewalUnsubscribe();
+
+renewalUnsubscribe=null;
+
+}
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+previousRevision=null;
+
+renewalUnsubscribe=onSnapshot(
+
+doc(
+db,
+"drivers",
+uid,
+"renewalState",
+"summary"
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession()
+||!driver)return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+||data.driverUid!==uid
+||!Number.isSafeInteger(data.revision)
+||data.revision<0){
+
+return;
+
+}
+
+const changed=
+previousRevision!==null
+&&data.revision!==previousRevision;
+
+previousRevision=data.revision;
+
+if(changed){
+
+loadDocuments();
+
+loadHistory(false);
+
+}
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+status(t.error);
+
+}
+
+);
+
+}
+
+// CLEAR PRIVATE DATA
+
+function clearRenewalData(){
+
+historyGeneration++;
+documentGeneration++;
+
+if(renewalUnsubscribe){
+
+renewalUnsubscribe();
+
+renewalUnsubscribe=null;
+
+}
+
+documents=null;
+pendingTypes=[];
+records=[];
+nextCursor=null;
+
+loading=false;
+submitting=false;
+
+pendingRequest=null;
+previousRevision=null;
+
+$("documentList").replaceChildren();
+
+$("historyList").replaceChildren();
+
+$("historyStatus").textContent="";
+
+$("formStatus").textContent="";
+
+$("loadMoreButton").hidden=true;
+
+$("renewalForm").reset();
+
+$("numberField").hidden=true;
+
+$("vehicleNumber").textContent="—";
+
+$("eligibility").textContent="—";
+
+$("expiredWarning").hidden=true;
+
+updateControls();
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+uid=null;
+driver=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+stopGps();
+
+gpsSending=false;
+lastGpsSent=0;
+
+serverOffset=null;
+serverSyncAt=0;
+
+clearRenewalData();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("accountStatus").textContent="—";
+
+$("content").hidden=true;
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps();
+
+clearRenewalData();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+||data.uid!==uid
+||data.status!=="approved"
+||data.activationComplete!==true
+||typeof data.documentsValid!=="boolean"
+||!validText(data.fullName,1,150)
+||!validId(data.driverId)
+||!["online","offline","busy"].includes(
+data.availability
+)){
+
+denyAccess();
+
+return;
+
+}
+
+const firstLoad=driver===null;
+
+const validityChanged=
+driver!==null
+&&driver.documentsValid!==data.documentsValid;
+
+driver=data;
+
+$("driverName").textContent=
+data.fullName;
+
+$("driverId").textContent=
+data.driverId;
+
+$("accountStatus").textContent=
+t.approved;
+
+$("accountStatus").className="green";
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(
+data.availability==="busy"
+||(
+data.availability==="online"
+&&data.documentsValid===true
+)
+){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(firstLoad){
+
+subscribeRenewalState();
+
+loadDocuments();
+
+loadHistory(false);
+
+}else if(validityChanged){
+
+loadDocuments();
+
+}
+
+renderDocuments();
+
+updateControls();
+
+status("");
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// SPECIAL RENEWAL AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+functions,
+"verifyDriverRenewalSession"
+)({});
+
+if(currentGeneration!==generation
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+||account.uid!==user.uid
+||account.status!=="approved"
+||account.activationComplete!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+||!driver
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+"verifyDriverRenewalSession"
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+||result.uid!==uid
+||result.status!=="approved"
+||result.activationComplete!==true){
+
+denyAccess();
+
+return;
+
+}
+
+try{
+
+await syncServerTime();
+
+if(currentGeneration!==generation)return;
+
+renderDocuments();
+
+updateRenewalFields(false);
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+status(t.error);
+
+renderDocuments();
+
+}
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+checkingSession=false;
+
+}
+
+},60000);
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+"pagehide",
+disconnect
+);
+
+window.addEventListener(
+"pageshow",
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+);
+
+updateControls();
+
+</script>
+
+</body>
+</html>
