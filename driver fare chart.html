@@ -1,0 +1,3455 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<meta name="robots"
+content="noindex,nofollow">
+
+<meta name="google"
+content="notranslate">
+
+<meta name="referrer"
+content="no-referrer">
+
+<title>MY RIDE - Driver Fare Chart</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:850px;
+margin:auto;
+padding:15px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.fareIcon{
+width:90px;
+height:90px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:15px;
+margin:15px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.8;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border:1px solid #555;
+border-radius:12px;
+padding:18px 8px;
+text-align:center;
+}
+
+.stat strong{
+display:block;
+font-size:23px;
+color:#FFD600;
+margin-bottom:10px;
+}
+
+.stat span{
+font-size:13px;
+line-height:1.8;
+}
+
+.vehicleCard{
+background:#202020;
+border:1px solid #555;
+border-radius:14px;
+padding:14px;
+margin:20px 0;
+}
+
+.vehicleHeading{
+background:#FFD600;
+color:#111;
+font-size:20px;
+font-weight:bold;
+padding:15px;
+border-radius:9px;
+text-align:center;
+margin-bottom:15px;
+}
+
+.conditionHeading{
+color:#FFD600;
+font-size:15px;
+font-weight:bold;
+margin:20px 0 10px;
+line-height:1.8;
+}
+
+.tableWrap{
+overflow-x:auto;
+margin-bottom:15px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+font-size:13px;
+}
+
+th,td{
+border:1px solid #555;
+padding:12px 7px;
+text-align:center;
+}
+
+th{
+background:#FFD600;
+color:#111;
+}
+
+td{
+background:#292929;
+}
+
+tr:nth-child(even) td{
+background:#252525;
+}
+
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.filters{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:9px;
+}
+
+.filterButton{
+padding:13px 8px;
+border:1px solid #FFD600;
+border-radius:8px;
+background:#292929;
+color:#FFD600;
+font-weight:bold;
+cursor:pointer;
+line-height:1.6;
+}
+
+.filterButton.selected{
+background:#FFD600;
+color:#111;
+}
+
+.filterButton:first-child{
+grid-column:1/-1;
+}
+
+.green{
+color:#4ADE80!important;
+}
+
+.yellow{
+color:#FFD600!important;
+}
+
+.red{
+color:#FF6464!important;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.9;
+}
+
+.notice{
+background:#302C17;
+border:1px solid #FFD600;
+border-radius:10px;
+padding:14px;
+line-height:1.9;
+margin:15px 0;
+}
+
+#status,
+#fareStatus{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+overflow-wrap:anywhere;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<div class="fareIcon">
+
+<svg width="52" height="52"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<rect x="3" y="3"
+width="18" height="18" rx="2"/>
+
+<path d="M3 9h18"/>
+<path d="M3 15h18"/>
+<path d="M10 9v12"/>
+<path d="M16 9v12"/>
+
+</svg>
+
+</div>
+
+<h2 data-t="heading">
+Driver Fare Chart
+</h2>
+
+<p id="status"
+role="status"
+aria-live="polite">
+Checking driver account...
+</p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="driverDetails"></h3>
+
+<div class="row">
+
+<span data-t="driverName"></span>
+
+<strong id="driverName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>Driver ID</span>
+
+<strong id="driverId"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="registeredVehicle"></span>
+
+<strong id="registeredVehicle">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="accountStatus"></span>
+
+<strong class="green"
+data-t="approved"></strong>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="serviceHours"></h3>
+
+<div class="row">
+
+<span data-t="day"></span>
+
+<strong id="dayHours">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="night"></span>
+
+<strong id="nightHours">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="sriLankaTime"></span>
+
+<strong id="sriLankaTime">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="currentPeriod"></span>
+
+<strong id="currentPeriod"
+class="yellow">—</strong>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="additionalCharges"></h3>
+
+<div class="stats">
+
+<div class="stat">
+
+<strong id="rainCharge">—</strong>
+
+<span data-t="rainPerKm"></span>
+
+</div>
+
+<div class="stat">
+
+<strong id="roadCharge">—</strong>
+
+<span data-t="roadPerKm"></span>
+
+</div>
+
+<div class="stat">
+
+<strong id="combinedCharge">—</strong>
+
+<span data-t="combinedPerKm"></span>
+
+</div>
+
+<div class="stat">
+
+<strong id="commissionRate">—</strong>
+
+<span data-t="commission"></span>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="selectVehicle"></h3>
+
+<div id="vehicleFilters"
+class="filters">
+
+<button type="button"
+class="filterButton selected"
+data-vehicle="all"
+data-t="allVehicles"
+aria-pressed="true"></button>
+
+<button type="button"
+class="filterButton"
+data-vehicle="bike"
+data-t="bike"
+aria-pressed="false"></button>
+
+<button type="button"
+class="filterButton"
+data-vehicle="tuk"
+data-t="tuk"
+aria-pressed="false"></button>
+
+<button type="button"
+class="filterButton"
+data-vehicle="car"
+data-t="car"
+aria-pressed="false"></button>
+
+<button type="button"
+class="filterButton"
+data-vehicle="van"
+data-t="van"
+aria-pressed="false"></button>
+
+</div>
+
+</section>
+
+<p id="fareStatus"
+role="status"
+aria-live="polite"></p>
+
+<div id="fareCharts"></div>
+
+<section class="panel">
+
+<h3 data-t="discountHeading"></h3>
+
+<div class="tableWrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th data-t="distance"></th>
+
+<th data-t="bike"></th>
+
+<th data-t="tuk"></th>
+
+<th data-t="car"></th>
+
+<th data-t="van"></th>
+
+</tr>
+
+</thead>
+
+<tbody id="discountTable"></tbody>
+
+</table>
+
+</div>
+
+<div class="notice"
+data-t="discountNotice"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="minimumFares"></h3>
+
+<div class="row">
+
+<span data-t="bike"></span>
+
+<strong id="bikeMinimum">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="tuk"></span>
+
+<strong id="tukMinimum">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="car"></span>
+
+<strong id="carMinimum">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="van"></span>
+
+<strong id="vanMinimum">—</strong>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="commissionHeading"></h3>
+
+<div class="stats">
+
+<div class="stat">
+
+<strong id="companyShare">—</strong>
+
+<span>MY RIDE</span>
+
+</div>
+
+<div class="stat">
+
+<strong id="driverShare"
+class="green">—</strong>
+
+<span data-t="driverIncome"></span>
+
+</div>
+
+</div>
+
+<p class="note"
+data-t="commissionNote"></p>
+
+<a id="commissionLink"
+class="action secondary"
+data-t="commissionReport"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="extraCharges"></h3>
+
+<div class="row">
+
+<span data-t="highway"></span>
+
+<strong data-t="separate"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="parking"></span>
+
+<strong data-t="separate"></strong>
+
+</div>
+
+<p class="note"
+data-t="extraNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="fareRules"></h3>
+
+<p data-t="rule1"></p>
+<p data-t="rule2"></p>
+<p data-t="rule3"></p>
+<p data-t="rule4"></p>
+<p data-t="rule5"></p>
+<p data-t="rule6"></p>
+<p data-t="rule7"></p>
+<p data-t="rule8"></p>
+<p data-t="rule9"></p>
+<p data-t="rule10"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="fareInformation"></h3>
+
+<div class="row">
+
+<span data-t="fareVersion"></span>
+
+<strong id="fareVersion">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="lastUpdate"></span>
+
+<strong id="lastUpdate">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="dataSource"></span>
+
+<strong>MY RIDE Admin</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="updateStatus"></span>
+
+<strong id="updateStatus">—</strong>
+
+</div>
+
+<button id="refreshButton"
+class="action"
+data-t="refresh"></button>
+
+<p class="note"
+data-t="updateNote"></p>
+
+</section>
+
+<a id="weatherLink"
+class="action secondary"
+data-t="weatherRoad"></a>
+
+<a id="termsLink"
+class="action secondary"
+data-t="driverTerms"></a>
+
+<a id="feedbackLink"
+class="action secondary"
+data-t="feedback"></a>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot,
+getDocFromServer
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const LANGUAGES=["si","en","ta"];
+
+const params=
+new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")
+||"si";
+
+}catch(e){}
+
+const lang=
+LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"රියදුරු ගාස්තු වගුව",
+
+driverDetails:"රියදුරු විස්තර",
+
+driverName:"රියදුරුගේ නම",
+
+registeredVehicle:"ලියාපදිංචි වාහනය",
+
+accountStatus:"ගිණුමේ තත්ත්වය",
+
+approved:"අනුමත කර ඇත",
+
+serviceHours:"දිවා සහ රාත්‍රී සේවා කාලය",
+
+day:"දිවා",
+
+night:"රාත්‍රී",
+
+sriLankaTime:"ශ්‍රී ලංකා වේලාව",
+
+currentPeriod:"වර්තමාන කාල කාණ්ඩය",
+
+additionalCharges:"අමතර ගාස්තු",
+
+rainPerKm:"වැසි අමතර ගාස්තුව / KM",
+
+roadPerKm:"දුෂ්කර මාර්ග ගාස්තුව / KM",
+
+combinedPerKm:"වැසි සහ දුෂ්කර මාර්ග / KM",
+
+commission:"MY RIDE කොමිස්",
+
+selectVehicle:"වාහන වර්ගය තෝරන්න",
+
+allVehicles:"සියලුම වාහන",
+
+bike:"Scooter / Bike",
+
+tuk:"ත්‍රීරෝද රථය",
+
+car:"මෝටර් රථය",
+
+van:"වෑන් රථය",
+
+normalRoad:"සාමාන්‍ය මාර්ග",
+
+rainyRoad:"වැසි සහිත දින",
+
+difficultRoad:"දුෂ්කර මාර්ග",
+
+rainDifficult:"වැසි සහ දුෂ්කර මාර්ග",
+
+distance:"දුර (KM)",
+
+discount:"වට්ටම / KM",
+
+discountHeading:"දුර අනුව ලැබෙන වට්ටම්",
+
+discountNotice:"වට්ටම් අදාළ දුර කාණ්ඩයේ කිලෝමීටර් සඳහා පමණක් යෙදේ. සම්පූර්ණ දුරට අවසාන දුර කාණ්ඩයේ ගාස්තුව යෙදෙන්නේ නැත.",
+
+minimumFares:"අවම හයර් ගාස්තු",
+
+minimumFare:"අවම ගාස්තුව",
+
+passengers:"මගී ධාරිතාව",
+
+registeredCapacity:"ලියාපදිංචි ධාරිතාව අනුව",
+
+commissionHeading:"MY RIDE කොමිස් සහ රියදුරු ආදායම",
+
+driverIncome:"රියදුරුට හිමි ප්‍රතිශතය",
+
+commissionNote:"කොමිස් මුදල හයර් ගාස්තුවෙන් අඩු වේ. Highway සහ Parking ගාස්තු සඳහා කොමිස් අය නොකෙරේ.",
+
+commissionReport:"කොමිස් වාර්තාව",
+
+extraCharges:"වෙනත් ගාස්තු",
+
+highway:"අධිවේගී මාර්ග ගාස්තු",
+
+parking:"වාහන නැවැත්වීමේ ගාස්තු",
+
+separate:"වෙනම ගණනය වේ",
+
+extraNote:"අදාළ ගමන සඳහා තහවුරු කළ අමතර ගාස්තු පමණක් එකතු කළ යුතුය.",
+
+fareRules:"ගාස්තු ගණනය කිරීමේ කොන්දේසි",
+
+rule1:"✓ ගාස්තු ගමන් කළ සැබෑ දුර අනුව ගණනය වේ.",
+
+rule2:"✓ දිවා සහ රාත්‍රී ගාස්තු අදාළ ගාස්තු නීති අනුව යෙදේ.",
+
+rule3:"✓ දුර වට්ටම් අදාළ කිලෝමීටර් කාණ්ඩයට පමණක් යෙදේ.",
+
+rule4:"✓ තහවුරු කළ වැසි තත්ත්වයට පමණක් වැසි ගාස්තු යෙදේ.",
+
+rule5:"✓ දුෂ්කර මාර්ග ගාස්තුව තහවුරු කළ දුෂ්කර මාර්ග දුරට පමණක් යෙදේ.",
+
+rule6:"✓ තහවුරු නොකළ තත්ත්වයන් සඳහා අමතර ගාස්තු අය නොකළ යුතුය.",
+
+rule7:"✓ අදාළ වාහනයේ අවම හයර් ගාස්තුව ක්‍රියාත්මක වේ.",
+
+rule8:"✓ රියදුරුට ගාස්තු අතින් වෙනස් කළ නොහැක.",
+
+rule9:"✓ Admin අනුමත ගාස්තු පමණක් ක්‍රියාත්මක වේ.",
+
+rule10:"✓ අවසන් ගාස්තුව ආරක්ෂිත Backend පද්ධතියෙන් ගණනය වේ.",
+
+fareInformation:"ගාස්තු පද්ධති තොරතුරු",
+
+fareVersion:"ගාස්තු සංස්කරණය",
+
+lastUpdate:"අවසන් යාවත්කාලීන කිරීම",
+
+dataSource:"දත්ත මූලාශ්‍රය",
+
+updateStatus:"යාවත්කාලීන තත්ත්වය",
+
+live:"Server දත්ත සම්බන්ධයි",
+
+unknown:"තහවුරු කර නොමැත",
+
+refresh:"ගාස්තු යාවත්කාලීන කරන්න",
+
+updateNote:"Admin විසින් අනුමත කර ප්‍රකාශයට පත් කරන ගාස්තු ස්වයංක්‍රීයව මෙම පිටුවට ලැබේ.",
+
+weatherRoad:"කාලගුණය සහ මාර්ග තත්ත්වය",
+
+driverTerms:"රියදුරු කොන්දේසි",
+
+feedback:"අදහස් සහ පැමිණිලි",
+
+back:"← Driver Dashboard",
+
+login:"Driver Login",
+
+checking:"රියදුරු ගිණුම පරීක්ෂා කරමින්...",
+
+loading:"ගාස්තු දත්ත ලබාගනිමින්...",
+
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+
+error:"දත්ත ලබාගත නොහැක.",
+
+unavailable:"Admin අනුමත වලංගු ගාස්තු වගුවක් දැනට ලබාගත නොහැක.",
+
+connectionLost:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+
+currencyNote:"සියලුම වගු ගාස්තු ශ්‍රී ලංකා රුපියල් / KM වේ.",
+
+ownVehicle:"ඔබගේ ලියාපදිංචි වාහන වර්ගය"
+
+},
+
+en:{
+
+heading:"Driver Fare Chart",
+
+driverDetails:"Driver Details",
+
+driverName:"Driver Name",
+
+registeredVehicle:"Registered Vehicle",
+
+accountStatus:"Account Status",
+
+approved:"Approved",
+
+serviceHours:"Day and Night Service Hours",
+
+day:"Day",
+
+night:"Night",
+
+sriLankaTime:"Sri Lanka Time",
+
+currentPeriod:"Current Period",
+
+additionalCharges:"Additional Charges",
+
+rainPerKm:"Rain Surcharge / KM",
+
+roadPerKm:"Difficult Road Surcharge / KM",
+
+combinedPerKm:"Rain and Difficult Road / KM",
+
+commission:"MY RIDE Commission",
+
+selectVehicle:"Select Vehicle Type",
+
+allVehicles:"All Vehicles",
+
+bike:"Scooter / Bike",
+
+tuk:"Three Wheeler",
+
+car:"Car",
+
+van:"Van",
+
+normalRoad:"Normal Roads",
+
+rainyRoad:"Rainy Conditions",
+
+difficultRoad:"Difficult Roads",
+
+rainDifficult:"Rain and Difficult Roads",
+
+distance:"Distance (KM)",
+
+discount:"Discount / KM",
+
+discountHeading:"Distance-Based Discounts",
+
+discountNotice:"Discounts apply only to kilometres within each distance band. The final distance band's rate does not apply to the entire journey.",
+
+minimumFares:"Minimum Ride Fares",
+
+minimumFare:"Minimum Fare",
+
+passengers:"Passenger Capacity",
+
+registeredCapacity:"According to registered capacity",
+
+commissionHeading:"MY RIDE Commission and Driver Income",
+
+driverIncome:"Driver Share",
+
+commissionNote:"Commission is deducted from the ride fare. Highway and parking charges are excluded from commission.",
+
+commissionReport:"Commission Report",
+
+extraCharges:"Other Charges",
+
+highway:"Highway Charges",
+
+parking:"Parking Charges",
+
+separate:"Calculated Separately",
+
+extraNote:"Only verified additional charges applicable to the trip may be added.",
+
+fareRules:"Fare Calculation Rules",
+
+rule1:"✓ Fares are calculated using actual trip distance.",
+
+rule2:"✓ Day and night rates follow applicable fare rules.",
+
+rule3:"✓ Distance discounts apply only within the relevant distance band.",
+
+rule4:"✓ Rain surcharges require verified rain conditions.",
+
+rule5:"✓ Difficult road charges apply only to verified difficult road distance.",
+
+rule6:"✓ Unverified conditions must not incur surcharges.",
+
+rule7:"✓ The applicable vehicle minimum fare is enforced.",
+
+rule8:"✓ Drivers cannot manually change fares.",
+
+rule9:"✓ Only Admin-approved fare settings are used.",
+
+rule10:"✓ Final fares are calculated by the secure backend.",
+
+fareInformation:"Fare System Information",
+
+fareVersion:"Fare Version",
+
+lastUpdate:"Last Updated",
+
+dataSource:"Data Source",
+
+updateStatus:"Update Status",
+
+live:"Connected to Server Data",
+
+unknown:"Not Verified",
+
+refresh:"Refresh Fare Chart",
+
+updateNote:"Published Admin-approved fare settings are automatically received by this page.",
+
+weatherRoad:"Weather and Road Conditions",
+
+driverTerms:"Driver Terms",
+
+feedback:"Feedback and Complaints",
+
+back:"← Driver Dashboard",
+
+login:"Driver Login",
+
+checking:"Verifying driver account...",
+
+loading:"Loading fare information...",
+
+denied:"Access to this page is not authorized.",
+
+error:"Unable to retrieve data.",
+
+unavailable:"No valid Admin-approved fare chart is currently available.",
+
+connectionLost:"No internet connection.",
+
+currencyNote:"All table rates are in Sri Lankan rupees per kilometre.",
+
+ownVehicle:"Your registered vehicle type"
+
+},
+
+ta:{
+
+heading:"சாரதி கட்டண அட்டவணை",
+
+driverDetails:"சாரதி விவரங்கள்",
+
+driverName:"சாரதியின் பெயர்",
+
+registeredVehicle:"பதிவு செய்யப்பட்ட வாகனம்",
+
+accountStatus:"கணக்கு நிலை",
+
+approved:"அங்கீகரிக்கப்பட்டது",
+
+serviceHours:"பகல் மற்றும் இரவு சேவை நேரம்",
+
+day:"பகல்",
+
+night:"இரவு",
+
+sriLankaTime:"இலங்கை நேரம்",
+
+currentPeriod:"தற்போதைய நேர வகை",
+
+additionalCharges:"கூடுதல் கட்டணங்கள்",
+
+rainPerKm:"மழை கூடுதல் கட்டணம் / KM",
+
+roadPerKm:"கடினமான சாலை கட்டணம் / KM",
+
+combinedPerKm:"மழை மற்றும் கடினமான சாலை / KM",
+
+commission:"MY RIDE கமிஷன்",
+
+selectVehicle:"வாகன வகையை தேர்ந்தெடுக்கவும்",
+
+allVehicles:"அனைத்து வாகனங்கள்",
+
+bike:"ஸ்கூட்டர் / மோட்டார் சைக்கிள்",
+
+tuk:"முச்சக்கர வண்டி",
+
+car:"கார்",
+
+van:"வேன்",
+
+normalRoad:"சாதாரண சாலைகள்",
+
+rainyRoad:"மழைக்கால நிலை",
+
+difficultRoad:"கடினமான சாலைகள்",
+
+rainDifficult:"மழை மற்றும் கடினமான சாலைகள்",
+
+distance:"தூரம் (KM)",
+
+discount:"தள்ளுபடி / KM",
+
+discountHeading:"தூர அடிப்படையிலான தள்ளுபடிகள்",
+
+discountNotice:"ஒவ்வொரு தூர பிரிவிற்கும் உரிய கிலோமீட்டர்களுக்கு மட்டுமே தள்ளுபடி பொருந்தும். இறுதி தூர பிரிவின் கட்டணம் முழு பயணத்திற்கும் பொருந்தாது.",
+
+minimumFares:"குறைந்தபட்ச பயண கட்டணங்கள்",
+
+minimumFare:"குறைந்தபட்ச கட்டணம்",
+
+passengers:"பயணிகள் கொள்ளளவு",
+
+registeredCapacity:"பதிவு செய்யப்பட்ட கொள்ளளவின் அடிப்படையில்",
+
+commissionHeading:"MY RIDE கமிஷன் மற்றும் சாரதி வருமானம்",
+
+driverIncome:"சாரதியின் பங்கு",
+
+commissionNote:"பயண கட்டணத்திலிருந்து கமிஷன் கழிக்கப்படும். நெடுஞ்சாலை மற்றும் வாகன நிறுத்த கட்டணங்களுக்கு கமிஷன் இல்லை.",
+
+commissionReport:"கமிஷன் அறிக்கை",
+
+extraCharges:"பிற கட்டணங்கள்",
+
+highway:"நெடுஞ்சாலை கட்டணம்",
+
+parking:"வாகன நிறுத்த கட்டணம்",
+
+separate:"தனியாக கணக்கிடப்படும்",
+
+extraNote:"பயணத்திற்கு பொருந்தும் சரிபார்க்கப்பட்ட கூடுதல் கட்டணங்கள் மட்டுமே சேர்க்கப்படும்.",
+
+fareRules:"கட்டண கணக்கீட்டு விதிமுறைகள்",
+
+rule1:"✓ உண்மையான பயண தூரத்தின் அடிப்படையில் கட்டணம் கணக்கிடப்படும்.",
+
+rule2:"✓ பகல் மற்றும் இரவு கட்டணங்கள் உரிய விதிகளின்படி பொருந்தும்.",
+
+rule3:"✓ தூர தள்ளுபடி உரிய தூர பிரிவிற்கு மட்டுமே பொருந்தும்.",
+
+rule4:"✓ சரிபார்க்கப்பட்ட மழை நிலைக்கு மட்டுமே கூடுதல் கட்டணம் பொருந்தும்.",
+
+rule5:"✓ சரிபார்க்கப்பட்ட கடினமான சாலை தூரத்திற்கு மட்டுமே கூடுதல் கட்டணம் பொருந்தும்.",
+
+rule6:"✓ சரிபார்க்கப்படாத நிலைகளுக்கு கூடுதல் கட்டணம் விதிக்கக்கூடாது.",
+
+rule7:"✓ உரிய வாகனத்தின் குறைந்தபட்ச கட்டணம் நடைமுறையில் இருக்கும்.",
+
+rule8:"✓ சாரதிகள் கட்டணங்களை மாற்ற முடியாது.",
+
+rule9:"✓ நிர்வாகம் அங்கீகரித்த கட்டணங்கள் மட்டுமே பயன்படுத்தப்படும்.",
+
+rule10:"✓ பாதுகாப்பான சேவையகத்தால் இறுதி கட்டணம் கணக்கிடப்படும்.",
+
+fareInformation:"கட்டண அமைப்பு தகவல்கள்",
+
+fareVersion:"கட்டண பதிப்பு",
+
+lastUpdate:"கடைசி புதுப்பிப்பு",
+
+dataSource:"தரவு மூலம்",
+
+updateStatus:"புதுப்பிப்பு நிலை",
+
+live:"சேவையக தரவுடன் இணைக்கப்பட்டுள்ளது",
+
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+
+refresh:"கட்டண அட்டவணையை புதுப்பிக்கவும்",
+
+updateNote:"நிர்வாகம் அங்கீகரித்து வெளியிடும் கட்டணங்கள் தானாக இந்த பக்கத்தில் பெறப்படும்.",
+
+weatherRoad:"வானிலை மற்றும் சாலை நிலை",
+
+driverTerms:"சாரதி விதிமுறைகள்",
+
+feedback:"கருத்துகள் மற்றும் முறைப்பாடுகள்",
+
+back:"← சாரதி முதன்மைப் பக்கம்",
+
+login:"சாரதி உள்நுழைவு",
+
+checking:"சாரதி கணக்கு சரிபார்க்கப்படுகிறது...",
+
+loading:"கட்டண தகவல்கள் பெறப்படுகின்றன...",
+
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+
+error:"தரவை பெற முடியவில்லை.",
+
+unavailable:"அங்கீகரிக்கப்பட்ட செல்லுபடியாகும் கட்டண அட்டவணை தற்போது கிடைக்கவில்லை.",
+
+connectionLost:"இணைய இணைப்பு இல்லை.",
+
+currencyNote:"அனைத்து அட்டவணை கட்டணங்களும் இலங்கை ரூபாய் / KM ஆகும்.",
+
+ownVehicle:"உங்கள் பதிவு செய்யப்பட்ட வாகன வகை"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+// PAGE LINKS
+
+const links={
+
+loginLink:"driver-login.html",
+
+commissionLink:"driver-commission.html",
+
+weatherLink:"driver-weather-road.html",
+
+termsLink:"driver-terms.html",
+
+feedbackLink:"driver-feedback.html",
+
+backButton:"driver-dashboard.html"
+
+};
+
+Object.entries(links)
+.forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+
+let generation=0;
+
+let driverUnsubscribe=null;
+let fareUnsubscribe=null;
+
+let fareSettings=null;
+
+let selectedVehicle="all";
+
+let serverOffset=null;
+let serverSyncAt=0;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+let checkingSession=false;
+let refreshing=false;
+
+let fareRevision=0;
+
+const VEHICLES=[
+"bike","tuk","car","van"
+];
+
+const DISTANCE_LIMITS=[
+10,25,50,100,null
+];
+
+const DISTANCE_LABELS=[
+"0–10",
+"10–25",
+"25–50",
+"50–100",
+"100+"
+];
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+&&uid!==null
+&&auth?.currentUser?.uid===uid
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,min,max){
+
+return typeof value==="string"
+&&value.trim().length>=min
+&&value.length<=max;
+
+}
+
+function validNumber(value,min,max){
+
+return typeof value==="number"
+&&Number.isFinite(value)
+&&value>=min
+&&value<=max;
+
+}
+
+function validMoney(value){
+
+return validNumber(value,0,1000000)
+&&Math.abs(
+value*100-Math.round(value*100)
+)<0.001;
+
+}
+
+function cents(value){
+
+return Math.round(value*100);
+
+}
+
+function validTime(value){
+
+return validNumber(
+value,
+1,
+8640000000000000
+);
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+functions,name
+)(data);
+
+if(!validSession()
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// SERVER TIME
+
+async function syncServerTime(){
+
+const currentGeneration=generation;
+
+const start=Date.now();
+
+const result=await serverCall(
+"getDriverServerTime"
+);
+
+const end=Date.now();
+
+if(currentGeneration!==generation)return;
+
+if(!validTime(result?.serverTimeMs)
+||end-start>10000){
+
+throw new Error("Invalid server time");
+
+}
+
+serverOffset=
+result.serverTimeMs-(start+end)/2;
+
+serverSyncAt=end;
+
+}
+
+function serverNow(){
+
+if(serverOffset===null
+||Date.now()-serverSyncAt>120000){
+
+return null;
+
+}
+
+return Date.now()+serverOffset;
+
+}
+
+function formatDate(ms){
+
+if(!validTime(ms))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"medium"
+
+}
+
+).format(new Date(ms));
+
+}
+
+function money(value){
+
+if(!validMoney(value))return "—";
+
+return "LKR "+
+new Intl.NumberFormat("en-LK",{
+
+minimumFractionDigits:2,
+
+maximumFractionDigits:2
+
+}).format(value);
+
+}
+
+function rateNumber(value){
+
+return new Intl.NumberFormat("en-LK",{
+
+maximumFractionDigits:2
+
+}).format(value);
+
+}
+
+function formatMinutes(minutes){
+
+const hours=Math.floor(minutes/60);
+
+const mins=minutes%60;
+
+return String(hours).padStart(2,"0")
++":"
++String(mins).padStart(2,"0");
+
+}
+
+function getPeriod(){
+
+const now=serverNow();
+
+if(now===null||!fareSettings){
+
+return null;
+
+}
+
+const date=new Date(
+now+330*60000
+);
+
+const minutes=
+date.getUTCHours()*60
++date.getUTCMinutes();
+
+const dayStart=
+fareSettings.dayStartMinutes;
+
+const nightStart=
+fareSettings.nightStartMinutes;
+
+const isDay=
+
+dayStart<nightStart
+
+?minutes>=dayStart
+&&minutes<nightStart
+
+:minutes>=dayStart
+||minutes<nightStart;
+
+return isDay?"day":"night";
+
+}
+
+function renderClock(){
+
+const now=serverNow();
+
+$("sriLankaTime").textContent=
+
+now===null
+?"—"
+:formatDate(now);
+
+const period=getPeriod();
+
+$("currentPeriod").textContent=
+
+period?t[period]:"—";
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+||!navigator.geolocation
+||!validSession()){
+
+return;
+
+}
+
+const currentGeneration=generation;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+||!driver
+
+||driver.documentsValid!==true
+
+||!["online","busy"]
+.includes(driver.availability)
+
+||!validNumber(c.latitude,5.85,9.9)
+
+||!validNumber(c.longitude,79.5,82)
+
+||!validNumber(c.accuracy,0,100)
+
+||!validTime(position.timestamp)
+
+||Date.now()-position.timestamp>30000
+
+||position.timestamp>Date.now()+5000
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000
+
+){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+const result=await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:c.latitude,
+
+lon:c.longitude,
+
+accuracy:c.accuracy,
+
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+if(result?.accepted!==true){
+
+throw new Error("GPS rejected");
+
+}
+
+}catch(e){
+
+// Backend must expire stale GPS data.
+
+}finally{
+
+if(currentGeneration===generation){
+
+gpsSending=false;
+
+}
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(
+gpsWatch
+);
+
+gpsWatch=null;
+
+}
+
+}
+
+// SAFE DOM
+
+function element(tag,className,text){
+
+const node=document.createElement(tag);
+
+if(className){
+
+node.className=className;
+
+}
+
+if(text!==undefined){
+
+node.textContent=text;
+
+}
+
+return node;
+
+}
+
+function addRow(container,label,value){
+
+const row=element("div","row");
+
+row.append(
+
+element("span","",label),
+
+element("strong","",value)
+
+);
+
+container.appendChild(row);
+
+}
+
+// ADMIN FARE VALIDATION
+
+function validFareSettings(data){
+
+if(
+
+!data
+
+||data.published!==true
+
+||!validId(data.version)
+
+||!Number.isInteger(data.dayStartMinutes)
+
+||!Number.isInteger(data.nightStartMinutes)
+
+||!validNumber(
+data.dayStartMinutes,0,1439
+)
+
+||!validNumber(
+data.nightStartMinutes,0,1439
+)
+
+||data.dayStartMinutes
+===data.nightStartMinutes
+
+||!validNumber(
+data.commissionRate,0,100
+)
+
+||!validMoney(
+data.rainSurchargePerKm
+)
+
+||!validMoney(
+data.difficultRoadSurchargePerKm
+)
+
+||!data.vehicles
+
+){
+
+return false;
+
+}
+
+if(data.updatedAt!==undefined){
+
+if(
+
+!data.updatedAt
+
+||typeof data.updatedAt.toMillis
+!=="function"
+
+||!validTime(data.updatedAt.toMillis())
+
+){
+
+return false;
+
+}
+
+}
+
+return VEHICLES.every(type=>{
+
+const vehicle=data.vehicles[type];
+
+if(
+
+!vehicle
+
+||!validMoney(vehicle.minimumFare)
+
+||!Array.isArray(vehicle.bands)
+
+||vehicle.bands.length!==5
+
+){
+
+return false;
+
+}
+
+const first=vehicle.bands[0];
+
+if(
+
+!first
+
+||!validMoney(first.dayRate)
+
+||!validMoney(first.nightRate)
+
+||first.discountPerKm!==0
+
+){
+
+return false;
+
+}
+
+return vehicle.bands.every(
+(band,index)=>{
+
+if(
+
+!band
+
+||band.upToKm!==DISTANCE_LIMITS[index]
+
+||!validMoney(band.dayRate)
+
+||!validMoney(band.nightRate)
+
+||!validMoney(band.discountPerKm)
+
+){
+
+return false;
+
+}
+
+if(
+
+cents(band.dayRate)
++cents(band.discountPerKm)
+!==cents(first.dayRate)
+
+||
+
+cents(band.nightRate)
++cents(band.discountPerKm)
+!==cents(first.nightRate)
+
+){
+
+return false;
+
+}
+
+if(
+
+index>0
+
+&&band.discountPerKm
+<vehicle.bands[index-1].discountPerKm
+
+){
+
+return false;
+
+}
+
+return true;
+
+});
+
+});
+
+}
+
+// CONDITION SURCHARGES
+
+function getSurcharge(condition){
+
+if(!fareSettings){
+
+return null;
+
+}
+
+const rain=
+fareSettings.rainSurchargePerKm;
+
+const road=
+fareSettings.difficultRoadSurchargePerKm;
+
+switch(condition){
+
+case "normal":
+
+return 0;
+
+case "rain":
+
+return rain;
+
+case "difficult":
+
+return road;
+
+case "combined":
+
+return Math.round(
+(rain+road)*100
+)/100;
+
+default:
+
+return null;
+
+}
+
+}
+
+// CREATE FARE TABLE
+
+function createFareTable(
+vehicle,
+condition,
+heading
+){
+
+const section=element("section","");
+
+section.appendChild(
+
+element(
+"h4",
+"conditionHeading",
+heading
+)
+
+);
+
+const wrapper=element(
+"div",
+"tableWrap"
+);
+
+const table=element("table");
+
+const thead=element("thead");
+
+const header=element("tr");
+
+[
+t.distance,
+t.day,
+t.night,
+t.discount
+].forEach(label=>{
+
+const th=element("th","",label);
+
+th.scope="col";
+
+header.appendChild(th);
+
+});
+
+thead.appendChild(header);
+
+table.appendChild(thead);
+
+const tbody=element("tbody");
+
+const surcharge=
+getSurcharge(condition);
+
+vehicle.bands.forEach((band,index)=>{
+
+const row=element("tr");
+
+const dayRate=Math.round(
+
+(band.dayRate+surcharge)*100
+
+)/100;
+
+const nightRate=Math.round(
+
+(band.nightRate+surcharge)*100
+
+)/100;
+
+const values=[
+
+DISTANCE_LABELS[index],
+
+rateNumber(dayRate),
+
+rateNumber(nightRate),
+
+rateNumber(band.discountPerKm)
+
+];
+
+values.forEach(value=>{
+
+row.appendChild(
+
+element("td","",value)
+
+);
+
+});
+
+tbody.appendChild(row);
+
+});
+
+table.appendChild(tbody);
+
+wrapper.appendChild(table);
+
+section.appendChild(wrapper);
+
+return section;
+
+}
+
+// VEHICLE FARE CARDS
+
+function createVehicleCard(type){
+
+const vehicle=
+fareSettings.vehicles[type];
+
+const card=element(
+"section",
+"vehicleCard"
+);
+
+card.appendChild(
+
+element(
+"h3",
+"vehicleHeading",
+t[type]
+)
+
+);
+
+if(driver?.vehicleType===type){
+
+card.appendChild(
+
+element(
+"p",
+"green",
+t.ownVehicle
+)
+
+);
+
+}
+
+addRow(
+
+card,
+
+t.minimumFare,
+
+money(vehicle.minimumFare)
+
+);
+
+addRow(
+
+card,
+
+t.passengers,
+
+t.registeredCapacity
+
+);
+
+card.appendChild(
+
+element(
+"p",
+"note",
+t.currencyNote
+)
+
+);
+
+card.appendChild(
+
+createFareTable(
+
+vehicle,
+
+"normal",
+
+t.normalRoad
+
+)
+
+);
+
+card.appendChild(
+
+createFareTable(
+
+vehicle,
+
+"rain",
+
+t.rainyRoad
+
+)
+
+);
+
+card.appendChild(
+
+createFareTable(
+
+vehicle,
+
+"difficult",
+
+t.difficultRoad
+
+)
+
+);
+
+card.appendChild(
+
+createFareTable(
+
+vehicle,
+
+"combined",
+
+t.rainDifficult
+
+)
+
+);
+
+return card;
+
+}
+
+// RENDER VEHICLE CHARTS
+
+function renderCharts(){
+
+const container=$("fareCharts");
+
+container.replaceChildren();
+
+if(!fareSettings||!validSession()){
+
+return;
+
+}
+
+const types=
+
+selectedVehicle==="all"
+
+?VEHICLES
+
+:[selectedVehicle];
+
+types.forEach(type=>{
+
+container.appendChild(
+
+createVehicleCard(type)
+
+);
+
+});
+
+}
+
+// DISTANCE DISCOUNT TABLE
+
+function renderDiscountTable(){
+
+const tbody=$("discountTable");
+
+tbody.replaceChildren();
+
+if(!fareSettings)return;
+
+DISTANCE_LABELS.forEach(
+(label,index)=>{
+
+const row=element("tr");
+
+row.appendChild(
+
+element("td","",label)
+
+);
+
+VEHICLES.forEach(type=>{
+
+const discount=
+
+fareSettings
+.vehicles[type]
+.bands[index]
+.discountPerKm;
+
+row.appendChild(
+
+element(
+
+"td",
+
+"",
+
+rateNumber(discount)
+
+)
+
+);
+
+});
+
+tbody.appendChild(row);
+
+});
+
+}
+
+// RENDER FARE SETTINGS
+
+function renderFareSettings(){
+
+if(!fareSettings
+||!validSession()
+||!driver){
+
+clearFareDisplay();
+
+$("fareStatus").textContent=
+t.unavailable;
+
+return;
+
+}
+
+const data=fareSettings;
+
+$("dayHours").textContent=
+
+formatMinutes(data.dayStartMinutes)
+
++" – "+
+
+formatMinutes(data.nightStartMinutes);
+
+$("nightHours").textContent=
+
+formatMinutes(data.nightStartMinutes)
+
++" – "+
+
+formatMinutes(data.dayStartMinutes);
+
+$("rainCharge").textContent=
+
+money(data.rainSurchargePerKm);
+
+$("roadCharge").textContent=
+
+money(data.difficultRoadSurchargePerKm);
+
+$("combinedCharge").textContent=
+
+money(
+
+Math.round(
+
+(
+data.rainSurchargePerKm
+
++data.difficultRoadSurchargePerKm
+)*100
+
+)/100
+
+);
+
+$("commissionRate").textContent=
+
+rateNumber(data.commissionRate)+"%";
+
+$("companyShare").textContent=
+
+rateNumber(data.commissionRate)+"%";
+
+$("driverShare").textContent=
+
+rateNumber(
+
+Math.round(
+(100-data.commissionRate)*100
+)/100
+
+)+"%";
+
+VEHICLES.forEach(type=>{
+
+$(type+"Minimum").textContent=
+
+money(
+
+data.vehicles[type].minimumFare
+
+);
+
+});
+
+$("fareVersion").textContent=
+
+data.version;
+
+$("lastUpdate").textContent=
+
+data.updatedAt
+
+?formatDate(data.updatedAt.toMillis())
+
+:"—";
+
+$("updateStatus").textContent=t.live;
+
+$("updateStatus").className="green";
+
+$("fareStatus").textContent="";
+
+renderCharts();
+
+renderDiscountTable();
+
+renderClock();
+
+}
+
+// CLEAR FARE DATA
+
+function clearFareDisplay(){
+
+const fields=[
+
+"dayHours",
+
+"nightHours",
+
+"currentPeriod",
+
+"rainCharge",
+
+"roadCharge",
+
+"combinedCharge",
+
+"commissionRate",
+
+"companyShare",
+
+"driverShare",
+
+"bikeMinimum",
+
+"tukMinimum",
+
+"carMinimum",
+
+"vanMinimum",
+
+"fareVersion",
+
+"lastUpdate"
+
+];
+
+fields.forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+$("updateStatus").textContent=
+t.unknown;
+
+$("updateStatus").className="yellow";
+
+$("fareCharts").replaceChildren();
+
+$("discountTable").replaceChildren();
+
+}
+
+// PROCESS SERVER SNAPSHOT
+
+function applyFareSnapshot(snapshot){
+
+if(
+
+snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()
+
+||!validFareSettings(snapshot.data())
+
+){
+
+fareSettings=null;
+
+clearFareDisplay();
+
+$("fareStatus").textContent=
+
+t.unavailable;
+
+return;
+
+}
+
+fareSettings=snapshot.data();
+
+renderFareSettings();
+
+}
+
+// REALTIME ADMIN FARE SETTINGS
+
+function subscribeFareSettings(){
+
+if(fareUnsubscribe){
+
+fareUnsubscribe();
+
+fareUnsubscribe=null;
+
+}
+
+if(!validSession()||!driver){
+
+return;
+
+}
+
+const currentGeneration=generation;
+
+$("fareStatus").textContent=t.loading;
+
+fareUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"publicSettings",
+
+"fares"
+
+),
+
+{
+
+includeMetadataChanges:true
+
+},
+
+snapshot=>{
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+||!driver
+
+){
+
+return;
+
+}
+
+fareRevision++;
+
+applyFareSnapshot(snapshot);
+
+},
+
+()=>{
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+fareRevision++;
+
+fareSettings=null;
+
+clearFareDisplay();
+
+$("fareStatus").textContent=t.error;
+
+}
+
+);
+
+}
+
+// VEHICLE FILTER BUTTONS
+
+document.querySelectorAll(
+"[data-vehicle]"
+).forEach(button=>{
+
+button.onclick=()=>{
+
+if(!validSession()||!driver){
+
+return;
+
+}
+
+const type=button.dataset.vehicle;
+
+if(
+
+type!=="all"
+
+&&!VEHICLES.includes(type)
+
+){
+
+return;
+
+}
+
+selectedVehicle=type;
+
+document.querySelectorAll(
+"[data-vehicle]"
+).forEach(item=>{
+
+const selected=
+
+item.dataset.vehicle===type;
+
+item.classList.toggle(
+
+"selected",
+
+selected
+
+);
+
+item.setAttribute(
+
+"aria-pressed",
+
+String(selected)
+
+);
+
+});
+
+renderCharts();
+
+};
+
+});
+
+// MANUAL REFRESH
+
+$("refreshButton").onclick=async()=>{
+
+if(
+
+!validSession()
+
+||!driver
+
+||refreshing
+
+){
+
+return;
+
+}
+
+const currentGeneration=generation;
+
+const startingRevision=fareRevision;
+
+refreshing=true;
+
+updateControls();
+
+$("fareStatus").textContent=t.loading;
+
+try{
+
+await syncServerTime();
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+const snapshot=await getDocFromServer(
+
+doc(
+
+db,
+
+"publicSettings",
+
+"fares"
+
+)
+
+);
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+||!driver
+
+){
+
+return;
+
+}
+
+if(startingRevision===fareRevision){
+
+applyFareSnapshot(snapshot);
+
+}else{
+
+renderFareSettings();
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+$("fareStatus").textContent=t.error;
+
+}finally{
+
+if(currentGeneration===generation){
+
+refreshing=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// CONTROL SECURITY
+
+function updateControls(){
+
+const enabled=
+
+validSession()
+
+&&driver!==null;
+
+$("refreshButton").disabled=
+
+!enabled||refreshing;
+
+document.querySelectorAll(
+"[data-vehicle]"
+).forEach(button=>{
+
+button.disabled=!enabled;
+
+});
+
+}
+
+// CLEAR SESSION
+
+function disconnect(){
+
+generation++;
+
+fareRevision++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+fareSettings=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+if(fareUnsubscribe){
+
+fareUnsubscribe();
+
+fareUnsubscribe=null;
+
+}
+
+stopGps();
+
+gpsSending=false;
+
+lastGpsSent=0;
+
+serverOffset=null;
+
+serverSyncAt=0;
+
+checkingSession=false;
+
+refreshing=false;
+
+selectedVehicle="all";
+
+document.querySelectorAll(
+"[data-vehicle]"
+).forEach(button=>{
+
+const selected=
+
+button.dataset.vehicle==="all";
+
+button.classList.toggle(
+
+"selected",
+
+selected
+
+);
+
+button.setAttribute(
+
+"aria-pressed",
+
+String(selected)
+
+);
+
+});
+
+clearFareDisplay();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("registeredVehicle").textContent="—";
+
+$("sriLankaTime").textContent="—";
+
+$("fareStatus").textContent="";
+
+$("content").hidden=true;
+
+$("accessPanel").hidden=true;
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"drivers",
+
+uid
+
+),
+
+{
+
+includeMetadataChanges:true
+
+},
+
+snapshot=>{
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+){
+
+return;
+
+}
+
+if(
+
+snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+){
+
+driver=null;
+
+fareSettings=null;
+
+fareRevision++;
+
+stopGps();
+
+if(fareUnsubscribe){
+
+fareUnsubscribe();
+
+fareUnsubscribe=null;
+
+}
+
+clearFareDisplay();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(
+
+!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true
+
+||!validText(data.fullName,1,150)
+
+||!validId(data.driverId)
+
+||!VEHICLES.includes(data.vehicleType)
+
+||!["online","offline","busy"]
+.includes(data.availability)
+
+){
+
+denyAccess();
+
+return;
+
+}
+
+const firstLoad=driver===null;
+
+const vehicleChanged=
+
+driver!==null
+
+&&driver.vehicleType!==data.vehicleType;
+
+driver=data;
+
+$("driverName").textContent=
+
+data.fullName;
+
+$("driverId").textContent=
+
+data.driverId;
+
+$("registeredVehicle").textContent=
+
+t[data.vehicleType];
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(
+
+["online","busy"]
+
+.includes(data.availability)
+
+){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(firstLoad){
+
+subscribeFareSettings();
+
+syncServerTime()
+
+.then(()=>{
+
+if(currentGeneration===generation){
+
+renderClock();
+
+}
+
+})
+
+.catch(()=>{
+
+if(currentGeneration===generation){
+
+serverOffset=null;
+
+renderClock();
+
+}
+
+});
+
+}else if(vehicleChanged){
+
+renderCharts();
+
+}
+
+status("");
+
+updateControls();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.connectionLost);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=
+
+await user.getIdTokenResult(true);
+
+if(
+
+token.claims.driver!==true
+
+||token.signInProvider!=="custom"
+
+){
+
+throw new Error(
+"Driver login required"
+);
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+)({});
+
+if(
+
+currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid
+
+){
+
+return;
+
+}
+
+const account=response.data;
+
+if(
+
+account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true
+
+){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(
+
+auth,
+
+verifyDriver
+
+);
+
+}
+
+// AUTOMATIC SRI LANKA CLOCK
+
+setInterval(()=>{
+
+if(!validSession()||!driver){
+
+return;
+
+}
+
+renderClock();
+
+},1000);
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(
+
+!validSession()
+
+||!driver
+
+||checkingSession
+
+){
+
+return;
+
+}
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyDriverSession"
+
+);
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+if(
+
+result?.authorized!==true
+
+||result.uid!==uid
+
+||result.status!=="approved"
+
+||result.activationComplete!==true
+
+||result.documentsValid!==true
+
+){
+
+denyAccess();
+
+return;
+
+}
+
+try{
+
+await syncServerTime();
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+serverOffset=null;
+
+}
+
+}
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+renderClock();
+
+}catch(e){
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+denyAccess();
+
+}finally{
+
+if(currentGeneration===generation){
+
+checkingSession=false;
+
+}
+
+}
+
+},60000);
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+disconnect();
+
+status(t.connectionLost);
+
+}
+
+);
+
+window.addEventListener(
+
+"online",
+
+()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+// PAGE VISIBILITY
+
+document.addEventListener(
+
+"visibilitychange",
+
+()=>{
+
+if(
+
+document.hidden
+
+||!validSession()
+
+||!driver
+
+){
+
+return;
+
+}
+
+if(serverNow()===null){
+
+const currentGeneration=generation;
+
+syncServerTime()
+
+.then(()=>{
+
+if(currentGeneration===generation){
+
+renderClock();
+
+}
+
+})
+
+.catch(()=>{});
+
+}
+
+}
+
+);
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+updateControls();
+
+</script>
+
+</body>
+
+</html>
