@@ -1,0 +1,1356 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+
+<title>MY RIDE - Live Driver Tracking</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+text-align:center;
+color:#FFD600;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.5;
+}
+
+#map{
+height:60vh;
+min-height:320px;
+width:100%;
+border-radius:14px;
+margin:15px 0;
+color:#111;
+}
+
+#status{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+padding:12px;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:15px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+gap:15px;
+padding:12px 0;
+border-bottom:1px solid #444;
+}
+
+.row strong{
+color:#FFD600;
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+.action,button{
+display:block;
+width:100%;
+padding:16px;
+border:0;
+border-radius:10px;
+background:#FFD600;
+color:#111;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+margin:12px 0;
+}
+
+.back{
+display:block;
+text-align:center;
+padding:20px;
+color:#FFD600;
+text-decoration:none;
+}
+
+.driver-icon{
+background:#FFD600;
+border:2px solid #111;
+border-radius:50%;
+text-align:center;
+font-size:24px;
+line-height:38px;
+}
+
+.pickup-icon{
+background:white;
+border:2px solid #1677FF;
+border-radius:50%;
+text-align:center;
+font-size:23px;
+line-height:38px;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+<div class="country">SRI LANKA</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="trackingPanel" hidden>
+
+<div id="map"></div>
+
+<div class="panel">
+
+<div class="row">
+<span data-t="driverName"></span>
+<strong id="driverName"></strong>
+</div>
+
+<div class="row">
+<span data-t="driverPhone"></span>
+<strong id="driverPhone"></strong>
+</div>
+
+<div class="row">
+<span data-t="distance"></span>
+<strong id="distance"></strong>
+</div>
+
+<div class="row">
+<span data-t="eta"></span>
+<strong id="eta"></strong>
+</div>
+
+<div class="row">
+<span data-t="gpsStatus"></span>
+<strong id="gpsStatus"></strong>
+</div>
+
+</div>
+
+<a id="callDriver"
+class="action"
+data-t="call"
+hidden></a>
+
+<button id="centerMap"
+data-t="center"></button>
+
+<a id="activeRide"
+class="action"
+data-t="activeRide"
+hidden></a>
+
+</section>
+
+<button id="retryButton"
+data-t="retry"
+hidden></button>
+
+<a id="backButton"
+class="back"
+data-t="back"></a>
+
+<footer>© MY RIDE SRI LANKA</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+
+// LANGUAGE SYSTEM
+
+const languages=["si","en","ta"];
+
+const params=
+new URLSearchParams(location.search);
+
+let savedLanguage=null;
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language");
+
+}catch(e){}
+
+const requestedLanguage=params.get("lang");
+
+const lang=
+languages.includes(requestedLanguage)
+?requestedLanguage
+:languages.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+heading:"රියදුරා එන මාර්ගය",
+driverName:"රියදුරුගේ නම",
+driverPhone:"දුරකථන අංකය",
+distance:"රියදුරාට පැමිණීමට ඇති දුර",
+eta:"පැමිණීමට ගතවන කාලය",
+gpsStatus:"GPS තත්ත්වය",
+call:"📞 රියදුරා අමතන්න",
+center:"සිතියම මධ්‍යගත කරන්න",
+activeRide:"දැනට ගමන් කරන හයර් එක",
+retry:"නැවත සම්බන්ධ වන්න",
+back:"← පාරිභෝගික සේවා",
+connecting:"පද්ධතියට සම්බන්ධ වෙමින්...",
+coming:"ඔබගේ රියදුරා පැමිණෙමින් සිටී.",
+arrived:"ඔබගේ රියදුරා පැමිණ ඇත.",
+started:"ඔබගේ ගමන ආරම්භ කර ඇත.",
+completed:"ඔබගේ ගමන අවසන් වී ඇත.",
+cancelled:"මෙම හයර් එක අවලංගු කර ඇත.",
+waiting:"රියදුරෙකු තවම පවරා නැත.",
+missing:"සක්‍රිය Booking එකක් නොමැත.",
+denied:"මෙම Booking එක බැලීමට අවසර නැත.",
+auth:"පාරිභෝගික සැසිය අවශ්‍යයි.",
+error:"පද්ධතියට සම්බන්ධ විය නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+gpsActive:"සක්‍රියයි",
+gpsWaiting:"GPS දත්ත බලාපොරොත්තුවෙන්",
+gpsStale:"GPS දත්ත යාවත්කාලීන වී නැත",
+pickup:"ඔබගේ ආරම්භක ස්ථානය",
+driver:"රියදුරා",
+unknown:"ලබාගත නොහැක",
+routeLoading:"ගණනය කරමින්...",
+routeError:"මාර්ග දත්ත ලබාගත නොහැක",
+mapError:"සිතියම ලබාගත නොහැක."
+},
+
+en:{
+heading:"Live Driver Tracking",
+driverName:"Driver Name",
+driverPhone:"Phone Number",
+distance:"Driver Distance to Pickup",
+eta:"Estimated Arrival Time",
+gpsStatus:"GPS Status",
+call:"📞 Call Driver",
+center:"Center Map",
+activeRide:"View Active Ride",
+retry:"Reconnect",
+back:"← Customer Services",
+connecting:"Connecting to the system...",
+coming:"Your driver is on the way.",
+arrived:"Your driver has arrived.",
+started:"Your ride has started.",
+completed:"Your ride has been completed.",
+cancelled:"This ride has been cancelled.",
+waiting:"A driver has not been assigned yet.",
+missing:"No active booking found.",
+denied:"You cannot access this booking.",
+auth:"A customer session is required.",
+error:"Unable to connect to the system.",
+offline:"No internet connection.",
+gpsActive:"Active",
+gpsWaiting:"Waiting for GPS data",
+gpsStale:"GPS data is outdated",
+pickup:"Your Pickup Location",
+driver:"Driver",
+unknown:"Unavailable",
+routeLoading:"Calculating...",
+routeError:"Route data unavailable",
+mapError:"Map unavailable."
+},
+
+ta:{
+heading:"சாரதியின் நேரடி இருப்பிடம்",
+driverName:"சாரதியின் பெயர்",
+driverPhone:"தொலைபேசி எண்",
+distance:"சாரதி வரவேண்டிய தூரம்",
+eta:"வருகைக்கான மதிப்பிடப்பட்ட நேரம்",
+gpsStatus:"GPS நிலை",
+call:"📞 சாரதியை அழைக்கவும்",
+center:"வரைபடத்தை மையப்படுத்தவும்",
+activeRide:"தற்போதைய பயணம்",
+retry:"மீண்டும் இணைக்கவும்",
+back:"← வாடிக்கையாளர் சேவைகள்",
+connecting:"அமைப்புடன் இணைக்கப்படுகிறது...",
+coming:"உங்கள் சாரதி வந்துகொண்டிருக்கிறார்.",
+arrived:"உங்கள் சாரதி வந்துவிட்டார்.",
+started:"உங்கள் பயணம் தொடங்கியுள்ளது.",
+completed:"உங்கள் பயணம் முடிந்துவிட்டது.",
+cancelled:"இந்தப் பயணம் ரத்து செய்யப்பட்டது.",
+waiting:"சாரதி இன்னும் நியமிக்கப்படவில்லை.",
+missing:"செயலில் உள்ள முன்பதிவு இல்லை.",
+denied:"இந்த முன்பதிவைப் பார்க்க அனுமதி இல்லை.",
+auth:"வாடிக்கையாளர் அமர்வு தேவை.",
+error:"அமைப்புடன் இணைக்க முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+gpsActive:"செயலில் உள்ளது",
+gpsWaiting:"GPS தரவுக்காக காத்திருக்கிறது",
+gpsStale:"GPS தரவு புதுப்பிக்கப்படவில்லை",
+pickup:"உங்கள் புறப்படும் இடம்",
+driver:"சாரதி",
+unknown:"கிடைக்கவில்லை",
+routeLoading:"கணக்கிடப்படுகிறது...",
+routeError:"பாதை தரவு கிடைக்கவில்லை",
+mapError:"வரைபடம் கிடைக்கவில்லை."
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+$("backButton").href=
+"./customer.html?lang="+lang;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+
+// FIREBASE CONNECTION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+db=getFirestore(app);
+
+}catch(error){
+
+status(t.error);
+
+}
+
+
+// BOOKING IDENTIFICATION
+
+let bookingId=params.get("booking");
+
+if(!bookingId){
+
+try{
+
+bookingId=sessionStorage.getItem(
+"myride_confirmed_booking_id"
+);
+
+}catch(e){}
+
+}
+
+function validBookingId(id){
+
+return typeof id==="string"
+&& /^[A-Za-z0-9_-]{1,128}$/.test(id);
+
+}
+
+
+// MAP SYSTEM
+
+let map=null;
+let driverMarker=null;
+let pickupMarker=null;
+let routeLine=null;
+let pickupPoint=null;
+let driverPoint=null;
+
+let bookingUnsubscribe=null;
+let gpsUnsubscribe=null;
+let gpsTimer=null;
+
+let currentUser=null;
+let assignedDriverUid=null;
+let latestGpsTime=0;
+let lastRouteTime=0;
+let routeController=null;
+let routeRevision=0;
+let bookingStatus=null;
+
+function validPoint(point){
+
+return point
+&&Number.isFinite(point.lat)
+&&Number.isFinite(point.lon)
+&&point.lat>=5.85
+&&point.lat<=9.9
+&&point.lon>=79.5
+&&point.lon<=82;
+
+}
+
+function initializeMap(){
+
+if(map){
+
+map.invalidateSize();
+return true;
+
+}
+
+if(typeof L==="undefined"){
+
+status(t.mapError);
+return false;
+
+}
+
+map=L.map("map")
+.setView([7.8731,80.7718],7);
+
+L.tileLayer(
+
+"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+{
+maxZoom:19,
+attribution:"© OpenStreetMap contributors"
+}
+
+).addTo(map);
+
+return true;
+
+}
+
+function centerMap(){
+
+if(!map)return;
+
+const points=[];
+
+if(pickupPoint){
+
+points.push([
+pickupPoint.lat,
+pickupPoint.lon
+]);
+
+}
+
+if(driverPoint){
+
+points.push([
+driverPoint.lat,
+driverPoint.lon
+]);
+
+}
+
+if(points.length===2){
+
+map.fitBounds(points,{
+padding:[35,35],
+maxZoom:16
+});
+
+}else if(points.length===1){
+
+map.setView(points[0],16);
+
+}
+
+}
+
+$("centerMap").onclick=centerMap;
+
+
+// CUSTOMER PICKUP MARKER
+
+function showPickup(point){
+
+pickupPoint=point;
+
+const position=[point.lat,point.lon];
+
+if(pickupMarker){
+
+pickupMarker.setLatLng(position);
+
+}else{
+
+pickupMarker=L.marker(position,{
+
+icon:L.divIcon({
+
+className:"pickup-icon",
+html:"📍",
+iconSize:[42,42],
+iconAnchor:[21,21]
+
+})
+
+}).addTo(map);
+
+pickupMarker.bindTooltip(t.pickup);
+
+}
+
+}
+
+
+// DRIVER LIVE MARKER
+
+function showDriver(point){
+
+const firstLocation=!driverPoint;
+
+driverPoint=point;
+
+const position=[point.lat,point.lon];
+
+if(driverMarker){
+
+driverMarker.setLatLng(position);
+
+}else{
+
+driverMarker=L.marker(position,{
+
+icon:L.divIcon({
+
+className:"driver-icon",
+html:"🚕",
+iconSize:[42,42],
+iconAnchor:[21,21]
+
+})
+
+}).addTo(map);
+
+driverMarker.bindTooltip(t.driver);
+
+}
+
+if(firstLocation){
+
+centerMap();
+
+}
+
+}
+
+
+// REMOVE OLD ROUTE
+
+function clearRoute(){
+
+routeRevision++;
+
+if(routeController){
+
+routeController.abort();
+routeController=null;
+
+}
+
+if(map&&routeLine){
+
+map.removeLayer(routeLine);
+routeLine=null;
+
+}
+
+}
+
+function clearDriverLocation(){
+
+clearRoute();
+
+if(map&&driverMarker){
+
+map.removeLayer(driverMarker);
+driverMarker=null;
+
+}
+
+driverPoint=null;
+latestGpsTime=0;
+lastRouteTime=0;
+
+$("distance").textContent=t.unknown;
+$("eta").textContent=t.unknown;
+
+}
+
+
+// AUTOMATIC ROUTE AND ETA
+
+async function updateRoute(){
+
+if(!driverPoint||!pickupPoint)return;
+
+if(Date.now()-latestGpsTime>60000)return;
+
+if(Date.now()-lastRouteTime<15000)return;
+
+lastRouteTime=Date.now();
+
+clearRoute();
+
+const revision=routeRevision;
+
+const controller=new AbortController();
+
+routeController=controller;
+
+const timeout=setTimeout(
+
+()=>controller.abort(),15000
+
+);
+
+const driver={...driverPoint};
+const pickup={...pickupPoint};
+
+$("distance").textContent=t.routeLoading;
+$("eta").textContent=t.routeLoading;
+
+try{
+
+const url=
+
+"https://router.project-osrm.org/route/v1/driving/"
+
++driver.lon+","+driver.lat+";"
+
++pickup.lon+","+pickup.lat
+
++"?overview=full&geometries=geojson";
+
+const response=await fetch(url,{
+
+signal:controller.signal
+
+});
+
+if(!response.ok){
+
+throw new Error("Route unavailable");
+
+}
+
+const data=await response.json();
+
+if(revision!==routeRevision)return;
+
+if(data.code!=="Ok"
+||!data.routes?.length){
+
+throw new Error("No route");
+
+}
+
+const route=data.routes[0];
+
+if(!Number.isFinite(route.distance)
+||!Number.isFinite(route.duration)
+||route.distance<0
+||route.duration<0){
+
+throw new Error("Invalid route");
+
+}
+
+routeLine=L.geoJSON(
+
+route.geometry,
+
+{
+style:{
+color:"#1677FF",
+weight:6,
+opacity:.9
+}
+}
+
+).addTo(map);
+
+$("distance").textContent=
+
+(route.distance/1000).toFixed(2)+" KM";
+
+$("eta").textContent=
+
+Math.ceil(route.duration/60)+" min";
+
+}catch(error){
+
+if(revision===routeRevision){
+
+$("distance").textContent=t.routeError;
+$("eta").textContent=t.unknown;
+
+}
+
+}finally{
+
+clearTimeout(timeout);
+
+if(routeController===controller){
+
+routeController=null;
+
+}
+
+}
+
+}
+
+
+// STOP GPS TRACKING
+
+function stopGPS(){
+
+if(gpsUnsubscribe){
+
+gpsUnsubscribe();
+gpsUnsubscribe=null;
+
+}
+
+if(gpsTimer){
+
+clearInterval(gpsTimer);
+gpsTimer=null;
+
+}
+
+assignedDriverUid=null;
+
+clearDriverLocation();
+
+}
+
+
+// LIVE GPS SUBSCRIPTION
+
+function subscribeGPS(driverUid){
+
+if(assignedDriverUid===driverUid
+&&gpsUnsubscribe){
+
+return;
+
+}
+
+stopGPS();
+
+assignedDriverUid=driverUid;
+
+$("gpsStatus").textContent=t.gpsWaiting;
+
+const locationRef=doc(
+
+db,
+
+"bookings",
+
+bookingId,
+
+"tracking",
+
+"driver"
+
+);
+
+gpsUnsubscribe=onSnapshot(
+
+locationRef,
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+clearDriverLocation();
+
+$("gpsStatus").textContent=t.gpsWaiting;
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+clearDriverLocation();
+
+$("gpsStatus").textContent=t.gpsWaiting;
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(data.driverUid!==assignedDriverUid
+||!validPoint(data)
+||data.active!==true){
+
+clearDriverLocation();
+
+$("gpsStatus").textContent=t.gpsWaiting;
+
+return;
+
+}
+
+const updatedAt=
+data.updatedAt?.toMillis?.();
+
+if(!Number.isFinite(updatedAt)
+||Date.now()-updatedAt>60000
+||updatedAt>Date.now()+30000){
+
+clearDriverLocation();
+
+$("gpsStatus").textContent=t.gpsStale;
+
+return;
+
+}
+
+latestGpsTime=updatedAt;
+
+$("gpsStatus").textContent=t.gpsActive;
+
+showDriver({
+
+lat:data.lat,
+
+lon:data.lon
+
+});
+
+updateRoute();
+
+},
+
+error=>{
+
+clearDriverLocation();
+
+$("gpsStatus").textContent=t.unknown;
+
+status(
+
+error.code==="permission-denied"
+?t.denied:t.error
+
+);
+
+$("retryButton").hidden=false;
+
+}
+
+);
+
+gpsTimer=setInterval(()=>{
+
+if(latestGpsTime
+&&Date.now()-latestGpsTime>60000){
+
+clearDriverLocation();
+
+$("gpsStatus").textContent=t.gpsStale;
+
+}else if(driverPoint){
+
+updateRoute();
+
+}
+
+},5000);
+
+}
+
+
+// CLEAR PRIVATE INFORMATION
+
+function clearDisplay(){
+
+stopGPS();
+
+$("trackingPanel").hidden=true;
+
+$("driverName").textContent="";
+$("driverPhone").textContent="";
+
+$("callDriver").hidden=true;
+$("callDriver").removeAttribute("href");
+
+$("activeRide").hidden=true;
+$("activeRide").removeAttribute("href");
+
+if(map&&pickupMarker){
+
+map.removeLayer(pickupMarker);
+pickupMarker=null;
+
+}
+
+pickupPoint=null;
+
+}
+
+
+// BOOKING STATUS CONTROL
+
+function displayBooking(data){
+
+bookingStatus=data.status;
+
+if(data.status==="completed"){
+
+clearDisplay();
+status(t.completed);
+return;
+
+}
+
+if(data.status==="cancelled"){
+
+clearDisplay();
+status(t.cancelled);
+return;
+
+}
+
+if(data.status==="active"){
+
+clearDisplay();
+
+status(t.started);
+
+$("trackingPanel").hidden=false;
+$("map").hidden=true;
+
+$("driverName").textContent=t.unknown;
+$("driverPhone").textContent=t.unknown;
+$("gpsStatus").textContent=t.unknown;
+
+$("activeRide").href=
+
+"./active-ride.html?lang="+lang
++"&booking="+encodeURIComponent(bookingId);
+
+$("activeRide").hidden=false;
+
+return;
+
+}
+
+if(!["accepted","arrived"]
+.includes(data.status)){
+
+clearDisplay();
+status(t.waiting);
+return;
+
+}
+
+const driver=data.assignedDriver;
+
+if(!driver
+||typeof driver.uid!=="string"
+||typeof driver.name!=="string"
+||typeof driver.phone!=="string"
+||!validPoint(data.pickup)){
+
+clearDisplay();
+status(t.error);
+return;
+
+}
+
+const phone=driver.phone
+.replace(/[\s-]/g,"");
+
+if(!/^(?:\+94|94|0)7\d{8}$/.test(phone)){
+
+clearDisplay();
+status(t.error);
+return;
+
+}
+
+$("trackingPanel").hidden=false;
+$("map").hidden=false;
+
+$("activeRide").hidden=true;
+
+$("driverName").textContent=driver.name;
+
+$("driverPhone").textContent=phone;
+
+$("callDriver").href="tel:"+phone;
+
+$("callDriver").hidden=false;
+
+if(!initializeMap())return;
+
+showPickup(data.pickup);
+
+if(data.status==="arrived"){
+
+stopGPS();
+
+status(t.arrived);
+
+$("gpsStatus").textContent=t.unknown;
+
+centerMap();
+
+return;
+
+}
+
+status(t.coming);
+
+subscribeGPS(driver.uid);
+
+if(!driverPoint){
+
+centerMap();
+
+}
+
+}
+
+
+// AUTHORIZED BOOKING LISTENER
+
+function disconnect(){
+
+if(bookingUnsubscribe){
+
+bookingUnsubscribe();
+bookingUnsubscribe=null;
+
+}
+
+clearDisplay();
+
+}
+
+function connect(){
+
+disconnect();
+
+$("retryButton").hidden=true;
+
+if(!validBookingId(bookingId)){
+
+status(t.missing);
+return;
+
+}
+
+if(!auth||!db){
+
+status(t.error);
+return;
+
+}
+
+if(!currentUser){
+
+status(t.auth);
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+$("retryButton").hidden=false;
+
+return;
+
+}
+
+status(t.connecting);
+
+const bookingRef=doc(
+
+db,
+
+"bookings",
+
+bookingId
+
+);
+
+bookingUnsubscribe=onSnapshot(
+
+bookingRef,
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+clearDisplay();
+
+status(t.connecting);
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+clearDisplay();
+status(t.missing);
+return;
+
+}
+
+const data=snapshot.data();
+
+if(data.customerUid!==currentUser?.uid){
+
+disconnect();
+status(t.denied);
+return;
+
+}
+
+displayBooking(data);
+
+},
+
+error=>{
+
+disconnect();
+
+status(
+
+error.code==="permission-denied"
+?t.denied:t.error
+
+);
+
+$("retryButton").hidden=false;
+
+}
+
+);
+
+}
+
+
+// AUTHENTICATION SYSTEM
+
+if(auth&&db){
+
+onAuthStateChanged(
+
+auth,
+
+user=>{
+
+currentUser=user;
+
+connect();
+
+},
+
+()=>{
+
+disconnect();
+
+status(t.auth);
+
+}
+
+);
+
+}
+
+
+// INTERNET AND SESSION RECOVERY
+
+$("retryButton").onclick=connect;
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+disconnect();
+
+status(t.offline);
+
+$("retryButton").hidden=false;
+
+}
+
+);
+
+window.addEventListener(
+
+"online",
+
+connect
+
+);
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted){
+
+connect();
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
