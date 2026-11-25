@@ -1,0 +1,3455 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Account Status</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.accountIcon{
+width:90px;
+height:90px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.8;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+max-width:60%;
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+.statusCard{
+background:#292929;
+border:1px solid #555;
+border-radius:12px;
+padding:22px 12px;
+text-align:center;
+}
+
+.statusCard strong{
+display:block;
+font-size:25px;
+margin:10px 0;
+overflow-wrap:anywhere;
+}
+
+.green{
+color:#4ADE80!important;
+}
+
+.red{
+color:#FF6464!important;
+}
+
+.yellow{
+color:#FFD600!important;
+}
+
+.blue{
+color:#60A5FA!important;
+}
+
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.notice{
+background:#302C17;
+border:1px solid #FFD600;
+border-radius:10px;
+padding:14px;
+line-height:1.9;
+margin:15px 0;
+overflow-wrap:anywhere;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:14px;
+line-height:1.9;
+margin:15px 0;
+overflow-wrap:anywhere;
+}
+
+.documentCard{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:12px;
+margin:12px 0;
+}
+
+.documentCard h4{
+color:#FFD600;
+line-height:1.8;
+}
+
+label{
+display:block;
+margin:14px 0 8px;
+line-height:1.8;
+font-size:14px;
+}
+
+textarea,select{
+width:100%;
+background:#292929;
+color:#fff;
+border:1px solid #666;
+border-radius:8px;
+padding:13px;
+font-size:16px;
+font-family:inherit;
+}
+
+textarea{
+min-height:130px;
+resize:vertical;
+}
+
+.checkboxRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin:15px 0;
+line-height:1.8;
+}
+
+.checkboxRow input{
+width:20px;
+height:20px;
+accent-color:#FFD600;
+flex-shrink:0;
+}
+
+.checkboxRow label{
+margin:0;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.9;
+}
+
+.message{
+background:#292929;
+border:1px solid #555;
+border-radius:9px;
+padding:14px;
+line-height:1.9;
+white-space:pre-wrap;
+overflow-wrap:anywhere;
+}
+
+#status,
+#reviewStatus,
+#refreshStatus{
+text-align:center;
+color:#FFD600;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+button:disabled,
+textarea:disabled,
+select:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<div class="accountIcon">
+
+<svg width="55" height="55"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.7"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11"/>
+
+<path d="m9 12 2 2 4-4"/>
+
+</svg>
+
+</div>
+
+<h2 data-t="heading">
+Driver Account Status
+</h2>
+
+<p id="status"
+role="status"
+aria-live="polite">
+Checking account...
+</p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="accountDetails"></h3>
+
+<div class="row">
+<span data-t="driverName"></span>
+<strong id="driverName">—</strong>
+</div>
+
+<div class="row">
+<span>Driver ID</span>
+<strong id="driverId"
+class="yellow">—</strong>
+</div>
+
+<div class="row">
+<span data-t="vehicleType"></span>
+<strong id="vehicleType">—</strong>
+</div>
+
+<div class="row">
+<span data-t="vehicleNumber"></span>
+<strong id="vehicleNumber">—</strong>
+</div>
+
+<div class="row">
+<span data-t="registrationDate"></span>
+<strong id="registrationDate">—</strong>
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="accountStatus"></h3>
+
+<div class="statusCard">
+
+<span data-t="currentStatus"></span>
+
+<strong id="accountStatus">—</strong>
+
+<p id="statusDescription"></p>
+
+</div>
+
+<div class="row">
+<span data-t="adminApproval"></span>
+<strong id="adminApproval">—</strong>
+</div>
+
+<div class="row">
+<span data-t="activation"></span>
+<strong id="activationStatus">—</strong>
+</div>
+
+<div class="row">
+<span data-t="serviceStatus"></span>
+<strong id="serviceStatus">—</strong>
+</div>
+
+<div class="row">
+<span data-t="statusUpdated"></span>
+<strong id="statusUpdated">—</strong>
+</div>
+
+<div id="restrictionPanel"
+class="warning" hidden>
+
+<h4 data-t="restrictionReason"></h4>
+
+<p id="restrictionReason"></p>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="hirePermission"></h3>
+
+<div class="statusCard">
+
+<strong id="hirePermission">—</strong>
+
+<p id="hireDescription"></p>
+
+</div>
+
+<div class="row">
+<span data-t="documentsValid"></span>
+<strong id="documentsValid">—</strong>
+</div>
+
+<div class="row">
+<span data-t="commissionClearance"></span>
+<strong id="commissionClearance">—</strong>
+</div>
+
+<div class="row">
+<span data-t="termsAccepted"></span>
+<strong id="termsAccepted">—</strong>
+</div>
+
+<div class="row">
+<span data-t="gpsStatus"></span>
+<strong id="gpsStatus">—</strong>
+</div>
+
+<div class="row">
+<span data-t="adminRestriction"></span>
+<strong id="adminRestriction">—</strong>
+</div>
+
+<div id="hireReasons"
+class="notice" hidden></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="documentStatus"></h3>
+
+<div class="documentCard">
+
+<h4 data-t="drivingLicence"></h4>
+
+<div class="row">
+<span data-t="expiryDate"></span>
+<strong id="licenceExpiry">—</strong>
+</div>
+
+<div class="row">
+<span data-t="remainingDays"></span>
+<strong id="licenceDays">—</strong>
+</div>
+
+<div class="row">
+<span data-t="validity"></span>
+<strong id="licenceStatus">—</strong>
+</div>
+
+</div>
+
+<div class="documentCard">
+
+<h4 data-t="insurance"></h4>
+
+<div class="row">
+<span data-t="expiryDate"></span>
+<strong id="insuranceExpiry">—</strong>
+</div>
+
+<div class="row">
+<span data-t="remainingDays"></span>
+<strong id="insuranceDays">—</strong>
+</div>
+
+<div class="row">
+<span data-t="validity"></span>
+<strong id="insuranceStatus">—</strong>
+</div>
+
+</div>
+
+<div class="documentCard">
+
+<h4 data-t="revenueLicence"></h4>
+
+<div class="row">
+<span data-t="expiryDate"></span>
+<strong id="revenueExpiry">—</strong>
+</div>
+
+<div class="row">
+<span data-t="remainingDays"></span>
+<strong id="revenueDays">—</strong>
+</div>
+
+<div class="row">
+<span data-t="validity"></span>
+<strong id="revenueStatus">—</strong>
+</div>
+
+</div>
+
+<a id="renewalLink"
+class="action"
+data-t="renewDocuments"></a>
+
+<p class="note"
+data-t="renewalNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="commissionStatus"></h3>
+
+<div class="row">
+<span data-t="outstandingCommission"></span>
+<strong id="outstandingCommission">—</strong>
+</div>
+
+<div class="row">
+<span data-t="overdueCommission"></span>
+<strong id="overdueCommission">—</strong>
+</div>
+
+<div class="row">
+<span data-t="nextDueDate"></span>
+<strong id="nextDueDate">—</strong>
+</div>
+
+<div class="row">
+<span data-t="paymentRestriction"></span>
+<strong id="paymentRestriction">—</strong>
+</div>
+
+<a id="commissionLink"
+class="action secondary"
+data-t="commissionReport"></a>
+
+<a id="payCommissionLink"
+class="action secondary"
+data-t="payCommission"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="adminMessage"></h3>
+
+<div id="adminMessage"
+class="message">—</div>
+
+<div class="row">
+<span data-t="messageDate"></span>
+<strong id="messageDate">—</strong>
+</div>
+
+<a id="notificationLink"
+class="action secondary"
+data-t="notifications"></a>
+
+</section>
+
+<section id="reviewPanel"
+class="panel" hidden>
+
+<h3 data-t="requestReview"></h3>
+
+<p class="note"
+data-t="reviewNote"></p>
+
+<form id="reviewForm">
+
+<label for="reviewCategory"
+data-t="reviewCategory"></label>
+
+<select id="reviewCategory" required>
+
+<option value=""
+data-t="selectReason"></option>
+
+<option value="account_status"
+data-t="accountStatus"></option>
+
+<option value="documents"
+data-t="documentStatus"></option>
+
+<option value="commission"
+data-t="commissionStatus"></option>
+
+<option value="incorrect_restriction"
+data-t="incorrectRestriction"></option>
+
+<option value="other"
+data-t="other"></option>
+
+</select>
+
+<label for="reviewMessage"
+data-t="reviewMessage"></label>
+
+<textarea id="reviewMessage"
+minlength="10"
+maxlength="2000"
+required></textarea>
+
+<p class="note">
+<span id="characterCount">0</span>
+/ 2000
+</p>
+
+<div class="checkboxRow">
+
+<input type="checkbox"
+id="declaration" required>
+
+<label for="declaration"
+data-t="declaration"></label>
+
+</div>
+
+<button type="submit"
+id="submitReview"
+class="action"
+data-t="sendReview"></button>
+
+</form>
+
+<p id="reviewStatus"
+role="status"
+aria-live="polite"></p>
+
+<div id="reviewRecord"
+class="documentCard" hidden>
+
+<div class="row">
+<span data-t="reference"></span>
+<strong id="reviewReference">—</strong>
+</div>
+
+<div class="row">
+<span data-t="reviewState"></span>
+<strong id="reviewState">—</strong>
+</div>
+
+<div class="row">
+<span data-t="submittedDate"></span>
+<strong id="reviewDate">—</strong>
+</div>
+
+<div class="row">
+<span data-t="adminReply"></span>
+<strong id="reviewReply">—</strong>
+</div>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="securityRules"></h3>
+
+<p data-t="rule1"></p>
+<p data-t="rule2"></p>
+<p data-t="rule3"></p>
+<p data-t="rule4"></p>
+<p data-t="rule5"></p>
+<p data-t="rule6"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="updateDetails"></h3>
+
+<div class="row">
+<span data-t="lastUpdate"></span>
+<strong id="lastUpdate">—</strong>
+</div>
+
+<div class="row">
+<span data-t="serverConnection"></span>
+<strong id="serverConnection">—</strong>
+</div>
+
+<button id="refreshButton"
+class="action"
+data-t="refresh"></button>
+
+<p id="refreshStatus"
+role="status"></p>
+
+</section>
+
+<a id="helpLink"
+class="action secondary"
+data-t="help"></a>
+
+<a id="feedbackLink"
+class="action secondary"
+data-t="feedback"></a>
+
+<a id="termsLink"
+class="action secondary"
+data-t="driverTerms"></a>
+
+<a id="dashboardLink"
+class="action secondary"
+data-t="back"
+hidden></a>
+
+</div>
+
+<a id="mainMenuLink"
+class="action secondary"
+data-t="mainMenu"></a>
+
+<button id="logoutButton"
+class="action secondary"
+data-t="logout"
+hidden></button>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const LANGUAGES=["si","en","ta"];
+
+const params=
+new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")
+||"si";
+
+}catch(e){}
+
+const lang=
+LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"රියදුරු ගිණුමේ තත්ත්වය",
+accountDetails:"රියදුරු ගිණුමේ විස්තර",
+driverName:"රියදුරුගේ නම",
+vehicleType:"වාහන වර්ගය",
+vehicleNumber:"වාහන ලියාපදිංචි අංකය",
+registrationDate:"ලියාපදිංචි දිනය",
+accountStatus:"ගිණුමේ තත්ත්වය",
+currentStatus:"වර්තමාන තත්ත්වය",
+adminApproval:"Admin අනුමැතිය",
+activation:"ගිණුම සක්‍රිය කිරීම",
+serviceStatus:"සේවා තත්ත්වය",
+statusUpdated:"තත්ත්වය වෙනස් කළ දිනය",
+restrictionReason:"ගිණුම් සීමාවට හේතුව",
+hirePermission:"හයර් ලබාගැනීමේ අවසරය",
+documentsValid:"බලපත්‍ර වලංගුභාවය",
+commissionClearance:"කොමිස් ගෙවීම් තත්ත්වය",
+termsAccepted:"නවතම කොන්දේසි පිළිගැනීම",
+gpsStatus:"GPS තත්ත්වය",
+adminRestriction:"Admin සීමා",
+documentStatus:"බලපත්‍ර සහ රක්ෂණ තත්ත්වය",
+drivingLicence:"රියදුරු බලපත්‍රය",
+insurance:"වාහන රක්ෂණය",
+revenueLicence:"වාහන ආදායම් බලපත්‍රය",
+expiryDate:"කල් ඉකුත්වීමේ දිනය",
+remainingDays:"ඉතිරි දින",
+validity:"වලංගුභාවය",
+renewDocuments:"බලපත්‍ර අලුත් කිරීම",
+renewalNote:"අලුත් කරන ලද බලපත්‍ර Admin විසින් තහවුරු කළ යුතුය.",
+commissionStatus:"කොමිස් ගෙවීම් තත්ත්වය",
+outstandingCommission:"ගෙවීමට ඉතිරි කොමිස්",
+overdueCommission:"කල් ඉකුත් වූ කොමිස්",
+nextDueDate:"ඊළඟ ගෙවීමේ අවසන් දිනය",
+paymentRestriction:"ගෙවීම් සීමා",
+commissionReport:"කොමිස් වාර්තාව",
+payCommission:"කොමිස් ගෙවන්න",
+adminMessage:"Admin නිවේදනය",
+messageDate:"නිවේදනයේ දිනය",
+notifications:"සියලුම නිවේදන",
+requestReview:"ගිණුම නැවත සමාලෝචනය කිරීමට ඉල්ලන්න",
+reviewNote:"මෙම ඉල්ලීම Admin වෙත යොමු වේ. ඉල්ලීම යැවීමෙන් ගිණුමේ සීමා ස්වයංක්‍රීයව ඉවත් නොවේ.",
+reviewCategory:"ඉල්ලීමේ වර්ගය",
+selectReason:"හේතුව තෝරන්න",
+incorrectRestriction:"වැරදි ගිණුම් සීමාවක්",
+other:"වෙනත්",
+reviewMessage:"ඔබගේ ඉල්ලීම විස්තර කරන්න",
+declaration:"මා ලබාදෙන තොරතුරු නිවැරදි බව තහවුරු කරමි.",
+sendReview:"Admin වෙත ඉල්ලීම යවන්න",
+reference:"ඉල්ලීම් අංකය",
+reviewState:"ඉල්ලීමේ තත්ත්වය",
+submittedDate:"යොමු කළ දිනය",
+adminReply:"Admin පිළිතුර",
+securityRules:"ගිණුම් ආරක්ෂක කොන්දේසි",
+rule1:"✓ Admin අනුමත රියදුරන්ට පමණක් හයර් ලබාගත හැක.",
+rule2:"✓ අවහිර කළ හෝ අත්හිටුවූ ගිණුම්වලට නව හයර් ලබාගත නොහැක.",
+rule3:"✓ වලංගු බලපත්‍ර සහ රක්ෂණය අනිවාර්ය වේ.",
+rule4:"✓ රියදුරුට තම ගිණුමේ අනුමැතිය වෙනස් කළ නොහැක.",
+rule5:"✓ ගිණුම් සීමා ඉවත් කිරීමේ බලය Admin සතුය.",
+rule6:"✓ ව්‍යාජ දත්ත හෝ වෙනත් අයගේ ගිණුම් භාවිතය තහනම්ය.",
+updateDetails:"දත්ත යාවත්කාලීන කිරීම",
+lastUpdate:"අවසන් යාවත්කාලීන කිරීම",
+serverConnection:"Server සම්බන්ධතාව",
+refresh:"ගිණුමේ තත්ත්වය යාවත්කාලීන කරන්න",
+help:"රියදුරු සහාය",
+feedback:"අදහස් සහ පැමිණිලි",
+driverTerms:"රියදුරු කොන්දේසි",
+back:"← Driver Dashboard",
+mainMenu:"← ප්‍රධාන මෙනුව",
+login:"Driver Login",
+logout:"ගිණුමෙන් ඉවත් වන්න",
+pending:"අනුමැතිය බලාපොරොත්තුවෙන්",
+approved:"අනුමත කර ඇත",
+rejected:"ප්‍රතික්ෂේප කර ඇත",
+suspended:"තාවකාලිකව අත්හිටුවා ඇත",
+blocked:"අවහිර කර ඇත",
+pendingDescription:"ඔබගේ ගිණුම Admin පරීක්ෂා කරමින් සිටී.",
+approvedDescription:"ඔබගේ රියදුරු ගිණුම අනුමත කර ඇත. හයර් ලබාගැනීමට අනෙකුත් අවශ්‍යතාද සම්පූර්ණ විය යුතුය.",
+rejectedDescription:"ඔබගේ ලියාපදිංචිය ප්‍රතික්ෂේප කර ඇත.",
+suspendedDescription:"ඔබගේ ගිණුම තාවකාලිකව අත්හිටුවා ඇත.",
+blockedDescription:"ඔබගේ ගිණුම අවහිර කර ඇත.",
+activated:"සක්‍රිය කර ඇත",
+notActivated:"සක්‍රිය කර නොමැත",
+online:"Online",
+offline:"Offline",
+busy:"හයර් එකක සිටී",
+allowed:"අවසර ඇත",
+notAllowed:"අවසර නොමැත",
+allowedDescription:"දැනට නව හයර් ලබාගැනීමට අවසර ඇත.",
+notAllowedDescription:"දැනට නව හයර් ලබාගැනීමට අවසර නොමැත.",
+valid:"වලංගුයි",
+invalid:"වලංගු නොවේ",
+expired:"කල් ඉකුත් වී ඇත",
+expiring:"ළඟදීම කල් ඉකුත් වේ",
+clear:"සීමා නොමැත",
+restricted:"සීමා කර ඇත",
+accepted:"පිළිගෙන ඇත",
+notAccepted:"පිළිගෙන නොමැත",
+active:"ක්‍රියාත්මකයි",
+inactive:"ක්‍රියාත්මක නොවේ",
+unknown:"තහවුරු වී නොමැත",
+none:"කිසිවක් නොමැත",
+days:"දින",
+bike:"Scooter / Bike",
+tuk:"ත්‍රීරෝද රථය",
+car:"මෝටර් රථය",
+van:"වෑන් රථය",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+loading:"දත්ත ලබාගනිමින්...",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+error:"දත්ත ලබාගත නොහැක.",
+connectionLost:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+connected:"සම්බන්ධයි",
+updated:"යාවත්කාලීන කර ඇත.",
+reviewSent:"ඉල්ලීම Admin වෙත යොමු කර ඇත.",
+reviewPending:"සමාලෝචනය බලාපොරොත්තුවෙන්",
+inProgress:"පරීක්ෂා කරමින්",
+resolved:"විසඳා ඇත",
+closed:"අවසන් කර ඇත",
+confirmReview:"මෙම ඉල්ලීම Admin වෙත යොමු කරන්නද?",
+confirmLogout:"ගිණුමෙන් ඉවත් වීමට අවශ්‍යද?",
+busyLogout:"දැනට පවතින හයර් එක අවසන් කරන තුරු Logout කළ නොහැක.",
+account_not_approved:"ගිණුම අනුමත කර නොමැත.",
+activation_required:"ගිණුම සක්‍රිය කළ යුතුය.",
+documents_invalid:"බලපත්‍ර හෝ රක්ෂණය වලංගු නොවේ.",
+commission_restricted:"කොමිස් ගෙවීම් සීමාවක් ඇත.",
+terms_required:"නවතම කොන්දේසි පිළිගත යුතුය.",
+gps_unavailable:"වලංගු GPS දත්ත නොමැත.",
+admin_restricted:"Admin විසින් සේවා සීමා කර ඇත.",
+driver_offline:"රියදුරු Offline තත්ත්වයේ සිටී.",
+driver_busy:"දැනට හයර් එකක සිටී.",
+system_restricted:"පද්ධති සේවා සීමාවක් ඇත."
+
+},
+
+en:{
+
+heading:"Driver Account Status",
+accountDetails:"Driver Account Details",
+driverName:"Driver Name",
+vehicleType:"Vehicle Type",
+vehicleNumber:"Vehicle Registration Number",
+registrationDate:"Registration Date",
+accountStatus:"Account Status",
+currentStatus:"Current Status",
+adminApproval:"Admin Approval",
+activation:"Account Activation",
+serviceStatus:"Service Status",
+statusUpdated:"Status Updated",
+restrictionReason:"Reason for Account Restriction",
+hirePermission:"New Hire Permission",
+documentsValid:"Document Validity",
+commissionClearance:"Commission Clearance",
+termsAccepted:"Latest Terms Accepted",
+gpsStatus:"GPS Status",
+adminRestriction:"Admin Restriction",
+documentStatus:"Licence and Insurance Status",
+drivingLicence:"Driving Licence",
+insurance:"Vehicle Insurance",
+revenueLicence:"Vehicle Revenue Licence",
+expiryDate:"Expiry Date",
+remainingDays:"Remaining Days",
+validity:"Validity",
+renewDocuments:"Renew Documents",
+renewalNote:"Renewed documents must be verified by Admin.",
+commissionStatus:"Commission Payment Status",
+outstandingCommission:"Outstanding Commission",
+overdueCommission:"Overdue Commission",
+nextDueDate:"Next Payment Due Date",
+paymentRestriction:"Payment Restriction",
+commissionReport:"Commission Report",
+payCommission:"Pay Commission",
+adminMessage:"Admin Message",
+messageDate:"Message Date",
+notifications:"All Notifications",
+requestReview:"Request Account Review",
+reviewNote:"Your request will be sent to Admin. Submitting a request does not automatically remove account restrictions.",
+reviewCategory:"Request Category",
+selectReason:"Select Reason",
+incorrectRestriction:"Incorrect Account Restriction",
+other:"Other",
+reviewMessage:"Describe Your Request",
+declaration:"I confirm that the information provided is accurate.",
+sendReview:"Send Request to Admin",
+reference:"Reference Number",
+reviewState:"Review Status",
+submittedDate:"Submitted Date",
+adminReply:"Admin Reply",
+securityRules:"Account Security Rules",
+rule1:"✓ Only approved drivers can receive new hires.",
+rule2:"✓ Blocked or suspended accounts cannot receive new hires.",
+rule3:"✓ Valid licences and insurance are mandatory.",
+rule4:"✓ Drivers cannot change their own approval status.",
+rule5:"✓ Only Admin can remove account restrictions.",
+rule6:"✓ False information and account sharing are prohibited.",
+updateDetails:"Data Updates",
+lastUpdate:"Last Updated",
+serverConnection:"Server Connection",
+refresh:"Refresh Account Status",
+help:"Driver Help",
+feedback:"Feedback and Complaints",
+driverTerms:"Driver Terms",
+back:"← Driver Dashboard",
+mainMenu:"← Main Menu",
+login:"Driver Login",
+logout:"Logout",
+pending:"Pending Approval",
+approved:"Approved",
+rejected:"Rejected",
+suspended:"Suspended",
+blocked:"Blocked",
+pendingDescription:"Admin is reviewing your account.",
+approvedDescription:"Your account is approved. All other eligibility requirements must also be satisfied before receiving hires.",
+rejectedDescription:"Your driver registration has been rejected.",
+suspendedDescription:"Your account has been temporarily suspended.",
+blockedDescription:"Your account has been blocked.",
+activated:"Activated",
+notActivated:"Not Activated",
+online:"Online",
+offline:"Offline",
+busy:"On a Ride",
+allowed:"Allowed",
+notAllowed:"Not Allowed",
+allowedDescription:"You are currently eligible to receive new hires.",
+notAllowedDescription:"You are currently not eligible to receive new hires.",
+valid:"Valid",
+invalid:"Invalid",
+expired:"Expired",
+expiring:"Expiring Soon",
+clear:"No Restrictions",
+restricted:"Restricted",
+accepted:"Accepted",
+notAccepted:"Not Accepted",
+active:"Active",
+inactive:"Inactive",
+unknown:"Not Verified",
+none:"None",
+days:"Days",
+bike:"Scooter / Bike",
+tuk:"Three Wheeler",
+car:"Car",
+van:"Van",
+checking:"Verifying account...",
+loading:"Loading data...",
+denied:"Access to this page is not authorized.",
+error:"Unable to retrieve data.",
+connectionLost:"No internet connection.",
+connected:"Connected",
+updated:"Updated successfully.",
+reviewSent:"Your request has been sent to Admin.",
+reviewPending:"Pending Review",
+inProgress:"In Progress",
+resolved:"Resolved",
+closed:"Closed",
+confirmReview:"Send this request to Admin?",
+confirmLogout:"Do you want to log out?",
+busyLogout:"Complete the current ride before logging out.",
+account_not_approved:"Account is not approved.",
+activation_required:"Account activation is required.",
+documents_invalid:"Documents or insurance are invalid.",
+commission_restricted:"Commission payment restriction applies.",
+terms_required:"Latest terms must be accepted.",
+gps_unavailable:"Valid GPS data is unavailable.",
+admin_restricted:"Admin has restricted service access.",
+driver_offline:"Driver is offline.",
+driver_busy:"Driver is currently on a ride.",
+system_restricted:"A system restriction applies."
+
+},
+
+ta:{
+
+heading:"சாரதி கணக்கு நிலை",
+accountDetails:"சாரதி கணக்கு விவரங்கள்",
+driverName:"சாரதியின் பெயர்",
+vehicleType:"வாகன வகை",
+vehicleNumber:"வாகன பதிவு எண்",
+registrationDate:"பதிவு தேதி",
+accountStatus:"கணக்கு நிலை",
+currentStatus:"தற்போதைய நிலை",
+adminApproval:"நிர்வாக அனுமதி",
+activation:"கணக்கு செயல்படுத்தல்",
+serviceStatus:"சேவை நிலை",
+statusUpdated:"நிலை புதுப்பிக்கப்பட்ட தேதி",
+restrictionReason:"கணக்கு கட்டுப்பாட்டிற்கான காரணம்",
+hirePermission:"புதிய பயண அனுமதி",
+documentsValid:"ஆவண செல்லுபடியாகும் நிலை",
+commissionClearance:"கமிஷன் நிலை",
+termsAccepted:"சமீபத்திய விதிமுறைகள் ஏற்றுக்கொள்ளல்",
+gpsStatus:"GPS நிலை",
+adminRestriction:"நிர்வாக கட்டுப்பாடு",
+documentStatus:"உரிமம் மற்றும் காப்பீட்டு நிலை",
+drivingLicence:"சாரதி உரிமம்",
+insurance:"வாகன காப்பீடு",
+revenueLicence:"வாகன வருவாய் உரிமம்",
+expiryDate:"காலாவதி தேதி",
+remainingDays:"மீதமுள்ள நாட்கள்",
+validity:"செல்லுபடியாகும் நிலை",
+renewDocuments:"ஆவணங்களை புதுப்பிக்கவும்",
+renewalNote:"புதுப்பிக்கப்பட்ட ஆவணங்களை நிர்வாகம் சரிபார்க்க வேண்டும்.",
+commissionStatus:"கமிஷன் கட்டண நிலை",
+outstandingCommission:"செலுத்த வேண்டிய கமிஷன்",
+overdueCommission:"காலதாமதமான கமிஷன்",
+nextDueDate:"அடுத்த கட்டண இறுதி தேதி",
+paymentRestriction:"கட்டண கட்டுப்பாடு",
+commissionReport:"கமிஷன் அறிக்கை",
+payCommission:"கமிஷன் செலுத்தவும்",
+adminMessage:"நிர்வாக அறிவிப்பு",
+messageDate:"அறிவிப்பு தேதி",
+notifications:"அனைத்து அறிவிப்புகள்",
+requestReview:"கணக்கு மறுபரிசீலனை கோரிக்கை",
+reviewNote:"கோரிக்கை நிர்வாகத்திற்கு அனுப்பப்படும். கோரிக்கை அனுப்புவதால் கட்டுப்பாடுகள் தானாக நீக்கப்படாது.",
+reviewCategory:"கோரிக்கை வகை",
+selectReason:"காரணத்தை தேர்ந்தெடுக்கவும்",
+incorrectRestriction:"தவறான கணக்கு கட்டுப்பாடு",
+other:"மற்றவை",
+reviewMessage:"உங்கள் கோரிக்கையை விவரிக்கவும்",
+declaration:"வழங்கிய தகவல்கள் சரியானவை என உறுதிப்படுத்துகிறேன்.",
+sendReview:"நிர்வாகத்திற்கு அனுப்பவும்",
+reference:"குறிப்பு எண்",
+reviewState:"மறுபரிசீலனை நிலை",
+submittedDate:"சமர்ப்பித்த தேதி",
+adminReply:"நிர்வாக பதில்",
+securityRules:"கணக்கு பாதுகாப்பு விதிகள்",
+rule1:"✓ அங்கீகரிக்கப்பட்ட சாரதிகள் மட்டுமே புதிய பயணங்களை பெற முடியும்.",
+rule2:"✓ தடுக்கப்பட்ட அல்லது இடைநிறுத்தப்பட்ட கணக்குகளுக்கு புதிய பயணங்கள் கிடைக்காது.",
+rule3:"✓ செல்லுபடியாகும் உரிமங்களும் காப்பீடும் கட்டாயம்.",
+rule4:"✓ சாரதிகள் தங்கள் அங்கீகார நிலையை மாற்ற முடியாது.",
+rule5:"✓ நிர்வாகம் மட்டுமே கட்டுப்பாடுகளை நீக்க முடியும்.",
+rule6:"✓ தவறான தகவல் மற்றும் கணக்கு பகிர்வு தடைசெய்யப்பட்டுள்ளது.",
+updateDetails:"தரவு புதுப்பிப்பு",
+lastUpdate:"கடைசி புதுப்பிப்பு",
+serverConnection:"சேவையக இணைப்பு",
+refresh:"கணக்கு நிலையை புதுப்பிக்கவும்",
+help:"சாரதி உதவி",
+feedback:"கருத்துகள் மற்றும் முறைப்பாடுகள்",
+driverTerms:"சாரதி விதிமுறைகள்",
+back:"← சாரதி முதன்மைப் பக்கம்",
+mainMenu:"← முதன்மை பட்டியல்",
+login:"சாரதி உள்நுழைவு",
+logout:"வெளியேறு",
+pending:"அங்கீகாரம் நிலுவையில்",
+approved:"அங்கீகரிக்கப்பட்டது",
+rejected:"நிராகரிக்கப்பட்டது",
+suspended:"இடைநிறுத்தப்பட்டது",
+blocked:"தடுக்கப்பட்டது",
+pendingDescription:"உங்கள் கணக்கை நிர்வாகம் பரிசீலிக்கிறது.",
+approvedDescription:"உங்கள் கணக்கு அங்கீகரிக்கப்பட்டுள்ளது. புதிய பயணங்களுக்கு மற்ற தகுதிகளும் பூர்த்தி செய்யப்பட வேண்டும்.",
+rejectedDescription:"உங்கள் சாரதி பதிவு நிராகரிக்கப்பட்டுள்ளது.",
+suspendedDescription:"உங்கள் கணக்கு தற்காலிகமாக இடைநிறுத்தப்பட்டுள்ளது.",
+blockedDescription:"உங்கள் கணக்கு தடுக்கப்பட்டுள்ளது.",
+activated:"செயல்படுத்தப்பட்டது",
+notActivated:"செயல்படுத்தப்படவில்லை",
+online:"இணைப்பில்",
+offline:"இணைப்பில் இல்லை",
+busy:"பயணத்தில்",
+allowed:"அனுமதி உள்ளது",
+notAllowed:"அனுமதி இல்லை",
+allowedDescription:"தற்போது புதிய பயணங்களை பெற தகுதி உள்ளது.",
+notAllowedDescription:"தற்போது புதிய பயணங்களை பெற தகுதி இல்லை.",
+valid:"செல்லுபடியாகும்",
+invalid:"செல்லுபடியாகாது",
+expired:"காலாவதியானது",
+expiring:"விரைவில் காலாவதியாகும்",
+clear:"கட்டுப்பாடு இல்லை",
+restricted:"கட்டுப்படுத்தப்பட்டது",
+accepted:"ஏற்றுக்கொள்ளப்பட்டது",
+notAccepted:"ஏற்றுக்கொள்ளப்படவில்லை",
+active:"செயலில்",
+inactive:"செயலில் இல்லை",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+none:"எதுவுமில்லை",
+days:"நாட்கள்",
+bike:"ஸ்கூட்டர் / மோட்டார் சைக்கிள்",
+tuk:"முச்சக்கர வண்டி",
+car:"கார்",
+van:"வேன்",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+loading:"தரவு பெறப்படுகிறது...",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+error:"தரவை பெற முடியவில்லை.",
+connectionLost:"இணைய இணைப்பு இல்லை.",
+connected:"இணைக்கப்பட்டுள்ளது",
+updated:"புதுப்பிக்கப்பட்டது.",
+reviewSent:"கோரிக்கை நிர்வாகத்திற்கு அனுப்பப்பட்டது.",
+reviewPending:"மறுபரிசீலனை நிலுவையில்",
+inProgress:"பரிசீலனையில்",
+resolved:"தீர்க்கப்பட்டது",
+closed:"முடிக்கப்பட்டது",
+confirmReview:"கோரிக்கையை நிர்வாகத்திற்கு அனுப்பவா?",
+confirmLogout:"கணக்கிலிருந்து வெளியேற விரும்புகிறீர்களா?",
+busyLogout:"தற்போதைய பயணத்தை முடித்த பிறகு வெளியேறவும்.",
+account_not_approved:"கணக்கு அங்கீகரிக்கப்படவில்லை.",
+activation_required:"கணக்கை செயல்படுத்த வேண்டும்.",
+documents_invalid:"ஆவணங்கள் அல்லது காப்பீடு செல்லுபடியாகாது.",
+commission_restricted:"கமிஷன் கட்டுப்பாடு உள்ளது.",
+terms_required:"சமீபத்திய விதிமுறைகளை ஏற்க வேண்டும்.",
+gps_unavailable:"செல்லுபடியாகும் GPS தரவு இல்லை.",
+admin_restricted:"நிர்வாகம் சேவையை கட்டுப்படுத்தியுள்ளது.",
+driver_offline:"சாரதி இணைப்பில் இல்லை.",
+driver_busy:"சாரதி தற்போது பயணத்தில் உள்ளார்.",
+system_restricted:"அமைப்பு கட்டுப்பாடு உள்ளது."
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+// PAGE LINKS
+
+const links={
+
+loginLink:"driver-login.html",
+renewalLink:"driver-renewal.html",
+commissionLink:"driver-commission.html",
+payCommissionLink:"driver-pay-commission.html",
+notificationLink:"driver-notifications.html",
+helpLink:"driver-help.html",
+feedbackLink:"driver-feedback.html",
+termsLink:"driver-terms.html",
+dashboardLink:"driver-dashboard.html",
+mainMenuLink:"menu.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let authorized=false;
+let account=null;
+let reviewRecord=null;
+
+let generation=0;
+
+let accountUnsubscribe=null;
+let reviewUnsubscribe=null;
+
+let serverOffset=null;
+let serverSyncAt=0;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+let refreshing=false;
+let checkingSession=false;
+let submitting=false;
+let loggingOut=false;
+
+let pendingReview=null;
+
+const ACCOUNT_STATES=[
+
+"pending",
+"approved",
+"rejected",
+"suspended",
+"blocked"
+
+];
+
+const RESTRICTION_CODES=[
+
+"account_not_approved",
+"activation_required",
+"documents_invalid",
+"commission_restricted",
+"terms_required",
+"gps_unavailable",
+"admin_restricted",
+"driver_offline",
+"driver_busy",
+"system_restricted"
+
+];
+
+const REVIEW_CATEGORIES=[
+
+"account_status",
+"documents",
+"commission",
+"incorrect_restriction",
+"other"
+
+];
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+&&uid!==null
+&&auth?.currentUser?.uid===uid
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,min,max){
+
+return typeof value==="string"
+&&value.trim().length>=min
+&&value.length<=max;
+
+}
+
+function validNumber(value,min,max){
+
+return typeof value==="number"
+&&Number.isFinite(value)
+&&value>=min
+&&value<=max;
+
+}
+
+function validMoney(value){
+
+return validNumber(value,0,100000000)
+&&Math.abs(
+value*100-Math.round(value*100)
+)<0.001;
+
+}
+
+function validTime(value){
+
+return validNumber(
+value,1,8640000000000000
+);
+
+}
+
+function timestampMs(value){
+
+if(!value
+||typeof value.toMillis!=="function"){
+
+return null;
+
+}
+
+const ms=value.toMillis();
+
+return validTime(ms)?ms:null;
+
+}
+
+function validDate(value){
+
+if(typeof value!=="string"
+||!/^\d{4}-\d{2}-\d{2}$/.test(value)){
+
+return false;
+
+}
+
+const date=new Date(value+"T00:00:00Z");
+
+return Number.isFinite(date.getTime())
+&&date.toISOString().slice(0,10)===value;
+
+}
+
+function validTranslations(value){
+
+return value
+&&LANGUAGES.every(language=>
+
+typeof value[language]==="string"
+&&value[language].length<=3000
+
+);
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+functions,name
+)(data);
+
+if(!validSession()
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// SERVER TIME
+
+async function syncServerTime(){
+
+const currentGeneration=generation;
+
+const start=Date.now();
+
+const result=await serverCall(
+"getDriverAccountStatusTime"
+);
+
+const end=Date.now();
+
+if(currentGeneration!==generation)return;
+
+if(!validTime(result?.serverTimeMs)
+||end-start>10000){
+
+throw new Error("Invalid server time");
+
+}
+
+serverOffset=
+result.serverTimeMs-(start+end)/2;
+
+serverSyncAt=end;
+
+}
+
+function serverNow(){
+
+if(serverOffset===null
+||Date.now()-serverSyncAt>120000){
+
+return null;
+
+}
+
+return Date.now()+serverOffset;
+
+}
+
+function sriLankaToday(){
+
+const now=serverNow();
+
+if(now===null)return null;
+
+return new Date(now+330*60000)
+.toISOString().slice(0,10);
+
+}
+
+function formatDate(ms){
+
+if(!validTime(ms))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"medium"
+
+}
+
+).format(new Date(ms));
+
+}
+
+function money(value){
+
+if(!validMoney(value))return "—";
+
+return "LKR "+
+new Intl.NumberFormat("en-LK",{
+
+minimumFractionDigits:2,
+maximumFractionDigits:2
+
+}).format(value);
+
+}
+
+// SAFE STATUS DISPLAY
+
+function setValue(id,value,color=""){
+
+const el=$(id);
+
+el.textContent=value??"—";
+
+el.classList.remove(
+"green","red","yellow","blue"
+);
+
+if(color){
+
+el.classList.add(color);
+
+}
+
+}
+
+function setBoolean(
+id,value,trueText,falseText
+){
+
+if(typeof value!=="boolean"){
+
+setValue(id,t.unknown,"yellow");
+
+return;
+
+}
+
+setValue(
+
+id,
+
+value?t[trueText]:t[falseText],
+
+value?"green":"red"
+
+);
+
+}
+
+// ACCOUNT DATA VALIDATION
+
+function validAccount(data){
+
+if(
+
+!data
+
+||data.driverUid!==uid
+
+||!validId(data.driverId)
+
+||!validText(data.fullName,1,150)
+
+||!ACCOUNT_STATES.includes(data.status)
+
+||!["bike","tuk","car","van"]
+.includes(data.vehicleType)
+
+||!validText(data.vehicleNumber,1,30)
+
+||!["online","offline","busy"]
+.includes(data.availability)
+
+||typeof data.activationComplete!=="boolean"
+
+||typeof data.documentsValid!=="boolean"
+
+||typeof data.commissionRestricted!=="boolean"
+
+||typeof data.termsAccepted!=="boolean"
+
+||typeof data.gpsActive!=="boolean"
+
+||typeof data.adminRestricted!=="boolean"
+
+||typeof data.canReceiveHires!=="boolean"
+
+||typeof data.canRequestReview!=="boolean"
+
+||!validMoney(data.outstandingCommission)
+
+||!validMoney(data.overdueCommission)
+
+||data.overdueCommission>
+data.outstandingCommission
+
+||!Array.isArray(data.restrictionCodes)
+
+||data.restrictionCodes.length>20
+
+||!data.restrictionCodes.every(
+code=>RESTRICTION_CODES.includes(code)
+)
+
+||timestampMs(data.createdAt)===null
+
+||timestampMs(data.updatedAt)===null
+
+||timestampMs(data.statusUpdatedAt)===null
+
+){
+
+return false;
+
+}
+
+for(const key of [
+
+"licenceExpiry",
+"insuranceExpiry",
+"revenueExpiry"
+
+]){
+
+if(data[key]!==null
+&&!validDate(data[key])){
+
+return false;
+
+}
+
+}
+
+for(const key of [
+
+"licenceVerified",
+"insuranceVerified",
+"revenueVerified"
+
+]){
+
+if(typeof data[key]!=="boolean"){
+
+return false;
+
+}
+
+}
+
+if(data.nextDueAt!==null
+&&timestampMs(data.nextDueAt)===null){
+
+return false;
+
+}
+
+if(data.restrictionReason!==null
+&&!validTranslations(
+data.restrictionReason
+)){
+
+return false;
+
+}
+
+if(data.adminMessage!==null){
+
+if(!validTranslations(
+data.adminMessage.translations
+)
+
+||timestampMs(
+data.adminMessage.createdAt
+)===null){
+
+return false;
+
+}
+
+}
+
+// Reject contradictory eligibility data.
+
+if(data.canReceiveHires===true){
+
+if(
+
+data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true
+
+||data.commissionRestricted===true
+
+||data.termsAccepted!==true
+
+||data.gpsActive!==true
+
+||data.adminRestricted===true
+
+||data.availability!=="online"
+
+||data.restrictionCodes.length>0
+
+){
+
+return false;
+
+}
+
+}
+
+return true;
+
+}
+
+// DOCUMENT EXPIRY CALCULATION
+
+function documentDays(expiry){
+
+const today=sriLankaToday();
+
+if(!today||!validDate(expiry)){
+
+return null;
+
+}
+
+const expiryMs=
+Date.parse(expiry+"T00:00:00Z");
+
+const todayMs=
+Date.parse(today+"T00:00:00Z");
+
+return Math.round(
+
+(expiryMs-todayMs)/86400000
+
+);
+
+}
+
+function renderDocument(
+prefix,expiry,verified
+){
+
+setValue(
+prefix+"Expiry",
+expiry||"—"
+);
+
+const days=documentDays(expiry);
+
+if(days===null){
+
+setValue(prefix+"Days","—");
+
+setValue(
+prefix+"Status",
+t.unknown,
+"yellow"
+);
+
+return;
+
+}
+
+setValue(
+
+prefix+"Days",
+
+Math.max(0,days)+" "+t.days,
+
+days<0?"red":
+days<=30?"yellow":"green"
+
+);
+
+if(days<0){
+
+setValue(
+prefix+"Status",
+t.expired,
+"red"
+);
+
+}else if(!verified){
+
+setValue(
+prefix+"Status",
+t.unknown,
+"yellow"
+);
+
+}else if(days<=30){
+
+setValue(
+prefix+"Status",
+t.expiring,
+"yellow"
+);
+
+}else{
+
+setValue(
+prefix+"Status",
+t.valid,
+"green"
+);
+
+}
+
+}
+
+function renderDocuments(){
+
+if(!account)return;
+
+renderDocument(
+
+"licence",
+account.licenceExpiry,
+account.licenceVerified
+
+);
+
+renderDocument(
+
+"insurance",
+account.insuranceExpiry,
+account.insuranceVerified
+
+);
+
+renderDocument(
+
+"revenue",
+account.revenueExpiry,
+account.revenueVerified
+
+);
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+||!navigator.geolocation
+||!validSession())return;
+
+const currentGeneration=generation;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+||!account
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true
+
+||!["online","busy"]
+.includes(account.availability)
+
+||!validNumber(c.latitude,5.85,9.9)
+
+||!validNumber(c.longitude,79.5,82)
+
+||!validNumber(c.accuracy,0,100)
+
+||!validTime(position.timestamp)
+
+||Date.now()-position.timestamp>30000
+
+||position.timestamp>Date.now()+5000
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000
+
+){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+const result=await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:c.latitude,
+lon:c.longitude,
+accuracy:c.accuracy,
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+if(result?.accepted!==true){
+
+throw new Error("GPS rejected");
+
+}
+
+}catch(e){
+
+// Server must expire stale GPS data.
+
+}finally{
+
+if(currentGeneration===generation){
+
+gpsSending=false;
+
+}
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+maximumAge:5000,
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(
+gpsWatch
+);
+
+gpsWatch=null;
+
+}
+
+}
+
+// RENDER ACCOUNT STATUS
+
+function renderAccount(){
+
+if(!validSession()||!account)return;
+
+const data=account;
+
+setValue("driverName",data.fullName);
+
+setValue("driverId",data.driverId,"yellow");
+
+setValue("vehicleType",t[data.vehicleType]);
+
+setValue("vehicleNumber",data.vehicleNumber);
+
+setValue(
+
+"registrationDate",
+
+formatDate(timestampMs(data.createdAt))
+
+);
+
+const accountColor=
+
+data.status==="approved"
+?"green"
+
+:data.status==="pending"
+?"yellow":"red";
+
+setValue(
+
+"accountStatus",
+
+t[data.status],
+
+accountColor
+
+);
+
+setValue(
+
+"statusDescription",
+
+t[data.status+"Description"]
+
+);
+
+setValue(
+
+"adminApproval",
+
+t[data.status],
+
+accountColor
+
+);
+
+setBoolean(
+
+"activationStatus",
+
+data.activationComplete,
+
+"activated",
+
+"notActivated"
+
+);
+
+setValue(
+
+"serviceStatus",
+
+t[data.availability],
+
+data.availability==="online"
+?"green"
+:data.availability==="busy"
+?"yellow":"red"
+
+);
+
+setValue(
+
+"statusUpdated",
+
+formatDate(
+timestampMs(data.statusUpdatedAt)
+)
+
+);
+
+const reason=
+
+data.restrictionReason?.[lang]||"";
+
+$("restrictionPanel").hidden=
+
+reason.trim()==="";
+
+setValue("restrictionReason",reason);
+
+setBoolean(
+
+"documentsValid",
+
+data.documentsValid,
+
+"valid",
+
+"invalid"
+
+);
+
+setBoolean(
+
+"commissionClearance",
+
+!data.commissionRestricted,
+
+"clear",
+
+"restricted"
+
+);
+
+setBoolean(
+
+"termsAccepted",
+
+data.termsAccepted,
+
+"accepted",
+
+"notAccepted"
+
+);
+
+setBoolean(
+
+"gpsStatus",
+
+data.gpsActive,
+
+"active",
+
+"inactive"
+
+);
+
+setBoolean(
+
+"adminRestriction",
+
+!data.adminRestricted,
+
+"clear",
+
+"restricted"
+
+);
+
+// Hire eligibility is supplied by server.
+
+setBoolean(
+
+"hirePermission",
+
+data.canReceiveHires,
+
+"allowed",
+
+"notAllowed"
+
+);
+
+setValue(
+
+"hireDescription",
+
+data.canReceiveHires
+?t.allowedDescription
+:t.notAllowedDescription
+
+);
+
+const reasons=
+
+data.restrictionCodes.map(
+code=>"• "+t[code]
+);
+
+$("hireReasons").textContent=
+
+reasons.join("\n");
+
+$("hireReasons").style.whiteSpace=
+
+"pre-wrap";
+
+$("hireReasons").hidden=
+
+reasons.length===0;
+
+renderDocuments();
+
+setValue(
+
+"outstandingCommission",
+
+money(data.outstandingCommission),
+
+data.outstandingCommission>0
+?"yellow":"green"
+
+);
+
+setValue(
+
+"overdueCommission",
+
+money(data.overdueCommission),
+
+data.overdueCommission>0
+?"red":"green"
+
+);
+
+setValue(
+
+"nextDueDate",
+
+data.nextDueAt
+?formatDate(timestampMs(data.nextDueAt))
+:t.none
+
+);
+
+setBoolean(
+
+"paymentRestriction",
+
+!data.commissionRestricted,
+
+"clear",
+
+"restricted"
+
+);
+
+setValue(
+
+"adminMessage",
+
+data.adminMessage?.translations?.[lang]
+||t.none
+
+);
+
+setValue(
+
+"messageDate",
+
+data.adminMessage
+?formatDate(
+timestampMs(data.adminMessage.createdAt)
+)
+:"—"
+
+);
+
+setValue(
+
+"lastUpdate",
+
+formatDate(timestampMs(data.updatedAt))
+
+);
+
+setValue(
+
+"serverConnection",
+
+t.connected,
+
+"green"
+
+);
+
+const dashboardAllowed=
+
+data.status==="approved"
+
+&&data.activationComplete===true
+
+&&data.documentsValid===true;
+
+$("dashboardLink").hidden=
+
+!dashboardAllowed;
+
+$("renewalLink").hidden=
+
+!(data.status==="approved"
+&&data.activationComplete===true);
+
+$("commissionLink").hidden=
+
+!dashboardAllowed;
+
+$("payCommissionLink").hidden=
+
+!dashboardAllowed;
+
+$("feedbackLink").hidden=
+
+!dashboardAllowed;
+
+$("helpLink").hidden=
+
+!dashboardAllowed;
+
+$("termsLink").hidden=
+
+!(data.status==="approved"
+&&data.activationComplete===true);
+
+$("notificationLink").hidden=
+
+!data.activationComplete;
+
+$("reviewPanel").hidden=
+
+!data.canRequestReview;
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+$("logoutButton").hidden=false;
+
+if(
+
+dashboardAllowed
+
+&&["online","busy"]
+.includes(data.availability)
+
+){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+status("");
+
+updateControls();
+
+}
+
+// REVIEW RECORD VALIDATION
+
+function validReview(data){
+
+return data
+
+&&data.driverUid===uid
+
+&&validId(data.referenceId)
+
+&&[
+"pending",
+"in_progress",
+"resolved",
+"closed"
+].includes(data.status)
+
+&&timestampMs(data.createdAt)!==null
+
+&&(
+
+data.adminReply===null
+
+||validTranslations(data.adminReply)
+
+);
+
+}
+
+function renderReview(){
+
+if(!reviewRecord){
+
+$("reviewRecord").hidden=true;
+
+updateControls();
+
+return;
+
+}
+
+const data=reviewRecord;
+
+const labels={
+
+pending:"reviewPending",
+
+in_progress:"inProgress",
+
+resolved:"resolved",
+
+closed:"closed"
+
+};
+
+$("reviewRecord").hidden=false;
+
+setValue(
+
+"reviewReference",
+
+data.referenceId,
+
+"yellow"
+
+);
+
+setValue(
+
+"reviewState",
+
+t[labels[data.status]],
+
+["pending","in_progress"]
+.includes(data.status)
+?"yellow":"green"
+
+);
+
+setValue(
+
+"reviewDate",
+
+formatDate(
+timestampMs(data.createdAt)
+)
+
+);
+
+setValue(
+
+"reviewReply",
+
+data.adminReply?.[lang]||t.none
+
+);
+
+updateControls();
+
+}
+
+// REALTIME REVIEW MONITORING
+
+function subscribeReview(){
+
+if(reviewUnsubscribe){
+
+reviewUnsubscribe();
+
+reviewUnsubscribe=null;
+
+}
+
+const currentGeneration=generation;
+
+reviewUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"drivers",
+
+uid,
+
+"accountReviews",
+
+"latest"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+reviewRecord=null;
+
+reviewStateKnown=false;
+
+renderReview();
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+reviewRecord=null;
+
+reviewStateKnown=true;
+
+renderReview();
+
+return;
+
+}
+
+if(!validReview(snapshot.data())){
+
+reviewRecord=null;
+
+reviewStateKnown=false;
+
+renderReview();
+
+return;
+
+}
+
+reviewRecord=snapshot.data();
+
+reviewStateKnown=true;
+
+renderReview();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+reviewRecord=null;
+
+reviewStateKnown=false;
+
+renderReview();
+
+}
+
+);
+
+}
+
+let reviewStateKnown=false;
+
+// ACCOUNT STATUS MONITORING
+
+function subscribeAccount(){
+
+if(accountUnsubscribe){
+
+accountUnsubscribe();
+
+accountUnsubscribe=null;
+
+}
+
+const currentGeneration=generation;
+
+accountUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"drivers",
+
+uid,
+
+"accountStatus",
+
+"current"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+account=null;
+
+stopGps();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+updateControls();
+
+return;
+
+}
+
+if(!snapshot.exists()
+||!validAccount(snapshot.data())){
+
+account=null;
+
+stopGps();
+
+$("content").hidden=true;
+
+status(t.error);
+
+updateControls();
+
+return;
+
+}
+
+account=snapshot.data();
+
+renderAccount();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+account=null;
+
+stopGps();
+
+$("content").hidden=true;
+
+status(t.error);
+
+updateControls();
+
+}
+
+);
+
+}
+
+// REVIEW REQUEST CONTROLS
+
+function updateControls(){
+
+const enabled=
+
+validSession()&&account!==null;
+
+const openReview=
+
+reviewRecord
+
+&&["pending","in_progress"]
+.includes(reviewRecord.status);
+
+const canSubmit=
+
+enabled
+
+&&account.canRequestReview===true
+
+&&reviewStateKnown
+
+&&!openReview
+
+&&!submitting;
+
+$("reviewCategory").disabled=!canSubmit;
+
+$("reviewMessage").disabled=!canSubmit;
+
+$("declaration").disabled=!canSubmit;
+
+$("submitReview").disabled=!canSubmit;
+
+$("refreshButton").disabled=
+
+!enabled||refreshing;
+
+$("logoutButton").disabled=
+
+loggingOut
+
+||!enabled
+
+||account?.availability==="busy";
+
+}
+
+$("reviewMessage").addEventListener(
+
+"input",
+
+()=>{
+
+$("characterCount").textContent=
+
+String(
+$("reviewMessage").value.length
+);
+
+}
+
+);
+
+// SUBMIT ACCOUNT REVIEW
+
+$("reviewForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(
+
+!validSession()
+
+||!account
+
+||!account.canRequestReview
+
+||!reviewStateKnown
+
+||submitting
+
+||(
+
+reviewRecord
+
+&&["pending","in_progress"]
+.includes(reviewRecord.status)
+
+)
+
+){
+
+return;
+
+}
+
+const category=
+
+$("reviewCategory").value;
+
+const message=
+
+$("reviewMessage").value.trim();
+
+if(
+
+!REVIEW_CATEGORIES.includes(category)
+
+||!validText(message,10,2000)
+
+||!$("declaration").checked
+
+){
+
+return;
+
+}
+
+if(!window.confirm(t.confirmReview)){
+
+return;
+
+}
+
+const signature=
+
+JSON.stringify([category,message,lang]);
+
+if(!pendingReview
+||pendingReview.signature!==signature){
+
+pendingReview={
+
+signature,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const currentGeneration=generation;
+
+submitting=true;
+
+updateControls();
+
+$("reviewStatus").textContent=t.loading;
+
+try{
+
+const result=await serverCall(
+
+"submitDriverAccountReview",
+
+{
+
+requestId:pendingReview.requestId,
+
+category,
+
+message,
+
+language:lang,
+
+declarationAccepted:true
+
+}
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(
+
+result?.accepted!==true
+
+||result.driverUid!==uid
+
+||!validId(result.referenceId)
+
+){
+
+throw new Error("Request rejected");
+
+}
+
+pendingReview=null;
+
+// Wait for authoritative review record.
+
+reviewStateKnown=false;
+
+$("reviewForm").reset();
+
+$("characterCount").textContent="0";
+
+$("reviewStatus").textContent=
+
+t.reviewSent+" "+result.referenceId;
+
+subscribeReview();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("reviewStatus").textContent=t.error;
+
+}finally{
+
+if(currentGeneration===generation){
+
+submitting=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// MANUAL REFRESH
+
+$("refreshButton").onclick=async()=>{
+
+if(!validSession()
+||!account
+||refreshing)return;
+
+const currentGeneration=generation;
+
+refreshing=true;
+
+updateControls();
+
+$("refreshStatus").textContent=t.loading;
+
+try{
+
+const result=await serverCall(
+
+"getDriverAccountStatus"
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.success!==true
+||result.driverUid!==uid){
+
+throw new Error("Refresh rejected");
+
+}
+
+await syncServerTime();
+
+if(currentGeneration!==generation)return;
+
+subscribeAccount();
+
+subscribeReview();
+
+$("refreshStatus").textContent="";
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("refreshStatus").textContent=t.error;
+
+}finally{
+
+if(currentGeneration===generation){
+
+refreshing=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// CLEAR SESSION
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+account=null;
+
+reviewRecord=null;
+
+reviewStateKnown=false;
+
+if(accountUnsubscribe){
+
+accountUnsubscribe();
+
+accountUnsubscribe=null;
+
+}
+
+if(reviewUnsubscribe){
+
+reviewUnsubscribe();
+
+reviewUnsubscribe=null;
+
+}
+
+stopGps();
+
+gpsSending=false;
+
+lastGpsSent=0;
+
+serverOffset=null;
+
+serverSyncAt=0;
+
+refreshing=false;
+
+checkingSession=false;
+
+submitting=false;
+
+loggingOut=false;
+
+pendingReview=null;
+
+$("content").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("logoutButton").hidden=true;
+
+$("reviewRecord").hidden=true;
+
+$("reviewPanel").hidden=true;
+
+$("dashboardLink").hidden=true;
+
+$("reviewForm").reset();
+
+$("characterCount").textContent="0";
+
+$("reviewStatus").textContent="";
+
+$("refreshStatus").textContent="";
+
+document.querySelectorAll(
+
+"#content strong[id]"
+
+).forEach(el=>{
+
+el.textContent="—";
+
+});
+
+$("adminMessage").textContent="—";
+
+$("restrictionReason").textContent="";
+
+$("statusDescription").textContent="";
+
+$("hireDescription").textContent="";
+
+$("hireReasons").textContent="";
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// LIMITED ACCOUNT STATUS AUTHORIZATION
+
+async function verifyAccount(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.connectionLost);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(currentGeneration!==generation)return;
+
+const provider=token.signInProvider;
+
+// A verified phone session can only access
+// limited registration/account-status data.
+
+const driverLogin=
+
+provider==="custom"
+
+&&token.claims.driver===true;
+
+const phoneSession=
+
+provider==="phone"
+
+&&typeof user.phoneNumber==="string"
+
+&&user.phoneNumber.length>0;
+
+if(!driverLogin&&!phoneSession){
+
+throw new Error("Invalid authentication");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverAccountStatusSession"
+
+)({});
+
+if(
+
+currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid
+
+){
+
+return;
+
+}
+
+const result=response.data;
+
+if(
+
+result?.authorized!==true
+
+||result.uid!==user.uid
+
+||!ACCOUNT_STATES.includes(result.status)
+
+||result.scope!=="account_status"
+
+){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+subscribeAccount();
+
+subscribeReview();
+
+syncServerTime()
+
+.then(()=>{
+
+if(currentGeneration===generation){
+
+renderDocuments();
+
+}
+
+})
+
+.catch(()=>{});
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyAccount);
+
+}
+
+// LOGOUT
+
+$("logoutButton").onclick=async()=>{
+
+if(!validSession()
+||!account
+||loggingOut)return;
+
+if(account.availability==="busy"){
+
+status(t.busyLogout);
+
+return;
+
+}
+
+if(!window.confirm(t.confirmLogout)){
+
+return;
+
+}
+
+const currentGeneration=generation;
+
+loggingOut=true;
+
+updateControls();
+
+try{
+
+const result=await serverCall(
+
+"endDriverAccountStatusSession"
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.accepted!==true){
+
+throw new Error("Logout rejected");
+
+}
+
+await signOut(auth);
+
+location.replace(
+
+"./driver-login.html?lang="+lang
+
+);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+status(t.error);
+
+}finally{
+
+if(currentGeneration===generation){
+
+loggingOut=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// AUTOMATIC DOCUMENT EXPIRY DISPLAY
+
+setInterval(()=>{
+
+if(!validSession()||!account)return;
+
+renderDocuments();
+
+},10000);
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyDriverAccountStatusSession"
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(
+
+result?.authorized!==true
+
+||result.uid!==uid
+
+||result.scope!=="account_status"
+
+||!ACCOUNT_STATES.includes(result.status)
+
+){
+
+denyAccess();
+
+return;
+
+}
+
+try{
+
+await syncServerTime();
+
+}catch(e){
+
+serverOffset=null;
+
+}
+
+if(currentGeneration!==generation)return;
+
+renderDocuments();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+if(currentGeneration===generation){
+
+checkingSession=false;
+
+}
+
+}
+
+},60000);
+
+// INTERNET MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.connectionLost);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyAccount(auth.currentUser);
+
+}
+
+});
+
+// PAGE VISIBILITY
+
+document.addEventListener(
+
+"visibilitychange",
+
+()=>{
+
+if(document.hidden
+||!validSession())return;
+
+if(serverNow()===null){
+
+const currentGeneration=generation;
+
+syncServerTime()
+
+.then(()=>{
+
+if(currentGeneration===generation){
+
+renderDocuments();
+
+}
+
+})
+
+.catch(()=>{});
+
+}
+
+}
+
+);
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyAccount(auth.currentUser);
+
+}
+
+}
+
+);
+
+updateControls();
+
+</script>
+
+</body>
+</html>
