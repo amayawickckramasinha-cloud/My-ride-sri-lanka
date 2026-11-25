@@ -1,0 +1,3106 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Profile</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.profileHeader{
+text-align:center;
+border-color:#FFD600;
+}
+
+.profileIcon{
+width:85px;
+height:85px;
+border-radius:50%;
+background:#FFD600;
+color:#111;
+margin:10px auto;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.profileName{
+font-size:23px;
+font-weight:bold;
+margin:15px 0;
+overflow-wrap:anywhere;
+}
+
+.driverId{
+color:#FFD600;
+font-size:15px;
+}
+
+.badge{
+display:inline-block;
+padding:9px 14px;
+border-radius:8px;
+margin:12px 0;
+font-size:13px;
+font-weight:bold;
+}
+
+.approved{
+background:#163322;
+color:#4ADE80;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+margin:15px 0;
+}
+
+.success{
+background:#163322;
+border:1px solid #4ADE80;
+border-radius:10px;
+padding:15px;
+color:#4ADE80;
+line-height:1.8;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.7;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+
+.yellow{color:#FFD600}
+.green{color:#4ADE80}
+.red{color:#FF6464}
+
+label{
+display:block;
+margin-top:18px;
+margin-bottom:8px;
+font-size:14px;
+font-weight:bold;
+}
+
+input,textarea,select{
+width:100%;
+padding:14px;
+border:1px solid #555;
+border-radius:9px;
+background:#292929;
+color:#fff;
+font-size:16px;
+color-scheme:dark;
+}
+
+textarea{
+min-height:110px;
+resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+outline:2px solid #FFD600;
+}
+
+input[type="checkbox"]{
+width:22px;
+height:22px;
+accent-color:#FFD600;
+flex-shrink:0;
+}
+
+.checkboxRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin:18px 0;
+}
+
+.checkboxRow label{
+margin:0;
+font-weight:normal;
+line-height:1.8;
+}
+
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.8;
+}
+
+.passwordBox{
+position:relative;
+}
+
+.passwordBox input{
+padding-right:75px;
+}
+
+.showPassword{
+position:absolute;
+right:8px;
+top:8px;
+bottom:8px;
+background:#444;
+color:#FFD600;
+border:0;
+border-radius:5px;
+padding:5px 9px;
+cursor:pointer;
+}
+
+#status{
+text-align:center;
+color:#FFD600;
+line-height:1.8;
+}
+
+details{
+background:#202020;
+border:1px solid #444;
+border-radius:12px;
+margin:14px 0;
+}
+
+summary{
+padding:17px;
+color:#FFD600;
+font-weight:bold;
+cursor:pointer;
+line-height:1.8;
+}
+
+.detailsContent{
+padding:0 16px 16px;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel profileHeader">
+
+<div class="profileIcon">
+
+<svg width="48" height="48"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="2"
+stroke-linecap="round">
+
+<circle cx="12" cy="7" r="4"/>
+
+<path d="M4 22v-3a8 8 0 0 1 16 0v3"/>
+
+</svg>
+
+</div>
+
+<div id="profileName"
+class="profileName">—</div>
+
+<div id="profileDriverId"
+class="driverId">—</div>
+
+<div class="badge approved"
+data-t="approved"></div>
+
+<p id="registeredAt"
+class="note"></p>
+
+</section>
+
+<div id="documentWarning"
+class="warning" hidden
+data-t="documentWarning"></div>
+
+<details open>
+
+<summary data-t="personalDetails"></summary>
+
+<div id="personalDetails"
+class="detailsContent"></div>
+
+</details>
+
+<details>
+
+<summary data-t="vehicleDetails"></summary>
+
+<div id="vehicleDetails"
+class="detailsContent"></div>
+
+</details>
+
+<details>
+
+<summary data-t="licenceDetails"></summary>
+
+<div id="licenceDetails"
+class="detailsContent"></div>
+
+</details>
+
+<details>
+
+<summary data-t="insuranceDetails"></summary>
+
+<div id="insuranceDetails"
+class="detailsContent"></div>
+
+</details>
+
+<details>
+
+<summary data-t="serviceDetails"></summary>
+
+<div id="serviceDetails"
+class="detailsContent"></div>
+
+</details>
+
+<details>
+
+<summary data-t="accountDetails"></summary>
+
+<div id="accountDetails"
+class="detailsContent"></div>
+
+</details>
+
+<section class="panel">
+
+<h3 data-t="updateDetails"></h3>
+
+<p class="note"
+data-t="updateNote"></p>
+
+<form id="updateForm">
+
+<label for="changeType"
+data-t="changeType"></label>
+
+<select id="changeType" required>
+
+<option value=""
+data-t="select"></option>
+
+<option value="fullName"
+data-t="fullName"></option>
+
+<option value="phone"
+data-t="phone"></option>
+
+<option value="whatsapp"
+data-t="whatsapp"></option>
+
+<option value="address"
+data-t="address"></option>
+
+<option value="district"
+data-t="district"></option>
+
+<option value="nic"
+data-t="nic"></option>
+
+<option value="dob"
+data-t="dob"></option>
+
+<option value="vehicle"
+data-t="vehicleDetails"></option>
+
+<option value="licence"
+data-t="licenceDetails"></option>
+
+<option value="insurance"
+data-t="insuranceDetails"></option>
+
+<option value="serviceArea"
+data-t="serviceArea"></option>
+
+<option value="workingTime"
+data-t="workingTime"></option>
+
+<option value="other"
+data-t="other"></option>
+
+</select>
+
+<label for="changeValue"
+data-t="newDetails"></label>
+
+<textarea
+id="changeValue"
+minlength="2"
+maxlength="500"
+required></textarea>
+
+<label for="changeReason"
+data-t="reason"></label>
+
+<textarea
+id="changeReason"
+minlength="5"
+maxlength="500"
+required></textarea>
+
+<div class="checkboxRow">
+
+<input
+id="updateConsent"
+type="checkbox"
+required>
+
+<label for="updateConsent"
+data-t="updateConsent"></label>
+
+</div>
+
+<button
+id="updateButton"
+class="action"
+type="submit"
+data-t="sendRequest"></button>
+
+</form>
+
+<p id="updateStatus"
+class="note"
+role="status"></p>
+
+</section>
+
+<section id="requestPanel"
+class="panel" hidden>
+
+<h3 data-t="latestRequest"></h3>
+
+<div id="requestDetails"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="changePassword"></h3>
+
+<form id="passwordForm">
+
+<label for="currentPassword"
+data-t="currentPassword"></label>
+
+<div class="passwordBox">
+
+<input
+id="currentPassword"
+type="password"
+autocomplete="current-password"
+maxlength="128"
+required>
+
+<button
+type="button"
+class="showPassword"
+data-target="currentPassword"
+data-t="show"></button>
+
+</div>
+
+<label for="newPassword"
+data-t="newPassword"></label>
+
+<div class="passwordBox">
+
+<input
+id="newPassword"
+type="password"
+autocomplete="new-password"
+minlength="15"
+maxlength="128"
+required>
+
+<button
+type="button"
+class="showPassword"
+data-target="newPassword"
+data-t="show"></button>
+
+</div>
+
+<label for="confirmPassword"
+data-t="confirmPassword"></label>
+
+<div class="passwordBox">
+
+<input
+id="confirmPassword"
+type="password"
+autocomplete="new-password"
+minlength="15"
+maxlength="128"
+required>
+
+<button
+type="button"
+class="showPassword"
+data-target="confirmPassword"
+data-t="show"></button>
+
+</div>
+
+<p class="note"
+data-t="passwordRules"></p>
+
+<button
+id="passwordButton"
+type="submit"
+class="action"
+data-t="savePassword"></button>
+
+</form>
+
+<p id="passwordStatus"
+class="note"
+role="status"></p>
+
+<a id="resetLink"
+class="action secondary"
+data-t="forgotPassword"></a>
+
+</section>
+
+<a id="renewalLink"
+class="action"
+data-t="renewDocuments"></a>
+
+<a id="accountLink"
+class="action secondary"
+data-t="accountStatus"></a>
+
+<button id="refreshButton"
+class="action secondary"
+data-t="refresh"></button>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"මගේ රියදුරු ගිණුම",
+approved:"අනුමත රියදුරෙකි",
+personalDetails:"පෞද්ගලික තොරතුරු",
+vehicleDetails:"වාහන විස්තර",
+licenceDetails:"රියදුරු බලපත්‍ර විස්තර",
+insuranceDetails:"රක්ෂණ සහ ආදායම් බලපත්‍ර",
+serviceDetails:"සේවා විස්තර",
+accountDetails:"ගිණුමේ තොරතුරු",
+fullName:"සම්පූර්ණ නම",
+nic:"ජාතික හැඳුනුම්පත් අංකය",
+dob:"උපන් දිනය",
+phone:"දුරකථන අංකය",
+whatsapp:"WhatsApp අංකය",
+address:"ස්ථිර ලිපිනය",
+district:"දිස්ත්‍රික්කය",
+vehicleType:"වාහන වර්ගය",
+vehicleNumber:"වාහන ලියාපදිංචි අංකය",
+vehicleModel:"වාහන මාදිලිය",
+vehicleColor:"වාහනයේ වර්ණය",
+capacity:"මගී ධාරිතාව",
+licenceNumber:"රියදුරු බලපත්‍ර අංකය",
+licenceExpiry:"බලපත්‍රය කල් ඉකුත් වන දිනය",
+experience:"රියදුරු පළපුරුද්ද",
+years:"අවුරුදු",
+insuranceNumber:"රක්ෂණ අංකය",
+insuranceExpiry:"රක්ෂණය කල් ඉකුත් වන දිනය",
+revenueExpiry:"ආදායම් බලපත්‍රය කල් ඉකුත් වන දිනය",
+serviceArea:"සේවා ප්‍රදේශය",
+workingTime:"සේවා කාලය",
+day:"දිවා",
+night:"රාත්‍රී",
+both:"දිවා සහ රාත්‍රී",
+bike:"Scooter / Bike",
+tuk:"ත්‍රීරෝද රථය",
+car:"මෝටර් රථය",
+van:"වෑන් රථය",
+registered:"ලියාපදිංචි වූ දිනය",
+accountStatus:"ගිණුමේ තත්ත්වය",
+documentsValid:"ලේඛන වලංගුභාවය",
+valid:"වලංගුයි",
+invalid:"වලංගු නැත",
+commissionRate:"කොමිස් අනුපාතය",
+termsConsent:"රියදුරු නීතිවලට එකඟතාව",
+gpsConsent:"GPS අවසරය",
+whatsappConsent:"WhatsApp පණිවිඩ අවසරය",
+yes:"ඔව්",
+no:"නැත",
+updateDetails:"තොරතුරු වෙනස් කිරීම",
+updateNote:"ලියාපදිංචි තොරතුරු සෘජුව වෙනස් කළ නොහැක. Admin වෙත ඉල්ලීමක් යොමු කරන්න. දුරකථන අංක වෙනස් කිරීමේදී අලුත් අංකය තහවුරු කළ යුතුය.",
+changeType:"වෙනස් කිරීමට අවශ්‍ය තොරතුර",
+select:"තෝරන්න",
+newDetails:"අලුත් තොරතුරු",
+reason:"වෙනස් කිරීමට හේතුව",
+other:"වෙනත්",
+updateConsent:"මා ලබාදෙන තොරතුරු නිවැරදි බව තහවුරු කරමි.",
+sendRequest:"Admin වෙත ඉල්ලීම යොමු කරන්න",
+latestRequest:"අවසන් තොරතුරු වෙනස් කිරීමේ ඉල්ලීම",
+requestId:"ඉල්ලීම් අංකය",
+requestDate:"ඉල්ලීම යොමු කළ දිනය",
+requestStatus:"ඉල්ලීමේ තත්ත්වය",
+pending:"පරීක්ෂා කිරීමට ඇත",
+rejected:"ප්‍රතික්ෂේප කර ඇත",
+accepted:"අනුමත කර ඇත",
+adminReason:"Admin සටහන",
+changePassword:"Password වෙනස් කිරීම",
+currentPassword:"දැනට භාවිතා කරන Password එක",
+newPassword:"අලුත් Password එක",
+confirmPassword:"අලුත් Password එක නැවත ඇතුළත් කරන්න",
+passwordRules:"අලුත් Password එක අවම වශයෙන් අක්ෂර 15ක් සහ උපරිම අක්ෂර 128ක් විය යුතුය.",
+savePassword:"Password වෙනස් කරන්න",
+forgotPassword:"Password අමතකද?",
+show:"පෙන්වන්න",
+hide:"සඟවන්න",
+renewDocuments:"බලපත්‍ර සහ රක්ෂණ අලුත් කිරීම",
+documentWarning:"ඔබගේ ලේඛනවලින් එකක් ඉදිරි දින 30 තුළ කල් ඉකුත් වීමට නියමිතයි.",
+refresh:"නැවත පරීක්ෂා කරන්න",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+loading:"තොරතුරු ලබාගනිමින්...",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+error:"තොරතුරු ලබාගත නොහැක.",
+invalidDetails:"නිවැරදි තොරතුරු ඇතුළත් කරන්න.",
+sending:"ඉල්ලීම යොමු කරමින්...",
+requestSent:"ඔබගේ ඉල්ලීම Admin වෙත යොමු කර ඇත.",
+requestFailed:"ඉල්ලීම ලැබුණු බව තහවුරු කළ නොහැක. නැවත යොමු කිරීමට පෙර පරීක්ෂා කරන්න.",
+passwordMismatch:"අලුත් Password දෙක සමාන නොවේ.",
+passwordLength:"අලුත් Password එක අක්ෂර 15 සිට 128 දක්වා විය යුතුය.",
+samePassword:"පැරණි Password එකට වඩා වෙනස් Password එකක් භාවිතා කරන්න.",
+passwordFailed:"Password වෙනස් කළ බව තහවුරු කළ නොහැක. නැවත Login හෝ Password Recovery භාවිතා කරන්න.",
+passwordChanged:"Password වෙනස් කර ඇත. නැවත Login වන්න.",
+passwordConfirm:"Password වෙනස් කිරීමෙන් පසු නැවත Login වීමට අවශ්‍යයි. ඉදිරියට යන්නද?",
+busyRide:"සක්‍රිය හයර් එක අවසන් කිරීමෙන් පසුව Password වෙනස් කරන්න.",
+confirmRequest:"මෙම ඉල්ලීම Admin වෙත යොමු කරන්නද?"
+
+},
+
+en:{
+
+heading:"My Driver Profile",
+approved:"Approved Driver",
+personalDetails:"Personal Details",
+vehicleDetails:"Vehicle Details",
+licenceDetails:"Driving Licence Details",
+insuranceDetails:"Insurance and Revenue Licence",
+serviceDetails:"Service Details",
+accountDetails:"Account Details",
+fullName:"Full Name",
+nic:"National Identity Card Number",
+dob:"Date of Birth",
+phone:"Phone Number",
+whatsapp:"WhatsApp Number",
+address:"Permanent Address",
+district:"District",
+vehicleType:"Vehicle Type",
+vehicleNumber:"Vehicle Registration Number",
+vehicleModel:"Vehicle Model",
+vehicleColor:"Vehicle Colour",
+capacity:"Passenger Capacity",
+licenceNumber:"Driving Licence Number",
+licenceExpiry:"Driving Licence Expiry",
+experience:"Driving Experience",
+years:"Years",
+insuranceNumber:"Insurance Number",
+insuranceExpiry:"Insurance Expiry",
+revenueExpiry:"Revenue Licence Expiry",
+serviceArea:"Service Area",
+workingTime:"Working Time",
+day:"Day",
+night:"Night",
+both:"Day and Night",
+bike:"Scooter / Bike",
+tuk:"Three Wheeler",
+car:"Car",
+van:"Van",
+registered:"Registration Date",
+accountStatus:"Account Status",
+documentsValid:"Document Validity",
+valid:"Valid",
+invalid:"Invalid",
+commissionRate:"Commission Rate",
+termsConsent:"Driver Terms Consent",
+gpsConsent:"GPS Consent",
+whatsappConsent:"WhatsApp Consent",
+yes:"Yes",
+no:"No",
+updateDetails:"Update Profile Details",
+updateNote:"Registered details cannot be changed directly. Submit a request to Admin. New phone numbers require verification.",
+changeType:"Information to Change",
+select:"Select",
+newDetails:"New Details",
+reason:"Reason for Change",
+other:"Other",
+updateConsent:"I confirm that the information provided is accurate.",
+sendRequest:"Send Request to Admin",
+latestRequest:"Latest Profile Change Request",
+requestId:"Request ID",
+requestDate:"Request Date",
+requestStatus:"Request Status",
+pending:"Pending Review",
+rejected:"Rejected",
+accepted:"Approved",
+adminReason:"Admin Note",
+changePassword:"Change Password",
+currentPassword:"Current Password",
+newPassword:"New Password",
+confirmPassword:"Confirm New Password",
+passwordRules:"The new password must contain between 15 and 128 characters.",
+savePassword:"Change Password",
+forgotPassword:"Forgot Password?",
+show:"Show",
+hide:"Hide",
+renewDocuments:"Renew Licence and Insurance",
+documentWarning:"One or more of your documents will expire within the next 30 days.",
+refresh:"Refresh",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"Verifying account...",
+loading:"Loading profile...",
+denied:"Access to this page is not authorized.",
+offline:"No internet connection.",
+error:"Unable to load information.",
+invalidDetails:"Enter valid information.",
+sending:"Sending request...",
+requestSent:"Your request has been submitted to Admin.",
+requestFailed:"Submission could not be confirmed. Check before submitting again.",
+passwordMismatch:"The new passwords do not match.",
+passwordLength:"The new password must contain 15 to 128 characters.",
+samePassword:"Choose a password different from the current password.",
+passwordFailed:"Password change could not be confirmed. Try signing in or use password recovery.",
+passwordChanged:"Password changed. Please sign in again.",
+passwordConfirm:"Changing your password requires signing in again. Continue?",
+busyRide:"Complete your active ride before changing your password.",
+confirmRequest:"Submit this request to Admin?"
+
+},
+
+ta:{
+
+heading:"எனது சாரதி சுயவிவரம்",
+approved:"அங்கீகரிக்கப்பட்ட சாரதி",
+personalDetails:"தனிப்பட்ட விவரங்கள்",
+vehicleDetails:"வாகன விவரங்கள்",
+licenceDetails:"ஓட்டுநர் உரிம விவரங்கள்",
+insuranceDetails:"காப்புறுதி மற்றும் வருமான உரிமம்",
+serviceDetails:"சேவை விவரங்கள்",
+accountDetails:"கணக்கு விவரங்கள்",
+fullName:"முழுப் பெயர்",
+nic:"தேசிய அடையாள அட்டை இலக்கம்",
+dob:"பிறந்த தேதி",
+phone:"தொலைபேசி எண்",
+whatsapp:"WhatsApp எண்",
+address:"நிரந்தர முகவரி",
+district:"மாவட்டம்",
+vehicleType:"வாகன வகை",
+vehicleNumber:"வாகன பதிவு இலக்கம்",
+vehicleModel:"வாகன மாதிரி",
+vehicleColor:"வாகன நிறம்",
+capacity:"பயணிகள் கொள்ளளவு",
+licenceNumber:"ஓட்டுநர் உரிம இலக்கம்",
+licenceExpiry:"ஓட்டுநர் உரிம காலாவதி தேதி",
+experience:"ஓட்டுநர் அனுபவம்",
+years:"வருடங்கள்",
+insuranceNumber:"காப்புறுதி இலக்கம்",
+insuranceExpiry:"காப்புறுதி காலாவதி தேதி",
+revenueExpiry:"வருமான உரிம காலாவதி தேதி",
+serviceArea:"சேவை பகுதி",
+workingTime:"சேவை நேரம்",
+day:"பகல்",
+night:"இரவு",
+both:"பகல் மற்றும் இரவு",
+bike:"ஸ்கூட்டர் / மோட்டார் சைக்கிள்",
+tuk:"முச்சக்கர வண்டி",
+car:"கார்",
+van:"வேன்",
+registered:"பதிவு தேதி",
+accountStatus:"கணக்கு நிலை",
+documentsValid:"ஆவண செல்லுபடியாகும் நிலை",
+valid:"செல்லுபடியாகும்",
+invalid:"செல்லுபடியாகாது",
+commissionRate:"கமிஷன் விகிதம்",
+termsConsent:"சாரதி விதிமுறை ஒப்புதல்",
+gpsConsent:"GPS அனுமதி",
+whatsappConsent:"WhatsApp அனுமதி",
+yes:"ஆம்",
+no:"இல்லை",
+updateDetails:"சுயவிவரத்தை மாற்றுதல்",
+updateNote:"பதிவு விவரங்களை நேரடியாக மாற்ற முடியாது. நிர்வாகிக்கு கோரிக்கை அனுப்பவும். புதிய தொலைபேசி எண்ணை உறுதிப்படுத்த வேண்டும்.",
+changeType:"மாற்ற வேண்டிய தகவல்",
+select:"தேர்ந்தெடுக்கவும்",
+newDetails:"புதிய விவரங்கள்",
+reason:"மாற்றத்திற்கான காரணம்",
+other:"மற்றவை",
+updateConsent:"வழங்கிய தகவல்கள் சரியானவை என உறுதிப்படுத்துகிறேன்.",
+sendRequest:"நிர்வாகிக்கு கோரிக்கை அனுப்பவும்",
+latestRequest:"சமீபத்திய மாற்ற கோரிக்கை",
+requestId:"கோரிக்கை இலக்கம்",
+requestDate:"கோரிக்கை தேதி",
+requestStatus:"கோரிக்கை நிலை",
+pending:"பரிசீலனை நிலுவையில்",
+rejected:"நிராகரிக்கப்பட்டது",
+accepted:"அங்கீகரிக்கப்பட்டது",
+adminReason:"நிர்வாகி குறிப்பு",
+changePassword:"கடவுச்சொல்லை மாற்றவும்",
+currentPassword:"தற்போதைய கடவுச்சொல்",
+newPassword:"புதிய கடவுச்சொல்",
+confirmPassword:"புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+passwordRules:"புதிய கடவுச்சொல் 15 முதல் 128 எழுத்துகள் வரை இருக்க வேண்டும்.",
+savePassword:"கடவுச்சொல்லை மாற்றவும்",
+forgotPassword:"கடவுச்சொல் மறந்துவிட்டதா?",
+show:"காட்டு",
+hide:"மறை",
+renewDocuments:"உரிமம் மற்றும் காப்புறுதியை புதுப்பிக்கவும்",
+documentWarning:"உங்கள் ஆவணங்களில் ஒன்று அல்லது அதற்கு மேற்பட்டவை அடுத்த 30 நாட்களில் காலாவதியாகும்.",
+refresh:"புதுப்பிக்கவும்",
+back:"← சாரதி முதன்மைப் பக்கம்",
+login:"சாரதி உள்நுழைவு",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+loading:"விவரங்கள் பெறப்படுகின்றன...",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+error:"தகவல்களை பெற முடியவில்லை.",
+invalidDetails:"சரியான தகவல்களை உள்ளிடவும்.",
+sending:"கோரிக்கை அனுப்பப்படுகிறது...",
+requestSent:"உங்கள் கோரிக்கை நிர்வாகிக்கு அனுப்பப்பட்டது.",
+requestFailed:"கோரிக்கை பெறப்பட்டதை உறுதிப்படுத்த முடியவில்லை. மீண்டும் அனுப்பும் முன் சரிபார்க்கவும்.",
+passwordMismatch:"புதிய கடவுச்சொற்கள் பொருந்தவில்லை.",
+passwordLength:"புதிய கடவுச்சொல் 15 முதல் 128 எழுத்துகள் வரை இருக்க வேண்டும்.",
+samePassword:"தற்போதைய கடவுச்சொல்லிலிருந்து வேறுபட்ட கடவுச்சொல்லை தேர்ந்தெடுக்கவும்.",
+passwordFailed:"கடவுச்சொல் மாற்றத்தை உறுதிப்படுத்த முடியவில்லை. மீண்டும் உள்நுழையவும் அல்லது மீட்பு முறையை பயன்படுத்தவும்.",
+passwordChanged:"கடவுச்சொல் மாற்றப்பட்டது. மீண்டும் உள்நுழையவும்.",
+passwordConfirm:"கடவுச்சொல் மாற்றிய பின்னர் மீண்டும் உள்நுழைய வேண்டும். தொடரவா?",
+busyRide:"கடவுச்சொல்லை மாற்றும் முன் தற்போதைய பயணத்தை முடிக்கவும்.",
+confirmRequest:"இந்த கோரிக்கையை நிர்வாகிக்கு அனுப்பவா?"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+const links={
+
+backButton:"driver-dashboard.html",
+loginLink:"driver-login.html",
+resetLink:"driver-reset.html",
+renewalLink:"driver-renewal.html",
+accountLink:"driver-account-status.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let authorized=false;
+let driver=null;
+let profile=null;
+
+let generation=0;
+let profileGeneration=0;
+
+let driverUnsubscribe=null;
+let requestUnsubscribe=null;
+
+let updateBusy=false;
+let passwordBusy=false;
+
+let serverOffset=0;
+let clockCheckedAt=0;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+let pendingUpdate=null;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,max=500){
+
+return typeof value==="string"
+
+&&value.trim().length>0
+
+&&value.length<=max;
+
+}
+
+function number(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=0;
+
+}
+
+function text(value){
+
+if(typeof value==="string"
+
+&&value.trim()){
+
+return value;
+
+}
+
+if(typeof value==="number"
+
+&&Number.isFinite(value)){
+
+return String(value);
+
+}
+
+return "—";
+
+}
+
+function yesNo(value){
+
+return value===true
+
+?t.yes
+
+:value===false
+
+?t.no:"—";
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// SERVER TIME
+
+async function syncClock(){
+
+const started=Date.now();
+
+const result=await serverCall(
+
+"getDriverServerTime"
+
+);
+
+const ended=Date.now();
+
+if(!Number.isFinite(result?.serverTimeMs)
+
+||ended-started>10000){
+
+throw new Error("Server time unavailable");
+
+}
+
+serverOffset=
+
+result.serverTimeMs-(started+ended)/2;
+
+clockCheckedAt=ended;
+
+}
+
+function serverNow(){
+
+return Date.now()+serverOffset;
+
+}
+
+function clockValid(){
+
+return clockCheckedAt>0
+
+&&Date.now()-clockCheckedAt<120000;
+
+}
+
+function sriLankaToday(){
+
+return new Date(
+
+serverNow()+330*60000
+
+).toISOString().slice(0,10);
+
+}
+
+function validDate(value){
+
+if(typeof value!=="string"
+
+||!/^\d{4}-\d{2}-\d{2}$/.test(value)){
+
+return false;
+
+}
+
+const date=new Date(value+"T00:00:00Z");
+
+return Number.isFinite(date.getTime())
+
+&&date.toISOString().slice(0,10)===value;
+
+}
+
+function formatDate(ms){
+
+if(!Number.isFinite(ms)
+
+||ms<=0
+
+||ms>8640000000000000){
+
+return "—";
+
+}
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(ms));
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(
+
+driver.availability
+
+)
+
+||!Number.isFinite(c.latitude)
+
+||!Number.isFinite(c.longitude)
+
+||!number(c.accuracy)
+
+||c.accuracy>100
+
+||c.latitude<5.85
+
+||c.latitude>9.9
+
+||c.longitude<79.5
+
+||c.longitude>82
+
+||Date.now()-position.timestamp>30000
+
+||position.timestamp>Date.now()+5000
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:c.latitude,
+
+lon:c.longitude,
+
+accuracy:c.accuracy,
+
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+}catch(e){
+
+// Backend must expire stale GPS data.
+
+}finally{
+
+gpsSending=false;
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// PRIVATE DATA CLEARING
+
+const profileSections=[
+
+"personalDetails",
+
+"vehicleDetails",
+
+"licenceDetails",
+
+"insuranceDetails",
+
+"serviceDetails",
+
+"accountDetails"
+
+];
+
+function clearProfile(){
+
+profileGeneration++;
+
+profile=null;
+
+profileSections.forEach(id=>{
+
+$(id).replaceChildren();
+
+});
+
+$("profileName").textContent="—";
+
+$("profileDriverId").textContent="—";
+
+$("registeredAt").textContent="";
+
+$("documentWarning").hidden=true;
+
+$("content").hidden=true;
+
+}
+
+function clearPasswords(){
+
+$("passwordForm").reset();
+
+document.querySelectorAll("[data-target]")
+
+.forEach(button=>{
+
+$(button.dataset.target).type="password";
+
+button.textContent=t.show;
+
+});
+
+}
+
+function stopRequestListener(){
+
+if(requestUnsubscribe){
+
+requestUnsubscribe();
+
+requestUnsubscribe=null;
+
+}
+
+$("requestDetails").replaceChildren();
+
+$("requestPanel").hidden=true;
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+clockCheckedAt=0;
+
+updateBusy=false;
+
+passwordBusy=false;
+
+pendingUpdate=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+stopRequestListener();
+
+stopGps();
+
+clearProfile();
+
+clearPasswords();
+
+$("updateForm").reset();
+
+$("updateStatus").textContent="";
+
+$("passwordStatus").textContent="";
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// SAFE PROFILE DISPLAY
+
+function addRow(parent,label,value,color=""){
+
+const row=document.createElement("div");
+
+row.className="row";
+
+const name=document.createElement("span");
+
+name.textContent=label;
+
+const result=document.createElement("strong");
+
+result.textContent=text(value);
+
+if(color){
+
+result.className=color;
+
+}
+
+row.append(name,result);
+
+parent.append(row);
+
+}
+
+function addProfileRow(section,key,value,color=""){
+
+addRow(
+
+$(section),
+
+t[key]||key,
+
+value,
+
+color
+
+);
+
+}
+
+function maskNic(value){
+
+if(typeof value!=="string"
+
+||value.length<5){
+
+return "—";
+
+}
+
+return "••••••"+value.slice(-4);
+
+}
+
+// PROFILE DATA VALIDATION
+
+function validProfile(data){
+
+if(!data
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true
+
+||!validText(data.fullName,150)
+
+||!validId(data.driverId)){
+
+return false;
+
+}
+
+if(!["bike","tuk","car","van"]
+
+.includes(data.vehicleType)){
+
+return false;
+
+}
+
+if(!["day","night","both"]
+
+.includes(data.workingTime)){
+
+return false;
+
+}
+
+if(!Number.isInteger(data.capacity)
+
+||data.capacity<1
+
+||data.capacity>10){
+
+return false;
+
+}
+
+if(!number(data.experience)
+
+||!number(data.commissionRate)
+
+||data.commissionRate>100){
+
+return false;
+
+}
+
+const dateFields=[
+
+"dob",
+
+"licenceExpiry",
+
+"insuranceExpiry",
+
+"revenueExpiry"
+
+];
+
+if(!dateFields.every(key=>
+
+validDate(data[key])
+
+)){
+
+return false;
+
+}
+
+const requiredText=[
+
+"nic",
+
+"phone",
+
+"address",
+
+"district",
+
+"vehicleNumber",
+
+"vehicleModel",
+
+"vehicleColor",
+
+"licenceNumber",
+
+"insuranceNumber",
+
+"serviceArea"
+
+];
+
+if(!requiredText.every(key=>
+
+validText(data[key])
+
+)){
+
+return false;
+
+}
+
+if(!Number.isFinite(data.createdAtMs)
+
+||data.createdAtMs<=0
+
+||data.createdAtMs>serverNow()+30000){
+
+return false;
+
+}
+
+return true;
+
+}
+
+// DOCUMENT EXPIRY WARNING
+
+function updateDocumentWarning(){
+
+if(!profile||!clockValid()){
+
+$("documentWarning").hidden=true;
+
+return;
+
+}
+
+const today=sriLankaToday();
+
+const todayMs=Date.parse(
+
+today+"T00:00:00Z"
+
+);
+
+const expiring=[
+
+profile.licenceExpiry,
+
+profile.insuranceExpiry,
+
+profile.revenueExpiry
+
+].some(value=>{
+
+const expiry=Date.parse(
+
+value+"T00:00:00Z"
+
+);
+
+const days=
+
+(expiry-todayMs)/86400000;
+
+return days>=0&&days<=30;
+
+});
+
+$("documentWarning").hidden=!expiring;
+
+}
+
+// DISPLAY DRIVER PROFILE
+
+function displayProfile(data){
+
+profile=data;
+
+profileSections.forEach(id=>{
+
+$(id).replaceChildren();
+
+});
+
+$("profileName").textContent=
+
+data.fullName;
+
+$("profileDriverId").textContent=
+
+"Driver ID: "+data.driverId;
+
+$("registeredAt").textContent=
+
+t.registered+": "+
+
+formatDate(data.createdAtMs);
+
+// PERSONAL INFORMATION
+
+addProfileRow(
+
+"personalDetails",
+
+"fullName",
+
+data.fullName
+
+);
+
+addProfileRow(
+
+"personalDetails",
+
+"nic",
+
+maskNic(data.nic)
+
+);
+
+addProfileRow(
+
+"personalDetails",
+
+"dob",
+
+data.dob
+
+);
+
+addProfileRow(
+
+"personalDetails",
+
+"phone",
+
+data.phone
+
+);
+
+addProfileRow(
+
+"personalDetails",
+
+"whatsapp",
+
+data.whatsapp
+
+);
+
+addProfileRow(
+
+"personalDetails",
+
+"address",
+
+data.address
+
+);
+
+addProfileRow(
+
+"personalDetails",
+
+"district",
+
+data.district
+
+);
+
+// VEHICLE INFORMATION
+
+addProfileRow(
+
+"vehicleDetails",
+
+"vehicleType",
+
+t[data.vehicleType]
+
+);
+
+addProfileRow(
+
+"vehicleDetails",
+
+"vehicleNumber",
+
+data.vehicleNumber,
+
+"yellow"
+
+);
+
+addProfileRow(
+
+"vehicleDetails",
+
+"vehicleModel",
+
+data.vehicleModel
+
+);
+
+addProfileRow(
+
+"vehicleDetails",
+
+"vehicleColor",
+
+data.vehicleColor
+
+);
+
+addProfileRow(
+
+"vehicleDetails",
+
+"capacity",
+
+data.capacity
+
+);
+
+// DRIVING LICENCE
+
+addProfileRow(
+
+"licenceDetails",
+
+"licenceNumber",
+
+data.licenceNumber
+
+);
+
+addProfileRow(
+
+"licenceDetails",
+
+"licenceExpiry",
+
+data.licenceExpiry
+
+);
+
+addProfileRow(
+
+"licenceDetails",
+
+"experience",
+
+data.experience+" "+t.years
+
+);
+
+// INSURANCE AND REVENUE LICENCE
+
+addProfileRow(
+
+"insuranceDetails",
+
+"insuranceNumber",
+
+data.insuranceNumber
+
+);
+
+addProfileRow(
+
+"insuranceDetails",
+
+"insuranceExpiry",
+
+data.insuranceExpiry
+
+);
+
+addProfileRow(
+
+"insuranceDetails",
+
+"revenueExpiry",
+
+data.revenueExpiry
+
+);
+
+// SERVICE INFORMATION
+
+addProfileRow(
+
+"serviceDetails",
+
+"serviceArea",
+
+data.serviceArea
+
+);
+
+addProfileRow(
+
+"serviceDetails",
+
+"workingTime",
+
+t[data.workingTime]
+
+);
+
+// ACCOUNT INFORMATION
+
+addProfileRow(
+
+"accountDetails",
+
+"accountStatus",
+
+t.approved,
+
+"green"
+
+);
+
+addProfileRow(
+
+"accountDetails",
+
+"documentsValid",
+
+data.documentsValid
+
+?t.valid:t.invalid,
+
+data.documentsValid
+
+?"green":"red"
+
+);
+
+addProfileRow(
+
+"accountDetails",
+
+"commissionRate",
+
+data.commissionRate+"%",
+
+"yellow"
+
+);
+
+addProfileRow(
+
+"accountDetails",
+
+"termsConsent",
+
+yesNo(data.termsConsent)
+
+);
+
+addProfileRow(
+
+"accountDetails",
+
+"gpsConsent",
+
+yesNo(data.gpsConsent)
+
+);
+
+addProfileRow(
+
+"accountDetails",
+
+"whatsappConsent",
+
+yesNo(data.whatsappConsent)
+
+);
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+updateDocumentWarning();
+
+updateControls();
+
+status("");
+
+}
+
+// LOAD PRIVATE PROFILE FROM BACKEND
+
+async function loadProfile(){
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+const currentProfileGeneration=
+
+++profileGeneration;
+
+status(t.loading);
+
+try{
+
+const result=await serverCall(
+
+"getDriverProfile"
+
+);
+
+if(currentGeneration!==generation
+
+||currentProfileGeneration!==profileGeneration
+
+||!driver){
+
+return;
+
+}
+
+if(result?.success!==true
+
+||!validProfile(result.profile)){
+
+throw new Error("Invalid profile");
+
+}
+
+displayProfile(result.profile);
+
+}catch(e){
+
+if(currentGeneration!==generation
+
+||currentProfileGeneration!==profileGeneration){
+
+return;
+
+}
+
+clearProfile();
+
+status(t.error);
+
+}
+
+}
+
+// PROFILE CHANGE REQUEST STATUS
+
+function subscribeLatestRequest(){
+
+stopRequestListener();
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+requestUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"drivers",
+
+uid,
+
+"profileRequests",
+
+"latest"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession()
+
+||!driver)return;
+
+$("requestDetails").replaceChildren();
+
+$("requestPanel").hidden=true;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()){
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(data.driverUid!==uid
+
+||!validId(data.requestId)
+
+||!["pending","approved","rejected"]
+
+.includes(data.status)){
+
+return;
+
+}
+
+const section=$("requestDetails");
+
+addRow(
+
+section,
+
+t.requestId,
+
+data.requestId
+
+);
+
+addRow(
+
+section,
+
+t.changeType,
+
+t[data.changeType]||data.changeType
+
+);
+
+const requestStatus=
+
+data.status==="approved"
+
+?t.accepted
+
+:t[data.status];
+
+addRow(
+
+section,
+
+t.requestStatus,
+
+requestStatus,
+
+data.status==="approved"
+
+?"green"
+
+:data.status==="rejected"
+
+?"red":"yellow"
+
+);
+
+const createdAt=
+
+data.createdAt?.toMillis?.();
+
+addRow(
+
+section,
+
+t.requestDate,
+
+formatDate(createdAt)
+
+);
+
+if(typeof data.adminReason==="string"
+
+&&data.adminReason.trim()){
+
+addRow(
+
+section,
+
+t.adminReason,
+
+data.adminReason
+
+);
+
+}
+
+$("requestPanel").hidden=false;
+
+if(data.status==="approved"){
+
+loadProfile();
+
+}
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+$("requestPanel").hidden=true;
+
+}
+
+);
+
+}
+
+// FORM CONTROL
+
+function updateControls(){
+
+const enabled=
+
+validSession()
+
+&&driver!==null
+
+&&profile!==null;
+
+const locked=
+
+updateBusy||passwordBusy;
+
+[
+
+"changeType",
+
+"changeValue",
+
+"changeReason",
+
+"updateConsent",
+
+"updateButton"
+
+].forEach(id=>{
+
+$(id).disabled=!enabled||locked;
+
+});
+
+[
+
+"currentPassword",
+
+"newPassword",
+
+"confirmPassword",
+
+"passwordButton"
+
+].forEach(id=>{
+
+$(id).disabled=!enabled||locked;
+
+});
+
+$("refreshButton").disabled=locked;
+
+}
+
+// REQUEST PROFILE UPDATE
+
+const allowedChanges=[
+
+"fullName",
+
+"phone",
+
+"whatsapp",
+
+"address",
+
+"district",
+
+"nic",
+
+"dob",
+
+"vehicle",
+
+"licence",
+
+"insurance",
+
+"serviceArea",
+
+"workingTime",
+
+"other"
+
+];
+
+$("updateForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(!validSession()
+
+||!driver
+
+||!profile
+
+||updateBusy
+
+||passwordBusy)return;
+
+const changeType=
+
+$("changeType").value;
+
+const newValue=
+
+$("changeValue").value.trim();
+
+const reason=
+
+$("changeReason").value.trim();
+
+if(!allowedChanges.includes(changeType)
+
+||newValue.length<2
+
+||newValue.length>500
+
+||reason.length<5
+
+||reason.length>500
+
+||!$("updateConsent").checked){
+
+$("updateStatus").textContent=
+
+t.invalidDetails;
+
+return;
+
+}
+
+if(changeType==="dob"
+
+&&(!validDate(newValue)
+
+||newValue>sriLankaToday())){
+
+$("updateStatus").textContent=
+
+t.invalidDetails;
+
+return;
+
+}
+
+if(["phone","whatsapp"]
+
+.includes(changeType)
+
+&&!/^(?:\+94|0)7\d{8}$/.test(
+
+newValue.replace(/[\s-]/g,"")
+
+)){
+
+$("updateStatus").textContent=
+
+t.invalidDetails;
+
+return;
+
+}
+
+if(!confirm(t.confirmRequest))return;
+
+const currentGeneration=generation;
+
+const fingerprint=JSON.stringify([
+
+changeType,
+
+newValue,
+
+reason
+
+]);
+
+if(!pendingUpdate
+
+||pendingUpdate.fingerprint!==fingerprint){
+
+pendingUpdate={
+
+fingerprint,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+updateBusy=true;
+
+updateControls();
+
+$("updateStatus").textContent=t.sending;
+
+try{
+
+const result=await serverCall(
+
+"submitDriverProfileChange",
+
+{
+
+requestId:pendingUpdate.requestId,
+
+changeType,
+
+newValue,
+
+reason,
+
+declarationAccepted:true,
+
+language:lang
+
+}
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.accepted!==true
+
+||!validId(result.requestId)
+
+||result.status!=="pending"){
+
+throw new Error("Request not confirmed");
+
+}
+
+pendingUpdate=null;
+
+$("updateForm").reset();
+
+$("updateStatus").textContent=
+
+t.requestSent;
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("updateStatus").textContent=
+
+t.requestFailed;
+
+}finally{
+
+if(currentGeneration===generation){
+
+updateBusy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// SHOW AND HIDE PASSWORD
+
+document.querySelectorAll("[data-target]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+const input=$(button.dataset.target);
+
+const visible=input.type==="text";
+
+input.type=visible
+
+?"password":"text";
+
+button.textContent=visible
+
+?t.show:t.hide;
+
+};
+
+});
+
+// CHANGE DRIVER PASSWORD
+
+$("passwordForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(!validSession()
+
+||!driver
+
+||!profile
+
+||passwordBusy
+
+||updateBusy)return;
+
+if(driver.availability==="busy"
+
+||driver.activeBookingId){
+
+$("passwordStatus").textContent=
+
+t.busyRide;
+
+return;
+
+}
+
+const currentPassword=
+
+$("currentPassword").value;
+
+const newPassword=
+
+$("newPassword").value;
+
+const confirmPassword=
+
+$("confirmPassword").value;
+
+const length=
+
+Array.from(newPassword).length;
+
+if(length<15||length>128){
+
+$("passwordStatus").textContent=
+
+t.passwordLength;
+
+return;
+
+}
+
+if(newPassword!==confirmPassword){
+
+$("passwordStatus").textContent=
+
+t.passwordMismatch;
+
+return;
+
+}
+
+if(currentPassword===newPassword){
+
+$("passwordStatus").textContent=
+
+t.samePassword;
+
+return;
+
+}
+
+if(!currentPassword
+
+||currentPassword.length>128){
+
+$("passwordStatus").textContent=
+
+t.invalidDetails;
+
+return;
+
+}
+
+if(!confirm(t.passwordConfirm))return;
+
+const currentGeneration=generation;
+
+passwordBusy=true;
+
+updateControls();
+
+$("passwordStatus").textContent=
+
+t.sending;
+
+try{
+
+const result=await serverCall(
+
+"changeDriverPassword",
+
+{
+
+currentPassword,
+
+newPassword,
+
+requestId:crypto.randomUUID()
+
+}
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.changed!==true){
+
+throw new Error("Password change failed");
+
+}
+
+clearPasswords();
+
+alert(t.passwordChanged);
+
+disconnect();
+
+await signOut(auth);
+
+location.replace(
+
+"./driver-login.html?lang="+lang
+
+);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+clearPasswords();
+
+$("passwordStatus").textContent=
+
+t.passwordFailed;
+
+}finally{
+
+if(currentGeneration===generation){
+
+passwordBusy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// DRIVER STATUS MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps();
+
+stopRequestListener();
+
+clearProfile();
+
+clearPasswords();
+
+$("updateForm").reset();
+
+pendingUpdate=null;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true){
+
+denyAccess();
+
+return;
+
+}
+
+driver=data;
+
+if(["online","busy"].includes(
+
+data.availability
+
+)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(!profile){
+
+loadProfile();
+
+}
+
+if(!requestUnsubscribe){
+
+subscribeLatestRequest();
+
+}
+
+updateControls();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!functions||!db){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+await syncClock();
+
+if(currentGeneration!==generation)return;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// SERVER TIME AND SESSION UPDATE
+
+setInterval(async()=>{
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+try{
+
+await syncClock();
+
+if(currentGeneration!==generation)return;
+
+const result=await serverCall(
+
+"verifyDriverSession"
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+
+||result.uid!==uid
+
+||result.status!=="approved"
+
+||result.activationComplete!==true
+
+||result.documentsValid!==true){
+
+denyAccess();
+
+return;
+
+}
+
+updateDocumentWarning();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+},60000);
+
+// REFRESH
+
+$("refreshButton").onclick=()=>{
+
+if(auth&&!updateBusy&&!passwordBusy){
+
+verifyDriver(auth.currentUser);
+
+}
+
+};
+
+// INTERNET CONNECTION
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
