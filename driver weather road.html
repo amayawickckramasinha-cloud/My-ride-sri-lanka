@@ -1,0 +1,2873 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Weather & Road</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+h2{
+text-align:center;
+line-height:1.7;
+}
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+.weatherIcon{
+width:90px;
+height:90px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.8;
+}
+.row span{
+color:#CCC;
+}
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+.stats{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+.stat{
+background:#292929;
+border:1px solid #555;
+border-radius:12px;
+padding:18px 8px;
+text-align:center;
+}
+.stat strong{
+display:block;
+font-size:23px;
+color:#FFD600;
+margin-bottom:10px;
+overflow-wrap:anywhere;
+}
+.stat span{
+font-size:13px;
+line-height:1.8;
+}
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+.green{
+color:#4ADE80!important;
+}
+.red{
+color:#FF6464!important;
+}
+.yellow{
+color:#FFD600!important;
+}
+.blue{
+color:#60A5FA!important;
+}
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.9;
+}
+.notice{
+background:#302C17;
+border:1px solid #FFD600;
+border-radius:10px;
+padding:14px;
+line-height:1.9;
+margin:15px 0;
+}
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:14px;
+line-height:1.9;
+margin:15px 0;
+}
+.tableWrap{
+overflow-x:auto;
+}
+table{
+width:100%;
+border-collapse:collapse;
+font-size:13px;
+}
+th,td{
+border:1px solid #555;
+padding:12px 7px;
+text-align:center;
+}
+th{
+background:#FFD600;
+color:#111;
+}
+td{
+background:#292929;
+}
+#status,
+#weatherStatus,
+#fareStatus,
+#gpsStatus{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+overflow-wrap:anywhere;
+}
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+[hidden]{
+display:none!important;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+<div class="country">SRI LANKA</div>
+
+<div class="weatherIcon">
+<svg width="55" height="55"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.7"
+stroke-linecap="round"
+stroke-linejoin="round">
+<path d="M20 16a4 4 0 0 0 0-8
+a6 6 0 0 0-11-2
+A5 5 0 0 0 6 16h14"/>
+<path d="M8 19l-1 2"/>
+<path d="M13 19l-1 2"/>
+<path d="M18 19l-1 2"/>
+</svg>
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="driverDetails"></h3>
+
+<div class="row">
+<span data-t="driverName"></span>
+<strong id="driverName">—</strong>
+</div>
+
+<div class="row">
+<span>Driver ID</span>
+<strong id="driverId"
+class="yellow">—</strong>
+</div>
+
+<div class="row">
+<span data-t="vehicleType"></span>
+<strong id="vehicleType">—</strong>
+</div>
+
+<div class="row">
+<span data-t="availability"></span>
+<strong id="availability">—</strong>
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="locationDetails"></h3>
+
+<div class="row">
+<span data-t="gpsConnection"></span>
+<strong id="gpsConnection">—</strong>
+</div>
+
+<div class="row">
+<span data-t="currentLocation"></span>
+<strong id="currentLocation">—</strong>
+</div>
+
+<div class="row">
+<span data-t="gpsAccuracy"></span>
+<strong id="gpsAccuracy">—</strong>
+</div>
+
+<div class="row">
+<span data-t="lastGpsUpdate"></span>
+<strong id="lastGpsUpdate">—</strong>
+</div>
+
+<div class="row">
+<span data-t="serverGpsUpdate"></span>
+<strong id="serverGpsUpdate">—</strong>
+</div>
+
+<p id="gpsStatus"
+role="status"></p>
+
+<button id="locationButton"
+class="action"
+data-t="updateLocation"></button>
+
+<a id="gpsLink"
+class="action secondary"
+data-t="gpsPage"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="currentWeather"></h3>
+
+<div class="stats">
+
+<div class="stat">
+<strong id="temperature">—</strong>
+<span data-t="temperature"></span>
+</div>
+
+<div class="stat">
+<strong id="rainfall"
+class="blue">—</strong>
+<span data-t="rainfall"></span>
+</div>
+
+<div class="stat">
+<strong id="humidity">—</strong>
+<span data-t="humidity"></span>
+</div>
+
+<div class="stat">
+<strong id="windSpeed">—</strong>
+<span data-t="windSpeed"></span>
+</div>
+
+</div>
+
+<div class="row">
+<span data-t="weatherCondition"></span>
+<strong id="weatherCondition">—</strong>
+</div>
+
+<div class="row">
+<span data-t="rainCondition"></span>
+<strong id="rainCondition">—</strong>
+</div>
+
+<div class="row">
+<span data-t="weatherSource"></span>
+<strong id="weatherSource">—</strong>
+</div>
+
+<div class="row">
+<span data-t="weatherUpdated"></span>
+<strong id="weatherUpdated">—</strong>
+</div>
+
+<p id="weatherStatus"
+role="status"></p>
+
+<div id="weatherWarning"
+class="warning" hidden></div>
+
+<p class="note"
+data-t="weatherNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="roadDetails"></h3>
+
+<div class="row">
+<span data-t="roadCondition"></span>
+<strong id="roadCondition">—</strong>
+</div>
+
+<div class="row">
+<span data-t="roadSurface"></span>
+<strong id="roadSurface">—</strong>
+</div>
+
+<div class="row">
+<span data-t="roadVerification"></span>
+<strong id="roadVerification">—</strong>
+</div>
+
+<div class="row">
+<span data-t="roadSource"></span>
+<strong id="roadSource">—</strong>
+</div>
+
+<div class="row">
+<span data-t="roadUpdated"></span>
+<strong id="roadUpdated">—</strong>
+</div>
+
+<div id="roadWarning"
+class="warning" hidden
+data-t="difficultWarning"></div>
+
+<p class="note"
+data-t="roadNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="serviceTime"></h3>
+
+<div class="row">
+<span data-t="sriLankaTime"></span>
+<strong id="sriLankaTime">—</strong>
+</div>
+
+<div class="row">
+<span data-t="currentPeriod"></span>
+<strong id="currentPeriod"
+class="yellow">—</strong>
+</div>
+
+<div class="row">
+<span data-t="day"></span>
+<strong id="dayHours">—</strong>
+</div>
+
+<div class="row">
+<span data-t="night"></span>
+<strong id="nightHours">—</strong>
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="applicableFares"></h3>
+
+<div class="row">
+<span data-t="baseRate"></span>
+<strong id="baseRate">—</strong>
+</div>
+
+<div class="row">
+<span data-t="rainCharge"></span>
+<strong id="rainCharge">—</strong>
+</div>
+
+<div class="row">
+<span data-t="roadCharge"></span>
+<strong id="roadCharge">—</strong>
+</div>
+
+<div class="row">
+<span data-t="currentRate"></span>
+<strong id="currentRate"
+class="yellow">—</strong>
+</div>
+
+<div class="row">
+<span data-t="minimumFare"></span>
+<strong id="minimumFare">—</strong>
+</div>
+
+<div class="row">
+<span data-t="commissionRate"></span>
+<strong id="commissionRate">—</strong>
+</div>
+
+<div class="row">
+<span data-t="fareVersion"></span>
+<strong id="fareVersion">—</strong>
+</div>
+
+<p id="fareStatus"
+role="status"></p>
+
+<div class="notice"
+data-t="fareNotice"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="distanceDiscount"></h3>
+
+<div class="tableWrap">
+
+<table>
+<thead>
+<tr>
+<th data-t="distance"></th>
+<th data-t="day"></th>
+<th data-t="night"></th>
+<th data-t="discount"></th>
+</tr>
+</thead>
+
+<tbody id="fareTable"></tbody>
+
+</table>
+
+</div>
+
+<p class="note"
+data-t="discountNote"></p>
+
+<a id="fareChartLink"
+class="action secondary"
+data-t="fareChart"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="updateDetails"></h3>
+
+<div class="row">
+<span data-t="automaticUpdate"></span>
+<strong>5 min</strong>
+</div>
+
+<div class="row">
+<span data-t="lastUpdate"></span>
+<strong id="lastUpdate">—</strong>
+</div>
+
+<button id="refreshButton"
+class="action"
+data-t="refresh"></button>
+
+<p class="note"
+data-t="updateNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="rules"></h3>
+
+<p data-t="rule1"></p>
+<p data-t="rule2"></p>
+<p data-t="rule3"></p>
+<p data-t="rule4"></p>
+<p data-t="rule5"></p>
+<p data-t="rule6"></p>
+<p data-t="rule7"></p>
+
+</section>
+
+<a id="feedbackLink"
+class="action secondary"
+data-t="feedback"></a>
+
+<a id="helpLink"
+class="action secondary"
+data-t="help"></a>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const LANGUAGES=["si","en","ta"];
+
+const params=new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+heading:"කාලගුණය සහ මාර්ග තත්ත්වය",
+driverDetails:"රියදුරු විස්තර",
+driverName:"රියදුරුගේ නම",
+vehicleType:"වාහන වර්ගය",
+availability:"සේවා තත්ත්වය",
+online:"Online",
+offline:"Offline",
+busy:"හයර් එකක සිටී",
+bike:"Scooter / Bike",
+tuk:"ත්‍රීරෝද රථය",
+car:"මෝටර් රථය",
+van:"වෑන් රථය",
+locationDetails:"GPS ස්ථානය",
+gpsConnection:"GPS සම්බන්ධතාව",
+currentLocation:"දැනට සිටින ස්ථානය",
+gpsAccuracy:"GPS නිරවද්‍යතාව",
+lastGpsUpdate:"අවසන් GPS දත්ත",
+serverGpsUpdate:"Server වෙත අවසන් GPS යාවත්කාලීන කිරීම",
+updateLocation:"GPS ස්ථානය ලබාගන්න",
+gpsPage:"GPS Status",
+currentWeather:"වර්තමාන කාලගුණය",
+temperature:"උෂ්ණත්වය",
+rainfall:"වර්ෂාපතනය",
+humidity:"වායු ආර්ද්‍රතාව",
+windSpeed:"සුළඟේ වේගය",
+weatherCondition:"කාලගුණ තත්ත්වය",
+rainCondition:"වැසි තත්ත්වය",
+weatherSource:"කාලගුණ දත්ත මූලාශ්‍රය",
+weatherUpdated:"කාලගුණ දත්ත වේලාව",
+clear:"පැහැදිලි කාලගුණය",
+cloudy:"වලාකුළු සහිතයි",
+fog:"මීදුම සහිතයි",
+drizzle:"පොද වැසි",
+rain:"වැසි සහිතයි",
+storm:"ගිගුරුම් සහිත වැසි",
+dry:"වැසි නොමැත",
+unknown:"තහවුරු වී නොමැත",
+weatherNote:"කාලගුණ දත්ත ආසන්න ප්‍රදේශයේ ඇස්තමේන්තු විය හැක. නිල හදිසි අනතුරු ඇඟවීම් සඳහා අදාළ බලධාරීන්ගේ නිවේදන අනුගමනය කරන්න.",
+roadDetails:"මාර්ග තත්ත්වය",
+roadCondition:"මාර්ග වර්ගය",
+roadSurface:"මාර්ග මතුපිට",
+roadVerification:"දත්ත තහවුරු කිරීම",
+roadSource:"මාර්ග දත්ත මූලාශ්‍රය",
+roadUpdated:"මාර්ග දත්ත වේලාව",
+normal:"සාමාන්‍ය මාර්ගය",
+difficult:"දුෂ්කර මාර්ගය",
+paved:"තාර / පදික මාර්ගය",
+concrete:"කොන්ක්‍රීට් මාර්ගය",
+gravel:"බොරළු මාර්ගය",
+dirt:"පස් මාර්ගය",
+sand:"වැලි මාර්ගය",
+verified:"තහවුරු කර ඇත",
+unverified:"තහවුරු කර නොමැත",
+difficultWarning:"දුෂ්කර මාර්ගයක් හඳුනාගෙන ඇත. ආරක්ෂිතව රිය පදවන්න.",
+roadNote:"මෙය දැනට සිටින ස්ථානය ආසන්නයේ මාර්ග තත්ත්වයයි. සම්පූර්ණ හයර් මාර්ගයේ තත්ත්වය මෙයින් තහවුරු නොවේ.",
+serviceTime:"දිවා සහ රාත්‍රී සේවා කාලය",
+sriLankaTime:"ශ්‍රී ලංකා වේලාව",
+currentPeriod:"වර්තමාන කාල කාණ්ඩය",
+day:"දිවා",
+night:"රාත්‍රී",
+applicableFares:"දැනට අදාළ ඇස්තමේන්තු ගාස්තු",
+baseRate:"මූලික ගාස්තුව / KM",
+rainCharge:"වැසි අමතර ගාස්තුව / KM",
+roadCharge:"දුෂ්කර මාර්ග ගාස්තුව / KM",
+currentRate:"පළමු දුර කාණ්ඩයේ ගාස්තුව / KM",
+minimumFare:"අවම හයර් ගාස්තුව",
+commissionRate:"MY RIDE කොමිස් ප්‍රතිශතය",
+fareVersion:"ගාස්තු සංස්කරණය",
+fareNotice:"මෙහි පෙන්වන ගාස්තුව ඇස්තමේන්තුවකි. අවසන් හයර් ගාස්තුව තහවුරු කළ ගමන් දුර, මාර්ග තත්ත්වය, කාලගුණය සහ අදාළ ගාස්තු නීති අනුව Backend එකෙන් ගණනය වේ.",
+distanceDiscount:"දුර අනුව ගාස්තු සහ වට්ටම්",
+distance:"දුර (KM)",
+discount:"වට්ටම / KM",
+discountNote:"වට්ටම් අදාළ දුර කාණ්ඩයේ කිලෝමීටර් සඳහා පමණක් යෙදේ. වගුවේ දිවා සහ රාත්‍රී ගාස්තුවල වට්ටම් දැනටමත් ඇතුළත්ය.",
+fareChart:"සම්පූර්ණ ගාස්තු වගුව",
+updateDetails:"දත්ත යාවත්කාලීන කිරීම",
+automaticUpdate:"ස්වයංක්‍රීය යාවත්කාලීන කාලය",
+lastUpdate:"අවසන් යාවත්කාලීන කිරීම",
+refresh:"කාලගුණය සහ මාර්ග දත්ත යාවත්කාලීන කරන්න",
+updateNote:"පිටුව විවෘතව තිබෙන විට සහ අන්තර්ජාලය සම්බන්ධ විට දත්ත යාවත්කාලීන වේ.",
+rules:"කාලගුණ සහ මාර්ග ගාස්තු කොන්දේසි",
+rule1:"✓ තහවුරු කළ වැසි දත්ත අනුව පමණක් වැසි ගාස්තු යෙදේ.",
+rule2:"✓ දුෂ්කර මාර්ග ගාස්තුව අදාළ තහවුරු කළ මාර්ග දුරට පමණක් යෙදේ.",
+rule3:"✓ තහවුරු නොකළ තත්ත්වයකට අමතර ගාස්තු අය නොකළ යුතුය.",
+rule4:"✓ රියදුරුට කාලගුණ දත්ත හෝ ගාස්තු වෙනස් කළ නොහැක.",
+rule5:"✓ අධිවේගී මාර්ග සහ Parking ගාස්තු වෙනම ගණනය වේ.",
+rule6:"✓ ගාස්තු වෙනස් කිරීමේ බලය Admin සතුය.",
+rule7:"✓ අනාරක්ෂිත මාර්ග සහ කාලගුණ තත්ත්වයන්හිදී ආරක්ෂාවට ප්‍රමුඛත්වය දෙන්න.",
+checking:"රියදුරු ගිණුම පරීක්ෂා කරමින්...",
+loading:"දත්ත ලබාගනිමින්...",
+error:"දත්ත ලබාගත නොහැක.",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+connectionLost:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+gpsReady:"GPS දත්ත ලැබී ඇත",
+gpsWaiting:"GPS දත්ත බලාපොරොත්තුවෙන්",
+gpsError:"GPS ස්ථානය ලබාගත නොහැක.",
+gpsPermission:"Location Permission ලබාදෙන්න.",
+gpsAccuracyError:"ප්‍රමාණවත් GPS නිරවද්‍යතාවක් නොමැත.",
+outsideArea:"MY RIDE සේවා ප්‍රදේශයෙන් පිටතයි.",
+stale:"දත්ත කල් ඉකුත් වී ඇත. යාවත්කාලීන කරන්න.",
+fareUnavailable:"වලංගු ගාස්තු සැකසුම් ලබාගත නොහැක.",
+stormWarning:"ගිගුරුම් සහිත වැසි තත්ත්වයක් වාර්තා වී ඇත.",
+windWarning:"තද සුළං තත්ත්වයක් වාර්තා වී ඇත.",
+rainWarning:"වැසි සහිත මාර්ගවල ආරක්ෂිතව රිය පදවන්න.",
+feedback:"අදහස් සහ පැමිණිලි",
+help:"රියදුරු සහාය",
+login:"Driver Login",
+back:"← Driver Dashboard"
+},
+
+en:{
+heading:"Weather and Road Conditions",
+driverDetails:"Driver Details",
+driverName:"Driver Name",
+vehicleType:"Vehicle Type",
+availability:"Service Status",
+online:"Online",
+offline:"Offline",
+busy:"On a Ride",
+bike:"Scooter / Bike",
+tuk:"Three Wheeler",
+car:"Car",
+van:"Van",
+locationDetails:"GPS Location",
+gpsConnection:"GPS Connection",
+currentLocation:"Current Location",
+gpsAccuracy:"GPS Accuracy",
+lastGpsUpdate:"Last GPS Fix",
+serverGpsUpdate:"Last Server GPS Update",
+updateLocation:"Get GPS Location",
+gpsPage:"GPS Status",
+currentWeather:"Current Weather",
+temperature:"Temperature",
+rainfall:"Precipitation",
+humidity:"Humidity",
+windSpeed:"Wind Speed",
+weatherCondition:"Weather Condition",
+rainCondition:"Rain Condition",
+weatherSource:"Weather Data Source",
+weatherUpdated:"Weather Data Time",
+clear:"Clear",
+cloudy:"Cloudy",
+fog:"Fog",
+drizzle:"Drizzle",
+rain:"Rain",
+storm:"Thunderstorm",
+dry:"No Rain",
+unknown:"Unknown",
+weatherNote:"Weather data may be estimates for the surrounding area. Follow official emergency warnings from the relevant authorities.",
+roadDetails:"Road Conditions",
+roadCondition:"Road Classification",
+roadSurface:"Road Surface",
+roadVerification:"Data Verification",
+roadSource:"Road Data Source",
+roadUpdated:"Road Data Time",
+normal:"Normal Road",
+difficult:"Difficult Road",
+paved:"Paved Road",
+concrete:"Concrete Road",
+gravel:"Gravel Road",
+dirt:"Dirt Road",
+sand:"Sand Road",
+verified:"Verified",
+unverified:"Not Verified",
+difficultWarning:"A difficult road has been identified. Drive safely.",
+roadNote:"This describes the road near your current location, not the entire ride route.",
+serviceTime:"Day and Night Service Period",
+sriLankaTime:"Sri Lanka Time",
+currentPeriod:"Current Period",
+day:"Day",
+night:"Night",
+applicableFares:"Current Estimated Fare Rates",
+baseRate:"Base Rate / KM",
+rainCharge:"Rain Surcharge / KM",
+roadCharge:"Difficult Road Surcharge / KM",
+currentRate:"First Distance Band Rate / KM",
+minimumFare:"Minimum Fare",
+commissionRate:"MY RIDE Commission Rate",
+fareVersion:"Fare Version",
+fareNotice:"These rates are estimates. The backend calculates the final fare using verified trip distance, road conditions, weather and applicable fare rules.",
+distanceDiscount:"Distance Rates and Discounts",
+distance:"Distance (KM)",
+discount:"Discount / KM",
+discountNote:"Discounts apply only to kilometres within each distance band. Day and night rates in this table already include these discounts.",
+fareChart:"Complete Fare Chart",
+updateDetails:"Data Updates",
+automaticUpdate:"Automatic Update Interval",
+lastUpdate:"Last Updated",
+refresh:"Refresh Weather and Road Data",
+updateNote:"Data updates while this page is open and connected to the internet.",
+rules:"Weather and Road Fare Conditions",
+rule1:"✓ Rain surcharges require verified rain data.",
+rule2:"✓ Difficult road charges apply only to verified difficult road distance.",
+rule3:"✓ Unverified conditions must not incur surcharges.",
+rule4:"✓ Drivers cannot change weather data or fare rates.",
+rule5:"✓ Highway and parking charges are calculated separately.",
+rule6:"✓ Only Admin can change fare settings.",
+rule7:"✓ Prioritize safety in hazardous weather and road conditions.",
+checking:"Verifying driver account...",
+loading:"Loading data...",
+error:"Unable to retrieve data.",
+denied:"Access to this page is not authorized.",
+connectionLost:"No internet connection.",
+gpsReady:"GPS fix available",
+gpsWaiting:"Waiting for GPS",
+gpsError:"Unable to obtain GPS location.",
+gpsPermission:"Allow location permission.",
+gpsAccuracyError:"GPS accuracy is insufficient.",
+outsideArea:"Outside the MY RIDE service area.",
+stale:"Data has expired. Please refresh.",
+fareUnavailable:"Valid fare settings are unavailable.",
+stormWarning:"Thunderstorm conditions have been reported.",
+windWarning:"Strong winds have been reported.",
+rainWarning:"Drive safely on wet roads.",
+feedback:"Feedback and Complaints",
+help:"Driver Help",
+login:"Driver Login",
+back:"← Driver Dashboard"
+},
+
+ta:{
+heading:"வானிலை மற்றும் சாலை நிலை",
+driverDetails:"சாரதி விவரங்கள்",
+driverName:"சாரதியின் பெயர்",
+vehicleType:"வாகன வகை",
+availability:"சேவை நிலை",
+online:"இணைப்பில்",
+offline:"இணைப்பில் இல்லை",
+busy:"பயணத்தில்",
+bike:"ஸ்கூட்டர் / மோட்டார் சைக்கிள்",
+tuk:"முச்சக்கர வண்டி",
+car:"கார்",
+van:"வேன்",
+locationDetails:"GPS இருப்பிடம்",
+gpsConnection:"GPS இணைப்பு",
+currentLocation:"தற்போதைய இருப்பிடம்",
+gpsAccuracy:"GPS துல்லியம்",
+lastGpsUpdate:"கடைசி GPS பதிவு",
+serverGpsUpdate:"சேவையகத்தின் கடைசி GPS புதுப்பிப்பு",
+updateLocation:"GPS இருப்பிடத்தை பெறவும்",
+gpsPage:"GPS நிலை",
+currentWeather:"தற்போதைய வானிலை",
+temperature:"வெப்பநிலை",
+rainfall:"மழைப்பொழிவு",
+humidity:"ஈரப்பதம்",
+windSpeed:"காற்றின் வேகம்",
+weatherCondition:"வானிலை நிலை",
+rainCondition:"மழை நிலை",
+weatherSource:"வானிலை தரவு மூலம்",
+weatherUpdated:"வானிலை தரவு நேரம்",
+clear:"தெளிவான வானிலை",
+cloudy:"மேகமூட்டம்",
+fog:"மூடுபனி",
+drizzle:"தூறல்",
+rain:"மழை",
+storm:"இடியுடன் கூடிய மழை",
+dry:"மழை இல்லை",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+weatherNote:"வானிலை தரவு சுற்றுப்புறத்தின் மதிப்பீடாக இருக்கலாம். அதிகாரப்பூர்வ அவசர எச்சரிக்கைகளை பின்பற்றவும்.",
+roadDetails:"சாலை நிலை",
+roadCondition:"சாலை வகை",
+roadSurface:"சாலை மேற்பரப்பு",
+roadVerification:"தரவு சரிபார்ப்பு",
+roadSource:"சாலை தரவு மூலம்",
+roadUpdated:"சாலை தரவு நேரம்",
+normal:"சாதாரண சாலை",
+difficult:"கடினமான சாலை",
+paved:"தார் சாலை",
+concrete:"கான்கிரீட் சாலை",
+gravel:"சரளை சாலை",
+dirt:"மண் சாலை",
+sand:"மணல் சாலை",
+verified:"சரிபார்க்கப்பட்டது",
+unverified:"சரிபார்க்கப்படவில்லை",
+difficultWarning:"கடினமான சாலை கண்டறியப்பட்டுள்ளது. பாதுகாப்பாக வாகனம் ஓட்டவும்.",
+roadNote:"இது தற்போதைய இருப்பிடத்திற்கு அருகிலுள்ள சாலையின் நிலை மட்டுமே. முழு பயண பாதையின் நிலை அல்ல.",
+serviceTime:"பகல் மற்றும் இரவு சேவை நேரம்",
+sriLankaTime:"இலங்கை நேரம்",
+currentPeriod:"தற்போதைய நேர வகை",
+day:"பகல்",
+night:"இரவு",
+applicableFares:"தற்போதைய மதிப்பிடப்பட்ட கட்டணங்கள்",
+baseRate:"அடிப்படை கட்டணம் / KM",
+rainCharge:"மழை கூடுதல் கட்டணம் / KM",
+roadCharge:"கடினமான சாலை கட்டணம் / KM",
+currentRate:"முதல் தூர பிரிவு கட்டணம் / KM",
+minimumFare:"குறைந்தபட்ச கட்டணம்",
+commissionRate:"MY RIDE கமிஷன் சதவீதம்",
+fareVersion:"கட்டண பதிப்பு",
+fareNotice:"இவை மதிப்பிடப்பட்ட கட்டணங்கள். சரிபார்க்கப்பட்ட தூரம், வானிலை, சாலை நிலை மற்றும் கட்டண விதிகளின் அடிப்படையில் இறுதி கட்டணம் கணக்கிடப்படும்.",
+distanceDiscount:"தூர கட்டணங்கள் மற்றும் தள்ளுபடிகள்",
+distance:"தூரம் (KM)",
+discount:"தள்ளுபடி / KM",
+discountNote:"ஒவ்வொரு தூர பிரிவிற்கும் உரிய கிலோமீட்டர்களுக்கு மட்டுமே தள்ளுபடி பொருந்தும். அட்டவணை கட்டணங்களில் தள்ளுபடி ஏற்கனவே சேர்க்கப்பட்டுள்ளது.",
+fareChart:"முழு கட்டண அட்டவணை",
+updateDetails:"தரவு புதுப்பிப்பு",
+automaticUpdate:"தானியங்கி புதுப்பிப்பு இடைவெளி",
+lastUpdate:"கடைசி புதுப்பிப்பு",
+refresh:"வானிலை மற்றும் சாலை தரவை புதுப்பிக்கவும்",
+updateNote:"பக்கம் திறந்திருக்கும் போதும் இணைய இணைப்பு இருக்கும் போதும் தரவு புதுப்பிக்கப்படும்.",
+rules:"வானிலை மற்றும் சாலை கட்டண விதிமுறைகள்",
+rule1:"✓ சரிபார்க்கப்பட்ட மழை தரவுகளுக்கு மட்டுமே கூடுதல் கட்டணம் பொருந்தும்.",
+rule2:"✓ சரிபார்க்கப்பட்ட கடினமான சாலை தூரத்திற்கு மட்டுமே கூடுதல் கட்டணம் பொருந்தும்.",
+rule3:"✓ சரிபார்க்கப்படாத நிலைகளுக்கு கூடுதல் கட்டணம் விதிக்கக்கூடாது.",
+rule4:"✓ சாரதிகள் வானிலை தரவையோ கட்டணங்களையோ மாற்ற முடியாது.",
+rule5:"✓ நெடுஞ்சாலை மற்றும் வாகன நிறுத்த கட்டணங்கள் தனியாக கணக்கிடப்படும்.",
+rule6:"✓ நிர்வாகம் மட்டுமே கட்டணங்களை மாற்ற முடியும்.",
+rule7:"✓ ஆபத்தான வானிலை மற்றும் சாலை நிலைகளில் பாதுகாப்பிற்கு முன்னுரிமை வழங்கவும்.",
+checking:"சாரதி கணக்கு சரிபார்க்கப்படுகிறது...",
+loading:"தரவு பெறப்படுகிறது...",
+error:"தரவை பெற முடியவில்லை.",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+connectionLost:"இணைய இணைப்பு இல்லை.",
+gpsReady:"GPS தரவு கிடைத்துள்ளது",
+gpsWaiting:"GPS தரவுக்காக காத்திருக்கிறது",
+gpsError:"GPS இருப்பிடத்தை பெற முடியவில்லை.",
+gpsPermission:"இருப்பிட அனுமதியை வழங்கவும்.",
+gpsAccuracyError:"GPS துல்லியம் போதுமானதாக இல்லை.",
+outsideArea:"MY RIDE சேவை பகுதிக்கு வெளியே உள்ளது.",
+stale:"தரவு காலாவதியாகியுள்ளது. புதுப்பிக்கவும்.",
+fareUnavailable:"செல்லுபடியாகும் கட்டண அமைப்புகள் கிடைக்கவில்லை.",
+stormWarning:"இடியுடன் கூடிய மழை பதிவாகியுள்ளது.",
+windWarning:"பலத்த காற்று பதிவாகியுள்ளது.",
+rainWarning:"ஈரமான சாலைகளில் பாதுகாப்பாக வாகனம் ஓட்டவும்.",
+feedback:"கருத்துகள் மற்றும் முறைப்பாடுகள்",
+help:"சாரதி உதவி",
+login:"சாரதி உள்நுழைவு",
+back:"← சாரதி முதன்மைப் பக்கம்"
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+// PAGE LINKS
+
+const links={
+loginLink:"driver-login.html",
+gpsLink:"driver-gps.html",
+fareChartLink:"driver-fare-chart.html",
+feedbackLink:"driver-feedback.html",
+helpLink:"driver-help.html",
+backButton:"driver-dashboard.html"
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+projectId:"my-ride-sri-lanka",
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+messagingSenderId:"88909447786",
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+let generation=0;
+
+let driverUnsubscribe=null;
+let fareUnsubscribe=null;
+
+let fareSettings=null;
+let weatherData=null;
+let roadData=null;
+
+let currentLocation=null;
+let lastServerGpsAt=null;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+let serverOffset=null;
+let serverSyncAt=0;
+
+let refreshing=false;
+let checkingSession=false;
+let refreshGeneration=0;
+
+let lastRefreshAt=null;
+let locationRequestActive=false;
+
+const GPS_MAX_AGE=30000;
+const GPS_MAX_ACCURACY=100;
+const GPS_UPDATE_INTERVAL=10000;
+
+const WEATHER_MAX_AGE=1800000;
+const ROAD_MAX_AGE=900000;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+provider:new ReCaptchaEnterpriseProvider(
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+),
+isTokenAutoRefreshEnabled:true
+});
+
+auth=getAuth(app);
+db=getFirestore(app);
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+&&uid!==null
+&&auth?.currentUser?.uid===uid
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,min,max){
+
+return typeof value==="string"
+&&value.trim().length>=min
+&&value.length<=max;
+
+}
+
+function validNumber(value,min,max){
+
+return typeof value==="number"
+&&Number.isFinite(value)
+&&value>=min
+&&value<=max;
+
+}
+
+function validTime(value){
+
+return validNumber(
+value,
+1,
+8640000000000000
+);
+
+}
+
+function validMoney(value){
+
+return validNumber(value,0,1000000)
+&&Math.abs(
+value*100-Math.round(value*100)
+)<0.001;
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+functions,name
+)(data);
+
+if(!validSession()
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// SERVER TIME
+
+async function syncServerTime(){
+
+const currentGeneration=generation;
+
+const start=Date.now();
+
+const result=await serverCall(
+"getDriverServerTime"
+);
+
+const end=Date.now();
+
+if(currentGeneration!==generation)return;
+
+if(!validTime(result?.serverTimeMs)
+||end-start>10000){
+
+throw new Error("Invalid server time");
+
+}
+
+serverOffset=
+result.serverTimeMs-(start+end)/2;
+
+serverSyncAt=end;
+
+}
+
+function serverNow(){
+
+if(serverOffset===null
+||Date.now()-serverSyncAt>120000){
+
+return null;
+
+}
+
+return Date.now()+serverOffset;
+
+}
+
+function formatDate(ms){
+
+if(!validTime(ms))return "—";
+
+return new Intl.DateTimeFormat(
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+{
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"medium"
+}
+).format(new Date(ms));
+
+}
+
+function money(value){
+
+if(!validMoney(value))return "—";
+
+return "LKR "+
+new Intl.NumberFormat("en-LK",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}).format(value);
+
+}
+
+function sriLankaMinutes(ms){
+
+const date=new Date(ms+330*60000);
+
+return date.getUTCHours()*60
++date.getUTCMinutes();
+
+}
+
+function formatMinutes(minutes){
+
+const hours=Math.floor(minutes/60);
+
+const mins=minutes%60;
+
+return String(hours).padStart(2,"0")
++":"+
+String(mins).padStart(2,"0");
+
+}
+
+function getPeriod(){
+
+const now=serverNow();
+
+if(now===null||!fareSettings)return null;
+
+const minutes=sriLankaMinutes(now);
+
+const start=fareSettings.dayStartMinutes;
+const end=fareSettings.nightStartMinutes;
+
+const isDay=start<end
+?minutes>=start&&minutes<end
+:minutes>=start||minutes<end;
+
+return isDay?"day":"night";
+
+}
+
+function renderClock(){
+
+const now=serverNow();
+
+$("sriLankaTime").textContent=
+now===null?"—":formatDate(now);
+
+const period=getPeriod();
+
+$("currentPeriod").textContent=
+period?t[period]:"—";
+
+}
+
+// GPS VALIDATION
+
+function insideServiceArea(lat,lon){
+
+return lat>=5.85
+&&lat<=9.9
+&&lon>=79.5
+&&lon<=82;
+
+}
+
+function freshLocation(location){
+
+return location
+&&validNumber(location.lat,-90,90)
+&&validNumber(location.lon,-180,180)
+&&validNumber(
+location.accuracy,
+0,
+GPS_MAX_ACCURACY
+)
+&&validTime(location.capturedAtMs)
+&&Date.now()-location.capturedAtMs
+<=GPS_MAX_AGE
+&&location.capturedAtMs<=Date.now()+5000
+&&insideServiceArea(
+location.lat,
+location.lon
+);
+
+}
+
+function parsePosition(position){
+
+const c=position.coords;
+
+if(!validNumber(c.latitude,-90,90)
+||!validNumber(c.longitude,-180,180)){
+
+throw new Error("gpsError");
+
+}
+
+if(!insideServiceArea(
+c.latitude,
+c.longitude
+)){
+
+throw new Error("outsideArea");
+
+}
+
+if(!validNumber(
+c.accuracy,
+0,
+GPS_MAX_ACCURACY
+)){
+
+throw new Error("gpsAccuracyError");
+
+}
+
+const location={
+lat:c.latitude,
+lon:c.longitude,
+accuracy:c.accuracy,
+capturedAtMs:position.timestamp
+};
+
+if(!freshLocation(location)){
+
+throw new Error("gpsError");
+
+}
+
+return location;
+
+}
+
+function renderLocation(){
+
+if(!freshLocation(currentLocation)){
+
+$("gpsConnection").textContent=
+t.gpsWaiting;
+
+$("gpsConnection").className="yellow";
+
+$("currentLocation").textContent="—";
+
+$("gpsAccuracy").textContent="—";
+
+$("lastGpsUpdate").textContent="—";
+
+}else{
+
+$("gpsConnection").textContent=
+t.gpsReady;
+
+$("gpsConnection").className="green";
+
+$("currentLocation").textContent=
+currentLocation.lat.toFixed(5)
++", "+
+currentLocation.lon.toFixed(5);
+
+$("gpsAccuracy").textContent=
+"± "+
+Math.round(currentLocation.accuracy)
++" m";
+
+$("lastGpsUpdate").textContent=
+formatDate(currentLocation.capturedAtMs);
+
+}
+
+$("serverGpsUpdate").textContent=
+lastServerGpsAt===null
+?"—":formatDate(lastServerGpsAt);
+
+}
+
+// SEND GPS TO BACKEND
+
+async function sendGps(location){
+
+if(!validSession()
+||!driver
+||driver.documentsValid!==true
+||!["online","busy"].includes(
+driver.availability
+)
+||!freshLocation(location)
+||gpsSending
+||Date.now()-lastGpsSent
+<GPS_UPDATE_INTERVAL){
+
+return;
+
+}
+
+const currentGeneration=generation;
+
+gpsSending=true;
+lastGpsSent=Date.now();
+
+try{
+
+const result=await serverCall(
+"updateDriverLocation",
+location
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.accepted!==true){
+
+throw new Error("GPS rejected");
+
+}
+
+lastServerGpsAt=serverNow()||Date.now();
+
+renderLocation();
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+$("gpsStatus").textContent=t.error;
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+gpsSending=false;
+
+}
+
+}
+
+}
+
+// GPS WATCH
+
+function startGps(){
+
+if(gpsWatch!==null
+||!navigator.geolocation
+||!validSession())return;
+
+const currentGeneration=generation;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+position=>{
+
+if(currentGeneration!==generation
+||!validSession()
+||!driver
+||!["online","busy"].includes(
+driver.availability
+))return;
+
+try{
+
+currentLocation=parsePosition(position);
+
+$("gpsStatus").textContent="";
+
+renderLocation();
+
+sendGps(currentLocation);
+
+}catch(e){
+
+$("gpsStatus").textContent=
+t[e.message]||t.gpsError;
+
+}
+
+},
+
+error=>{
+
+if(currentGeneration!==generation)return;
+
+$("gpsStatus").textContent=
+error.code===1
+?t.gpsPermission
+:t.gpsError;
+
+},
+
+{
+enableHighAccuracy:true,
+maximumAge:5000,
+timeout:15000
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// MANUAL GPS REQUEST
+
+function getLocation(){
+
+return new Promise((resolve,reject)=>{
+
+if(!navigator.geolocation){
+
+reject(new Error("gpsError"));
+
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+position=>{
+
+try{
+
+resolve(parsePosition(position));
+
+}catch(e){
+
+reject(e);
+
+}
+
+},
+
+error=>{
+
+reject(
+new Error(
+error.code===1
+?"gpsPermission":"gpsError"
+)
+);
+
+},
+
+{
+enableHighAccuracy:true,
+maximumAge:5000,
+timeout:15000
+}
+
+);
+
+});
+
+}
+
+$("locationButton").onclick=async()=>{
+
+if(!validSession()
+||!driver
+||locationRequestActive
+||refreshing)return;
+
+const currentGeneration=generation;
+
+locationRequestActive=true;
+
+updateControls();
+
+$("gpsStatus").textContent=t.loading;
+
+try{
+
+const location=await getLocation();
+
+if(currentGeneration!==generation)return;
+
+currentLocation=location;
+
+renderLocation();
+
+$("gpsStatus").textContent="";
+
+await sendGps(location);
+
+if(currentGeneration!==generation)return;
+
+await refreshEnvironment(false);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("gpsStatus").textContent=
+t[e.message]||t.gpsError;
+
+}finally{
+
+if(currentGeneration===generation){
+
+locationRequestActive=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// ADMIN FARE SETTINGS
+
+function validFareSettings(data){
+
+if(!data
+||data.published!==true
+||!validId(data.version)
+||!Number.isInteger(data.dayStartMinutes)
+||!Number.isInteger(data.nightStartMinutes)
+||!validNumber(data.dayStartMinutes,0,1439)
+||!validNumber(data.nightStartMinutes,0,1439)
+||data.dayStartMinutes===data.nightStartMinutes
+||!validNumber(data.commissionRate,0,100)
+||!validMoney(data.rainSurchargePerKm)
+||!validMoney(data.difficultRoadSurchargePerKm)
+||!data.vehicles){
+
+return false;
+
+}
+
+const limits=[10,25,50,100,null];
+
+return ["bike","tuk","car","van"].every(type=>{
+
+const vehicle=data.vehicles[type];
+
+if(!vehicle
+||!validMoney(vehicle.minimumFare)
+||!Array.isArray(vehicle.bands)
+||vehicle.bands.length!==5){
+
+return false;
+
+}
+
+const first=vehicle.bands[0];
+
+return vehicle.bands.every((band,index)=>{
+
+return band
+&&band.upToKm===limits[index]
+&&validMoney(band.dayRate)
+&&validMoney(band.nightRate)
+&&validMoney(band.discountPerKm)
+&&band.dayRate+band.discountPerKm
+===first.dayRate
+&&band.nightRate+band.discountPerKm
+===first.nightRate;
+
+});
+
+});
+
+}
+
+function subscribeFareSettings(){
+
+if(fareUnsubscribe){
+
+fareUnsubscribe();
+
+fareUnsubscribe=null;
+
+}
+
+const currentGeneration=generation;
+
+fareUnsubscribe=onSnapshot(
+
+doc(db,"publicSettings","fares"),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites
+||!snapshot.exists()
+||!validFareSettings(snapshot.data())){
+
+fareSettings=null;
+
+renderFares();
+
+return;
+
+}
+
+fareSettings=snapshot.data();
+
+renderFares();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+fareSettings=null;
+
+renderFares();
+
+}
+
+);
+
+}
+
+// WEATHER AND ROAD VALIDATION
+
+function validWeather(data){
+
+return data
+&&validNumber(data.temperature,-50,70)
+&&validNumber(data.precipitationMm,0,1000)
+&&validNumber(data.humidity,0,100)
+&&validNumber(data.windSpeedKmh,0,500)
+&&[
+"clear","cloudy","fog",
+"drizzle","rain","storm","unknown"
+].includes(data.condition)
+&&["rain","dry","unknown"]
+.includes(data.rainStatus)
+&&typeof data.verified==="boolean"
+&&validText(data.source,1,150)
+&&validTime(data.observedAtMs)
+&&validTime(data.validUntilMs)
+&&data.validUntilMs>data.observedAtMs;
+
+}
+
+function validRoad(data){
+
+return data
+&&["normal","difficult","unknown"]
+.includes(data.condition)
+&&[
+"paved","concrete","gravel",
+"dirt","sand","unknown"
+].includes(data.surface)
+&&typeof data.verified==="boolean"
+&&validText(data.source,1,150)
+&&validTime(data.observedAtMs)
+&&validTime(data.validUntilMs)
+&&data.validUntilMs>data.observedAtMs;
+
+}
+
+function freshWeather(){
+
+const now=serverNow();
+
+return now!==null
+&&validWeather(weatherData)
+&&weatherData.observedAtMs<=now+60000
+&&now-weatherData.observedAtMs
+<=WEATHER_MAX_AGE
+&&now<=weatherData.validUntilMs;
+
+}
+
+function freshRoad(){
+
+const now=serverNow();
+
+return now!==null
+&&validRoad(roadData)
+&&roadData.observedAtMs<=now+60000
+&&now-roadData.observedAtMs
+<=ROAD_MAX_AGE
+&&now<=roadData.validUntilMs;
+
+}
+
+// WEATHER DISPLAY
+
+function renderWeather(){
+
+const fields=[
+"temperature",
+"rainfall",
+"humidity",
+"windSpeed",
+"weatherCondition",
+"rainCondition",
+"weatherSource",
+"weatherUpdated"
+];
+
+if(!freshWeather()){
+
+fields.forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+$("weatherWarning").hidden=true;
+
+$("weatherStatus").textContent=
+weatherData?t.stale:t.unknown;
+
+return;
+
+}
+
+const data=weatherData;
+
+$("temperature").textContent=
+data.temperature.toFixed(1)+" °C";
+
+$("rainfall").textContent=
+data.precipitationMm.toFixed(2)+" mm";
+
+$("humidity").textContent=
+data.humidity.toFixed(0)+"%";
+
+$("windSpeed").textContent=
+data.windSpeedKmh.toFixed(1)+" km/h";
+
+$("weatherCondition").textContent=
+t[data.condition];
+
+$("rainCondition").textContent=
+data.verified
+?t[data.rainStatus]
+:t.unverified;
+
+$("weatherSource").textContent=
+data.source;
+
+$("weatherUpdated").textContent=
+formatDate(data.observedAtMs);
+
+$("weatherStatus").textContent=
+data.verified?t.verified:t.unverified;
+
+const warnings=[];
+
+if(data.condition==="storm"){
+
+warnings.push(t.stormWarning);
+
+}
+
+if(data.windSpeedKmh>=50){
+
+warnings.push(t.windWarning);
+
+}
+
+if(data.rainStatus==="rain"){
+
+warnings.push(t.rainWarning);
+
+}
+
+$("weatherWarning").textContent=
+warnings.join(" ");
+
+$("weatherWarning").hidden=
+warnings.length===0;
+
+}
+
+// ROAD DISPLAY
+
+function renderRoad(){
+
+if(!freshRoad()){
+
+[
+"roadCondition",
+"roadSurface",
+"roadVerification",
+"roadSource",
+"roadUpdated"
+].forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+$("roadWarning").hidden=true;
+
+return;
+
+}
+
+const data=roadData;
+
+$("roadCondition").textContent=
+data.verified
+?t[data.condition]
+:t.unknown;
+
+$("roadSurface").textContent=
+t[data.surface];
+
+$("roadVerification").textContent=
+data.verified
+?t.verified:t.unverified;
+
+$("roadVerification").className=
+data.verified?"green":"yellow";
+
+$("roadSource").textContent=
+data.source;
+
+$("roadUpdated").textContent=
+formatDate(data.observedAtMs);
+
+$("roadWarning").hidden=
+!(data.verified
+&&data.condition==="difficult");
+
+}
+
+// FARE DISPLAY
+
+function clearFares(){
+
+[
+"baseRate",
+"rainCharge",
+"roadCharge",
+"currentRate",
+"minimumFare",
+"commissionRate",
+"fareVersion",
+"dayHours",
+"nightHours"
+].forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+$("fareTable").replaceChildren();
+
+}
+
+function renderFareTable(vehicle){
+
+const table=$("fareTable");
+
+table.replaceChildren();
+
+const ranges=[
+"0–10",
+"10–25",
+"25–50",
+"50–100",
+"100+"
+];
+
+vehicle.bands.forEach((band,index)=>{
+
+const row=document.createElement("tr");
+
+[
+ranges[index],
+money(band.dayRate),
+money(band.nightRate),
+money(band.discountPerKm)
+].forEach(value=>{
+
+const cell=document.createElement("td");
+
+cell.textContent=value;
+
+row.appendChild(cell);
+
+});
+
+table.appendChild(row);
+
+});
+
+}
+
+function renderFares(){
+
+if(!fareSettings
+||!driver
+||!validFareSettings(fareSettings)){
+
+clearFares();
+
+$("fareStatus").textContent=
+t.fareUnavailable;
+
+return;
+
+}
+
+const vehicle=
+fareSettings.vehicles[driver.vehicleType];
+
+if(!vehicle){
+
+clearFares();
+
+$("fareStatus").textContent=
+t.fareUnavailable;
+
+return;
+
+}
+
+$("minimumFare").textContent=
+money(vehicle.minimumFare);
+
+$("commissionRate").textContent=
+fareSettings.commissionRate+"%";
+
+$("fareVersion").textContent=
+fareSettings.version;
+
+$("dayHours").textContent=
+formatMinutes(fareSettings.dayStartMinutes)
++" – "+
+formatMinutes(fareSettings.nightStartMinutes);
+
+$("nightHours").textContent=
+formatMinutes(fareSettings.nightStartMinutes)
++" – "+
+formatMinutes(fareSettings.dayStartMinutes);
+
+renderFareTable(vehicle);
+
+const period=getPeriod();
+
+if(!period){
+
+[
+"baseRate",
+"rainCharge",
+"roadCharge",
+"currentRate"
+].forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+$("fareStatus").textContent=t.stale;
+
+return;
+
+}
+
+const firstBand=vehicle.bands[0];
+
+const baseRate=period==="day"
+?firstBand.dayRate
+:firstBand.nightRate;
+
+const rainVerified=
+freshWeather()
+&&weatherData.verified
+&&weatherData.rainStatus==="rain";
+
+const difficultVerified=
+freshRoad()
+&&roadData.verified
+&&roadData.condition==="difficult";
+
+const rainCharge=rainVerified
+?fareSettings.rainSurchargePerKm
+:0;
+
+const roadCharge=difficultVerified
+?fareSettings.difficultRoadSurchargePerKm
+:0;
+
+const totalRate=Math.round(
+(baseRate+rainCharge+roadCharge)*100
+)/100;
+
+$("baseRate").textContent=money(baseRate);
+
+$("rainCharge").textContent=
+money(rainCharge);
+
+$("roadCharge").textContent=
+money(roadCharge);
+
+$("currentRate").textContent=
+money(totalRate);
+
+const weatherKnown=
+freshWeather()
+&&weatherData.verified
+&&weatherData.rainStatus!=="unknown";
+
+const roadKnown=
+freshRoad()
+&&roadData.verified
+&&roadData.condition!=="unknown";
+
+$("fareStatus").textContent=
+weatherKnown&&roadKnown
+?"":t.unverified;
+
+}
+
+// REFRESH ENVIRONMENT
+
+async function refreshEnvironment(
+requestNewLocation=true
+){
+
+if(!validSession()
+||!driver
+||refreshing)return;
+
+const currentGeneration=generation;
+
+const requestGeneration=++refreshGeneration;
+
+refreshing=true;
+
+updateControls();
+
+$("weatherStatus").textContent=t.loading;
+
+try{
+
+await syncServerTime();
+
+if(currentGeneration!==generation)return;
+
+if(requestNewLocation
+||!freshLocation(currentLocation)){
+
+const location=await getLocation();
+
+if(currentGeneration!==generation)return;
+
+currentLocation=location;
+
+}
+
+if(!freshLocation(currentLocation)){
+
+throw new Error("gpsError");
+
+}
+
+const requestedLocation={
+...currentLocation
+};
+
+renderLocation();
+
+await sendGps(requestedLocation);
+
+if(currentGeneration!==generation)return;
+
+const result=await serverCall(
+"getDriverWeatherRoad",
+{
+location:requestedLocation
+}
+);
+
+if(currentGeneration!==generation
+||requestGeneration!==refreshGeneration
+||!driver)return;
+
+if(result?.success!==true
+||result.driverUid!==uid
+||!validTime(result.generatedAtMs)
+||!(
+result.weather===null
+||validWeather(result.weather)
+)
+||!(
+result.road===null
+||validRoad(result.road)
+)){
+
+throw new Error("Invalid environment data");
+
+}
+
+const now=serverNow();
+
+if(now===null
+||result.generatedAtMs>now+60000
+||now-result.generatedAtMs>300000){
+
+throw new Error("Expired response");
+
+}
+
+weatherData=result.weather;
+roadData=result.road;
+
+environmentLocation=requestedLocation;
+
+lastRefreshAt=result.generatedAtMs;
+
+$("lastUpdate").textContent=
+formatDate(lastRefreshAt);
+
+renderWeather();
+
+renderRoad();
+
+renderFares();
+
+}catch(e){
+
+if(currentGeneration!==generation
+||requestGeneration!==refreshGeneration){
+
+return;
+
+}
+
+weatherData=null;
+roadData=null;
+environmentLocation=null;
+
+lastRefreshAt=null;
+
+$("lastUpdate").textContent="—";
+
+renderWeather();
+renderRoad();
+renderFares();
+
+$("weatherStatus").textContent=
+t[e.message]||t.error;
+
+}finally{
+
+if(currentGeneration===generation
+&&requestGeneration===refreshGeneration){
+
+refreshing=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("refreshButton").onclick=()=>{
+
+refreshEnvironment(true);
+
+};
+
+// LOCATION CHANGE VALIDATION
+
+let environmentLocation=null;
+
+function distanceBetween(a,b){
+
+const radians=value=>value*Math.PI/180;
+
+const dLat=radians(b.lat-a.lat);
+
+const dLon=radians(b.lon-a.lon);
+
+const x=
+Math.sin(dLat/2)**2
++Math.cos(radians(a.lat))
+*Math.cos(radians(b.lat))
+*Math.sin(dLon/2)**2;
+
+return 6371000*2*Math.asin(
+Math.sqrt(Math.min(1,Math.max(0,x)))
+);
+
+}
+
+function checkLocationChange(){
+
+if(!environmentLocation
+||!freshLocation(currentLocation)){
+
+return;
+
+}
+
+const distance=distanceBetween(
+environmentLocation,
+currentLocation
+);
+
+if(distance>250){
+
+roadData=null;
+
+renderRoad();
+
+renderFares();
+
+}
+
+if(distance>2000){
+
+weatherData=null;
+
+renderWeather();
+
+renderFares();
+
+}
+
+}
+
+// CONTROL SECURITY
+
+function updateControls(){
+
+const enabled=
+validSession()&&driver!==null;
+
+$("locationButton").disabled=
+!enabled
+||refreshing
+||locationRequestActive;
+
+$("refreshButton").disabled=
+!enabled
+||refreshing
+||locationRequestActive;
+
+}
+
+// CLEAR PRIVATE DATA
+
+function clearEnvironment(){
+
+refreshGeneration++;
+
+weatherData=null;
+roadData=null;
+fareSettings=null;
+
+currentLocation=null;
+environmentLocation=null;
+
+lastRefreshAt=null;
+lastServerGpsAt=null;
+
+refreshing=false;
+locationRequestActive=false;
+
+renderLocation();
+renderWeather();
+renderRoad();
+clearFares();
+
+$("lastUpdate").textContent="—";
+
+$("sriLankaTime").textContent="—";
+
+$("currentPeriod").textContent="—";
+
+$("gpsStatus").textContent="";
+
+$("weatherStatus").textContent="";
+
+$("fareStatus").textContent="";
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+if(fareUnsubscribe){
+
+fareUnsubscribe();
+
+fareUnsubscribe=null;
+
+}
+
+stopGps();
+
+gpsSending=false;
+lastGpsSent=0;
+
+serverOffset=null;
+serverSyncAt=0;
+
+checkingSession=false;
+
+clearEnvironment();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("vehicleType").textContent="—";
+
+$("availability").textContent="—";
+
+$("content").hidden=true;
+
+$("accessPanel").hidden=true;
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps();
+
+if(fareUnsubscribe){
+
+fareUnsubscribe();
+
+fareUnsubscribe=null;
+
+}
+
+clearEnvironment();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+||data.uid!==uid
+||data.status!=="approved"
+||data.activationComplete!==true
+||data.documentsValid!==true
+||!validText(data.fullName,1,150)
+||!validId(data.driverId)
+||!["bike","tuk","car","van"]
+.includes(data.vehicleType)
+||!["online","offline","busy"]
+.includes(data.availability)){
+
+denyAccess();
+
+return;
+
+}
+
+const firstLoad=driver===null;
+
+driver=data;
+
+$("driverName").textContent=
+data.fullName;
+
+$("driverId").textContent=
+data.driverId;
+
+$("vehicleType").textContent=
+t[data.vehicleType];
+
+$("availability").textContent=
+t[data.availability];
+
+$("availability").className=
+data.availability==="online"
+?"green"
+:data.availability==="busy"
+?"yellow":"red";
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(
+data.availability
+)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(firstLoad){
+
+subscribeFareSettings();
+
+refreshEnvironment(true);
+
+}
+
+renderFares();
+
+status("");
+
+updateControls();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.connectionLost);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+functions,
+"verifyDriverSession"
+)({});
+
+if(currentGeneration!==generation
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+||account.uid!==user.uid
+||account.status!=="approved"
+||account.activationComplete!==true
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC CLOCK AND DATA EXPIRY
+
+setInterval(()=>{
+
+if(!validSession()||!driver)return;
+
+renderClock();
+
+renderLocation();
+
+checkLocationChange();
+
+if(!refreshing){
+
+renderWeather();
+renderRoad();
+renderFares();
+
+}
+
+},1000);
+
+// AUTOMATIC WEATHER UPDATE
+
+setInterval(()=>{
+
+if(!validSession()
+||!driver
+||refreshing
+||locationRequestActive
+||document.hidden)return;
+
+refreshEnvironment(true);
+
+},300000);
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+||!driver
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+"verifyDriverSession"
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+||result.uid!==uid
+||result.status!=="approved"
+||result.activationComplete!==true
+||result.documentsValid!==true){
+
+denyAccess();
+
+return;
+
+}
+
+try{
+
+await syncServerTime();
+
+}catch(e){
+
+serverOffset=null;
+
+}
+
+if(currentGeneration!==generation)return;
+
+renderClock();
+renderWeather();
+renderRoad();
+renderFares();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+if(currentGeneration===generation){
+
+checkingSession=false;
+
+}
+
+}
+
+},60000);
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.connectionLost);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE VISIBILITY
+
+document.addEventListener(
+"visibilitychange",
+()=>{
+
+if(document.hidden
+||!validSession()
+||!driver
+||refreshing
+||locationRequestActive){
+
+return;
+
+}
+
+const now=serverNow();
+
+if(now===null
+||lastRefreshAt===null
+||now-lastRefreshAt>=300000){
+
+refreshEnvironment(true);
+
+}
+
+}
+
+);
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+"pagehide",
+disconnect
+);
+
+window.addEventListener(
+"pageshow",
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+);
+
+updateControls();
+
+</script>
+
+</body>
+</html>
