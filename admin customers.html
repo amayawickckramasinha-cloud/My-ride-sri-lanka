@@ -1,0 +1,3486 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Customer Management</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111111;
+color:#ffffff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:950px;
+margin:auto;
+padding:16px;
+}
+
+header{
+text-align:center;
+padding:15px 0;
+}
+
+h1{
+color:#FFD600;
+font-size:38px;
+margin:8px 0;
+}
+
+.country{
+color:#FFD600;
+letter-spacing:5px;
+font-size:13px;
+}
+
+h2{
+font-size:23px;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.statsGrid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border:1px solid #444;
+border-radius:10px;
+padding:15px;
+}
+
+.stat span{
+display:block;
+color:#CCC;
+font-size:13px;
+line-height:1.7;
+}
+
+.stat strong{
+display:block;
+color:#FFD600;
+font-size:25px;
+margin-top:10px;
+}
+
+input,select,textarea{
+width:100%;
+background:#292929;
+color:#fff;
+border:1px solid #666;
+border-radius:8px;
+padding:13px;
+font-size:16px;
+margin:8px 0 15px;
+font-family:inherit;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+label{
+display:block;
+font-size:14px;
+line-height:1.8;
+}
+
+.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-weight:bold;
+font-size:14px;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.danger{
+background:#A51D2D;
+color:#fff;
+}
+
+.success{
+background:#15803D;
+color:#fff;
+}
+
+.customerCard{
+background:#292929;
+border:1px solid #555;
+border-radius:12px;
+padding:15px;
+margin:12px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+border-bottom:1px solid #444;
+padding:11px 0;
+font-size:14px;
+line-height:1.8;
+}
+
+.row strong{
+max-width:60%;
+text-align:right;
+overflow-wrap:anywhere;
+white-space:pre-wrap;
+}
+
+.green{
+color:#4ADE80!important;
+}
+
+.red{
+color:#FF6464!important;
+}
+
+.yellow{
+color:#FFD600!important;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:14px;
+margin:12px 0;
+line-height:1.8;
+}
+
+.notice{
+background:#302C17;
+border:1px solid #FFD600;
+border-radius:10px;
+padding:14px;
+margin:12px 0;
+line-height:1.8;
+}
+
+.languageGrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+.languageButton{
+background:#292929;
+color:#FFD600;
+border:1px solid #FFD600;
+border-radius:7px;
+padding:12px 4px;
+cursor:pointer;
+}
+
+.languageButton.selected{
+background:#FFD600;
+color:#111;
+}
+
+.tabs{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:8px;
+}
+
+.tab{
+background:#292929;
+color:#FFD600;
+border:1px solid #FFD600;
+border-radius:8px;
+padding:12px 5px;
+font-size:13px;
+cursor:pointer;
+}
+
+.tab.selected{
+background:#FFD600;
+color:#111;
+font-weight:bold;
+}
+
+.record{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:12px;
+margin:10px 0;
+}
+
+.note{
+color:#BBB;
+font-size:13px;
+line-height:1.8;
+}
+
+#status,#listStatus,#detailStatus,
+#historyStatus,#actionStatus{
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#999;
+font-size:12px;
+padding:25px 0;
+}
+
+[hidden]{
+display:none!important;
+}
+
+@media(min-width:700px){
+
+.statsGrid{
+grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+.tabs{
+grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<header>
+
+<h1>MY RIDE</h1>
+
+<div class="country">SRI LANKA</div>
+
+<h2 data-t="heading">
+Customer Management
+</h2>
+
+</header>
+
+<div class="languageGrid">
+
+<button class="languageButton"
+data-lang="si">සිංහල</button>
+
+<button class="languageButton"
+data-lang="en">English</button>
+
+<button class="languageButton"
+data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+class="yellow"
+role="status"
+aria-live="polite">
+
+Checking owner authorization...
+
+</p>
+
+<section id="deniedPanel"
+class="panel" hidden>
+
+<div class="warning"
+data-t="denied"></div>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+<button id="retryButton"
+class="action secondary"
+data-t="refresh"></button>
+
+</section>
+
+<div id="content" hidden>
+
+<a id="dashboardLink"
+class="action secondary"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="overview"></h3>
+
+<div id="statsGrid"
+class="statsGrid"></div>
+
+<p id="updatedAt"
+class="note"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="searchCustomers"></h3>
+
+<form id="searchForm">
+
+<label for="searchText"
+data-t="searchLabel"></label>
+
+<input id="searchText"
+type="search"
+maxlength="100"
+autocomplete="off">
+
+<label for="statusFilter"
+data-t="accountStatus"></label>
+
+<select id="statusFilter">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="active"
+data-t="active"></option>
+
+<option value="blocked"
+data-t="blocked"></option>
+
+</select>
+
+<button type="submit"
+id="searchButton"
+class="action"
+data-t="search"></button>
+
+<button type="button"
+id="clearButton"
+class="action secondary"
+data-t="clear"></button>
+
+</form>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="customerList"></h3>
+
+<p id="listStatus"
+class="note"
+role="status"></p>
+
+<div id="customerList"></div>
+
+<button id="loadMore"
+class="action secondary"
+data-t="loadMore"
+hidden></button>
+
+</section>
+
+<section id="customerDetails"
+class="panel" hidden>
+
+<h3 data-t="customerDetails"></h3>
+
+<button id="closeDetails"
+class="action secondary"
+data-t="close"></button>
+
+<p id="detailStatus"
+role="status"></p>
+
+<div id="profileData"></div>
+
+<div id="contactButtons" hidden>
+
+<a id="callCustomer"
+class="action success"
+data-t="call"></a>
+
+<a id="whatsappCustomer"
+class="action success"
+target="_blank"
+rel="noopener noreferrer"
+data-t="whatsapp"></a>
+
+</div>
+
+<div id="detailTabs"
+class="tabs" hidden>
+
+<button class="tab"
+data-tab="profile"
+data-t="profile"></button>
+
+<button class="tab"
+data-tab="rides"
+data-t="rideHistory"></button>
+
+<button class="tab"
+data-tab="payments"
+data-t="paymentHistory"></button>
+
+<button class="tab"
+data-tab="complaints"
+data-t="complaints"></button>
+
+</div>
+
+<p id="historyStatus"
+class="note"
+role="status"></p>
+
+<div id="historyRecords"></div>
+
+<button id="moreHistory"
+class="action secondary"
+data-t="loadMore"
+hidden></button>
+
+<section id="accountControl" hidden>
+
+<h3 data-t="accountControl"></h3>
+
+<div id="accountWarning"
+class="notice"></div>
+
+<button id="blockButton"
+class="action danger"
+data-t="block"></button>
+
+<button id="unblockButton"
+class="action success"
+data-t="unblock"></button>
+
+<form id="accountForm" hidden>
+
+<label for="reason"
+data-t="reason"></label>
+
+<textarea id="reason"
+minlength="10"
+maxlength="500"
+required></textarea>
+
+<p id="confirmInstruction"
+class="note"></p>
+
+<input id="confirmText"
+maxlength="20"
+autocomplete="off"
+required>
+
+<button id="confirmAction"
+type="submit"
+class="action danger"
+data-t="confirm"></button>
+
+<button id="cancelAction"
+type="button"
+class="action secondary"
+data-t="cancel"></button>
+
+</form>
+
+<p id="actionStatus"
+role="status"></p>
+
+</section>
+
+</section>
+
+<button id="refreshButton"
+class="action"
+data-t="refresh"></button>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const LANGUAGES=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_admin_language")
+||"si";
+
+}catch(e){}
+
+const params=new URLSearchParams(location.search);
+
+let lang=
+
+LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+// LANGUAGE SYSTEM
+
+const translations={
+
+si:{
+
+heading:"පාරිභෝගික කළමනාකරණය",
+overview:"පාරිභෝගික සංඛ්‍යාලේඛන",
+totalCustomers:"මුළු පාරිභෝගිකයන්",
+activeCustomers:"සක්‍රිය ගිණුම්",
+blockedCustomers:"අවහිර කළ ගිණුම්",
+newCustomersToday:"අද නව පාරිභෝගිකයන්",
+searchCustomers:"පාරිභෝගිකයන් සොයන්න",
+searchLabel:"නම / දුරකථන අංකය / Customer ID",
+accountStatus:"ගිණුමේ තත්ත්වය",
+all:"සියල්ල",
+active:"සක්‍රියයි",
+blocked:"අවහිර කර ඇත",
+search:"සොයන්න",
+clear:"සෙවුම ඉවත් කරන්න",
+customerList:"පාරිභෝගික ලැයිස්තුව",
+customerDetails:"පාරිභෝගික විස්තර",
+customerId:"පාරිභෝගික ID",
+name:"සම්පූර්ණ නම",
+phone:"දුරකථන අංකය",
+whatsappNumber:"WhatsApp අංකය",
+language:"භාෂාව",
+registeredAt:"ලියාපදිංචි දිනය",
+totalRides:"මුළු හයර්",
+completedRides:"අවසන් කළ හයර්",
+totalPaid:"මුළු ගෙවූ මුදල",
+outstanding:"ගෙවීමට ඉතිරි මුදල",
+complaintCount:"පැමිණිලි සංඛ්‍යාව",
+activeRide:"ක්‍රියාත්මක හයර්",
+view:"විස්තර බලන්න",
+close:"විස්තර වසන්න",
+call:"පාරිභෝගිකයාට අමතන්න",
+whatsapp:"WhatsApp පණිවිඩයක් යවන්න",
+profile:"ගිණුම් විස්තර",
+rideHistory:"හයර් වාර්තා",
+paymentHistory:"ගෙවීම් වාර්තා",
+complaints:"අදහස් සහ පැමිණිලි",
+accountControl:"ගිණුම් පාලනය",
+block:"ගිණුම අවහිර කරන්න",
+unblock:"ගිණුම නැවත සක්‍රිය කරන්න",
+reason:"තීරණයට හේතුව",
+confirm:"තහවුරු කරන්න",
+cancel:"අවලංගු කරන්න",
+refresh:"යාවත්කාලීන කරන්න",
+back:"Admin Dashboard වෙත",
+login:"Owner Admin Login",
+denied:"හිමිකරුගේ ප්‍රවේශ අවසරය තහවුරු කර නොමැත.",
+checking:"ආරක්ෂක අවසර පරීක්ෂා කරමින්...",
+loading:"Server දත්ත ලබාගනිමින්...",
+verified:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+error:"Server දත්ත ලබාගත නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+noRecords:"වාර්තා හමු නොවීය.",
+loadMore:"තවත් වාර්තා බලන්න",
+updated:"අවසන් යාවත්කාලීන කිරීම",
+bookingId:"Booking ID",
+pickup:"ගමන ආරම්භ කරන ස්ථානය",
+destination:"ගමනාන්තය",
+vehicle:"වාහනය",
+passengers:"මගීන් සංඛ්‍යාව",
+date:"දිනය සහ වේලාව",
+distance:"ගමන් දුර",
+duration:"ගමන් කාලය",
+fare:"අවසන් ගාස්තුව",
+paymentId:"ගෙවීම් ID",
+amount:"මුදල",
+paidAmount:"ගෙවූ මුදල",
+method:"ගෙවීම් ක්‍රමය",
+reference:"Reference අංකය",
+complaintId:"පැමිණිලි ID",
+type:"වර්ගය",
+message:"පණිවිඩය",
+adminReply:"Admin පිළිතුර",
+status:"තත්ත්වය",
+blockReason:"අවහිර කිරීමට හේතුව",
+yes:"ඔව්",
+no:"නැහැ",
+blockNotice:"ගිණුම අවහිර කිරීමෙන් නව හයර් ඉල්ලීම් නතර කළ යුතුය. දැනට ක්‍රියාත්මක ගමනක ආරක්ෂිත සේවා නතර නොකළ යුතුය.",
+unblockNotice:"ගිණුම නැවත සක්‍රිය කිරීමෙන් පාරිභෝගිකයාට අදාළ සේවා භාවිතා කළ හැක.",
+typeBlock:"තහවුරු කිරීමට BLOCK ලෙස ඇතුළත් කරන්න.",
+typeUnblock:"තහවුරු කිරීමට UNBLOCK ලෙස ඇතුළත් කරන්න.",
+reauth:"Google ගිණුම නැවත තහවුරු කරන්න.",
+actionSuccess:"Server විසින් ගිණුමේ වෙනස් කිරීම තහවුරු කර ඇත.",
+actionError:"වෙනස් කිරීම තහවුරු කළ නොහැක. නැවත පරීක්ෂා කරන්න.",
+invalidReason:"හේතුව අක්ෂර 10–500 අතර ඇතුළත් කරන්න.",
+cash:"මුදල්",
+bank:"බැංකු හුවමාරු",
+paid:"ගෙවා ඇත",
+unpaid:"ගෙවා නැත",
+pending:"පරීක්ෂාවට ඇත",
+partial:"කොටසක් ගෙවා ඇත",
+rejected:"ප්‍රතික්ෂේප කර ඇත",
+completed:"අවසන් කර ඇත",
+cancelled:"අවලංගු කර ඇත",
+scheduled:"වෙන්කර ඇත",
+accepted:"පිළිගෙන ඇත",
+arrived:"පැමිණ ඇත",
+searching:"රියදුරන් සොයමින්",
+confirmed:"තහවුරු කර ඇත",
+offered:"රියදුරු වෙත යොමු කර ඇත",
+no_driver:"රියදුරෙකු හමු නොවීය",
+new:"අලුත්",
+in_progress:"පරීක්ෂා කරමින්",
+resolved:"විසඳා ඇත",
+closed:"වසන ලදී",
+feedback:"අදහස්",
+complaint:"පැමිණිල්ල",
+question:"ප්‍රශ්නය",
+bike:"Scooter / Bike",
+tuk:"ත්‍රීරෝද රථය",
+car:"මෝටර් රථය",
+van:"වෑන් රථය",
+si:"සිංහල",
+en:"English",
+ta:"தமிழ்",
+unknown:"තහවුරු කර නැත"
+
+},
+
+en:{
+
+heading:"Customer Management",
+overview:"Customer Statistics",
+totalCustomers:"Total Customers",
+activeCustomers:"Active Accounts",
+blockedCustomers:"Blocked Accounts",
+newCustomersToday:"New Customers Today",
+searchCustomers:"Search Customers",
+searchLabel:"Name / Phone Number / Customer ID",
+accountStatus:"Account Status",
+all:"All",
+active:"Active",
+blocked:"Blocked",
+search:"Search",
+clear:"Clear Search",
+customerList:"Customer List",
+customerDetails:"Customer Details",
+customerId:"Customer ID",
+name:"Full Name",
+phone:"Phone Number",
+whatsappNumber:"WhatsApp Number",
+language:"Language",
+registeredAt:"Registration Date",
+totalRides:"Total Rides",
+completedRides:"Completed Rides",
+totalPaid:"Total Paid",
+outstanding:"Outstanding Payments",
+complaintCount:"Complaint Count",
+activeRide:"Active Ride",
+view:"View Details",
+close:"Close Details",
+call:"Call Customer",
+whatsapp:"Message Customer on WhatsApp",
+profile:"Account Details",
+rideHistory:"Ride History",
+paymentHistory:"Payment History",
+complaints:"Feedback & Complaints",
+accountControl:"Account Control",
+block:"Block Account",
+unblock:"Unblock Account",
+reason:"Reason for this decision",
+confirm:"Confirm",
+cancel:"Cancel",
+refresh:"Refresh",
+back:"Back to Admin Dashboard",
+login:"Owner Admin Login",
+denied:"Owner authorization has not been verified.",
+checking:"Verifying security permissions...",
+loading:"Loading server data...",
+verified:"Owner authorization verified.",
+error:"Unable to retrieve server data.",
+offline:"No internet connection.",
+noRecords:"No records found.",
+loadMore:"Load More",
+updated:"Last Updated",
+bookingId:"Booking ID",
+pickup:"Pickup Location",
+destination:"Destination",
+vehicle:"Vehicle",
+passengers:"Passengers",
+date:"Date and Time",
+distance:"Trip Distance",
+duration:"Trip Duration",
+fare:"Final Fare",
+paymentId:"Payment ID",
+amount:"Amount",
+paidAmount:"Paid Amount",
+method:"Payment Method",
+reference:"Reference Number",
+complaintId:"Complaint ID",
+type:"Type",
+message:"Message",
+adminReply:"Admin Reply",
+status:"Status",
+blockReason:"Blocking Reason",
+yes:"Yes",
+no:"No",
+blockNotice:"Blocking must prevent new bookings without disabling essential safety functions for an ongoing ride.",
+unblockNotice:"Unblocking restores eligible customer services.",
+typeBlock:"Type BLOCK to confirm.",
+typeUnblock:"Type UNBLOCK to confirm.",
+reauth:"Verify your Google account again.",
+actionSuccess:"The server confirmed the account change.",
+actionError:"Unable to confirm the change. Refresh and check.",
+invalidReason:"Enter a reason containing 10–500 characters.",
+cash:"Cash",
+bank:"Bank Transfer",
+paid:"Paid",
+unpaid:"Unpaid",
+pending:"Pending",
+partial:"Partially Paid",
+rejected:"Rejected",
+completed:"Completed",
+cancelled:"Cancelled",
+scheduled:"Scheduled",
+accepted:"Accepted",
+arrived:"Arrived",
+searching:"Searching",
+confirmed:"Confirmed",
+offered:"Offered",
+no_driver:"No Driver Found",
+new:"New",
+in_progress:"In Progress",
+resolved:"Resolved",
+closed:"Closed",
+feedback:"Feedback",
+complaint:"Complaint",
+question:"Question",
+bike:"Scooter / Bike",
+tuk:"Three Wheeler",
+car:"Car",
+van:"Van",
+si:"සිංහල",
+en:"English",
+ta:"தமிழ்",
+unknown:"Not Verified"
+
+},
+
+ta:{
+
+heading:"வாடிக்கையாளர் நிர்வாகம்",
+overview:"வாடிக்கையாளர் புள்ளிவிவரங்கள்",
+totalCustomers:"மொத்த வாடிக்கையாளர்கள்",
+activeCustomers:"செயலில் உள்ள கணக்குகள்",
+blockedCustomers:"தடுக்கப்பட்ட கணக்குகள்",
+newCustomersToday:"இன்றைய புதிய வாடிக்கையாளர்கள்",
+searchCustomers:"வாடிக்கையாளர்களை தேடவும்",
+searchLabel:"பெயர் / தொலைபேசி எண் / வாடிக்கையாளர் ID",
+accountStatus:"கணக்கு நிலை",
+all:"அனைத்தும்",
+active:"செயலில்",
+blocked:"தடுக்கப்பட்டது",
+search:"தேடவும்",
+clear:"தேடலை நீக்கவும்",
+customerList:"வாடிக்கையாளர் பட்டியல்",
+customerDetails:"வாடிக்கையாளர் விவரங்கள்",
+customerId:"வாடிக்கையாளர் ID",
+name:"முழுப் பெயர்",
+phone:"தொலைபேசி எண்",
+whatsappNumber:"WhatsApp எண்",
+language:"மொழி",
+registeredAt:"பதிவு தேதி",
+totalRides:"மொத்த பயணங்கள்",
+completedRides:"முடிக்கப்பட்ட பயணங்கள்",
+totalPaid:"செலுத்திய மொத்த தொகை",
+outstanding:"நிலுவை கட்டணங்கள்",
+complaintCount:"முறைப்பாடுகளின் எண்ணிக்கை",
+activeRide:"தற்போதைய பயணம்",
+view:"விவரங்களை பார்க்கவும்",
+close:"விவரங்களை மூடவும்",
+call:"வாடிக்கையாளரை அழைக்கவும்",
+whatsapp:"WhatsApp செய்தி அனுப்பவும்",
+profile:"கணக்கு விவரங்கள்",
+rideHistory:"பயண வரலாறு",
+paymentHistory:"கட்டண வரலாறு",
+complaints:"கருத்துகள் மற்றும் முறைப்பாடுகள்",
+accountControl:"கணக்கு கட்டுப்பாடு",
+block:"கணக்கை தடுக்கவும்",
+unblock:"கணக்கை மீண்டும் செயல்படுத்தவும்",
+reason:"முடிவுக்கான காரணம்",
+confirm:"உறுதிப்படுத்தவும்",
+cancel:"ரத்து செய்யவும்",
+refresh:"புதுப்பிக்கவும்",
+back:"நிர்வாக முதன்மைப் பக்கத்திற்கு",
+login:"உரிமையாளர் உள்நுழைவு",
+denied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+checking:"பாதுகாப்பு அனுமதி சரிபார்க்கப்படுகிறது...",
+loading:"சேவையக தரவு பெறப்படுகிறது...",
+verified:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+error:"சேவையக தரவை பெற முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+noRecords:"பதிவுகள் கிடைக்கவில்லை.",
+loadMore:"மேலும் பதிவுகள்",
+updated:"கடைசி புதுப்பிப்பு",
+bookingId:"முன்பதிவு ID",
+pickup:"பயண ஆரம்ப இடம்",
+destination:"செல்லும் இடம்",
+vehicle:"வாகனம்",
+passengers:"பயணிகள்",
+date:"தேதி மற்றும் நேரம்",
+distance:"பயண தூரம்",
+duration:"பயண நேரம்",
+fare:"இறுதி கட்டணம்",
+paymentId:"கட்டண ID",
+amount:"தொகை",
+paidAmount:"செலுத்திய தொகை",
+method:"கட்டண முறை",
+reference:"குறிப்பு எண்",
+complaintId:"முறைப்பாடு ID",
+type:"வகை",
+message:"செய்தி",
+adminReply:"நிர்வாக பதில்",
+status:"நிலை",
+blockReason:"தடுத்ததற்கான காரணம்",
+yes:"ஆம்",
+no:"இல்லை",
+blockNotice:"கணக்கை தடுப்பதால் புதிய முன்பதிவுகள் நிறுத்தப்பட வேண்டும். தற்போதைய பயணத்தின் பாதுகாப்பு சேவைகள் தொடர வேண்டும்.",
+unblockNotice:"கணக்கை மீண்டும் செயல்படுத்துவதால் தகுதியான சேவைகளை பயன்படுத்த முடியும்.",
+typeBlock:"உறுதிப்படுத்த BLOCK என உள்ளிடவும்.",
+typeUnblock:"உறுதிப்படுத்த UNBLOCK என உள்ளிடவும்.",
+reauth:"Google கணக்கை மீண்டும் உறுதிப்படுத்தவும்.",
+actionSuccess:"கணக்கு மாற்றம் சேவையகத்தால் உறுதிப்படுத்தப்பட்டது.",
+actionError:"மாற்றத்தை உறுதிப்படுத்த முடியவில்லை.",
+invalidReason:"10–500 எழுத்துகளுடன் காரணத்தை உள்ளிடவும்.",
+cash:"பணம்",
+bank:"வங்கி பரிமாற்றம்",
+paid:"செலுத்தப்பட்டது",
+unpaid:"செலுத்தப்படவில்லை",
+pending:"நிலுவையில்",
+partial:"பகுதி செலுத்தப்பட்டது",
+rejected:"நிராகரிக்கப்பட்டது",
+completed:"முடிக்கப்பட்டது",
+cancelled:"ரத்து செய்யப்பட்டது",
+scheduled:"திட்டமிடப்பட்டது",
+accepted:"ஏற்கப்பட்டது",
+arrived:"வந்தடைந்தது",
+searching:"தேடப்படுகிறது",
+confirmed:"உறுதிப்படுத்தப்பட்டது",
+offered:"வழங்கப்பட்டது",
+no_driver:"சாரதி கிடைக்கவில்லை",
+new:"புதியது",
+in_progress:"செயல்பாட்டில்",
+resolved:"தீர்க்கப்பட்டது",
+closed:"மூடப்பட்டது",
+feedback:"கருத்து",
+complaint:"முறைப்பாடு",
+question:"கேள்வி",
+bike:"Scooter / Bike",
+tuk:"முச்சக்கர வண்டி",
+car:"கார்",
+van:"வேன்",
+si:"සිංහල",
+en:"English",
+ta:"தமிழ்",
+unknown:"உறுதிப்படுத்தப்படவில்லை"
+
+}
+
+};
+
+let t=translations[lang];
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+const APP_CHECK_SITE_KEY=
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa";
+
+let app=null;
+let auth=null;
+let db=null;
+let functions=null;
+let appCheck=null;
+
+let uid=null;
+let authorized=false;
+let generation=0;
+let verifying=false;
+let actionBusy=false;
+let listBusy=false;
+let historyBusy=false;
+
+let overviewData=null;
+let overviewUnsubscribe=null;
+
+let customers=[];
+let nextCursor=null;
+let listGeneration=0;
+
+let currentFilters={
+
+search:"",
+status:"all"
+
+};
+
+let selectedCustomer=null;
+let selectedUid=null;
+let detailGeneration=0;
+
+let currentTab="profile";
+let historyRecords=[];
+let historyCursor=null;
+let historyGeneration=0;
+
+let pendingAction=null;
+let accountAction=null;
+
+let statusKey="checking";
+
+// VALIDATION
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,max=500){
+
+return typeof value==="string"
+
+&&value.length<=max;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+
+&&value>=0;
+
+}
+
+function validMoney(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=0
+
+&&value<=1000000000000;
+
+}
+
+function validTime(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>0
+
+&&value<=8640000000000000;
+
+}
+
+function validPhone(value){
+
+return typeof value==="string"
+
+&&/^\+[1-9]\d{7,14}$/.test(value);
+
+}
+
+function validCursor(value){
+
+return value===null
+
+||(
+
+typeof value==="string"
+
+&&value.length>0
+
+&&value.length<=4096
+
+);
+
+}
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function ownerResultValid(result,userUid){
+
+return result?.authorized===true
+
+&&result.uid===userUid
+
+&&result.role==="owner"
+
+&&result.ownerUidVerified===true
+
+&&result.sessionValid===true;
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+
+encodeURIComponent(lang);
+
+}
+
+function translateValue(value){
+
+return Object.prototype.hasOwnProperty.call(t,value)
+?t[value]:t.unknown;
+
+}
+
+function money(value){
+
+if(!validMoney(value))return "—";
+
+return "LKR "+
+
+new Intl.NumberFormat("en-LK",{
+
+minimumFractionDigits:2,
+
+maximumFractionDigits:2
+
+}).format(value);
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(value));
+
+}
+
+function formatDuration(seconds){
+
+if(!validCount(seconds))return "—";
+
+const hours=Math.floor(seconds/3600);
+
+const minutes=Math.floor((seconds%3600)/60);
+
+const secs=seconds%60;
+
+return [hours,minutes,secs]
+
+.map(value=>String(value).padStart(2,"0"))
+
+.join(":");
+
+}
+
+function showStatus(key){
+
+statusKey=key;
+
+$("status").textContent=t[key]||"";
+
+}
+
+// SAFE DOM RENDERING
+
+function addRow(container,label,value,color=""){
+
+const row=document.createElement("div");
+
+row.className="row";
+
+const name=document.createElement("span");
+
+name.textContent=t[label]||label;
+
+const text=document.createElement("strong");
+
+text.textContent=value===null
+
+||value===undefined
+
+||value===""
+
+?"—":String(value);
+
+if(color){
+
+text.classList.add(color);
+
+}
+
+row.append(name,text);
+
+container.appendChild(row);
+
+}
+
+function createButton(label,callback){
+
+const button=document.createElement("button");
+
+button.type="button";
+
+button.className="action";
+
+button.textContent=t[label];
+
+button.onclick=callback;
+
+return button;
+
+}
+
+// LANGUAGE RENDERING
+
+function renderLanguage(){
+
+t=translations[lang];
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t[element.dataset.t]||"";
+
+});
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+const selected=button.dataset.lang===lang;
+
+button.classList.toggle("selected",selected);
+
+button.setAttribute("aria-pressed",String(selected));
+
+});
+
+$("dashboardLink").href=
+
+pageLink("admin-dashboard.html");
+
+$("loginLink").href=
+
+pageLink("admin-login.html");
+
+$("searchText").placeholder=t.searchLabel;
+
+showStatus(statusKey);
+
+renderOverview();
+
+renderCustomers();
+
+renderDetails();
+
+renderHistory();
+
+if(accountAction){
+
+$("confirmInstruction").textContent=
+
+accountAction==="block"
+
+?t.typeBlock:t.typeUnblock;
+
+}
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!LANGUAGES.includes(button.dataset.lang)){
+
+return;
+
+}
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+
+"myride_admin_language",lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+// SECURE SERVER REQUESTS
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+
+name,
+
+{timeout:20000}
+
+)(data);
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// CUSTOMER OVERVIEW
+
+function validOverview(data){
+
+return data
+
+&&validCount(data.totalCustomers)
+
+&&validCount(data.activeCustomers)
+
+&&validCount(data.blockedCustomers)
+
+&&validCount(data.newCustomersToday)
+
+&&data.activeCustomers+
+
+data.blockedCustomers===data.totalCustomers
+
+&&data.newCustomersToday<=data.totalCustomers
+
+&&data.updatedAt
+
+&&typeof data.updatedAt.toMillis==="function"
+
+&&validTime(data.updatedAt.toMillis());
+
+}
+
+function renderOverview(){
+
+const grid=$("statsGrid");
+
+grid.replaceChildren();
+
+const keys=[
+
+"totalCustomers",
+
+"activeCustomers",
+
+"blockedCustomers",
+
+"newCustomersToday"
+
+];
+
+keys.forEach(key=>{
+
+const card=document.createElement("div");
+
+card.className="stat";
+
+const label=document.createElement("span");
+
+label.textContent=t[key];
+
+const value=document.createElement("strong");
+
+value.textContent=overviewData
+
+?String(overviewData[key])
+
+:"—";
+
+if(key==="blockedCustomers"){
+
+value.classList.add("red");
+
+}
+
+card.append(label,value);
+
+grid.appendChild(card);
+
+});
+
+$("updatedAt").textContent=
+
+overviewData
+
+?t.updated+": "+
+
+formatDate(overviewData.updatedAt.toMillis())
+
+:"—";
+
+}
+
+function subscribeOverview(){
+
+if(overviewUnsubscribe){
+
+overviewUnsubscribe();
+
+}
+
+const currentGeneration=generation;
+
+overviewUnsubscribe=onSnapshot(
+
+doc(db,"adminDashboard","customers"),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+)return;
+
+if(
+
+snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()
+
+||!validOverview(snapshot.data())
+
+){
+
+overviewData=null;
+
+}else{
+
+overviewData=snapshot.data();
+
+}
+
+renderOverview();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+overviewData=null;
+
+renderOverview();
+
+}
+
+);
+
+}
+
+// CUSTOMER LIST VALIDATION
+
+function validCustomer(item){
+
+return item
+
+&&validId(item.uid)
+
+&&validId(item.customerId)
+
+&&validText(item.fullName,150)
+
+&&(
+
+item.phone===null
+
+||validPhone(item.phone)
+
+)
+
+&&["active","blocked"].includes(item.status)
+
+&&validCount(item.totalRides)
+
+&&validTime(item.createdAtMs);
+
+}
+
+function renderCustomers(){
+
+const container=$("customerList");
+
+container.replaceChildren();
+
+customers.forEach(customer=>{
+
+const card=document.createElement("div");
+
+card.className="customerCard";
+
+addRow(card,"customerId",customer.customerId);
+
+addRow(card,"name",customer.fullName);
+
+addRow(card,"phone",customer.phone);
+
+addRow(
+
+card,
+
+"accountStatus",
+
+translateValue(customer.status),
+
+customer.status==="blocked"?"red":"green"
+
+);
+
+addRow(card,"totalRides",customer.totalRides);
+
+addRow(
+
+card,
+
+"registeredAt",
+
+formatDate(customer.createdAtMs)
+
+);
+
+const button=createButton(
+
+"view",
+
+()=>openCustomer(customer.uid)
+
+);
+
+button.disabled=actionBusy;
+
+card.appendChild(button);
+
+container.appendChild(card);
+
+});
+
+$("loadMore").hidden=nextCursor===null;
+
+$("loadMore").disabled=listBusy||actionBusy;
+
+}
+
+// CUSTOMER SEARCH AND PAGINATION
+
+async function loadCustomers(reset=true){
+
+if(!validSession()||actionBusy)return;
+
+if(!reset&&(listBusy||nextCursor===null))return;
+
+if(reset){
+
+listGeneration++;
+
+customers=[];
+
+nextCursor=null;
+
+renderCustomers();
+
+}
+
+const currentListGeneration=listGeneration;
+
+const currentGeneration=generation;
+
+listBusy=true;
+
+$("listStatus").textContent=t.loading;
+
+updateControls();
+
+try{
+
+const result=await serverCall(
+
+"getAdminCustomers",
+
+{
+
+search:currentFilters.search,
+
+status:currentFilters.status,
+
+limit:20,
+
+cursor:reset?null:nextCursor
+
+}
+
+);
+
+if(
+
+currentGeneration!==generation
+
+||currentListGeneration!==listGeneration
+
+)return;
+
+if(
+
+result?.success!==true
+
+||result.ownerUid!==uid
+
+||!Array.isArray(result.records)
+
+||result.records.length>20
+
+||!result.records.every(validCustomer)
+
+||!validCursor(result.nextCursor)
+
+){
+
+throw new Error("Invalid customer data");
+
+}
+
+const unique=new Map(
+
+customers.map(item=>[item.uid,item])
+
+);
+
+result.records.forEach(item=>{
+
+unique.set(item.uid,item);
+
+});
+
+customers=[...unique.values()];
+
+nextCursor=result.nextCursor;
+
+renderCustomers();
+
+$("listStatus").textContent=
+
+customers.length===0
+
+?t.noRecords:"";
+
+}catch(e){
+
+if(
+
+currentGeneration!==generation
+
+||currentListGeneration!==listGeneration
+
+)return;
+
+$("listStatus").textContent=t.error;
+
+}finally{
+
+if(
+
+currentGeneration===generation
+
+&&currentListGeneration===listGeneration
+
+){
+
+listBusy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("searchForm").onsubmit=event=>{
+
+event.preventDefault();
+
+if(!validSession()||actionBusy)return;
+
+const search=$("searchText").value.trim();
+
+const status=$("statusFilter").value;
+
+if(
+
+search.length>100
+
+||!["all","active","blocked"].includes(status)
+
+)return;
+
+currentFilters={search,status};
+
+loadCustomers(true);
+
+};
+
+$("clearButton").onclick=()=>{
+
+if(!validSession()||actionBusy)return;
+
+$("searchForm").reset();
+
+currentFilters={search:"",status:"all"};
+
+loadCustomers(true);
+
+};
+
+$("loadMore").onclick=()=>loadCustomers(false);
+
+// CUSTOMER PROFILE
+
+function validProfile(profile,targetUid){
+
+return validCustomer(profile)
+
+&&profile.uid===targetUid
+
+&&LANGUAGES.includes(profile.language)
+
+&&(
+
+profile.whatsapp===null
+
+||validPhone(profile.whatsapp)
+
+)
+
+&&typeof profile.whatsappConsent==="boolean"
+
+&&validCount(profile.completedRides)
+
+&&profile.completedRides<=profile.totalRides
+
+&&validMoney(profile.totalPaid)
+
+&&validMoney(profile.outstandingPayments)
+
+&&validCount(profile.complaintCount)
+
+&&typeof profile.hasActiveRide==="boolean"
+
+&&validCount(profile.revision)
+
+&&(
+
+profile.blockReason===null
+
+||validText(profile.blockReason,500)
+
+);
+
+}
+
+async function openCustomer(targetUid){
+
+if(
+
+!validSession()
+
+||!validId(targetUid)
+
+||actionBusy
+
+)return;
+
+closeCustomer();
+
+selectedUid=targetUid;
+
+const currentDetailGeneration=detailGeneration;
+
+const currentGeneration=generation;
+
+$("customerDetails").hidden=false;
+
+$("detailStatus").textContent=t.loading;
+
+try{
+
+const result=await serverCall(
+
+"getAdminCustomerDetails",
+
+{customerUid:targetUid}
+
+);
+
+if(
+
+currentGeneration!==generation
+
+||currentDetailGeneration!==detailGeneration
+
+||selectedUid!==targetUid
+
+)return;
+
+if(
+
+result?.success!==true
+
+||result.ownerUid!==uid
+
+||!validProfile(result.customer,targetUid)
+
+){
+
+throw new Error("Invalid customer profile");
+
+}
+
+selectedCustomer=result.customer;
+
+currentTab="profile";
+
+renderDetails();
+
+$("detailStatus").textContent="";
+
+$("customerDetails").scrollIntoView({
+
+behavior:"smooth",
+
+block:"start"
+
+});
+
+}catch(e){
+
+if(
+
+currentGeneration!==generation
+
+||currentDetailGeneration!==detailGeneration
+
+)return;
+
+$("detailStatus").textContent=t.error;
+
+}
+
+}
+
+function closeCustomer(){
+
+detailGeneration++;
+
+historyGeneration++;
+
+selectedCustomer=null;
+
+selectedUid=null;
+
+currentTab="profile";
+
+historyRecords=[];
+
+historyCursor=null;
+
+historyBusy=false;
+
+pendingAction=null;
+
+accountAction=null;
+
+$("customerDetails").hidden=true;
+
+$("profileData").replaceChildren();
+
+$("historyRecords").replaceChildren();
+
+$("detailStatus").textContent="";
+
+$("historyStatus").textContent="";
+
+$("actionStatus").textContent="";
+
+$("contactButtons").hidden=true;
+
+$("detailTabs").hidden=true;
+
+$("accountControl").hidden=true;
+
+$("callCustomer").removeAttribute("href");
+
+$("whatsappCustomer").removeAttribute("href");
+
+$("moreHistory").hidden=true;
+
+closeAccountForm();
+
+}
+
+$("closeDetails").onclick=()=>{
+
+if(!actionBusy){
+
+closeCustomer();
+
+}
+
+};
+
+// CUSTOMER PROFILE RENDERING
+
+function renderDetails(){
+
+const profile=selectedCustomer;
+
+const container=$("profileData");
+
+container.replaceChildren();
+
+if(!profile){
+
+$("contactButtons").hidden=true;
+
+$("detailTabs").hidden=true;
+
+$("accountControl").hidden=true;
+
+return;
+
+}
+
+addRow(container,"customerId",profile.customerId);
+
+addRow(container,"name",profile.fullName);
+
+addRow(container,"phone",profile.phone);
+
+addRow(container,"whatsappNumber",profile.whatsapp);
+
+addRow(
+
+container,
+
+"language",
+
+translateValue(profile.language)
+
+);
+
+addRow(
+
+container,
+
+"registeredAt",
+
+formatDate(profile.createdAtMs)
+
+);
+
+addRow(
+
+container,
+
+"accountStatus",
+
+translateValue(profile.status),
+
+profile.status==="blocked"?"red":"green"
+
+);
+
+addRow(
+
+container,
+
+"activeRide",
+
+profile.hasActiveRide?t.yes:t.no,
+
+profile.hasActiveRide?"yellow":""
+
+);
+
+if(currentTab==="profile"){
+
+addRow(container,"totalRides",profile.totalRides);
+
+addRow(
+
+container,
+
+"completedRides",
+
+profile.completedRides
+
+);
+
+addRow(
+
+container,
+
+"totalPaid",
+
+money(profile.totalPaid)
+
+);
+
+addRow(
+
+container,
+
+"outstanding",
+
+money(profile.outstandingPayments)
+
+);
+
+addRow(
+
+container,
+
+"complaintCount",
+
+profile.complaintCount
+
+);
+
+if(profile.status==="blocked"){
+
+addRow(
+
+container,
+
+"blockReason",
+
+profile.blockReason,
+
+"red"
+
+);
+
+}
+
+}
+
+// CALL CUSTOMER
+
+$("callCustomer").hidden=!validPhone(profile.phone);
+
+if(validPhone(profile.phone)){
+
+$("callCustomer").href="tel:"+profile.phone;
+
+}else{
+
+$("callCustomer").removeAttribute("href");
+
+}
+
+// WHATSAPP CUSTOMER
+
+const canWhatsApp=
+
+profile.whatsappConsent===true
+
+&&validPhone(profile.whatsapp);
+
+$("whatsappCustomer").hidden=!canWhatsApp;
+
+if(canWhatsApp){
+
+const messages={
+
+si:"MY RIDE පාරිභෝගික සේවාවෙන් ඔබව සම්බන්ධ කර ගනිමු.",
+
+en:"We are contacting you from MY RIDE customer support.",
+
+ta:"MY RIDE வாடிக்கையாளர் சேவையிலிருந்து உங்களை தொடர்பு கொள்கிறோம்."
+
+};
+
+$("whatsappCustomer").href=
+
+"https://wa.me/"+
+
+profile.whatsapp.replace(/\D/g,"")+
+
+"?text="+
+
+encodeURIComponent(messages[profile.language]);
+
+}else{
+
+$("whatsappCustomer").removeAttribute("href");
+
+}
+
+$("contactButtons").hidden=
+
+!validPhone(profile.phone)&&!canWhatsApp;
+
+$("detailTabs").hidden=false;
+
+$("accountControl").hidden=false;
+
+$("blockButton").hidden=
+
+profile.status!=="active";
+
+$("unblockButton").hidden=
+
+profile.status!=="blocked";
+
+$("accountWarning").textContent=
+
+profile.status==="active"
+
+?t.blockNotice:t.unblockNotice;
+
+document.querySelectorAll("[data-tab]")
+
+.forEach(button=>{
+
+button.classList.toggle(
+
+"selected",
+
+button.dataset.tab===currentTab
+
+);
+
+});
+
+updateControls();
+
+}
+
+// CUSTOMER HISTORY
+
+const bookingStatuses=[
+
+"confirmed","searching","offered",
+
+"scheduled","accepted","arrived",
+
+"active","completed","cancelled","no_driver"
+
+];
+
+const paymentStatuses=[
+
+"paid","unpaid","pending","partial","rejected"
+
+];
+
+const complaintStatuses=[
+
+"new","in_progress","resolved","closed"
+
+];
+
+function validHistoryRecord(item,tab){
+
+if(
+
+!item
+
+||item.customerUid!==selectedUid
+
+||!validTime(item.createdAtMs)
+
+)return false;
+
+if(tab==="rides"){
+
+return validId(item.bookingId)
+
+&&validText(item.pickupName,500)
+
+&&validText(item.destinationName,500)
+
+&&["bike","tuk","car","van"].includes(item.vehicle)
+
+&&bookingStatuses.includes(item.status)
+
+&&validCount(item.passengers)
+
+&&(
+
+item.distanceMeters===null
+
+||validCount(item.distanceMeters)
+
+)
+
+&&(
+
+item.durationSeconds===null
+
+||validCount(item.durationSeconds)
+
+)
+
+&&(
+
+item.finalFare===null
+
+||validMoney(item.finalFare)
+
+);
+
+}
+
+if(tab==="payments"){
+
+return validId(item.paymentId)
+
+&&validId(item.bookingId)
+
+&&validMoney(item.amount)
+
+&&validMoney(item.paidAmount)
+
+&&item.paidAmount<=item.amount
+
+&&["cash","bank","unknown"].includes(item.method)
+
+&&paymentStatuses.includes(item.status)
+
+&&(
+
+item.reference===null
+
+||validText(item.reference,150)
+
+);
+
+}
+
+if(tab==="complaints"){
+
+return validId(item.referenceId)
+
+&&["feedback","complaint","question"].includes(item.type)
+
+&&validText(item.message,2000)
+
+&&complaintStatuses.includes(item.status)
+
+&&(
+
+item.bookingId===null
+
+||validId(item.bookingId)
+
+)
+
+&&(
+
+item.adminReply===null
+
+||validText(item.adminReply,2000)
+
+);
+
+}
+
+return false;
+
+}
+
+function historyRecordId(item,tab){
+
+if(tab==="rides")return item.bookingId;
+
+if(tab==="payments")return item.paymentId;
+
+return item.referenceId;
+
+}
+
+async function loadHistory(reset=true){
+
+if(
+
+!validSession()
+
+||!selectedCustomer
+
+||currentTab==="profile"
+
+||actionBusy
+
+)return;
+
+if(!reset&&(historyBusy||historyCursor===null)){
+
+return;
+
+}
+
+if(reset){
+
+historyGeneration++;
+
+historyRecords=[];
+
+historyCursor=null;
+
+renderHistory();
+
+}
+
+const currentHistoryGeneration=historyGeneration;
+
+const currentGeneration=generation;
+
+const targetUid=selectedUid;
+
+const tab=currentTab;
+
+historyBusy=true;
+
+$("historyStatus").textContent=t.loading;
+
+updateControls();
+
+try{
+
+const result=await serverCall(
+
+"getAdminCustomerHistory",
+
+{
+
+customerUid:targetUid,
+
+category:tab,
+
+limit:20,
+
+cursor:reset?null:historyCursor
+
+}
+
+);
+
+if(
+
+currentGeneration!==generation
+
+||currentHistoryGeneration!==historyGeneration
+
+||selectedUid!==targetUid
+
+||currentTab!==tab
+
+)return;
+
+if(
+
+result?.success!==true
+
+||result.ownerUid!==uid
+
+||result.customerUid!==targetUid
+
+||result.category!==tab
+
+||!Array.isArray(result.records)
+
+||result.records.length>20
+
+||!result.records.every(
+
+item=>validHistoryRecord(item,tab)
+
+)
+
+||!validCursor(result.nextCursor)
+
+){
+
+throw new Error("Invalid history data");
+
+}
+
+const unique=new Map(
+
+historyRecords.map(item=>[
+
+historyRecordId(item,tab),
+
+item
+
+])
+
+);
+
+result.records.forEach(item=>{
+
+unique.set(historyRecordId(item,tab),item);
+
+});
+
+historyRecords=[...unique.values()];
+
+historyCursor=result.nextCursor;
+
+renderHistory();
+
+$("historyStatus").textContent=
+
+historyRecords.length===0?t.noRecords:"";
+
+}catch(e){
+
+if(
+
+currentGeneration!==generation
+
+||currentHistoryGeneration!==historyGeneration
+
+)return;
+
+$("historyStatus").textContent=t.error;
+
+}finally{
+
+if(
+
+currentGeneration===generation
+
+&&currentHistoryGeneration===historyGeneration
+
+){
+
+historyBusy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+function renderHistory(){
+
+const container=$("historyRecords");
+
+container.replaceChildren();
+
+if(currentTab==="profile"){
+
+$("moreHistory").hidden=true;
+
+return;
+
+}
+
+historyRecords.forEach(item=>{
+
+const card=document.createElement("div");
+
+card.className="record";
+
+if(currentTab==="rides"){
+
+addRow(card,"bookingId",item.bookingId);
+
+addRow(card,"pickup",item.pickupName);
+
+addRow(card,"destination",item.destinationName);
+
+addRow(
+
+card,
+
+"vehicle",
+
+translateValue(item.vehicle)
+
+);
+
+addRow(card,"passengers",item.passengers);
+
+addRow(
+
+card,
+
+"distance",
+
+item.distanceMeters===null
+
+?"—"
+
+:(item.distanceMeters/1000).toFixed(2)+" km"
+
+);
+
+addRow(
+
+card,
+
+"duration",
+
+formatDuration(item.durationSeconds)
+
+);
+
+addRow(card,"fare",money(item.finalFare));
+
+}
+
+if(currentTab==="payments"){
+
+addRow(card,"paymentId",item.paymentId);
+
+addRow(card,"bookingId",item.bookingId);
+
+addRow(card,"amount",money(item.amount));
+
+addRow(card,"paidAmount",money(item.paidAmount));
+
+addRow(
+
+card,
+
+"method",
+
+translateValue(item.method)
+
+);
+
+addRow(card,"reference",item.reference);
+
+}
+
+if(currentTab==="complaints"){
+
+addRow(card,"complaintId",item.referenceId);
+
+addRow(card,"bookingId",item.bookingId);
+
+addRow(card,"type",translateValue(item.type));
+
+addRow(card,"message",item.message);
+
+addRow(card,"adminReply",item.adminReply);
+
+}
+
+addRow(
+
+card,
+
+"status",
+
+translateValue(item.status),
+
+["paid","completed","resolved"].includes(item.status)
+
+?"green"
+
+:["rejected","cancelled","unpaid"].includes(item.status)
+
+?"red":"yellow"
+
+);
+
+addRow(card,"date",formatDate(item.createdAtMs));
+
+container.appendChild(card);
+
+});
+
+$("moreHistory").hidden=historyCursor===null;
+
+$("moreHistory").disabled=historyBusy||actionBusy;
+
+}
+
+document.querySelectorAll("[data-tab]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(
+
+!validSession()
+
+||!selectedCustomer
+
+||actionBusy
+
+)return;
+
+const tab=button.dataset.tab;
+
+if(!["profile","rides","payments","complaints"].includes(tab)){
+
+return;
+
+}
+
+historyGeneration++;
+
+historyBusy=false;
+
+historyRecords=[];
+
+historyCursor=null;
+
+currentTab=tab;
+
+$("historyStatus").textContent="";
+
+renderDetails();
+
+renderHistory();
+
+if(tab!=="profile"){
+
+loadHistory(true);
+
+}
+
+};
+
+});
+
+$("moreHistory").onclick=()=>loadHistory(false);
+
+// ACCOUNT BLOCK AND UNBLOCK
+
+function openAccountForm(action){
+
+if(
+
+!validSession()
+
+||!selectedCustomer
+
+||actionBusy
+
+)return;
+
+if(
+
+action==="block"
+
+&&selectedCustomer.status!=="active"
+
+)return;
+
+if(
+
+action==="unblock"
+
+&&selectedCustomer.status!=="blocked"
+
+)return;
+
+accountAction=action;
+
+pendingAction=null;
+
+$("accountForm").reset();
+
+$("confirmInstruction").textContent=
+
+action==="block"
+
+?t.typeBlock:t.typeUnblock;
+
+$("accountForm").hidden=false;
+
+$("reason").focus();
+
+}
+
+function closeAccountForm(){
+
+accountAction=null;
+
+$("accountForm").reset();
+
+$("accountForm").hidden=true;
+
+}
+
+$("blockButton").onclick=()=>{
+
+openAccountForm("block");
+
+};
+
+$("unblockButton").onclick=()=>{
+
+openAccountForm("unblock");
+
+};
+
+$("cancelAction").onclick=()=>{
+
+if(!actionBusy){
+
+pendingAction=null;
+
+closeAccountForm();
+
+}
+
+};
+
+$("accountForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(
+
+!validSession()
+
+||!selectedCustomer
+
+||actionBusy
+
+||!["block","unblock"].includes(accountAction)
+
+)return;
+
+const reason=$("reason").value.trim();
+
+if(reason.length<10||reason.length>500){
+
+$("actionStatus").textContent=t.invalidReason;
+
+return;
+
+}
+
+const action=accountAction;
+
+const expectedText=
+
+action==="block"?"BLOCK":"UNBLOCK";
+
+if($("confirmText").value.trim()!==expectedText){
+
+$("actionStatus").textContent=
+
+action==="block"?t.typeBlock:t.typeUnblock;
+
+return;
+
+}
+
+const targetUid=selectedCustomer.uid;
+
+const expectedRevision=selectedCustomer.revision;
+
+const expectedStatus=
+
+action==="block"?"blocked":"active";
+
+const signature=JSON.stringify([
+
+targetUid,
+
+action,
+
+reason,
+
+expectedRevision
+
+]);
+
+if(
+
+!pendingAction
+
+||pendingAction.signature!==signature
+
+){
+
+pendingAction={
+
+signature,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const requestId=pendingAction.requestId;
+
+const currentGeneration=generation;
+
+const user=auth.currentUser;
+
+actionBusy=true;
+
+updateControls();
+
+$("actionStatus").textContent=t.reauth;
+
+try{
+
+// Require fresh Google authentication.
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=await reauthenticateWithPopup(
+
+user,provider
+
+);
+
+if(
+
+currentGeneration!==generation
+
+||credential.user.uid!==uid
+
+||!validSession()
+
+){
+
+throw new Error("Owner session changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+||token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"
+
+){
+
+throw new Error("Owner authorization failed");
+
+}
+
+const result=await serverCall(
+
+"setAdminCustomerStatus",
+
+{
+
+customerUid:targetUid,
+
+status:expectedStatus,
+
+reason,
+
+expectedRevision,
+
+requestId
+
+}
+
+);
+
+// Never update the account locally
+// unless the server confirms the operation.
+
+if(
+
+result?.accepted!==true
+
+||result.ownerUid!==uid
+
+||result.customerUid!==targetUid
+
+||result.status!==expectedStatus
+
+||!validCount(result.revision)
+
+||result.revision<=expectedRevision
+
+){
+
+throw new Error("Status change not confirmed");
+
+}
+
+pendingAction=null;
+
+closeAccountForm();
+
+actionBusy=false;
+
+await openCustomer(targetUid);
+
+if(currentGeneration!==generation)return;
+
+$("actionStatus").textContent=t.actionSuccess;
+
+await loadCustomers(true);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("actionStatus").textContent=t.actionError;
+
+}finally{
+
+if(currentGeneration===generation){
+
+actionBusy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// CONTROL STATES
+
+function updateControls(){
+
+const enabled=validSession()&&!actionBusy;
+
+$("searchButton").disabled=!enabled||listBusy;
+
+$("clearButton").disabled=!enabled||listBusy;
+
+$("loadMore").disabled=!enabled||listBusy;
+
+$("moreHistory").disabled=!enabled||historyBusy;
+
+$("refreshButton").disabled=!enabled;
+
+$("closeDetails").disabled=actionBusy;
+
+$("blockButton").disabled=
+
+!enabled||!selectedCustomer;
+
+$("unblockButton").disabled=
+
+!enabled||!selectedCustomer;
+
+$("confirmAction").disabled=
+
+!enabled||!selectedCustomer;
+
+$("cancelAction").disabled=actionBusy;
+
+$("reason").disabled=actionBusy;
+
+$("confirmText").disabled=actionBusy;
+
+document.querySelectorAll("[data-tab]")
+
+.forEach(button=>{
+
+button.disabled=!enabled;
+
+});
+
+document.querySelectorAll("#customerList button")
+
+.forEach(button=>{
+
+button.disabled=!enabled;
+
+});
+
+}
+
+// REFRESH
+
+$("refreshButton").onclick=async()=>{
+
+if(!validSession()||actionBusy)return;
+
+const targetUid=selectedUid;
+
+await loadCustomers(true);
+
+if(targetUid&&validSession()){
+
+await openCustomer(targetUid);
+
+}
+
+};
+
+// CLEAR PRIVATE DATA
+
+function clearSession(){
+
+generation++;
+
+listGeneration++;
+
+authorized=false;
+
+uid=null;
+
+verifying=false;
+
+actionBusy=false;
+
+listBusy=false;
+
+overviewData=null;
+
+customers=[];
+
+nextCursor=null;
+
+if(overviewUnsubscribe){
+
+overviewUnsubscribe();
+
+overviewUnsubscribe=null;
+
+}
+
+closeCustomer();
+
+$("content").hidden=true;
+
+$("deniedPanel").hidden=true;
+
+$("searchForm").reset();
+
+currentFilters={search:"",status:"all"};
+
+$("listStatus").textContent="";
+
+renderOverview();
+
+renderCustomers();
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("deniedPanel").hidden=false;
+
+showStatus("denied");
+
+}
+
+// OWNER AUTHORIZATION
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+showStatus("offline");
+
+return;
+
+}
+
+showStatus("checking");
+
+try{
+
+const appToken=await getToken(
+
+appCheck,false
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(
+
+typeof appToken?.token!=="string"
+
+||appToken.token.length===0
+
+){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(currentGeneration!==generation)return;
+
+if(
+
+token.signInProvider!=="google.com"
+
+||token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+){
+
+throw new Error("Owner claim missing");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(
+
+currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid
+
+)return;
+
+if(!ownerResultValid(response.data,user.uid)){
+
+throw new Error("Owner authorization denied");
+
+}
+
+uid=user.uid;
+
+authorized=true;
+
+$("content").hidden=false;
+
+$("deniedPanel").hidden=true;
+
+showStatus("verified");
+
+subscribeOverview();
+
+updateControls();
+
+await loadCustomers(true);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+$("retryButton").onclick=()=>{
+
+if(auth?.currentUser){
+
+verifyOwner(auth.currentUser);
+
+}else{
+
+location.replace(pageLink("admin-login.html"));
+
+}
+
+};
+
+// INITIALIZE FIREBASE
+
+async function initializeSecurity(){
+
+try{
+
+// Same Firebase app name as steps 41 and 42.
+
+app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+APP_CHECK_SITE_KEY
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+// PERIODIC SECURITY CHECK
+
+setInterval(async()=>{
+
+if(
+
+!validSession()
+
+||verifying
+
+||actionBusy
+
+)return;
+
+const currentGeneration=generation;
+
+verifying=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(!ownerResultValid(result,uid)){
+
+throw new Error("Owner access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+if(currentGeneration===generation){
+
+verifying=false;
+
+}
+
+}
+
+},60000);
+
+// NETWORK AND PAGE SECURITY
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+showStatus("offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("pagehide",()=>{
+
+clearSession();
+
+});
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+document.addEventListener(
+
+"visibilitychange",
+
+()=>{
+
+if(
+
+!document.hidden
+
+&&auth?.currentUser
+
+&&!actionBusy
+
+&&!authorized
+
+){
+
+verifyOwner(auth.currentUser);
+
+}
+
+}
+
+);
+
+renderLanguage();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
