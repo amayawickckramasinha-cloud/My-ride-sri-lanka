@@ -1,0 +1,1357 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Activation</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:550px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:36px;
+margin-bottom:5px;
+}
+
+.country{
+text-align:center;
+color:#FFD600;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:18px;
+margin:20px 0;
+}
+
+label{
+display:block;
+margin:18px 0 8px;
+font-weight:bold;
+line-height:1.7;
+}
+
+input{
+width:100%;
+padding:15px;
+background:#292929;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:16px;
+margin:15px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+text-decoration:none;
+text-align:center;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+.check{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:normal;
+}
+
+.check input{
+width:20px;
+height:20px;
+accent-color:#FFD600;
+}
+
+.note{
+color:#CCC;
+font-size:14px;
+line-height:1.8;
+}
+
+#status{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+#passwordMeter{
+height:7px;
+background:#444;
+border-radius:10px;
+overflow:hidden;
+margin-top:12px;
+}
+
+#passwordBar{
+height:100%;
+width:0;
+background:#FFD600;
+transition:width .2s;
+}
+
+.back{
+display:block;
+color:#FFD600;
+text-align:center;
+text-decoration:none;
+padding:25px;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="activationPanel"
+class="panel" hidden>
+
+<h3 data-t="approved"></h3>
+
+<p id="driverId"></p>
+
+<p class="note"
+data-t="intro"></p>
+
+<label for="phone"
+data-t="phone"></label>
+
+<input id="phone"
+type="tel"
+autocomplete="tel"
+maxlength="16"
+placeholder="07XXXXXXXX">
+
+<div id="recaptcha-container"></div>
+
+<button id="sendOtp"
+type="button"
+data-t="sendOtp"></button>
+
+<section id="otpPanel" hidden>
+
+<label for="otp"
+data-t="otp"></label>
+
+<input id="otp"
+type="text"
+inputmode="numeric"
+autocomplete="one-time-code"
+maxlength="6">
+
+<button id="verifyOtp"
+type="button"
+data-t="verifyOtp"></button>
+
+</section>
+
+</section>
+
+<form id="passwordForm"
+class="panel" hidden>
+
+<h3 data-t="verified"></h3>
+
+<label for="password"
+data-t="password"></label>
+
+<input id="password"
+type="password"
+autocomplete="new-password"
+minlength="15"
+maxlength="128"
+required>
+
+<div id="passwordMeter">
+
+<div id="passwordBar"></div>
+
+</div>
+
+<p class="note"
+data-t="passwordRules"></p>
+
+<label for="confirmPassword"
+data-t="confirmPassword"></label>
+
+<input id="confirmPassword"
+type="password"
+autocomplete="new-password"
+minlength="15"
+maxlength="128"
+required>
+
+<label class="check">
+
+<input id="showPassword"
+type="checkbox">
+
+<span data-t="showPassword"></span>
+
+</label>
+
+<button id="activateButton"
+type="submit"
+data-t="activate"
+disabled></button>
+
+</form>
+
+<section id="successPanel"
+class="panel" hidden>
+
+<h2 data-t="success"></h2>
+
+<p class="note"
+data-t="successMessage"></p>
+
+<a id="loginButton"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<section id="invalidPanel"
+class="panel" hidden>
+
+<h3 data-t="invalidLink"></h3>
+
+<p class="note"
+data-t="contactAdmin"></p>
+
+</section>
+
+<button id="retryButton"
+type="button"
+data-t="retry"
+hidden></button>
+
+<p class="note"
+data-t="security"></p>
+
+<a id="backButton"
+class="back"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+RecaptchaVerifier,
+signInWithPhoneNumber,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+let lang=languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+const translations={
+
+si:{
+
+heading:"රියදුරු මුරපදය සකස් කිරීම",
+
+approved:"✓ ඔබගේ ලියාපදිංචිය අනුමත කර ඇත",
+
+intro:"ලියාපදිංචි දුරකථන අංකය තහවුරු කර අලුත් මුරපදයක් සකස් කරන්න.",
+
+phone:"01. ලියාපදිංචි දුරකථන අංකය",
+
+sendOtp:"OTP අංකය ලබාගන්න",
+
+otp:"02. OTP අංකය",
+
+verifyOtp:"OTP තහවුරු කරන්න",
+
+verified:"✓ දුරකථන අංකය තහවුරු කර ඇත",
+
+password:"03. අලුත් මුරපදය",
+
+confirmPassword:"04. මුරපදය නැවත ඇතුළත් කරන්න",
+
+passwordRules:"අවම අක්ෂර 15ක් භාවිතා කරන්න. වෙනත් ගිණුමකට භාවිතා නොකරන මුරපදයක් තෝරන්න.",
+
+showPassword:"මුරපදය පෙන්වන්න",
+
+activate:"මුරපදය සුරකින්න",
+
+success:"✓ ගිණුම සක්‍රිය කර ඇත",
+
+successMessage:"ඔබගේ මුරපදය සකස් කර ඇත. දැන් Driver Login පිටුව භාවිතා කරන්න.",
+
+login:"Driver Login",
+
+invalidLink:"Activation Link එක වලංගු නැත",
+
+contactAdmin:"අලුත් ආරක්ෂිත Activation Link එකක් සඳහා පරිපාලක සම්බන්ධ කරගන්න.",
+
+security:"ඔබගේ මුරපදය, OTP අංකය සහ Activation Link එක වෙනත් අයෙකුට ලබා නොදෙන්න.",
+
+back:"← ප්‍රධාන මෙනුව",
+
+checking:"අනුමැතිය පරීක්ෂා කරමින්...",
+
+sending:"OTP යවමින්...",
+
+sent:"OTP අංකය යවා ඇත.",
+
+verifying:"OTP තහවුරු කරමින්...",
+
+phoneError:"නිවැරදි දුරකථන අංකයක් ඇතුළත් කරන්න.",
+
+otpError:"OTP තහවුරු කළ නොහැක.",
+
+otpFormat:"ඉලක්කම් 6ක OTP අංකය ඇතුළත් කරන්න.",
+
+sendError:"OTP යැවීමට නොහැකි විය.",
+
+passwordError:"මුරපදය අවම අක්ෂර 15ක් විය යුතුය.",
+
+mismatch:"මුරපද දෙක සමාන නොවේ.",
+
+saving:"ගිණුම සක්‍රිය කරමින්...",
+
+error:"ක්‍රියාව සම්පූර්ණ කළ නොහැක. නැවත උත්සාහ කරන්න.",
+
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+
+retry:"නැවත පරීක්ෂා කරන්න",
+
+denied:"ගිණුම සක්‍රිය කිරීමට අවසර නැත."
+
+},
+
+en:{
+
+heading:"Create Driver Password",
+
+approved:"✓ Your registration is approved",
+
+intro:"Verify your registered phone number and create a new password.",
+
+phone:"01. Registered Phone Number",
+
+sendOtp:"Send OTP",
+
+otp:"02. OTP Code",
+
+verifyOtp:"Verify OTP",
+
+verified:"✓ Phone number verified",
+
+password:"03. New Password",
+
+confirmPassword:"04. Confirm Password",
+
+passwordRules:"Use at least 15 characters and choose a password not used on another account.",
+
+showPassword:"Show Password",
+
+activate:"Save Password",
+
+success:"✓ Account Activated",
+
+successMessage:"Your password has been created. You can now use Driver Login.",
+
+login:"Driver Login",
+
+invalidLink:"Invalid Activation Link",
+
+contactAdmin:"Contact the administrator for a new secure activation link.",
+
+security:"Never share your password, OTP or activation link.",
+
+back:"← Main Menu",
+
+checking:"Checking approval...",
+
+sending:"Sending OTP...",
+
+sent:"OTP sent.",
+
+verifying:"Verifying OTP...",
+
+phoneError:"Enter a valid phone number.",
+
+otpError:"OTP verification failed.",
+
+otpFormat:"Enter the six-digit OTP.",
+
+sendError:"Unable to send OTP.",
+
+passwordError:"Password must contain at least 15 characters.",
+
+mismatch:"Passwords do not match.",
+
+saving:"Activating account...",
+
+error:"Unable to complete the operation. Try again.",
+
+offline:"No internet connection.",
+
+retry:"Check Again",
+
+denied:"Account activation is not authorized."
+
+},
+
+ta:{
+
+heading:"சாரதி கடவுச்சொல் உருவாக்கம்",
+
+approved:"✓ உங்கள் பதிவு அங்கீகரிக்கப்பட்டுள்ளது",
+
+intro:"பதிவு செய்யப்பட்ட தொலைபேசி எண்ணைச் சரிபார்த்து புதிய கடவுச்சொல்லை உருவாக்கவும்.",
+
+phone:"01. பதிவு செய்யப்பட்ட தொலைபேசி எண்",
+
+sendOtp:"OTP அனுப்பவும்",
+
+otp:"02. OTP எண்",
+
+verifyOtp:"OTP சரிபார்க்கவும்",
+
+verified:"✓ தொலைபேசி எண் சரிபார்க்கப்பட்டது",
+
+password:"03. புதிய கடவுச்சொல்",
+
+confirmPassword:"04. கடவுச்சொல்லை மீண்டும் உள்ளிடவும்",
+
+passwordRules:"குறைந்தது 15 எழுத்துகளைப் பயன்படுத்தவும். வேறு கணக்கில் பயன்படுத்தாத கடவுச்சொல்லைத் தேர்ந்தெடுக்கவும்.",
+
+showPassword:"கடவுச்சொல்லைக் காட்டவும்",
+
+activate:"கடவுச்சொல்லைச் சேமிக்கவும்",
+
+success:"✓ கணக்கு செயல்படுத்தப்பட்டது",
+
+successMessage:"கடவுச்சொல் உருவாக்கப்பட்டது. சாரதி உள்நுழைவைப் பயன்படுத்தவும்.",
+
+login:"சாரதி உள்நுழைவு",
+
+invalidLink:"செயல்படுத்தும் இணைப்பு செல்லுபடியாகாது",
+
+contactAdmin:"புதிய பாதுகாப்பான இணைப்பைப் பெற நிர்வாகத்தைத் தொடர்புகொள்ளவும்.",
+
+security:"கடவுச்சொல், OTP அல்லது இணைப்பை மற்றவர்களுடன் பகிர வேண்டாம்.",
+
+back:"← முதன்மை பட்டியல்",
+
+checking:"அனுமதி சரிபார்க்கப்படுகிறது...",
+
+sending:"OTP அனுப்பப்படுகிறது...",
+
+sent:"OTP அனுப்பப்பட்டது.",
+
+verifying:"OTP சரிபார்க்கப்படுகிறது...",
+
+phoneError:"சரியான தொலைபேசி எண்ணை உள்ளிடவும்.",
+
+otpError:"OTP சரிபார்ப்பு தோல்வியடைந்தது.",
+
+otpFormat:"ஆறு இலக்க OTP எண்ணை உள்ளிடவும்.",
+
+sendError:"OTP அனுப்ப முடியவில்லை.",
+
+passwordError:"கடவுச்சொல் குறைந்தது 15 எழுத்துகளைக் கொண்டிருக்க வேண்டும்.",
+
+mismatch:"கடவுச்சொற்கள் பொருந்தவில்லை.",
+
+saving:"கணக்கு செயல்படுத்தப்படுகிறது...",
+
+error:"செயல்பாட்டை முடிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+
+offline:"இணைய இணைப்பு இல்லை.",
+
+retry:"மீண்டும் சரிபார்க்கவும்",
+
+denied:"கணக்கை செயல்படுத்த அனுமதி இல்லை."
+
+}
+
+};
+
+let t=translations[lang];
+
+function applyLanguage(){
+
+t=translations[lang];
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+$("loginButton").href=
+"./driver-login.html?lang="+lang;
+
+$("backButton").href=
+"./menu.html?lang="+lang;
+
+}
+
+applyLanguage();
+
+// SECURE ACTIVATION TOKEN
+
+const fragment=new URLSearchParams(
+location.hash.slice(1)
+);
+
+let activationToken=fragment.get("token");
+
+// Remove token from the visible URL.
+
+if(location.hash){
+
+history.replaceState(
+null,
+"",
+location.pathname+location.search
+);
+
+}
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let functions=null;
+let verifier=null;
+let confirmation=null;
+let verifiedUid=null;
+let verifiedPhone=null;
+let otpPhone=null;
+let linkValid=false;
+let busy=false;
+let completed=false;
+let requestId=null;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+auth.languageCode=lang;
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// BUTTON CONTROL
+
+function verified(){
+
+return verifiedUid!==null
+
+&&verifiedPhone!==null
+
+&&auth?.currentUser?.uid===verifiedUid
+
+&&auth.currentUser.phoneNumber===verifiedPhone;
+
+}
+
+function updateButtons(){
+
+const unavailable=
+
+busy||completed||!navigator.onLine;
+
+$("sendOtp").disabled=
+
+unavailable||!linkValid||!auth;
+
+$("verifyOtp").disabled=
+
+unavailable||!confirmation;
+
+$("activateButton").disabled=
+
+unavailable||!linkValid||!verified();
+
+$("retryButton").disabled=unavailable;
+
+}
+
+// INVALID LINK
+
+function invalidLink(){
+
+linkValid=false;
+
+activationToken=null;
+
+$("activationPanel").hidden=true;
+
+$("passwordForm").hidden=true;
+
+$("invalidPanel").hidden=false;
+
+$("retryButton").hidden=true;
+
+$("password").value="";
+
+$("confirmPassword").value="";
+
+status(t.denied);
+
+updateButtons();
+
+}
+
+// CHECK ACTIVATION LINK
+
+async function checkLink(){
+
+if(busy||completed)return;
+
+if(!activationToken
+
+||! /^[A-Za-z0-9_-]{43,256}$/
+
+.test(activationToken)){
+
+invalidLink();
+
+return;
+
+}
+
+if(!functions||!navigator.onLine){
+
+status(navigator.onLine?t.error:t.offline);
+
+$("retryButton").hidden=false;
+
+return;
+
+}
+
+busy=true;
+
+updateButtons();
+
+status(t.checking);
+
+try{
+
+const check=httpsCallable(
+
+functions,
+
+"validateDriverActivation"
+
+);
+
+const response=await check({
+
+token:activationToken
+
+});
+
+const result=response.data;
+
+if(result?.valid!==true
+
+||result.status!=="approved"
+
+||result.activationComplete!==false){
+
+invalidLink();
+
+return;
+
+}
+
+if(languages.includes(result.language)){
+
+lang=result.language;
+
+applyLanguage();
+
+auth.languageCode=lang;
+
+}
+
+linkValid=true;
+
+$("driverId").textContent=
+
+typeof result.driverId==="string"
+
+?"Driver ID: "+result.driverId:"";
+
+$("activationPanel").hidden=false;
+
+$("invalidPanel").hidden=true;
+
+$("retryButton").hidden=true;
+
+status("");
+
+}catch(e){
+
+if([
+
+"functions/permission-denied",
+
+"functions/not-found",
+
+"functions/failed-precondition"
+
+].includes(e.code)){
+
+invalidLink();
+
+}else{
+
+status(t.error);
+
+$("retryButton").hidden=false;
+
+}
+
+}finally{
+
+busy=false;
+
+updateButtons();
+
+}
+
+}
+
+$("retryButton").onclick=checkLink;
+
+// PHONE NUMBER VALIDATION
+
+function normalizePhone(value){
+
+const phone=value.replace(/[\s-]/g,"");
+
+if(!/^(?:\+94|94|0)7\d{8}$/.test(phone)){
+
+return null;
+
+}
+
+return "+94"+phone.slice(-9);
+
+}
+
+$("phone").addEventListener("input",()=>{
+
+confirmation=null;
+verifiedUid=null;
+verifiedPhone=null;
+otpPhone=null;
+
+$("otpPanel").hidden=true;
+
+$("passwordForm").hidden=true;
+
+$("password").value="";
+
+$("confirmPassword").value="";
+
+updateButtons();
+
+});
+
+// SEND OTP
+
+$("sendOtp").onclick=async()=>{
+
+if(busy||!linkValid||!auth)return;
+
+const phone=normalizePhone($("phone").value);
+
+if(!phone){
+
+status(t.phoneError);
+
+return;
+
+}
+
+busy=true;
+
+confirmation=null;
+
+verifiedUid=null;
+
+verifiedPhone=null;
+
+$("phone").readOnly=true;
+
+$("otpPanel").hidden=true;
+
+$("passwordForm").hidden=true;
+
+updateButtons();
+
+status(t.sending);
+
+try{
+
+// Backend checks the activation token,
+// approval status, registered phone
+// and OTP request limits.
+
+const checkPhone=httpsCallable(
+
+functions,
+
+"checkDriverActivationPhone"
+
+);
+
+const response=await checkPhone({
+
+token:activationToken,
+
+phone
+
+});
+
+if(response.data?.allowed!==true){
+
+status(t.denied);
+
+return;
+
+}
+
+if(verifier)verifier.clear();
+
+verifier=new RecaptchaVerifier(
+
+auth,
+
+"recaptcha-container",
+
+{size:"normal"}
+
+);
+
+confirmation=await signInWithPhoneNumber(
+
+auth,
+
+phone,
+
+verifier
+
+);
+
+otpPhone=phone;
+
+$("otpPanel").hidden=false;
+
+status(t.sent);
+
+}catch(e){
+
+if(verifier){
+
+verifier.clear();
+
+verifier=null;
+
+}
+
+status(t.sendError);
+
+}finally{
+
+busy=false;
+
+$("phone").readOnly=false;
+
+updateButtons();
+
+}
+
+};
+
+// VERIFY OTP
+
+$("verifyOtp").onclick=async()=>{
+
+if(busy||!confirmation)return;
+
+const code=$("otp").value.trim();
+
+if(!/^\d{6}$/.test(code)){
+
+status(t.otpFormat);
+
+return;
+
+}
+
+busy=true;
+
+$("phone").readOnly=true;
+
+updateButtons();
+
+status(t.verifying);
+
+try{
+
+const credential=
+
+await confirmation.confirm(code);
+
+if(credential.user.phoneNumber!==otpPhone){
+
+throw new Error("Phone mismatch");
+
+}
+
+const verify=httpsCallable(
+
+functions,
+
+"verifyDriverActivationIdentity"
+
+);
+
+const response=await verify({
+
+token:activationToken
+
+});
+
+if(response.data?.authorized!==true){
+
+invalidLink();
+
+return;
+
+}
+
+verifiedUid=credential.user.uid;
+
+verifiedPhone=credential.user.phoneNumber;
+
+confirmation=null;
+
+$("otp").value="";
+
+$("otpPanel").hidden=true;
+
+$("activationPanel").hidden=true;
+
+$("passwordForm").hidden=false;
+
+status("");
+
+}catch(e){
+
+status(t.otpError);
+
+}finally{
+
+busy=false;
+
+$("phone").readOnly=false;
+
+updateButtons();
+
+}
+
+};
+
+// SHOW OR HIDE PASSWORD
+
+$("showPassword").onchange=()=>{
+
+const type=$("showPassword").checked
+
+?"text":"password";
+
+$("password").type=type;
+
+$("confirmPassword").type=type;
+
+};
+
+// PASSWORD LENGTH INDICATOR
+
+$("password").oninput=()=>{
+
+const length=$("password").value.length;
+
+const progress=Math.min(
+
+100,
+
+length/15*100
+
+);
+
+$("passwordBar").style.width=
+
+progress+"%";
+
+$("passwordBar").style.background=
+
+length>=15?"#4ADE80":"#FFD600";
+
+};
+
+// ACTIVATE DRIVER ACCOUNT
+
+$("passwordForm").addEventListener(
+
+"submit",
+
+async event=>{
+
+event.preventDefault();
+
+if(busy||completed||!linkValid
+
+||!verified())return;
+
+const password=$("password").value;
+
+const confirmPassword=
+
+$("confirmPassword").value;
+
+if(password.length<15
+
+||password.length>128){
+
+status(t.passwordError);
+
+return;
+
+}
+
+if(password!==confirmPassword){
+
+status(t.mismatch);
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+if(!requestId){
+
+requestId=crypto.randomUUID();
+
+}
+
+busy=true;
+
+$("password").disabled=true;
+
+$("confirmPassword").disabled=true;
+
+updateButtons();
+
+status(t.saving);
+
+try{
+
+const activate=httpsCallable(
+
+functions,
+
+"activateDriverAccount"
+
+);
+
+const response=await activate({
+
+token:activationToken,
+
+password,
+
+requestId
+
+});
+
+if(response.data?.activated!==true){
+
+throw new Error("Activation failed");
+
+}
+
+completed=true;
+
+linkValid=false;
+
+activationToken=null;
+
+verifiedUid=null;
+
+verifiedPhone=null;
+
+$("password").value="";
+
+$("confirmPassword").value="";
+
+$("passwordForm").hidden=true;
+
+$("successPanel").hidden=false;
+
+$("status").textContent="";
+
+try{
+
+await signOut(auth);
+
+}catch(e){
+
+// Driver Login must independently
+// validate the new login session.
+
+}
+
+}catch(e){
+
+if([
+
+"functions/permission-denied",
+
+"functions/not-found",
+
+"functions/failed-precondition"
+
+].includes(e.code)){
+
+invalidLink();
+
+}else{
+
+status(t.error);
+
+}
+
+}finally{
+
+busy=false;
+
+$("password").disabled=false;
+
+$("confirmPassword").disabled=false;
+
+updateButtons();
+
+}
+
+}
+
+);
+
+// INTERNET CONNECTION
+
+window.addEventListener("offline",()=>{
+
+status(t.offline);
+
+updateButtons();
+
+});
+
+window.addEventListener("online",()=>{
+
+if(!completed){
+
+status("");
+
+updateButtons();
+
+}
+
+});
+
+window.addEventListener("pagehide",()=>{
+
+$("password").value="";
+
+$("confirmPassword").value="";
+
+$("otp").value="";
+
+});
+
+updateButtons();
+
+checkLink();
+
+</script>
+
+</body>
+</html>
