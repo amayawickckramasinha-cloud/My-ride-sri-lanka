@@ -1,0 +1,2234 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+
+<meta name="google"
+content="notranslate">
+
+<meta name="referrer"
+content="no-referrer">
+
+<title>MY RIDE - Owner Admin Login</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111111;
+color:#ffffff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:480px;
+margin:auto;
+padding:22px;
+}
+
+h1{
+color:#FFD600;
+font-size:40px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+text-align:center;
+color:#FFD600;
+letter-spacing:5px;
+font-size:14px;
+}
+
+.adminIcon{
+width:100px;
+height:100px;
+background:#FFD600;
+color:#111111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:30px auto;
+}
+
+h2{
+text-align:center;
+font-size:24px;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+font-size:17px;
+line-height:1.8;
+}
+
+.subtitle{
+text-align:center;
+color:#BBBBBB;
+font-size:14px;
+line-height:1.9;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444444;
+border-radius:15px;
+padding:18px;
+margin:20px 0;
+}
+
+.notice{
+background:#302C17;
+border:1px solid #FFD600;
+border-radius:10px;
+padding:15px;
+font-size:14px;
+line-height:1.9;
+margin:15px 0;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+line-height:1.9;
+margin:15px 0;
+}
+
+.googleButton{
+width:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+padding:16px;
+background:#FFFFFF;
+color:#222222;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+margin:20px 0;
+}
+
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+background:#FFD600;
+color:#111111;
+border:0;
+border-radius:9px;
+font-size:14px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.securityRow{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:14px 0;
+border-bottom:1px solid #444444;
+font-size:13px;
+line-height:1.8;
+}
+
+.securityRow strong{
+text-align:right;
+max-width:55%;
+overflow-wrap:anywhere;
+}
+
+.green{
+color:#4ADE80!important;
+}
+
+.red{
+color:#FF6464!important;
+}
+
+.yellow{
+color:#FFD600!important;
+}
+
+.languageButtons{
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:8px;
+margin:20px 0;
+}
+
+.languageButton{
+background:#202020;
+color:#FFD600;
+border:1px solid #FFD600;
+border-radius:7px;
+padding:12px 5px;
+cursor:pointer;
+}
+
+.languageButton.selected{
+background:#FFD600;
+color:#111111;
+font-weight:bold;
+}
+
+.note{
+color:#BBBBBB;
+font-size:12px;
+line-height:1.9;
+}
+
+#status{
+text-align:center;
+line-height:1.9;
+font-size:14px;
+overflow-wrap:anywhere;
+}
+
+#securityStatus{
+text-align:center;
+line-height:1.8;
+}
+
+.loader{
+width:30px;
+height:30px;
+border:3px solid #444444;
+border-top-color:#FFD600;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:20px auto;
+}
+
+@keyframes spin{
+
+to{
+transform:rotate(360deg);
+}
+
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#999999;
+font-size:12px;
+padding:25px 0;
+line-height:1.9;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<div class="adminIcon">
+
+<svg width="58"
+height="58"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.7"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11"/>
+
+<rect x="9" y="10"
+width="6" height="6" rx="1"/>
+
+<path d="M10 10V8a2 2 0 0 1 4 0v2"/>
+
+</svg>
+
+</div>
+
+<h2 data-t="heading">
+Owner Admin Login
+</h2>
+
+<p class="subtitle"
+data-t="subtitle"></p>
+
+<div class="languageButtons">
+
+<button type="button"
+class="languageButton"
+data-lang="si">
+
+සිංහල
+
+</button>
+
+<button type="button"
+class="languageButton"
+data-lang="en">
+
+English
+
+</button>
+
+<button type="button"
+class="languageButton"
+data-lang="ta">
+
+தமிழ்
+
+</button>
+
+</div>
+
+<section class="panel">
+
+<h3 data-t="secureLogin"></h3>
+
+<div class="notice"
+data-t="ownerNotice"></div>
+
+<button type="button"
+id="googleLogin"
+class="googleButton"
+disabled>
+
+<svg width="23"
+height="23"
+viewBox="0 0 48 48"
+aria-hidden="true">
+
+<path fill="#4285F4"
+d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5h6.7c3.9-3.6 6-8.8 6-14.9z"/>
+
+<path fill="#34A853"
+d="M24 44c5.5 0 10.1-1.8 13.6-4.9l-6.7-5c-1.8 1.2-4.1 2-6.9 2-5.3 0-9.8-3.6-11.4-8.4H5.7v5.2A20 20 0 0 0 24 44z"/>
+
+<path fill="#FBBC05"
+d="M12.6 27.7a12 12 0 0 1 0-7.4v-5.2H5.7a20 20 0 0 0 0 17.8z"/>
+
+<path fill="#EA4335"
+d="M24 11.9c3 0 5.7 1 7.8 3l5.9-5.9A19.2 19.2 0 0 0 24 4 20 20 0 0 0 5.7 15.1l6.9 5.2c1.6-4.8 6.1-8.4 11.4-8.4z"/>
+
+</svg>
+
+<span data-t="googleLogin"></span>
+
+</button>
+
+<div id="loader"
+class="loader" hidden></div>
+
+<p id="status"
+class="yellow"
+role="status"
+aria-live="polite">
+
+Connecting...
+
+</p>
+
+<div id="deniedPanel"
+class="warning" hidden>
+
+<strong data-t="accessDenied"></strong>
+
+<p data-t="deniedNotice"></p>
+
+</div>
+
+<button type="button"
+id="switchAccount"
+class="action secondary"
+data-t="switchAccount"
+hidden></button>
+
+<button type="button"
+id="retryButton"
+class="action secondary"
+data-t="retry"
+hidden></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="securityChecks"></h3>
+
+<div class="securityRow">
+
+<span data-t="firebaseConnection"></span>
+
+<strong id="firebaseState"
+class="yellow">—</strong>
+
+</div>
+
+<div class="securityRow">
+
+<span data-t="appCheck"></span>
+
+<strong id="appCheckState"
+class="yellow">—</strong>
+
+</div>
+
+<div class="securityRow">
+
+<span data-t="googleVerification"></span>
+
+<strong id="googleState"
+class="yellow">—</strong>
+
+</div>
+
+<div class="securityRow">
+
+<span data-t="ownerPermission"></span>
+
+<strong id="ownerState"
+class="yellow">—</strong>
+
+</div>
+
+<div class="securityRow">
+
+<span data-t="ownerUid"></span>
+
+<strong id="uidState"
+class="yellow">—</strong>
+
+</div>
+
+<div class="securityRow">
+
+<span data-t="backendVerification"></span>
+
+<strong id="backendState"
+class="yellow">—</strong>
+
+</div>
+
+<p id="securityStatus"
+class="note"></p>
+
+</section>
+
+<section id="setupPanel"
+class="panel" hidden>
+
+<h3 data-t="setupHeading"></h3>
+
+<p class="note"
+data-t="setupNotice"></p>
+
+<div class="securityRow">
+
+<span data-t="signedInAccount"></span>
+
+<strong id="setupEmail">—</strong>
+
+</div>
+
+<div class="securityRow">
+
+<span>Firebase UID</span>
+
+<strong id="setupUid">—</strong>
+
+</div>
+
+<button type="button"
+id="copyUid"
+class="action secondary"
+data-t="copyUid"></button>
+
+<p id="copyStatus"
+class="note"
+role="status"></p>
+
+<p class="note"
+data-t="setupWarning"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="accountProtection"></h3>
+
+<p class="note"
+data-t="protection1"></p>
+
+<p class="note"
+data-t="protection2"></p>
+
+<p class="note"
+data-t="protection3"></p>
+
+<p class="note"
+data-t="protection4"></p>
+
+<a href="https://myaccount.google.com/security"
+target="_blank"
+rel="noopener noreferrer"
+class="action secondary"
+data-t="googleSecurity"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="recoveryHeading"></h3>
+
+<p class="note"
+data-t="recoveryNotice"></p>
+
+<a href="https://accounts.google.com/signin/recovery"
+target="_blank"
+rel="noopener noreferrer"
+class="action secondary"
+data-t="recoverAccount"></a>
+
+</section>
+
+<footer>
+
+MY RIDE SRI LANKA
+
+<br>
+
+<span data-t="privateAccess"></span>
+
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+signOut,
+setPersistence,
+browserSessionPersistence,
+onAuthStateChanged
+
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+
+getFunctions,
+httpsCallable
+
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const LANGUAGES=["si","en","ta"];
+
+const params=
+new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+
+localStorage.getItem(
+"myride_admin_language"
+)||"si";
+
+}catch(e){}
+
+let lang=
+
+LANGUAGES.includes(params.get("lang"))
+
+?params.get("lang")
+
+:LANGUAGES.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+const translations={
+
+si:{
+
+heading:"Owner Admin Login",
+
+subtitle:"MY RIDE හිමිකරු සඳහා පමණක් වෙන් කළ ආරක්ෂිත ප්‍රවේශය",
+
+secureLogin:"ආරක්ෂිත Admin Login",
+
+ownerNotice:"මෙම පද්ධතියට ප්‍රවේශ විය හැක්කේ අවසර ලබාදී ඇති හිමිකරුගේ Google ගිණුමට පමණි.",
+
+googleLogin:"Google ගිණුමෙන් ඇතුළු වන්න",
+
+accessDenied:"ප්‍රවේශය ප්‍රතික්ෂේප කර ඇත",
+
+deniedNotice:"මෙම ගිණුමට Admin පද්ධතිය භාවිතා කිරීමට අවසර තහවුරු වී නොමැත.",
+
+switchAccount:"වෙනත් Google ගිණුමක් තෝරන්න",
+
+retry:"නැවත පරීක්ෂා කරන්න",
+
+securityChecks:"ආරක්ෂක පරීක්ෂාව",
+
+firebaseConnection:"Firebase සම්බන්ධතාව",
+
+appCheck:"Firebase App Check",
+
+googleVerification:"Google ගිණුම",
+
+ownerPermission:"Owner Admin අවසරය",
+
+ownerUid:"Owner UID පරීක්ෂාව",
+
+backendVerification:"Backend ආරක්ෂක පරීක්ෂාව",
+
+setupHeading:"පළමු Owner ගිණුම් සැකසුම",
+
+setupNotice:"Google ගිණුමේ Firebase UID එක පහතින් දැක්වේ. Firebase හි ආරක්ෂිත පරිපාලන පද්ධතිය හරහා පමණක් Owner අවසරය ලබාදිය යුතුය.",
+
+signedInAccount:"Google ගිණුම",
+
+copyUid:"Firebase UID එක Copy කරන්න",
+
+setupWarning:"UID එක Copy කිරීමෙන් හෝ මෙම පිටුවට Login වීමෙන් Admin අවසරය ලැබෙන්නේ නැත.",
+
+accountProtection:"Google ගිණුමේ ආරක්ෂාව",
+
+protection1:"✓ Google Two-Step Verification සක්‍රිය කර තබන්න.",
+
+protection2:"✓ Gmail Password එක වෙනත් කිසිවෙකුට ලබා නොදෙන්න.",
+
+protection3:"✓ Recovery Phone සහ Recovery Email යාවත්කාලීන කර තබන්න.",
+
+protection4:"✓ Google Backup Codes ආරක්ෂිත ස්ථානයක තබාගන්න.",
+
+googleSecurity:"Google Security Settings",
+
+recoveryHeading:"ගිණුම නැවත ලබාගැනීම",
+
+recoveryNotice:"දුරකථනය නැතිවූ විට හෝ Google Password එක අමතක වූ විට Google නිල ගිණුම් ප්‍රතිසාධන සේවාව භාවිතා කරන්න.",
+
+recoverAccount:"Google ගිණුම නැවත ලබාගන්න",
+
+privateAccess:"හිමිකරු සඳහා පමණක් වෙන් කළ පද්ධතියකි.",
+
+waiting:"පරීක්ෂා කර නොමැත",
+
+connected:"සම්බන්ධයි",
+
+verified:"තහවුරු කර ඇත",
+
+checking:"පරීක්ෂා කරමින්...",
+
+failed:"අසාර්ථකයි",
+
+initializing:"ආරක්ෂක පද්ධතිය සම්බන්ධ කරමින්...",
+
+ready:"Google ගිණුමෙන් Login වන්න.",
+
+signingIn:"Google ගිණුම පරීක්ෂා කරමින්...",
+
+verifyingOwner:"Owner අවසරය පරීක්ෂා කරමින්...",
+
+authorized:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+
+redirecting:"Admin Dashboard වෙත යොමු කරමින්...",
+
+notOwner:"මෙම ගිණුමට Owner Admin අවසරය නොමැත.",
+
+backendUnavailable:"Backend ආරක්ෂක පරීක්ෂාව සම්පූර්ණ කළ නොහැක. ප්‍රවේශය ලබාදී නොමැත.",
+
+appCheckFailed:"App Check පරීක්ෂාව අසාර්ථකයි.",
+
+connectionLost:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+
+popupClosed:"Google Login කවුළුව වසා ඇත. නැවත උත්සාහ කරන්න.",
+
+popupBlocked:"Browser එක Google Login කවුළුව අවහිර කර ඇත. Popup අවසර ලබාදී නැවත උත්සාහ කරන්න.",
+
+domainError:"මෙම වෙබ් අඩවිය Firebase Authorized Domains වෙත ඇතුළත් කර නැත.",
+
+tooManyRequests:"ඉල්ලීම් වැඩි ප්‍රමාණයක් සිදු කර ඇත. පසුව නැවත උත්සාහ කරන්න.",
+
+loginError:"Google Login සම්පූර්ණ කළ නොහැක.",
+
+copied:"UID එක Copy කර ඇත.",
+
+copyFailed:"UID එක අතින් Copy කරන්න.",
+
+securityNote:"සියලුම අනිවාර්ය Server පරීක්ෂාවන් සාර්ථක වීමෙන් පසුව පමණක් Admin ප්‍රවේශය ලැබේ.",
+
+setupRequired:"Owner Admin අවසරය තවම තහවුරු කර නොමැත."
+
+},
+
+en:{
+
+heading:"Owner Admin Login",
+
+subtitle:"Secure access reserved for the MY RIDE owner.",
+
+secureLogin:"Secure Admin Login",
+
+ownerNotice:"Only the authorized owner's Google account may access the Admin system.",
+
+googleLogin:"Sign in with Google",
+
+accessDenied:"Access Denied",
+
+deniedNotice:"Admin access has not been verified for this account.",
+
+switchAccount:"Choose Another Google Account",
+
+retry:"Retry Verification",
+
+securityChecks:"Security Checks",
+
+firebaseConnection:"Firebase Connection",
+
+appCheck:"Firebase App Check",
+
+googleVerification:"Google Account",
+
+ownerPermission:"Owner Admin Permission",
+
+ownerUid:"Owner UID Verification",
+
+backendVerification:"Backend Security Verification",
+
+setupHeading:"Initial Owner Account Setup",
+
+setupNotice:"Your signed-in Firebase UID is displayed below. Owner permission must be assigned through trusted Firebase administration.",
+
+signedInAccount:"Google Account",
+
+copyUid:"Copy Firebase UID",
+
+setupWarning:"Copying a UID or signing into this page does not grant Admin permission.",
+
+accountProtection:"Google Account Protection",
+
+protection1:"✓ Keep Google Two-Step Verification enabled.",
+
+protection2:"✓ Never share your Gmail password.",
+
+protection3:"✓ Keep your recovery phone and email updated.",
+
+protection4:"✓ Store Google backup codes securely.",
+
+googleSecurity:"Google Security Settings",
+
+recoveryHeading:"Account Recovery",
+
+recoveryNotice:"Use Google's official account recovery service if you lose your phone or forget your Google password.",
+
+recoverAccount:"Recover Google Account",
+
+privateAccess:"Private owner access only.",
+
+waiting:"Not Checked",
+
+connected:"Connected",
+
+verified:"Verified",
+
+checking:"Checking...",
+
+failed:"Failed",
+
+initializing:"Connecting security services...",
+
+ready:"Sign in with your Google account.",
+
+signingIn:"Verifying Google account...",
+
+verifyingOwner:"Verifying owner permissions...",
+
+authorized:"Owner permission verified.",
+
+redirecting:"Opening Admin Dashboard...",
+
+notOwner:"This account does not have Owner Admin permission.",
+
+backendUnavailable:"Backend security verification could not be completed. Access has not been granted.",
+
+appCheckFailed:"App Check verification failed.",
+
+connectionLost:"No internet connection.",
+
+popupClosed:"Google Login was closed. Please try again.",
+
+popupBlocked:"The browser blocked the Google Login popup. Allow popups and try again.",
+
+domainError:"This website is not authorized in Firebase Authorized Domains.",
+
+tooManyRequests:"Too many requests. Please try again later.",
+
+loginError:"Google Login could not be completed.",
+
+copied:"UID copied.",
+
+copyFailed:"Please copy the UID manually.",
+
+securityNote:"Admin access is granted only after all required server security checks succeed.",
+
+setupRequired:"Owner Admin permission has not yet been verified."
+
+},
+
+ta:{
+
+heading:"உரிமையாளர் நிர்வாக உள்நுழைவு",
+
+subtitle:"MY RIDE உரிமையாளருக்கான பாதுகாப்பான அணுகல்.",
+
+secureLogin:"பாதுகாப்பான நிர்வாக உள்நுழைவு",
+
+ownerNotice:"அங்கீகரிக்கப்பட்ட உரிமையாளரின் Google கணக்கிற்கு மட்டுமே நிர்வாக அணுகல் வழங்கப்படும்.",
+
+googleLogin:"Google கணக்கில் உள்நுழையவும்",
+
+accessDenied:"அணுகல் மறுக்கப்பட்டது",
+
+deniedNotice:"இந்த கணக்கிற்கான நிர்வாக அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+
+switchAccount:"வேறு Google கணக்கை தேர்ந்தெடுக்கவும்",
+
+retry:"மீண்டும் சரிபார்க்கவும்",
+
+securityChecks:"பாதுகாப்பு சரிபார்ப்புகள்",
+
+firebaseConnection:"Firebase இணைப்பு",
+
+appCheck:"Firebase App Check",
+
+googleVerification:"Google கணக்கு",
+
+ownerPermission:"உரிமையாளர் நிர்வாக அனுமதி",
+
+ownerUid:"உரிமையாளர் UID சரிபார்ப்பு",
+
+backendVerification:"சேவையக பாதுகாப்பு சரிபார்ப்பு",
+
+setupHeading:"ஆரம்ப உரிமையாளர் கணக்கு அமைப்பு",
+
+setupNotice:"உள்நுழைந்த Firebase UID கீழே காட்டப்பட்டுள்ளது. பாதுகாப்பான Firebase நிர்வாகம் மூலமாக மட்டுமே உரிமையாளர் அனுமதி வழங்கப்பட வேண்டும்.",
+
+signedInAccount:"Google கணக்கு",
+
+copyUid:"Firebase UID நகலெடுக்கவும்",
+
+setupWarning:"UID நகலெடுப்பதாலோ இந்த பக்கத்தில் உள்நுழைவதாலோ நிர்வாக அனுமதி கிடைக்காது.",
+
+accountProtection:"Google கணக்கு பாதுகாப்பு",
+
+protection1:"✓ Google இருபடி சரிபார்ப்பை செயல்படுத்தவும்.",
+
+protection2:"✓ Gmail கடவுச்சொல்லை பகிர வேண்டாம்.",
+
+protection3:"✓ மீட்பு தொலைபேசி மற்றும் மின்னஞ்சலை புதுப்பிக்கவும்.",
+
+protection4:"✓ Google காப்பு குறியீடுகளை பாதுகாப்பாக வைக்கவும்.",
+
+googleSecurity:"Google பாதுகாப்பு அமைப்புகள்",
+
+recoveryHeading:"கணக்கு மீட்பு",
+
+recoveryNotice:"தொலைபேசி தொலைந்தால் அல்லது கடவுச்சொல் மறந்தால் Google அதிகாரப்பூர்வ கணக்கு மீட்பு சேவையை பயன்படுத்தவும்.",
+
+recoverAccount:"Google கணக்கை மீட்டெடுக்கவும்",
+
+privateAccess:"உரிமையாளருக்கு மட்டும் தனிப்பட்ட அணுகல்.",
+
+waiting:"சரிபார்க்கப்படவில்லை",
+
+connected:"இணைக்கப்பட்டுள்ளது",
+
+verified:"உறுதிப்படுத்தப்பட்டது",
+
+checking:"சரிபார்க்கப்படுகிறது...",
+
+failed:"தோல்வி",
+
+initializing:"பாதுகாப்பு சேவைகள் இணைக்கப்படுகின்றன...",
+
+ready:"Google கணக்கில் உள்நுழையவும்.",
+
+signingIn:"Google கணக்கு சரிபார்க்கப்படுகிறது...",
+
+verifyingOwner:"உரிமையாளர் அனுமதி சரிபார்க்கப்படுகிறது...",
+
+authorized:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+
+redirecting:"நிர்வாக முதன்மைப் பக்கம் திறக்கப்படுகிறது...",
+
+notOwner:"இந்த கணக்கிற்கு உரிமையாளர் நிர்வாக அனுமதி இல்லை.",
+
+backendUnavailable:"சேவையக பாதுகாப்பு சரிபார்ப்பு முடியவில்லை. அணுகல் வழங்கப்படவில்லை.",
+
+appCheckFailed:"App Check சரிபார்ப்பு தோல்வியடைந்தது.",
+
+connectionLost:"இணைய இணைப்பு இல்லை.",
+
+popupClosed:"Google உள்நுழைவு மூடப்பட்டது. மீண்டும் முயற்சிக்கவும்.",
+
+popupBlocked:"உலாவி Google உள்நுழைவு சாளரத்தை தடுத்துள்ளது.",
+
+domainError:"இந்த இணையதளம் Firebase அங்கீகரிக்கப்பட்ட களங்களில் சேர்க்கப்படவில்லை.",
+
+tooManyRequests:"அதிகமான கோரிக்கைகள். பின்னர் முயற்சிக்கவும்.",
+
+loginError:"Google உள்நுழைவை முடிக்க முடியவில்லை.",
+
+copied:"UID நகலெடுக்கப்பட்டது.",
+
+copyFailed:"UID ஐ கைமுறையாக நகலெடுக்கவும்.",
+
+securityNote:"அனைத்து சேவையக பாதுகாப்பு சரிபார்ப்புகளும் வெற்றியடைந்த பின்னரே நிர்வாக அணுகல் வழங்கப்படும்.",
+
+setupRequired:"உரிமையாளர் நிர்வாக அனுமதி இன்னும் உறுதிப்படுத்தப்படவில்லை."
+
+}
+
+};
+
+let t=translations[lang];
+
+let statusKey="initializing";
+
+let statusColor="yellow";
+
+const states={
+
+firebaseState:"waiting",
+
+appCheckState:"waiting",
+
+googleState:"waiting",
+
+ownerState:"waiting",
+
+uidState:"waiting",
+
+backendState:"waiting"
+
+};
+
+function renderLanguage(){
+
+t=translations[lang];
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.querySelectorAll("[data-lang]")
+.forEach(button=>{
+
+const selected=
+button.dataset.lang===lang;
+
+button.classList.toggle(
+"selected",
+selected
+);
+
+button.setAttribute(
+"aria-pressed",
+String(selected)
+);
+
+});
+
+Object.entries(states)
+.forEach(([id,key])=>{
+
+renderState(id,key);
+
+});
+
+showStatus(statusKey,statusColor);
+
+$("securityStatus").textContent=
+
+t.securityNote;
+
+}
+
+document.querySelectorAll("[data-lang]")
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!LANGUAGES.includes(
+button.dataset.lang
+))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+"myride_admin_language",
+lang
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(
+null,"",url
+);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+function showStatus(key,color="yellow"){
+
+statusKey=key;
+
+statusColor=color;
+
+$("status").textContent=t[key]||key;
+
+$("status").className=color;
+
+}
+
+function renderState(id,key){
+
+states[id]=key;
+
+const el=$(id);
+
+el.textContent=t[key]||key;
+
+el.className=
+
+["verified","connected"].includes(key)
+
+?"green"
+
+:key==="failed"
+
+?"red"
+
+:"yellow";
+
+}
+
+renderLanguage();
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+const APP_CHECK_SITE_KEY=
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa";
+
+// Owner UID is intentionally NOT stored here.
+// The trusted backend must maintain the owner UID.
+
+let app=null;
+
+let auth=null;
+
+let functions=null;
+
+let appCheck=null;
+
+let initialized=false;
+
+let appCheckReady=false;
+
+let busy=false;
+
+let redirecting=false;
+
+let generation=0;
+
+let retryAfter=0;
+
+let setupUidValue="";
+
+let authUnsubscribe=null;
+
+let retryTimer=null;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+// SECURITY HELPERS
+
+function validUid(value){
+
+return typeof value==="string"
+
+&&value.length>=1
+
+&&value.length<=128;
+
+}
+
+function validSession(user,currentGeneration){
+
+return currentGeneration===generation
+
+&&auth?.currentUser?.uid===user.uid
+
+&&navigator.onLine;
+
+}
+
+function setBusy(value){
+
+busy=value;
+
+$("loader").hidden=!value;
+
+updateControls();
+
+}
+
+function updateControls(){
+
+const enabled=
+
+initialized
+
+&&appCheckReady
+
+&&navigator.onLine
+
+&&!busy
+
+&&!redirecting
+
+&&Date.now()>=retryAfter;
+
+$("googleLogin").disabled=!enabled;
+
+$("switchAccount").disabled=!enabled;
+
+$("retryButton").disabled=
+
+!initialized
+
+||busy
+
+||redirecting
+
+||!navigator.onLine
+
+||Date.now()<retryAfter;
+
+}
+
+function clearSetup(){
+
+setupUidValue="";
+
+$("setupPanel").hidden=true;
+
+$("setupEmail").textContent="—";
+
+$("setupUid").textContent="—";
+
+$("copyStatus").textContent="";
+
+}
+
+function resetSecurity(){
+
+renderState("googleState","waiting");
+
+renderState("ownerState","waiting");
+
+renderState("uidState","waiting");
+
+renderState("backendState","waiting");
+
+$("deniedPanel").hidden=true;
+
+$("switchAccount").hidden=true;
+
+$("retryButton").hidden=true;
+
+clearSetup();
+
+}
+
+function showSetup(user){
+
+if(!validUid(user.uid))return;
+
+setupUidValue=user.uid;
+
+$("setupEmail").textContent=
+
+user.email||"—";
+
+$("setupUid").textContent=user.uid;
+
+$("setupPanel").hidden=false;
+
+}
+
+// APP CHECK VERIFICATION
+
+async function verifyAppCheck(){
+
+if(!appCheck){
+
+throw new Error("App Check unavailable");
+
+}
+
+appCheckReady=false;
+
+renderState("appCheckState","checking");
+
+try{
+
+const result=await getToken(
+appCheck,
+false
+);
+
+if(
+
+typeof result?.token!=="string"
+
+||result.token.length===0
+
+){
+
+throw new Error("Invalid App Check token");
+
+}
+
+appCheckReady=true;
+
+renderState(
+"appCheckState",
+"verified"
+);
+
+}catch(e){
+
+appCheckReady=false;
+
+renderState(
+"appCheckState",
+"failed"
+);
+
+throw e;
+
+}finally{
+
+updateControls();
+
+}
+
+}
+
+// OPTIONAL SERVER AUDIT REQUEST
+
+async function reportLoginAttempt(
+user,
+reason
+){
+
+if(
+
+!functions
+
+||!auth?.currentUser
+
+||auth.currentUser.uid!==user.uid
+
+||!appCheckReady
+
+){
+
+return;
+
+}
+
+const allowedReasons=[
+
+"owner_claim_missing",
+
+"google_provider_invalid",
+
+"backend_denied"
+
+];
+
+if(!allowedReasons.includes(reason)){
+
+return;
+
+}
+
+try{
+
+await httpsCallable(
+
+functions,
+
+"reportOwnerLoginAttempt",
+
+{timeout:10000}
+
+)({
+
+reason
+
+});
+
+}catch(e){
+
+// Never grant access if audit fails.
+// Backend must independently audit
+// actual authentication attempts.
+
+}
+
+}
+
+// DENY ACCESS
+
+async function denyAccess(
+user,
+reason,
+key,
+showUid=false
+){
+
+const currentGeneration=generation;
+
+redirecting=false;
+
+renderState("ownerState","failed");
+
+renderState("uidState","failed");
+
+renderState("backendState","failed");
+
+showStatus(key,"red");
+
+$("deniedPanel").hidden=false;
+
+if(showUid&&user){
+
+showSetup(user);
+
+}
+
+if(user){
+
+await reportLoginAttempt(
+user,
+reason
+);
+
+}
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+try{
+
+if(auth?.currentUser){
+
+await signOut(auth);
+
+}
+
+}catch(e){
+
+// UI remains denied.
+// Backend must enforce authorization.
+
+}
+
+if(currentGeneration!==generation){
+
+return;
+
+}
+
+$("switchAccount").hidden=false;
+
+$("retryButton").hidden=false;
+
+setBusy(false);
+
+}
+
+// OWNER AUTHORIZATION
+
+async function verifyOwner(user){
+
+const currentGeneration=++generation;
+
+resetSecurity();
+
+setBusy(true);
+
+if(!user){
+
+showStatus("ready");
+
+setBusy(false);
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+showStatus("connectionLost","red");
+
+setBusy(false);
+
+return;
+
+}
+
+showStatus("signingIn");
+
+renderState("googleState","checking");
+
+try{
+
+await verifyAppCheck();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+showStatus("appCheckFailed","red");
+
+$("retryButton").hidden=false;
+
+setBusy(false);
+
+return;
+
+}
+
+if(!validSession(
+user,
+currentGeneration
+))return;
+
+let tokenResult;
+
+try{
+
+tokenResult=
+
+await user.getIdTokenResult(true);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+showStatus("loginError","red");
+
+$("retryButton").hidden=false;
+
+setBusy(false);
+
+return;
+
+}
+
+if(!validSession(
+user,
+currentGeneration
+))return;
+
+// Google sign-in provider is mandatory.
+
+const googleProvider=
+
+tokenResult.signInProvider==="google.com"
+
+&&user.providerData.some(
+
+item=>item.providerId==="google.com"
+
+);
+
+const emailVerified=
+
+tokenResult.claims.email_verified===true;
+
+if(!googleProvider||!emailVerified){
+
+renderState("googleState","failed");
+
+await denyAccess(
+
+user,
+
+"google_provider_invalid",
+
+"notOwner"
+
+);
+
+return;
+
+}
+
+renderState("googleState","verified");
+
+showStatus("verifyingOwner");
+
+renderState("ownerState","checking");
+
+// A custom claim is required.
+// It must be assigned using Admin SDK,
+// never from browser JavaScript.
+
+if(tokenResult.claims.ownerAdmin!==true){
+
+await denyAccess(
+
+user,
+
+"owner_claim_missing",
+
+"setupRequired",
+
+true
+
+);
+
+return;
+
+}
+
+renderState("ownerState","verified");
+
+renderState("uidState","checking");
+
+renderState("backendState","checking");
+
+try{
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(!validSession(
+user,
+currentGeneration
+))return;
+
+const result=response.data;
+
+// Backend must verify:
+// 1. Firebase Auth ID token.
+// 2. Google sign-in provider.
+// 3. Verified email.
+// 4. ownerAdmin custom claim.
+// 5. Server-side immutable owner UID.
+// 6. Revoked or disabled accounts.
+// 7. Owner session policy.
+// 8. Firebase App Check.
+// 9. Login rate limits.
+// 10. Security audit records.
+
+if(
+
+result?.authorized!==true
+
+||result.uid!==user.uid
+
+||result.role!=="owner"
+
+||result.ownerUidVerified!==true
+
+||result.sessionValid!==true
+
+){
+
+await denyAccess(
+
+user,
+
+"backend_denied",
+
+"notOwner"
+
+);
+
+return;
+
+}
+
+renderState("uidState","verified");
+
+renderState("backendState","verified");
+
+showStatus("authorized","green");
+
+redirecting=true;
+
+updateControls();
+
+if(!validSession(
+user,
+currentGeneration
+)){
+
+redirecting=false;
+
+setBusy(false);
+
+return;
+
+}
+
+showStatus("redirecting","green");
+
+location.replace(
+
+"./admin-dashboard.html?lang="
+
++encodeURIComponent(lang)
+
+);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+renderState("uidState","failed");
+
+renderState("backendState","failed");
+
+redirecting=false;
+
+showStatus(
+
+"backendUnavailable",
+
+"red"
+
+);
+
+$("retryButton").hidden=false;
+
+$("switchAccount").hidden=false;
+
+setBusy(false);
+
+}
+
+}
+
+// GOOGLE LOGIN
+
+function handleLoginError(error){
+
+const code=error?.code||"";
+
+switch(code){
+
+case "auth/popup-closed-by-user":
+
+case "auth/cancelled-popup-request":
+
+showStatus("popupClosed","yellow");
+
+break;
+
+case "auth/popup-blocked":
+
+showStatus("popupBlocked","red");
+
+break;
+
+case "auth/unauthorized-domain":
+
+showStatus("domainError","red");
+
+break;
+
+case "auth/too-many-requests":
+
+retryAfter=Date.now()+60000;
+
+showStatus("tooManyRequests","red");
+
+if(retryTimer){
+
+clearTimeout(retryTimer);
+
+}
+
+retryTimer=setTimeout(
+
+updateControls,
+
+60000
+
+);
+
+break;
+
+case "auth/network-request-failed":
+
+showStatus("connectionLost","red");
+
+break;
+
+default:
+
+showStatus("loginError","red");
+
+}
+
+$("retryButton").hidden=false;
+
+setBusy(false);
+
+}
+
+$("googleLogin").onclick=async()=>{
+
+if(
+
+!initialized
+
+||!appCheckReady
+
+||busy
+
+||redirecting
+
+||!navigator.onLine
+
+||Date.now()<retryAfter
+
+){
+
+return;
+
+}
+
+resetSecurity();
+
+setBusy(true);
+
+showStatus("signingIn");
+
+try{
+
+// Called directly from a user click.
+
+await signInWithPopup(
+
+auth,
+
+provider
+
+);
+
+// onAuthStateChanged handles verification.
+
+}catch(e){
+
+handleLoginError(e);
+
+}
+
+};
+
+// SWITCH GOOGLE ACCOUNT
+
+$("switchAccount").onclick=async()=>{
+
+if(
+
+busy
+
+||redirecting
+
+||!initialized
+
+||!navigator.onLine
+
+){
+
+return;
+
+}
+
+generation++;
+
+setBusy(true);
+
+try{
+
+await signOut(auth);
+
+resetSecurity();
+
+showStatus("ready");
+
+}catch(e){
+
+showStatus("loginError","red");
+
+}finally{
+
+setBusy(false);
+
+}
+
+};
+
+// RETRY SECURITY CHECKS
+
+$("retryButton").onclick=async()=>{
+
+if(
+
+busy
+
+||redirecting
+
+||!navigator.onLine
+
+||Date.now()<retryAfter
+
+){
+
+return;
+
+}
+
+if(!initialized){
+
+location.reload();
+
+return;
+
+}
+
+if(auth.currentUser){
+
+await verifyOwner(auth.currentUser);
+
+return;
+
+}
+
+setBusy(true);
+
+try{
+
+await verifyAppCheck();
+
+showStatus("ready");
+
+}catch(e){
+
+showStatus("appCheckFailed","red");
+
+}finally{
+
+setBusy(false);
+
+}
+
+};
+
+// COPY OWN FIREBASE UID
+
+$("copyUid").onclick=async()=>{
+
+if(!validUid(setupUidValue)){
+
+return;
+
+}
+
+try{
+
+await navigator.clipboard.writeText(
+
+setupUidValue
+
+);
+
+$("copyStatus").textContent=t.copied;
+
+}catch(e){
+
+$("copyStatus").textContent=t.copyFailed;
+
+}
+
+};
+
+// INITIALIZE FIREBASE
+
+async function initializeSecurity(){
+
+setBusy(true);
+
+showStatus("initializing");
+
+try{
+
+app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+APP_CHECK_SITE_KEY
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+initialized=true;
+
+// SDK initialization is not proof
+// of backend authorization.
+
+renderState(
+
+"firebaseState",
+
+"connected"
+
+);
+
+authUnsubscribe=onAuthStateChanged(
+
+auth,
+
+user=>{
+
+if(user){
+
+verifyOwner(user);
+
+}else if(!busy){
+
+showStatus("ready");
+
+updateControls();
+
+}
+
+}
+
+);
+
+await verifyAppCheck();
+
+if(!auth.currentUser){
+
+showStatus("ready");
+
+setBusy(false);
+
+}
+
+}catch(e){
+
+if(!initialized){
+
+renderState(
+
+"firebaseState",
+
+"failed"
+
+);
+
+}else{
+
+renderState(
+
+"appCheckState",
+
+"failed"
+
+);
+
+}
+
+showStatus(
+
+initialized
+
+?"appCheckFailed"
+
+:"loginError",
+
+"red"
+
+);
+
+$("retryButton").hidden=false;
+
+setBusy(false);
+
+}
+
+}
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+generation++;
+
+redirecting=false;
+
+appCheckReady=false;
+
+clearSetup();
+
+showStatus(
+
+"connectionLost",
+
+"red"
+
+);
+
+setBusy(false);
+
+}
+
+);
+
+window.addEventListener(
+
+"online",
+
+async()=>{
+
+if(!initialized)return;
+
+if(auth.currentUser){
+
+await verifyOwner(auth.currentUser);
+
+}else{
+
+setBusy(true);
+
+try{
+
+await verifyAppCheck();
+
+showStatus("ready");
+
+}catch(e){
+
+showStatus(
+
+"appCheckFailed",
+
+"red"
+
+);
+
+$("retryButton").hidden=false;
+
+}finally{
+
+setBusy(false);
+
+}
+
+}
+
+}
+
+);
+
+// PAGE RESTORATION
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(
+
+event.persisted
+
+&&initialized
+
+&&auth.currentUser
+
+){
+
+redirecting=false;
+
+verifyOwner(auth.currentUser);
+
+}
+
+}
+
+);
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+
+</html>
