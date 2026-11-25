@@ -1,0 +1,561 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="google" content="notranslate">
+
+<title>MY RIDE - Customer</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #111111;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 20px;
+    text-align: center;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    margin: 10px 0;
+}
+
+h1 {
+    color: #FFD600;
+    font-size: 36px;
+    margin: 0;
+}
+
+.country {
+    color: #FFD600;
+    letter-spacing: 5px;
+    margin: 8px 0 20px;
+}
+
+h2 {
+    font-size: 23px;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+
+.service-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 380px;
+    min-height: 65px;
+    padding: 16px;
+    margin: 7px 0;
+    background: #FFD600;
+    color: #111111;
+    border-radius: 12px;
+    text-decoration: none;
+    text-align: left;
+    font-size: 17px;
+    font-weight: bold;
+    touch-action: manipulation;
+}
+
+.service-button:hover {
+    background: #E6C200;
+}
+
+.service-button:focus-visible,
+.back-button:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 4px;
+}
+
+.service-icon {
+    font-size: 25px;
+    flex-shrink: 0;
+}
+
+.service-text {
+    flex: 1;
+    overflow-wrap: anywhere;
+}
+
+.arrow {
+    font-size: 24px;
+}
+
+.back-button {
+    color: #FFD600;
+    text-decoration: none;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+footer {
+    color: #AAAAAA;
+    font-size: 12px;
+    margin-top: 20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+<svg class="logo"
+viewBox="0 0 100 100"
+aria-hidden="true">
+
+<rect width="100" height="100"
+rx="24" fill="#FFD600"/>
+
+<path d="M22 47 L30 28 H70 L78 47
+V70 H22 Z" fill="#111111"/>
+
+<path d="M34 34 H66 L72 47 H28 Z"
+fill="#FFD600"/>
+
+<circle cx="34" cy="58" r="6"
+fill="#FFD600"/>
+
+<circle cx="66" cy="58" r="6"
+fill="#FFD600"/>
+
+<rect x="25" y="66" width="12"
+height="12" rx="3" fill="#111111"/>
+
+<rect x="63" y="66" width="12"
+height="12" rx="3" fill="#111111"/>
+
+</svg>
+
+<h1>MY RIDE</h1>
+
+<div class="country">SRI LANKA</div>
+
+<h2 id="heading">
+පාරිභෝගික සේවා
+</h2>
+
+<!-- BUTTON 01: RIDE BOOKING -->
+
+<a class="service-button"
+id="bookingButton"
+href="./booking.html">
+
+<span class="service-icon"
+aria-hidden="true">🚕</span>
+
+<span class="service-text"
+id="bookingText">
+හයර් එකක් ලබා ගැනීම
+</span>
+
+<span class="arrow"
+aria-hidden="true">›</span>
+
+</a>
+
+<!-- BUTTON 02: TRACK DRIVER -->
+
+<a class="service-button"
+id="trackingButton"
+href="./tracking.html">
+
+<span class="service-icon"
+aria-hidden="true">📍</span>
+
+<span class="service-text"
+id="trackingText">
+රියදුරු එන මාර්ගය
+</span>
+
+<span class="arrow"
+aria-hidden="true">›</span>
+
+</a>
+
+<!-- BUTTON 03: ACTIVE RIDE -->
+
+<a class="service-button"
+id="activeButton"
+href="./active-ride.html">
+
+<span class="service-icon"
+aria-hidden="true">🚘</span>
+
+<span class="service-text"
+id="activeText">
+දැනට ගමන් කරන හයර් එක
+</span>
+
+<span class="arrow"
+aria-hidden="true">›</span>
+
+</a>
+
+<!-- BUTTON 04: PAYMENTS -->
+
+<a class="service-button"
+id="paymentButton"
+href="./payments.html">
+
+<span class="service-icon"
+aria-hidden="true">💳</span>
+
+<span class="service-text"
+id="paymentText">
+මගේ ගෙවීම්
+</span>
+
+<span class="arrow"
+aria-hidden="true">›</span>
+
+</a>
+
+<!-- BUTTON 05: COMPLAINTS -->
+
+<a class="service-button"
+id="feedbackButton"
+href="./feedback.html">
+
+<span class="service-icon"
+aria-hidden="true">💬</span>
+
+<span class="service-text"
+id="feedbackText">
+අදහස් සහ පැමිණිලි
+</span>
+
+<span class="arrow"
+aria-hidden="true">›</span>
+
+</a>
+
+<!-- BUTTON 06: LANGUAGE -->
+
+<a class="service-button"
+id="languageButton"
+href="./language.html">
+
+<span class="service-icon"
+aria-hidden="true">🌐</span>
+
+<span class="service-text"
+id="languageText">
+භාෂාව වෙනස් කිරීම
+</span>
+
+<span class="arrow"
+aria-hidden="true">›</span>
+
+</a>
+
+<a class="back-button"
+id="backButton"
+href="./menu.html">
+
+← ආපසු
+
+</a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script>
+
+"use strict";
+
+const LANGUAGE_KEY = "myride_language";
+
+const allowedLanguages = [
+    "si",
+    "en",
+    "ta"
+];
+
+// THREE LANGUAGE TRANSLATIONS
+
+const translations = {
+
+    si: {
+
+        title: "MY RIDE - පාරිභෝගික සේවා",
+
+        heading: "පාරිභෝගික සේවා",
+
+        booking: "හයර් එකක් ලබා ගැනීම",
+
+        tracking: "රියදුරු එන මාර්ගය",
+
+        active: "දැනට ගමන් කරන හයර් එක",
+
+        payment: "මගේ ගෙවීම්",
+
+        feedback: "අදහස් සහ පැමිණිලි",
+
+        language: "භාෂාව වෙනස් කිරීම",
+
+        back: "← ආපසු"
+
+    },
+
+    en: {
+
+        title: "MY RIDE - Customer Services",
+
+        heading: "Customer Services",
+
+        booking: "Ride Booking",
+
+        tracking: "Track Driver",
+
+        active: "Active Ride",
+
+        payment: "My Payments",
+
+        feedback: "Feedback & Complaints",
+
+        language: "Change Language",
+
+        back: "← Back"
+
+    },
+
+    ta: {
+
+        title: "MY RIDE - வாடிக்கையாளர் சேவைகள்",
+
+        heading: "வாடிக்கையாளர் சேவைகள்",
+
+        booking: "பயண முன்பதிவு",
+
+        tracking: "ஓட்டுநரைக் கண்காணித்தல்",
+
+        active: "தற்போதைய பயணம்",
+
+        payment: "எனது கொடுப்பனவுகள்",
+
+        feedback: "கருத்துகள் மற்றும் புகார்கள்",
+
+        language: "மொழியை மாற்றவும்",
+
+        back: "← பின்செல்"
+
+    }
+
+};
+
+// AUTO GET LANGUAGE
+
+function getLanguage() {
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    const urlLanguage = params.get("lang");
+
+    if (allowedLanguages.includes(urlLanguage)) {
+
+        return urlLanguage;
+
+    }
+
+    try {
+
+        const savedLanguage =
+            localStorage.getItem(LANGUAGE_KEY);
+
+        if (
+            allowedLanguages.includes(
+                savedLanguage
+            )
+        ) {
+
+            return savedLanguage;
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Language storage unavailable."
+        );
+
+    }
+
+    return null;
+
+}
+
+// AUTO SAVE LANGUAGE
+
+function saveLanguage(language) {
+
+    try {
+
+        localStorage.setItem(
+            LANGUAGE_KEY,
+            language
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Language passed through URL."
+        );
+
+    }
+
+}
+
+// AUTO TRANSLATE CONTENT
+
+function applyLanguage(language) {
+
+    const text = translations[language];
+
+    document.documentElement.lang = language;
+
+    document.title = text.title;
+
+    const fields = {
+
+        heading: text.heading,
+
+        bookingText: text.booking,
+
+        trackingText: text.tracking,
+
+        activeText: text.active,
+
+        paymentText: text.payment,
+
+        feedbackText: text.feedback,
+
+        languageText: text.language,
+
+        backButton: text.back
+
+    };
+
+    Object.entries(fields).forEach(
+        function(entry) {
+
+            document.getElementById(
+                entry[0]
+            ).textContent = entry[1];
+
+        }
+    );
+
+}
+
+// AUTO CONNECT SERVICE PAGES
+
+function connectPage(
+    buttonId,
+    fileName,
+    language
+) {
+
+    const nextPage = new URL(
+        fileName,
+        window.location.href
+    );
+
+    nextPage.searchParams.set(
+        "lang",
+        language
+    );
+
+    document.getElementById(
+        buttonId
+    ).href = nextPage.href;
+
+}
+
+// INITIALIZE CUSTOMER DASHBOARD
+
+function initializeCustomer() {
+
+    const language = getLanguage();
+
+    if (!language) {
+
+        window.location.replace(
+            "./language.html"
+        );
+
+        return;
+
+    }
+
+    saveLanguage(language);
+
+    applyLanguage(language);
+
+    const pages = {
+
+        bookingButton: "./booking.html",
+
+        trackingButton: "./tracking.html",
+
+        activeButton: "./active-ride.html",
+
+        paymentButton: "./payments.html",
+
+        feedbackButton: "./feedback.html",
+
+        languageButton: "./language.html",
+
+        backButton: "./menu.html"
+
+    };
+
+    Object.entries(pages).forEach(
+        function(entry) {
+
+            connectPage(
+                entry[0],
+                entry[1],
+                language
+            );
+
+        }
+    );
+
+}
+
+initializeCustomer();
+
+window.addEventListener(
+    "pageshow",
+    initializeCustomer
+);
+
+</script>
+
+</body>
+</html>
