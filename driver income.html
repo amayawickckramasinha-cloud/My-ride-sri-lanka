@@ -1,0 +1,1980 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+
+<title>MY RIDE - Driver Income</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:18px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:18px;
+margin:15px 0;
+}
+
+.incomePanel{
+text-align:center;
+border-color:#FFD600;
+}
+
+.tabs{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:6px;
+margin:20px 0;
+}
+
+.tabs button{
+background:#292929;
+color:#FFD600;
+border:1px solid #FFD600;
+padding:12px 4px;
+font-size:13px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.tabs button.selected{
+background:#FFD600;
+color:#111;
+}
+
+.label{
+color:#CCC;
+font-size:14px;
+line-height:1.8;
+}
+
+.amount{
+font-size:30px;
+font-weight:bold;
+margin:12px 0;
+overflow-wrap:anywhere;
+}
+
+.yellow{color:#FFD600}
+.green{color:#4ADE80}
+.red{color:#FF6464}
+
+hr{
+border:0;
+border-top:1px solid #444;
+margin:20px 0;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.stat{
+background:#202020;
+border:1px solid #444;
+border-radius:12px;
+padding:16px;
+}
+
+.statValue{
+font-size:23px;
+font-weight:bold;
+color:#FFD600;
+margin-top:10px;
+overflow-wrap:anywhere;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid #444;
+}
+
+.row strong{
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.8;
+}
+
+#status{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+
+#periodText{
+text-align:center;
+color:#CCC;
+font-size:14px;
+}
+
+#incomeBar{
+display:flex;
+height:12px;
+background:#444;
+border-radius:10px;
+overflow:hidden;
+margin:20px 0;
+}
+
+#driverBar{
+background:#22C55E;
+width:0;
+}
+
+#commissionBar{
+background:#EF4444;
+width:0;
+}
+
+footer{
+text-align:center;
+font-size:12px;
+color:#AAA;
+padding:25px;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<div class="row">
+
+<span data-t="driverName"></span>
+
+<strong id="driverName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>Driver ID</span>
+
+<strong id="driverId">—</strong>
+
+</div>
+
+</section>
+
+<div class="tabs">
+
+<button data-period="day"
+data-t="today"></button>
+
+<button data-period="week"
+data-t="week"></button>
+
+<button data-period="month"
+data-t="month"></button>
+
+<button data-period="all"
+data-t="all"></button>
+
+</div>
+
+<p id="periodText">—</p>
+
+<section class="panel incomePanel">
+
+<div class="label"
+data-t="grossIncome"></div>
+
+<div id="grossIncome"
+class="amount yellow">—</div>
+
+<hr>
+
+<div class="label"
+data-t="commission"></div>
+
+<div id="commission"
+class="amount red">—</div>
+
+<hr>
+
+<div class="label"
+data-t="netIncome"></div>
+
+<div id="netIncome"
+class="amount green">—</div>
+
+<div id="incomeBar">
+
+<div id="driverBar"></div>
+
+<div id="commissionBar"></div>
+
+</div>
+
+<p class="note"
+data-t="commissionNote"></p>
+
+</section>
+
+<div class="grid">
+
+<div class="stat">
+
+<div class="label"
+data-t="completedRides"></div>
+
+<div id="completedRides"
+class="statValue">—</div>
+
+</div>
+
+<div class="stat">
+
+<div class="label"
+data-t="distance"></div>
+
+<div id="distance"
+class="statValue">—</div>
+
+</div>
+
+<div class="stat">
+
+<div class="label"
+data-t="duration"></div>
+
+<div id="duration"
+class="statValue">—</div>
+
+</div>
+
+<div class="stat">
+
+<div class="label"
+data-t="averageIncome"></div>
+
+<div id="averageIncome"
+class="statValue">—</div>
+
+</div>
+
+</div>
+
+<section class="panel">
+
+<h3 data-t="payments"></h3>
+
+<div class="row">
+
+<span data-t="cash"></span>
+
+<strong id="cash"
+class="green">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="bank"></span>
+
+<strong id="bank"
+class="green">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="totalReceived"></span>
+
+<strong id="totalReceived"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="outstanding"></span>
+
+<strong id="outstanding"
+class="red">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="tollParking"></span>
+
+<strong id="tollParking">—</strong>
+
+</div>
+
+<p class="note"
+data-t="paymentNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="commissionSummary"></h3>
+
+<div class="row">
+
+<span data-t="totalCommission"></span>
+
+<strong id="totalCommission">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="paidCommission"></span>
+
+<strong id="paidCommission"
+class="green">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="unpaidCommission"></span>
+
+<strong id="unpaidCommission"
+class="red">—</strong>
+
+</div>
+
+<a id="commissionLink"
+class="action"
+data-t="viewCommission"></a>
+
+<a id="payCommissionLink"
+class="action secondary"
+data-t="payCommission"></a>
+
+</section>
+
+<p id="updatedAt"
+class="note"></p>
+
+<a id="historyLink"
+class="action"
+data-t="history"></a>
+
+<button id="refreshButton"
+class="action secondary"
+data-t="refresh"></button>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"මගේ ආදායම",
+driverName:"රියදුරුගේ නම",
+today:"අද",
+week:"සතිය",
+month:"මාසය",
+all:"සියල්ල",
+grossIncome:"මුළු හයර් ආදායම",
+commission:"MY RIDE කොමිස් මුදල",
+netIncome:"රියදුරු ශුද්ධ ආදායම",
+commissionNote:"සාමාන්‍ය කොමිස් අනුපාතය 5% කි. එක් එක් හයර් එකට අදාළ සුරැකි කොමිස් මුදල අනුව වාර්තාව සකස් වේ.",
+completedRides:"අවසන් කළ හයර්",
+distance:"මුළු ගමන් දුර",
+duration:"මුළු ගමන් කාලය",
+averageIncome:"හයර් එකක සාමාන්‍ය ශුද්ධ ආදායම",
+payments:"පාරිභෝගික ගෙවීම්",
+cash:"මුදල් ගෙවීම්",
+bank:"බැංකු ගෙවීම්",
+totalReceived:"තහවුරු කළ ගෙවීම්",
+outstanding:"ලැබීමට ඇති මුදල",
+tollParking:"Highway / Parking",
+paymentNote:"Highway සහ Parking ගාස්තු හයර් ආදායමෙන් වෙන්ව පෙන්වයි. තහවුරු කළ ගෙවීම් පමණක් ලැබුණු මුදල් ලෙස ගණනය වේ.",
+commissionSummary:"කොමිස් වාර්තාව",
+totalCommission:"මුළු කොමිස් මුදල",
+paidCommission:"ගෙවා ඇති කොමිස්",
+unpaidCommission:"ගෙවීමට ඇති කොමිස්",
+viewCommission:"කොමිස් විස්තර බලන්න",
+payCommission:"කොමිස් මුදල් ගෙවන්න",
+history:"හයර් ඉතිහාසය",
+refresh:"නැවත පරීක්ෂා කරන්න",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+loading:"ආදායම් වාර්තාව ලබාගනිමින්...",
+denied:"මෙම ආදායම් වාර්තාව බැලීමට අවසර නැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+error:"ආදායම් දත්ත ලබාගත නොහැක.",
+noData:"මෙම කාලයට ආදායම් වාර්තාවක් තවම ලබාගත නොහැක.",
+updated:"අවසන් යාවත්කාලීන කිරීම",
+allTime:"සමස්ත කාලය",
+hours:"පැය",
+minutes:"මිනිත්තු"
+
+},
+
+en:{
+
+heading:"My Income",
+driverName:"Driver Name",
+today:"Today",
+week:"Week",
+month:"Month",
+all:"All",
+grossIncome:"Total Hire Income",
+commission:"MY RIDE Commission",
+netIncome:"Driver Net Income",
+commissionNote:"The standard commission rate is 5%. Reports use the commission recorded for each completed ride.",
+completedRides:"Completed Hires",
+distance:"Total Distance",
+duration:"Total Trip Duration",
+averageIncome:"Average Net Income per Hire",
+payments:"Customer Payments",
+cash:"Cash Payments",
+bank:"Bank Payments",
+totalReceived:"Verified Payments",
+outstanding:"Outstanding Payments",
+tollParking:"Highway / Parking",
+paymentNote:"Highway and parking charges are reported separately from hire income. Only verified payments are counted as received.",
+commissionSummary:"Commission Summary",
+totalCommission:"Total Commission",
+paidCommission:"Paid Commission",
+unpaidCommission:"Outstanding Commission",
+viewCommission:"View Commission Details",
+payCommission:"Pay Commission",
+history:"Ride History",
+refresh:"Refresh",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"Verifying account...",
+loading:"Loading income report...",
+denied:"Access to this income report is not authorized.",
+offline:"No internet connection.",
+error:"Unable to load income data.",
+noData:"An income report is not yet available for this period.",
+updated:"Last Updated",
+allTime:"All Time",
+hours:"Hours",
+minutes:"Minutes"
+
+},
+
+ta:{
+
+heading:"எனது வருமானம்",
+driverName:"சாரதியின் பெயர்",
+today:"இன்று",
+week:"வாரம்",
+month:"மாதம்",
+all:"அனைத்தும்",
+grossIncome:"மொத்த பயண வருமானம்",
+commission:"MY RIDE கமிஷன்",
+netIncome:"சாரதியின் நிகர வருமானம்",
+commissionNote:"வழக்கமான கமிஷன் விகிதம் 5%. ஒவ்வொரு பயணத்திற்கும் பதிவு செய்யப்பட்ட கமிஷன் பயன்படுத்தப்படுகிறது.",
+completedRides:"முடிக்கப்பட்ட பயணங்கள்",
+distance:"மொத்த பயண தூரம்",
+duration:"மொத்த பயண நேரம்",
+averageIncome:"ஒரு பயணத்தின் சராசரி நிகர வருமானம்",
+payments:"வாடிக்கையாளர் கொடுப்பனவுகள்",
+cash:"பண கொடுப்பனவுகள்",
+bank:"வங்கி கொடுப்பனவுகள்",
+totalReceived:"உறுதிப்படுத்தப்பட்ட கொடுப்பனவுகள்",
+outstanding:"பெற வேண்டிய தொகை",
+tollParking:"சுங்கம் / வாகன நிறுத்தம்",
+paymentNote:"சுங்கம் மற்றும் வாகன நிறுத்த கட்டணங்கள் தனியாக காட்டப்படும். உறுதிப்படுத்தப்பட்ட கொடுப்பனவுகள் மட்டுமே கணக்கிடப்படும்.",
+commissionSummary:"கமிஷன் அறிக்கை",
+totalCommission:"மொத்த கமிஷன்",
+paidCommission:"செலுத்திய கமிஷன்",
+unpaidCommission:"செலுத்த வேண்டிய கமிஷன்",
+viewCommission:"கமிஷன் விவரங்கள்",
+payCommission:"கமிஷன் செலுத்தவும்",
+history:"பயண வரலாறு",
+refresh:"புதுப்பிக்கவும்",
+back:"← சாரதி முதன்மைப் பக்கம்",
+login:"சாரதி உள்நுழைவு",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+loading:"வருமான அறிக்கை பெறப்படுகிறது...",
+denied:"இந்த வருமான அறிக்கையை அணுக அனுமதி இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+error:"வருமான தகவல்களைப் பெற முடியவில்லை.",
+noData:"இந்த காலத்திற்கான வருமான அறிக்கை இன்னும் கிடைக்கவில்லை.",
+updated:"கடைசியாக புதுப்பிக்கப்பட்டது",
+allTime:"முழு காலம்",
+hours:"மணி",
+minutes:"நிமிடங்கள்"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+$("backButton").href=
+"./driver-dashboard.html?lang="+lang;
+
+$("loginLink").href=
+"./driver-login.html?lang="+lang;
+
+$("commissionLink").href=
+"./driver-commission.html?lang="+lang;
+
+$("payCommissionLink").href=
+"./driver-pay-commission.html?lang="+lang;
+
+$("historyLink").href=
+"./driver-history.html?lang="+lang;
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let authorized=false;
+let driver=null;
+
+let driverUnsubscribe=null;
+let incomeUnsubscribe=null;
+
+let generation=0;
+let reportGeneration=0;
+
+let selectedPeriod="day";
+let activeReportKey=null;
+
+let serverOffset=0;
+let clockCheckedAt=0;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SESSION SECURITY
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function number(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=0;
+
+}
+
+function money(value){
+
+return number(value)
+
+?"Rs. "+value.toLocaleString(
+
+"en-LK",
+
+{
+
+minimumFractionDigits:2,
+
+maximumFractionDigits:2
+
+}
+
+)
+
+:"—";
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||generation!==currentGeneration){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// SERVER TIME
+
+async function syncClock(){
+
+const started=Date.now();
+
+const result=await serverCall(
+
+"getDriverServerTime"
+
+);
+
+const ended=Date.now();
+
+if(!Number.isFinite(result?.serverTimeMs)
+
+||ended-started>10000){
+
+throw new Error("Server time unavailable");
+
+}
+
+serverOffset=
+
+result.serverTimeMs-(started+ended)/2;
+
+clockCheckedAt=ended;
+
+}
+
+function clockValid(){
+
+return clockCheckedAt>0
+
+&&Date.now()-clockCheckedAt<120000;
+
+}
+
+// SRI LANKA DATE SYSTEM
+
+function sriLankaDate(){
+
+const time=
+
+Date.now()+serverOffset
+
++330*60000;
+
+return new Date(time);
+
+}
+
+function dateKey(date){
+
+return date.toISOString().slice(0,10);
+
+}
+
+function periodInfo(){
+
+const now=sriLankaDate();
+
+const day=new Date(Date.UTC(
+
+now.getUTCFullYear(),
+
+now.getUTCMonth(),
+
+now.getUTCDate()
+
+));
+
+if(selectedPeriod==="day"){
+
+const key=dateKey(day);
+
+return{
+
+id:"day_"+key,
+
+label:key
+
+};
+
+}
+
+if(selectedPeriod==="week"){
+
+const monday=new Date(day);
+
+const offset=
+
+(monday.getUTCDay()+6)%7;
+
+monday.setUTCDate(
+
+monday.getUTCDate()-offset
+
+);
+
+const sunday=new Date(monday);
+
+sunday.setUTCDate(
+
+sunday.getUTCDate()+6
+
+);
+
+return{
+
+id:"week_"+dateKey(monday),
+
+label:dateKey(monday)
+
++" — "+dateKey(sunday)
+
+};
+
+}
+
+if(selectedPeriod==="month"){
+
+const key=dateKey(day).slice(0,7);
+
+return{
+
+id:"month_"+key,
+
+label:key
+
+};
+
+}
+
+return{
+
+id:"all",
+
+label:t.allTime
+
+};
+
+}
+
+// CLEAR INCOME INFORMATION
+
+const reportFields=[
+
+"grossIncome",
+
+"commission",
+
+"netIncome",
+
+"completedRides",
+
+"distance",
+
+"duration",
+
+"averageIncome",
+
+"cash",
+
+"bank",
+
+"totalReceived",
+
+"outstanding",
+
+"tollParking",
+
+"totalCommission",
+
+"paidCommission",
+
+"unpaidCommission"
+
+];
+
+function clearIncome(){
+
+reportFields.forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+$("updatedAt").textContent="";
+
+$("driverBar").style.width="0%";
+
+$("commissionBar").style.width="0%";
+
+}
+
+function stopIncomeListener(){
+
+reportGeneration++;
+
+if(incomeUnsubscribe){
+
+incomeUnsubscribe();
+
+incomeUnsubscribe=null;
+
+}
+
+activeReportKey=null;
+
+clearIncome();
+
+}
+
+// GPS CONTINUITY
+
+function validPosition(position){
+
+const c=position.coords;
+
+return Number.isFinite(c.latitude)
+
+&&Number.isFinite(c.longitude)
+
+&&Number.isFinite(c.accuracy)
+
+&&c.latitude>=5.85
+
+&&c.latitude<=9.9
+
+&&c.longitude>=79.5
+
+&&c.longitude<=82
+
+&&c.accuracy>=0
+
+&&c.accuracy<=100
+
+&&Date.now()-position.timestamp<30000
+
+&&position.timestamp<=Date.now()+5000;
+
+}
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(
+
+driver.availability
+
+)
+
+||!validPosition(position)
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:position.coords.latitude,
+
+lon:position.coords.longitude,
+
+accuracy:position.coords.accuracy,
+
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+}catch(e){
+
+// Server must expire stale GPS data.
+
+}finally{
+
+gpsSending=false;
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// DISCONNECT SESSION
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+clockCheckedAt=0;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+stopIncomeListener();
+
+stopGps();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("periodText").textContent="—";
+
+$("content").hidden=true;
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// REPORT VALIDATION
+
+function validReport(data,reportId){
+
+if(!data
+
+||data.driverUid!==uid
+
+||data.periodKey!==reportId){
+
+return false;
+
+}
+
+const fields=[
+
+"grossIncome",
+
+"commission",
+
+"netIncome",
+
+"completedRides",
+
+"distanceKm",
+
+"durationSeconds",
+
+"cashReceived",
+
+"bankReceived",
+
+"outstandingPayments",
+
+"tollParking",
+
+"paidCommission",
+
+"unpaidCommission"
+
+];
+
+if(!fields.every(key=>number(data[key]))){
+
+return false;
+
+}
+
+if(!Number.isInteger(data.completedRides)){
+
+return false;
+
+}
+
+if(Math.abs(
+
+data.grossIncome
+
+-data.commission
+
+-data.netIncome
+
+)>0.02){
+
+return false;
+
+}
+
+if(Math.abs(
+
+data.commission
+
+-data.paidCommission
+
+-data.unpaidCommission
+
+)>0.02){
+
+return false;
+
+}
+
+if(Math.abs(
+
+data.grossIncome
+
++data.tollParking
+
+-data.cashReceived
+
+-data.bankReceived
+
+-data.outstandingPayments
+
+)>0.02){
+
+return false;
+
+}
+
+const updated=data.updatedAt?.toMillis?.();
+
+if(!Number.isFinite(updated)
+
+||updated>Date.now()+serverOffset+30000){
+
+return false;
+
+}
+
+return true;
+
+}
+
+// DISPLAY INCOME REPORT
+
+function displayReport(data){
+
+$("grossIncome").textContent=
+
+money(data.grossIncome);
+
+$("commission").textContent=
+
+money(data.commission);
+
+$("netIncome").textContent=
+
+money(data.netIncome);
+
+$("completedRides").textContent=
+
+data.completedRides.toLocaleString();
+
+$("distance").textContent=
+
+data.distanceKm.toFixed(2)+" KM";
+
+const hours=Math.floor(
+
+data.durationSeconds/3600
+
+);
+
+const minutes=Math.floor(
+
+(data.durationSeconds%3600)/60
+
+);
+
+$("duration").textContent=
+
+hours+"h "+minutes+"m";
+
+const average=
+
+data.completedRides>0
+
+?data.netIncome/data.completedRides
+
+:0;
+
+$("averageIncome").textContent=
+
+money(average);
+
+$("cash").textContent=
+
+money(data.cashReceived);
+
+$("bank").textContent=
+
+money(data.bankReceived);
+
+$("totalReceived").textContent=
+
+money(
+
+data.cashReceived+data.bankReceived
+
+);
+
+$("outstanding").textContent=
+
+money(data.outstandingPayments);
+
+$("tollParking").textContent=
+
+money(data.tollParking);
+
+$("totalCommission").textContent=
+
+money(data.commission);
+
+$("paidCommission").textContent=
+
+money(data.paidCommission);
+
+$("unpaidCommission").textContent=
+
+money(data.unpaidCommission);
+
+const commissionPercent=
+
+data.grossIncome>0
+
+?data.commission/data.grossIncome*100
+
+:0;
+
+const driverPercent=
+
+data.grossIncome>0
+
+?data.netIncome/data.grossIncome*100
+
+:0;
+
+$("driverBar").style.width=
+
+driverPercent+"%";
+
+$("commissionBar").style.width=
+
+commissionPercent+"%";
+
+const updated=
+
+data.updatedAt.toMillis();
+
+$("updatedAt").textContent=
+
+t.updated+": "+
+
+new Intl.DateTimeFormat(
+
+"en-GB",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(updated));
+
+status("");
+
+}
+
+// LIVE FIRESTORE INCOME REPORT
+
+function subscribeIncome(){
+
+stopIncomeListener();
+
+if(!validSession()||!driver)return;
+
+if(!clockValid()){
+
+status(t.loading);
+
+return;
+
+}
+
+const period=periodInfo();
+
+activeReportKey=period.id;
+
+$("periodText").textContent=
+
+period.label;
+
+status(t.loading);
+
+const currentGeneration=generation;
+
+const currentReportGeneration=
+
+reportGeneration;
+
+const ref=doc(
+
+db,
+
+"drivers",
+
+uid,
+
+"incomeReports",
+
+period.id
+
+);
+
+incomeUnsubscribe=onSnapshot(
+
+ref,
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||currentReportGeneration!==reportGeneration
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+clearIncome();
+
+status(t.loading);
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+clearIncome();
+
+status(t.noData);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!validReport(data,period.id)){
+
+clearIncome();
+
+status(t.error);
+
+return;
+
+}
+
+displayReport(data);
+
+},
+
+error=>{
+
+if(currentGeneration!==generation
+
+||currentReportGeneration!==reportGeneration){
+
+return;
+
+}
+
+clearIncome();
+
+status(t.error);
+
+}
+
+);
+
+}
+
+// SELECT REPORT PERIOD
+
+function updateTabs(){
+
+document.querySelectorAll("[data-period]")
+
+.forEach(button=>{
+
+const selected=
+
+button.dataset.period===selectedPeriod;
+
+button.classList.toggle(
+
+"selected",
+
+selected
+
+);
+
+button.setAttribute(
+
+"aria-pressed",
+
+String(selected)
+
+);
+
+});
+
+}
+
+document.querySelectorAll("[data-period]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!validSession()||!driver)return;
+
+const period=button.dataset.period;
+
+if(!["day","week","month","all"]
+
+.includes(period))return;
+
+selectedPeriod=period;
+
+updateTabs();
+
+subscribeIncome();
+
+};
+
+});
+
+updateTabs();
+
+// LIVE DRIVER STATUS
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopIncomeListener();
+
+stopGps();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true){
+
+denyAccess();
+
+return;
+
+}
+
+driver=data;
+
+$("driverName").textContent=
+
+typeof data.fullName==="string"
+
+?data.fullName:"—";
+
+$("driverId").textContent=
+
+typeof data.driverId==="string"
+
+?data.driverId:"—";
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(
+
+data.availability
+
+)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(!incomeUnsubscribe){
+
+subscribeIncome();
+
+}
+
+},
+
+error=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!functions||!db){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+await syncClock();
+
+if(currentGeneration!==generation)return;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC DATE AND REPORT UPDATE
+
+setInterval(async()=>{
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+try{
+
+await syncClock();
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+const period=periodInfo();
+
+if(activeReportKey!==period.id
+
+||!incomeUnsubscribe){
+
+subscribeIncome();
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+clockCheckedAt=0;
+
+stopIncomeListener();
+
+status(t.error);
+
+}
+
+},60000);
+
+// REFRESH BUTTON
+
+$("refreshButton").onclick=()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+};
+
+// INTERNET CONNECTION
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
