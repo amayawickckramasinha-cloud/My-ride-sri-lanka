@@ -1,0 +1,2987 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Pay Commission</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+text-align:center;
+color:#FFD600;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.highlight{
+border-color:#FFD600;
+text-align:center;
+}
+
+.label{
+color:#CCC;
+font-size:14px;
+line-height:1.8;
+}
+
+.amount{
+font-size:32px;
+font-weight:bold;
+margin:12px 0;
+overflow-wrap:anywhere;
+}
+
+.yellow{color:#FFD600}
+.green{color:#4ADE80}
+.red{color:#FF6464}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+}
+
+.row strong{
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+label{
+display:block;
+margin-top:18px;
+margin-bottom:8px;
+font-size:15px;
+font-weight:bold;
+}
+
+input,select{
+width:100%;
+padding:14px;
+border:1px solid #555;
+border-radius:9px;
+background:#292929;
+color:#fff;
+font-size:16px;
+}
+
+input:focus{
+outline:2px solid #FFD600;
+}
+
+input[type="file"]{
+font-size:13px;
+}
+
+input[type="checkbox"]{
+width:22px;
+height:22px;
+flex-shrink:0;
+accent-color:#FFD600;
+}
+
+.checkboxRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin:18px 0;
+line-height:1.8;
+}
+
+.checkboxRow label{
+margin:0;
+font-size:14px;
+font-weight:normal;
+}
+
+.action{
+display:block;
+width:100%;
+padding:16px;
+margin:12px 0;
+border:0;
+border-radius:10px;
+background:#FFD600;
+color:#111;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.smallButton{
+padding:8px 12px;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:6px;
+cursor:pointer;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+margin:15px 0;
+}
+
+.success{
+background:#163322;
+border:1px solid #4ADE80;
+border-radius:10px;
+padding:15px;
+color:#4ADE80;
+line-height:1.8;
+}
+
+.pending{
+background:#39320D;
+border:1px solid #FFD600;
+border-radius:10px;
+padding:15px;
+color:#FFD600;
+line-height:1.8;
+}
+
+.note{
+color:#BBB;
+font-size:13px;
+line-height:1.8;
+}
+
+#status{
+text-align:center;
+color:#FFD600;
+line-height:1.8;
+}
+
+#preview{
+display:block;
+max-width:100%;
+max-height:280px;
+margin:15px auto;
+border-radius:10px;
+object-fit:contain;
+}
+
+.progress{
+height:12px;
+background:#444;
+border-radius:10px;
+overflow:hidden;
+margin:15px 0;
+}
+
+#uploadBar{
+height:100%;
+width:0;
+background:#FFD600;
+}
+
+hr{
+border:0;
+border-top:1px solid #444;
+margin:18px 0;
+}
+
+button:disabled,
+input:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<div class="row">
+
+<span data-t="driverName"></span>
+
+<strong id="driverName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>Driver ID</span>
+
+<strong id="driverId">—</strong>
+
+</div>
+
+</section>
+
+<section class="panel highlight">
+
+<div class="label"
+data-t="outstanding"></div>
+
+<div id="outstanding"
+class="amount red">—</div>
+
+<hr>
+
+<div class="label"
+data-t="overdue"></div>
+
+<div id="overdue"
+class="amount red">—</div>
+
+<hr>
+
+<div class="label"
+data-t="pendingAmount"></div>
+
+<div id="pendingAmount"
+class="amount yellow">—</div>
+
+<hr>
+
+<div class="label"
+data-t="availableAmount"></div>
+
+<div id="availableAmount"
+class="amount yellow">—</div>
+
+<div class="row">
+
+<span data-t="deadline"></span>
+
+<strong id="deadline">—</strong>
+
+</div>
+
+</section>
+
+<div id="overdueWarning"
+class="warning" hidden
+data-t="overdueWarning"></div>
+
+<div id="allPaid"
+class="success" hidden
+data-t="allPaid"></div>
+
+<section id="bankPanel"
+class="panel" hidden>
+
+<h3 data-t="bankDetails"></h3>
+
+<div class="row">
+
+<span data-t="bankName"></span>
+
+<strong id="bankName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="branch"></span>
+
+<strong id="branch">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="accountName"></span>
+
+<strong id="accountName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="accountNumber"></span>
+
+<strong id="accountNumber"
+class="yellow">—</strong>
+
+</div>
+
+<button id="copyAccount"
+class="action secondary"
+data-t="copyAccount"></button>
+
+<p class="note"
+data-t="bankNote"></p>
+
+</section>
+
+<section id="paymentPanel"
+class="panel" hidden>
+
+<h3 data-t="paymentDetails"></h3>
+
+<form id="paymentForm">
+
+<label for="paymentAmount"
+data-t="amount"></label>
+
+<input
+id="paymentAmount"
+type="number"
+min="0.01"
+step="0.01"
+inputmode="decimal"
+required>
+
+<button
+id="fullAmountButton"
+type="button"
+class="action secondary"
+data-t="fullAmount"></button>
+
+<label for="paymentDate"
+data-t="paymentDate"></label>
+
+<input
+id="paymentDate"
+type="date"
+required>
+
+<label for="reference"
+data-t="reference"></label>
+
+<input
+id="reference"
+type="text"
+minlength="3"
+maxlength="100"
+autocomplete="off"
+required>
+
+<label for="payerName"
+data-t="payerName"></label>
+
+<input
+id="payerName"
+type="text"
+minlength="2"
+maxlength="100"
+required>
+
+<label for="paymentSlip"
+data-t="paymentSlip"></label>
+
+<input
+id="paymentSlip"
+type="file"
+accept="image/jpeg,image/png,application/pdf"
+required>
+
+<p class="note"
+data-t="fileNote"></p>
+
+<img id="preview"
+alt="Payment slip preview"
+hidden>
+
+<p id="fileName"
+class="note"></p>
+
+<div class="checkboxRow">
+
+<input
+id="confirmPayment"
+type="checkbox"
+required>
+
+<label for="confirmPayment"
+data-t="confirmPayment"></label>
+
+</div>
+
+<section id="uploadPanel" hidden>
+
+<div class="progress">
+
+<div id="uploadBar"></div>
+
+</div>
+
+<p id="uploadStatus"
+class="note"></p>
+
+</section>
+
+<button
+id="submitButton"
+type="submit"
+data-t="submit"
+class="action"></button>
+
+</form>
+
+<p class="note"
+data-t="verificationNote"></p>
+
+</section>
+
+<section id="receiptPanel"
+class="panel" hidden>
+
+<h3 data-t="receipt"></h3>
+
+<div class="row">
+
+<span data-t="paymentId"></span>
+
+<strong id="receiptId">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="amount"></span>
+
+<strong id="receiptAmount"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="reference"></span>
+
+<strong id="receiptReference">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="paymentStatus"></span>
+
+<strong id="receiptStatus">—</strong>
+
+</div>
+
+<p id="receiptMessage"
+class="note"></p>
+
+<p id="rejectionReason"
+class="red"></p>
+
+</section>
+
+<a id="historyLink"
+class="action"
+data-t="history"></a>
+
+<a id="commissionLink"
+class="action secondary"
+data-t="commission"></a>
+
+<button id="refreshButton"
+class="action secondary"
+data-t="refresh"></button>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+getStorage,
+ref,
+uploadBytesResumable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+// LANGUAGE SYSTEM
+
+const translations={
+
+si:{
+
+heading:"කොමිස් මුදල් ගෙවීම",
+driverName:"රියදුරුගේ නම",
+outstanding:"ගෙවීමට ඇති මුළු කොමිස්",
+overdue:"කල් ඉකුත් වූ කොමිස්",
+pendingAmount:"තහවුරු කිරීමට ඇති ගෙවීම්",
+availableAmount:"දැනට අලුතින් ගෙවිය හැකි මුදල",
+deadline:"ගෙවීමේ අවසන් දිනය",
+overdueWarning:"ඔබගේ කොමිස් ගෙවීම් කාලසීමාව ඉක්මවා ඇත. කරුණාකර හිඟ මුදල් ගෙවන්න.",
+allPaid:"✓ ගෙවීමට ඇති කොමිස් මුදල් නොමැත.",
+bankDetails:"MY RIDE බැංකු ගිණුම් විස්තර",
+bankName:"බැංකුව",
+branch:"ශාඛාව",
+accountName:"ගිණුම් හිමියා",
+accountNumber:"ගිණුම් අංකය",
+copyAccount:"ගිණුම් අංකය Copy කරන්න",
+bankNote:"මෙම නිල බැංකු ගිණුමට මුදල් බැර කිරීමෙන් පසුව ගෙවීම් විස්තර ඇතුළත් කරන්න.",
+paymentDetails:"ගෙවීම් විස්තර",
+amount:"ගෙවන මුදල (රු.)",
+fullAmount:"ගෙවීමට ඇති සම්පූර්ණ මුදල",
+paymentDate:"මුදල් ගෙවූ දිනය",
+reference:"Bank Reference Number",
+payerName:"මුදල් ගෙවූ පුද්ගලයාගේ නම",
+paymentSlip:"බැංකු ගෙවීම් රිසිට්පත",
+fileNote:"JPG, PNG හෝ PDF ගොනුවක් තෝරන්න. උපරිම ප්‍රමාණය 5 MB.",
+confirmPayment:"මා විසින් ඇතුළත් කරන ලද ගෙවීම් තොරතුරු සත්‍ය සහ නිවැරදි බව තහවුරු කරමි.",
+submit:"ගෙවීම් විස්තර යොමු කරන්න",
+verificationNote:"Admin විසින් බැංකු ගෙවීම තහවුරු කරන තෙක් කොමිස් ශේෂයෙන් මුදල් අඩු නොවේ.",
+receipt:"ගෙවීම් ඉල්ලීම",
+paymentId:"Payment ID",
+paymentStatus:"ගෙවීම් තත්ත්වය",
+history:"කොමිස් ගෙවීම් ඉතිහාසය",
+commission:"මගේ කොමිස් වාර්තාව",
+refresh:"නැවත පරීක්ෂා කරන්න",
+back:"← Driver Dashboard",
+login:"Driver Login",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+loading:"ගෙවීම් තොරතුරු ලබාගනිමින්...",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+error:"පද්ධතියට සම්බන්ධ විය නොහැක.",
+invalidAmount:"නිවැරදි ගෙවීම් මුදලක් ඇතුළත් කරන්න.",
+invalidDate:"නිවැරදි ගෙවීම් දිනයක් ඇතුළත් කරන්න.",
+invalidReference:"නිවැරදි Bank Reference Number එක ඇතුළත් කරන්න.",
+invalidName:"මුදල් ගෙවූ පුද්ගලයාගේ නම ඇතුළත් කරන්න.",
+invalidFile:"JPG, PNG හෝ PDF ගොනුවක් තෝරන්න. උපරිම ප්‍රමාණය 5 MB.",
+agree:"ගෙවීම් තොරතුරු තහවුරු කරන්න.",
+copied:"ගිණුම් අංකය Copy කරන ලදී.",
+copyFailed:"Copy කළ නොහැක. අංකය අතින් Copy කරන්න.",
+uploading:"ගෙවීම් රිසිට්පත Upload කරමින්...",
+submitting:"ගෙවීම් ඉල්ලීම යොමු කරමින්...",
+submitted:"ගෙවීම් ඉල්ලීම ලැබී ඇත.",
+pending:"තහවුරු කිරීමට ඇත",
+approved:"තහවුරු කර ඇත",
+rejected:"ප්‍රතික්ෂේප කර ඇත",
+pendingMessage:"Admin විසින් බැංකු ගෙවීම පරීක්ෂා කරනු ලැබේ.",
+approvedMessage:"ඔබගේ ගෙවීම තහවුරු කර ඇත.",
+rejectedMessage:"ගෙවීම තහවුරු කළ නොහැකි විය.",
+failed:"ගෙවීම් ඉල්ලීම සම්පූර්ණ වූ බව තහවුරු කළ නොහැක. නැවත ගෙවීමට පෙර ඉතිහාසය පරීක්ෂා කරන්න.",
+bankUnavailable:"බැංකු ගිණුම් විස්තර තවම ලබාගත නොහැක.",
+confirmSubmit:"මෙම ගෙවීම් විස්තර Admin වෙත යොමු කිරීමට අවශ්‍යද?",
+noBalance:"අලුතින් ගෙවීමක් යොමු කළ හැකි ශේෂයක් නොමැත.",
+retry:"පෙර ගෙවීම් ඉල්ලීම පරීක්ෂා කරන්න"
+
+},
+
+en:{
+
+heading:"Pay Commission",
+driverName:"Driver Name",
+outstanding:"Total Outstanding Commission",
+overdue:"Overdue Commission",
+pendingAmount:"Payments Awaiting Verification",
+availableAmount:"Available Amount to Pay",
+deadline:"Payment Deadline",
+overdueWarning:"Your commission payment deadline has passed. Please settle the outstanding amount.",
+allPaid:"✓ No outstanding commission.",
+bankDetails:"MY RIDE Bank Account Details",
+bankName:"Bank",
+branch:"Branch",
+accountName:"Account Holder",
+accountNumber:"Account Number",
+copyAccount:"Copy Account Number",
+bankNote:"Transfer money to this official bank account before submitting payment details.",
+paymentDetails:"Payment Details",
+amount:"Payment Amount (LKR)",
+fullAmount:"Pay Full Available Amount",
+paymentDate:"Payment Date",
+reference:"Bank Reference Number",
+payerName:"Name of Person Making Payment",
+paymentSlip:"Bank Payment Slip",
+fileNote:"Select a JPG, PNG or PDF file. Maximum size: 5 MB.",
+confirmPayment:"I confirm that the payment information provided is true and accurate.",
+submit:"Submit Payment Details",
+verificationNote:"The commission balance will only be reduced after the bank payment is verified by Admin.",
+receipt:"Payment Request",
+paymentId:"Payment ID",
+paymentStatus:"Payment Status",
+history:"Commission Payment History",
+commission:"My Commission Report",
+refresh:"Refresh",
+back:"← Driver Dashboard",
+login:"Driver Login",
+denied:"Access to this page is not authorized.",
+checking:"Verifying account...",
+loading:"Loading payment information...",
+offline:"No internet connection.",
+error:"Unable to connect to the system.",
+invalidAmount:"Enter a valid payment amount.",
+invalidDate:"Enter a valid payment date.",
+invalidReference:"Enter a valid bank reference number.",
+invalidName:"Enter the payer's name.",
+invalidFile:"Select a JPG, PNG or PDF file no larger than 5 MB.",
+agree:"Confirm the payment information.",
+copied:"Account number copied.",
+copyFailed:"Unable to copy. Copy the number manually.",
+uploading:"Uploading payment slip...",
+submitting:"Submitting payment request...",
+submitted:"Payment request received.",
+pending:"Pending Verification",
+approved:"Approved",
+rejected:"Rejected",
+pendingMessage:"Admin will verify the bank payment.",
+approvedMessage:"Your payment has been verified.",
+rejectedMessage:"The payment could not be verified.",
+failed:"Submission could not be confirmed. Check payment history before making another transfer.",
+bankUnavailable:"Bank account details are not available yet.",
+confirmSubmit:"Submit these payment details to Admin?",
+noBalance:"No available balance for a new payment request.",
+retry:"Check Previous Payment Request"
+
+},
+
+ta:{
+
+heading:"கமிஷன் செலுத்துதல்",
+driverName:"சாரதியின் பெயர்",
+outstanding:"செலுத்த வேண்டிய மொத்த கமிஷன்",
+overdue:"காலாவதியான கமிஷன்",
+pendingAmount:"உறுதிப்படுத்தப்பட வேண்டிய கொடுப்பனவுகள்",
+availableAmount:"தற்போது செலுத்தக்கூடிய தொகை",
+deadline:"கொடுப்பனவு இறுதி நாள்",
+overdueWarning:"கமிஷன் செலுத்தும் காலக்கெடு முடிந்தது. நிலுவைத் தொகையை செலுத்தவும்.",
+allPaid:"✓ நிலுவை கமிஷன் இல்லை.",
+bankDetails:"MY RIDE வங்கி கணக்கு விவரங்கள்",
+bankName:"வங்கி",
+branch:"கிளை",
+accountName:"கணக்கு உரிமையாளர்",
+accountNumber:"கணக்கு எண்",
+copyAccount:"கணக்கு எண்ணை நகலெடுக்கவும்",
+bankNote:"கொடுப்பனவு விவரங்களை சமர்ப்பிக்கும் முன் இந்த அதிகாரப்பூர்வ வங்கி கணக்கிற்கு பணம் செலுத்தவும்.",
+paymentDetails:"கொடுப்பனவு விவரங்கள்",
+amount:"செலுத்தும் தொகை (ரூ.)",
+fullAmount:"முழு தொகையை செலுத்தவும்",
+paymentDate:"பணம் செலுத்திய தேதி",
+reference:"வங்கி பரிவர்த்தனை இலக்கம்",
+payerName:"பணம் செலுத்தியவரின் பெயர்",
+paymentSlip:"வங்கி கொடுப்பனவு ரசீது",
+fileNote:"JPG, PNG அல்லது PDF கோப்பை தேர்ந்தெடுக்கவும். அதிகபட்சம் 5 MB.",
+confirmPayment:"வழங்கிய கொடுப்பனவு தகவல்கள் உண்மையானவை மற்றும் சரியானவை என உறுதிப்படுத்துகிறேன்.",
+submit:"கொடுப்பனவு விவரங்களை சமர்ப்பிக்கவும்",
+verificationNote:"நிர்வாகி வங்கி கொடுப்பனவை உறுதிப்படுத்திய பின்னரே கமிஷன் நிலுவை குறைக்கப்படும்.",
+receipt:"கொடுப்பனவு கோரிக்கை",
+paymentId:"கொடுப்பனவு இலக்கம்",
+paymentStatus:"கொடுப்பனவு நிலை",
+history:"கமிஷன் கொடுப்பனவு வரலாறு",
+commission:"எனது கமிஷன் அறிக்கை",
+refresh:"புதுப்பிக்கவும்",
+back:"← சாரதி முதன்மைப் பக்கம்",
+login:"சாரதி உள்நுழைவு",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+loading:"கொடுப்பனவு தகவல்கள் பெறப்படுகின்றன...",
+offline:"இணைய இணைப்பு இல்லை.",
+error:"அமைப்புடன் இணைக்க முடியவில்லை.",
+invalidAmount:"சரியான தொகையை உள்ளிடவும்.",
+invalidDate:"சரியான தேதியை உள்ளிடவும்.",
+invalidReference:"சரியான வங்கி பரிவர்த்தனை இலக்கத்தை உள்ளிடவும்.",
+invalidName:"பணம் செலுத்தியவரின் பெயரை உள்ளிடவும்.",
+invalidFile:"5 MB அளவுக்கு உட்பட்ட JPG, PNG அல்லது PDF கோப்பை தேர்ந்தெடுக்கவும்.",
+agree:"கொடுப்பனவு தகவல்களை உறுதிப்படுத்தவும்.",
+copied:"கணக்கு எண் நகலெடுக்கப்பட்டது.",
+copyFailed:"நகலெடுக்க முடியவில்லை. எண்ணை கைமுறையாக நகலெடுக்கவும்.",
+uploading:"கொடுப்பனவு ரசீது பதிவேற்றப்படுகிறது...",
+submitting:"கொடுப்பனவு கோரிக்கை சமர்ப்பிக்கப்படுகிறது...",
+submitted:"கொடுப்பனவு கோரிக்கை பெறப்பட்டது.",
+pending:"உறுதிப்படுத்தல் நிலுவையில்",
+approved:"அங்கீகரிக்கப்பட்டது",
+rejected:"நிராகரிக்கப்பட்டது",
+pendingMessage:"நிர்வாகி வங்கி கொடுப்பனவை சரிபார்ப்பார்.",
+approvedMessage:"உங்கள் கொடுப்பனவு உறுதிப்படுத்தப்பட்டது.",
+rejectedMessage:"கொடுப்பனவை உறுதிப்படுத்த முடியவில்லை.",
+failed:"சமர்ப்பிப்பை உறுதிப்படுத்த முடியவில்லை. மீண்டும் பணம் செலுத்தும் முன் வரலாற்றை சரிபார்க்கவும்.",
+bankUnavailable:"வங்கி கணக்கு விவரங்கள் இன்னும் கிடைக்கவில்லை.",
+confirmSubmit:"இந்த கொடுப்பனவு விவரங்களை நிர்வாகிக்கு அனுப்ப வேண்டுமா?",
+noBalance:"புதிய கொடுப்பனவு கோரிக்கைக்கு நிலுவை இல்லை.",
+retry:"முந்தைய கொடுப்பனவு கோரிக்கையை சரிபார்க்கவும்"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+const links={
+
+backButton:"driver-dashboard.html",
+loginLink:"driver-login.html",
+historyLink:"driver-payment-history.html",
+commissionLink:"driver-commission.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+let storage=null;
+
+let uid=null;
+let authorized=false;
+let driver=null;
+let balance=null;
+let bankSettings=null;
+
+let generation=0;
+let busy=false;
+
+let driverUnsubscribe=null;
+let balanceUnsubscribe=null;
+let bankUnsubscribe=null;
+let receiptUnsubscribe=null;
+
+let uploadTask=null;
+let previewUrl=null;
+let currentRequest=null;
+
+let serverOffset=0;
+let clockCheckedAt=0;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+const MAX_FILE_SIZE=5*1024*1024;
+
+const ALLOWED_TYPES=[
+
+"image/jpeg",
+
+"image/png",
+
+"application/pdf"
+
+];
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+storage=getStorage(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function number(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=0;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function money(value){
+
+return number(value)
+
+?"Rs. "+value.toLocaleString(
+
+"en-LK",
+
+{
+
+minimumFractionDigits:2,
+
+maximumFractionDigits:2
+
+}
+
+)
+
+:"—";
+
+}
+
+function cents(value){
+
+return Math.round(value*100);
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// SERVER TIME
+
+async function syncClock(){
+
+const started=Date.now();
+
+const result=await serverCall(
+
+"getDriverServerTime"
+
+);
+
+const ended=Date.now();
+
+if(!Number.isFinite(result?.serverTimeMs)
+
+||ended-started>10000){
+
+throw new Error("Server time unavailable");
+
+}
+
+serverOffset=
+
+result.serverTimeMs-(started+ended)/2;
+
+clockCheckedAt=ended;
+
+$("paymentDate").max=sriLankaToday();
+
+}
+
+function clockValid(){
+
+return clockCheckedAt>0
+
+&&Date.now()-clockCheckedAt<120000;
+
+}
+
+function sriLankaToday(){
+
+return new Date(
+
+Date.now()+serverOffset+330*60000
+
+).toISOString().slice(0,10);
+
+}
+
+function formatDate(value){
+
+const ms=value?.toMillis?.();
+
+if(!Number.isFinite(ms))return "—";
+
+return new Intl.DateTimeFormat(
+
+"en-GB",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(ms));
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(driver.availability)
+
+||!Number.isFinite(c.latitude)
+
+||!Number.isFinite(c.longitude)
+
+||!number(c.accuracy)
+
+||c.accuracy>100
+
+||c.latitude<5.85
+
+||c.latitude>9.9
+
+||c.longitude<79.5
+
+||c.longitude>82
+
+||Date.now()-position.timestamp>30000
+
+||position.timestamp>Date.now()+5000
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:c.latitude,
+
+lon:c.longitude,
+
+accuracy:c.accuracy,
+
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+}catch(e){
+
+// Backend must expire stale GPS data.
+
+}finally{
+
+gpsSending=false;
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// PAYMENT REQUEST RECOVERY
+
+function requestStorageKey(){
+
+return "myride_commission_request_"+uid;
+
+}
+
+function saveRequest(request){
+
+sessionStorage.setItem(
+
+requestStorageKey(),
+
+JSON.stringify(request)
+
+);
+
+}
+
+function restoreRequest(){
+
+try{
+
+const raw=sessionStorage.getItem(
+
+requestStorageKey()
+
+);
+
+if(!raw)return null;
+
+const data=JSON.parse(raw);
+
+if(data.driverUid!==uid
+
+||!validId(data.requestId)){
+
+return null;
+
+}
+
+return data;
+
+}catch(e){
+
+return null;
+
+}
+
+}
+
+function removeRequest(){
+
+try{
+
+sessionStorage.removeItem(
+
+requestStorageKey()
+
+);
+
+}catch(e){}
+
+currentRequest=null;
+
+}
+
+// CLEAR PRIVATE INFORMATION
+
+function clearPreview(){
+
+if(previewUrl){
+
+URL.revokeObjectURL(previewUrl);
+
+previewUrl=null;
+
+}
+
+$("preview").hidden=true;
+
+$("preview").removeAttribute("src");
+
+$("fileName").textContent="";
+
+}
+
+function clearBalance(){
+
+balance=null;
+
+[
+
+"outstanding",
+
+"overdue",
+
+"pendingAmount",
+
+"availableAmount",
+
+"deadline"
+
+].forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+$("overdueWarning").hidden=true;
+
+$("allPaid").hidden=true;
+
+}
+
+function clearBank(){
+
+bankSettings=null;
+
+[
+
+"bankName",
+
+"branch",
+
+"accountName",
+
+"accountNumber"
+
+].forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+$("bankPanel").hidden=true;
+
+}
+
+function clearReceipt(){
+
+if(receiptUnsubscribe){
+
+receiptUnsubscribe();
+
+receiptUnsubscribe=null;
+
+}
+
+[
+
+"receiptId",
+
+"receiptAmount",
+
+"receiptReference",
+
+"receiptStatus",
+
+"receiptMessage",
+
+"rejectionReason"
+
+].forEach(id=>{
+
+$(id).textContent="";
+
+});
+
+$("receiptPanel").hidden=true;
+
+}
+
+function stopDataListeners(){
+
+if(balanceUnsubscribe){
+
+balanceUnsubscribe();
+
+balanceUnsubscribe=null;
+
+}
+
+if(bankUnsubscribe){
+
+bankUnsubscribe();
+
+bankUnsubscribe=null;
+
+}
+
+clearBalance();
+
+clearBank();
+
+clearReceipt();
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+clockCheckedAt=0;
+
+if(uploadTask){
+
+uploadTask.cancel();
+
+uploadTask=null;
+
+}
+
+busy=false;
+
+currentRequest=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+stopDataListeners();
+
+stopGps();
+
+clearPreview();
+
+$("paymentForm").reset();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("content").hidden=true;
+
+$("paymentPanel").hidden=true;
+
+$("uploadPanel").hidden=true;
+
+$("uploadBar").style.width="0%";
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// COMMISSION BALANCE
+
+function validBalance(data){
+
+if(!data||data.driverUid!==uid){
+
+return false;
+
+}
+
+const fields=[
+
+"totalCommission",
+
+"paidCommission",
+
+"outstandingCommission",
+
+"overdueCommission",
+
+"pendingPaymentAmount"
+
+];
+
+if(!fields.every(key=>number(data[key]))){
+
+return false;
+
+}
+
+if(Math.abs(
+
+data.totalCommission
+
+-data.paidCommission
+
+-data.outstandingCommission
+
+)>0.02){
+
+return false;
+
+}
+
+if(data.overdueCommission
+
+>data.outstandingCommission+0.02
+
+||data.pendingPaymentAmount
+
+>data.outstandingCommission+0.02){
+
+return false;
+
+}
+
+return true;
+
+}
+
+function availableBalance(){
+
+if(!balance)return 0;
+
+return Math.max(
+
+0,
+
+cents(balance.outstandingCommission)
+
+-cents(balance.pendingPaymentAmount)
+
+)/100;
+
+}
+
+function displayBalance(data){
+
+balance=data;
+
+$("outstanding").textContent=
+
+money(data.outstandingCommission);
+
+$("overdue").textContent=
+
+money(data.overdueCommission);
+
+$("pendingAmount").textContent=
+
+money(data.pendingPaymentAmount);
+
+$("availableAmount").textContent=
+
+money(availableBalance());
+
+$("deadline").textContent=
+
+formatDate(data.nextDueAt);
+
+$("overdueWarning").hidden=
+
+data.overdueCommission<=0;
+
+$("allPaid").hidden=
+
+data.outstandingCommission>0;
+
+$("paymentAmount").max=
+
+availableBalance().toFixed(2);
+
+updateForm();
+
+}
+
+function subscribeBalance(){
+
+const currentGeneration=generation;
+
+balanceUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"drivers",
+
+uid,
+
+"commission",
+
+"summary"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession()||!driver)return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()
+
+||!validBalance(snapshot.data())){
+
+clearBalance();
+
+updateForm();
+
+return;
+
+}
+
+displayBalance(snapshot.data());
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+clearBalance();
+
+updateForm();
+
+status(t.error);
+
+}
+
+);
+
+}
+
+// ADMIN BANK ACCOUNT SETTINGS
+
+function validBank(data){
+
+return data
+
+&&data.enabled===true
+
+&&typeof data.bankName==="string"
+
+&&data.bankName.trim().length>0
+
+&&typeof data.branch==="string"
+
+&&typeof data.accountName==="string"
+
+&&data.accountName.trim().length>0
+
+&&typeof data.accountNumber==="string"
+
+&&/^[0-9 -]{5,40}$/.test(data.accountNumber)
+
+&&Number.isInteger(data.version)
+
+&&data.version>0;
+
+}
+
+function displayBank(data){
+
+bankSettings=data;
+
+$("bankName").textContent=data.bankName;
+
+$("branch").textContent=data.branch;
+
+$("accountName").textContent=data.accountName;
+
+$("accountNumber").textContent=data.accountNumber;
+
+$("bankPanel").hidden=false;
+
+updateForm();
+
+}
+
+function subscribeBank(){
+
+const currentGeneration=generation;
+
+bankUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"publicSettings",
+
+"driverCommissionPayment"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession()||!driver)return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()
+
+||!validBank(snapshot.data())){
+
+clearBank();
+
+updateForm();
+
+status(t.bankUnavailable);
+
+return;
+
+}
+
+displayBank(snapshot.data());
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+clearBank();
+
+updateForm();
+
+status(t.bankUnavailable);
+
+}
+
+);
+
+}
+
+$("copyAccount").onclick=async()=>{
+
+if(!validSession()||!bankSettings)return;
+
+try{
+
+await navigator.clipboard.writeText(
+
+bankSettings.accountNumber
+
+);
+
+status(t.copied);
+
+}catch(e){
+
+status(t.copyFailed);
+
+}
+
+};
+
+// PAYMENT FORM
+
+function updateForm(){
+
+const recovery=Boolean(currentRequest);
+
+const enabled=
+
+validSession()
+
+&&driver
+
+&&balance
+
+&&bankSettings
+
+&&clockValid()
+
+&&availableBalance()>0;
+
+$("paymentPanel").hidden=
+
+!enabled&&!recovery&&!busy;
+
+[
+
+"paymentAmount",
+
+"paymentDate",
+
+"reference",
+
+"payerName",
+
+"paymentSlip",
+
+"confirmPayment",
+
+"fullAmountButton"
+
+].forEach(id=>{
+
+$(id).disabled=
+
+busy||recovery||!enabled;
+
+});
+
+$("submitButton").disabled=
+
+busy||(!enabled&&!recovery);
+
+$("submitButton").textContent=
+
+recovery?t.retry:t.submit;
+
+$("refreshButton").disabled=busy;
+
+}
+
+$("fullAmountButton").onclick=()=>{
+
+if(!validSession()||busy)return;
+
+$("paymentAmount").value=
+
+availableBalance().toFixed(2);
+
+};
+
+// PAYMENT SLIP VALIDATION
+
+async function validFile(file){
+
+if(!file
+
+||!ALLOWED_TYPES.includes(file.type)
+
+||file.size<=0
+
+||file.size>MAX_FILE_SIZE){
+
+return false;
+
+}
+
+const bytes=new Uint8Array(
+
+await file.slice(0,8).arrayBuffer()
+
+);
+
+if(file.type==="image/jpeg"){
+
+return bytes[0]===255
+
+&&bytes[1]===216
+
+&&bytes[2]===255;
+
+}
+
+if(file.type==="image/png"){
+
+return [
+
+137,80,78,71,13,10,26,10
+
+].every((value,index)=>
+
+bytes[index]===value
+
+);
+
+}
+
+if(file.type==="application/pdf"){
+
+return String.fromCharCode(
+
+...bytes.slice(0,5)
+
+)==="%PDF-";
+
+}
+
+return false;
+
+}
+
+$("paymentSlip").onchange=async()=>{
+
+clearPreview();
+
+const file=$("paymentSlip").files[0];
+
+if(!file)return;
+
+const currentGeneration=generation;
+
+if(!await validFile(file)){
+
+if(currentGeneration!==generation)return;
+
+$("paymentSlip").value="";
+
+status(t.invalidFile);
+
+return;
+
+}
+
+if(currentGeneration!==generation
+
+||$("paymentSlip").files[0]!==file)return;
+
+$("fileName").textContent=
+
+file.name+" ("+
+
+(file.size/1024/1024).toFixed(2)
+
++" MB)";
+
+if(file.type.startsWith("image/")){
+
+previewUrl=URL.createObjectURL(file);
+
+$("preview").src=previewUrl;
+
+$("preview").hidden=false;
+
+}
+
+};
+
+// PAYMENT RECEIPT STATUS
+
+function displayReceipt(data){
+
+$("receiptPanel").hidden=false;
+
+$("receiptId").textContent=
+
+data.paymentId;
+
+$("receiptAmount").textContent=
+
+money(data.amount);
+
+$("receiptReference").textContent=
+
+data.reference;
+
+$("receiptStatus").textContent=
+
+t[data.status];
+
+$("receiptStatus").className=
+
+data.status==="approved"
+
+?"green"
+
+:data.status==="rejected"
+
+?"red":"yellow";
+
+$("receiptMessage").textContent=
+
+t[data.status+"Message"];
+
+$("rejectionReason").textContent=
+
+data.status==="rejected"
+
+?String(data.rejectionReason||"")
+
+:"";
+
+}
+
+function subscribeReceipt(paymentId){
+
+clearReceipt();
+
+if(!validSession()||!validId(paymentId))return;
+
+const currentGeneration=generation;
+
+receiptUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"drivers",
+
+uid,
+
+"commissionPayments",
+
+paymentId
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession()||!driver)return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()){
+
+$("receiptPanel").hidden=true;
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(data.driverUid!==uid
+
+||data.paymentId!==paymentId
+
+||!number(data.amount)
+
+||typeof data.reference!=="string"
+
+||!["pending","approved","rejected"]
+
+.includes(data.status)){
+
+$("receiptPanel").hidden=true;
+
+return;
+
+}
+
+displayReceipt(data);
+
+},
+
+()=>{
+
+$("receiptPanel").hidden=true;
+
+status(t.error);
+
+}
+
+);
+
+}
+
+// PRIVATE FILE UPLOAD
+
+function uploadSlip(file,path){
+
+return new Promise((resolve,reject)=>{
+
+const currentGeneration=generation;
+
+const fileRef=ref(storage,path);
+
+const task=uploadBytesResumable(
+
+fileRef,
+
+file,
+
+{
+
+contentType:file.type,
+
+cacheControl:"private,no-store"
+
+}
+
+);
+
+uploadTask=task;
+
+$("uploadPanel").hidden=false;
+
+task.on(
+
+"state_changed",
+
+snapshot=>{
+
+if(currentGeneration!==generation)return;
+
+const percent=
+
+snapshot.bytesTransferred
+
+/snapshot.totalBytes*100;
+
+$("uploadBar").style.width=
+
+percent+"%";
+
+$("uploadStatus").textContent=
+
+t.uploading+" "+Math.round(percent)+"%";
+
+},
+
+error=>{
+
+if(uploadTask===task){
+
+uploadTask=null;
+
+}
+
+reject(error);
+
+},
+
+()=>{
+
+if(uploadTask===task){
+
+uploadTask=null;
+
+}
+
+if(currentGeneration!==generation
+
+||!validSession()){
+
+reject(new Error("Session changed"));
+
+return;
+
+}
+
+resolve();
+
+}
+
+);
+
+});
+
+}
+
+// RECOVER EXISTING REQUEST
+
+async function recoverPayment(){
+
+if(!currentRequest||!validSession()){
+
+return false;
+
+}
+
+const result=await serverCall(
+
+"getCommissionPaymentRequestStatus",
+
+{
+
+requestId:currentRequest.requestId
+
+}
+
+);
+
+if(result?.success!==true){
+
+throw new Error("Unable to recover request");
+
+}
+
+if(result.state==="submitted"
+
+&&validId(result.paymentId)){
+
+removeRequest();
+
+subscribeReceipt(result.paymentId);
+
+$("paymentForm").reset();
+
+clearPreview();
+
+status(t.submitted);
+
+return true;
+
+}
+
+if(result.state==="uploaded"){
+
+const response=await serverCall(
+
+"submitDriverCommissionPayment",
+
+{
+
+requestId:currentRequest.requestId
+
+}
+
+);
+
+if(response?.accepted!==true
+
+||!validId(response.paymentId)){
+
+throw new Error("Submission not confirmed");
+
+}
+
+removeRequest();
+
+subscribeReceipt(response.paymentId);
+
+$("paymentForm").reset();
+
+clearPreview();
+
+status(t.submitted);
+
+return true;
+
+}
+
+if(["expired","not_found","abandoned"]
+
+.includes(result.state)){
+
+removeRequest();
+
+status(t.failed);
+
+return false;
+
+}
+
+if(result.state==="awaiting_upload"){
+
+const cancelled=await serverCall(
+
+"cancelCommissionPaymentUpload",
+
+{
+
+requestId:currentRequest.requestId
+
+}
+
+);
+
+if(cancelled?.cancelled!==true){
+
+throw new Error("Cancellation not confirmed");
+
+}
+
+removeRequest();
+
+status(t.failed);
+
+return false;
+
+}
+
+throw new Error("Unknown request state");
+
+}
+
+// SUBMIT COMMISSION PAYMENT
+
+$("paymentForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(busy||!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+if(currentRequest){
+
+busy=true;
+
+updateForm();
+
+try{
+
+await recoverPayment();
+
+}catch(e){
+
+status(t.failed);
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateForm();
+
+}
+
+}
+
+return;
+
+}
+
+if(!balance||!bankSettings||!clockValid()){
+
+status(t.error);
+
+return;
+
+}
+
+const amount=Number(
+
+$("paymentAmount").value
+
+);
+
+const paymentDate=
+
+$("paymentDate").value;
+
+const reference=
+
+$("reference").value.trim();
+
+const payerName=
+
+$("payerName").value.trim();
+
+const file=
+
+$("paymentSlip").files[0];
+
+if(!number(amount)
+
+||amount<=0
+
+||Math.abs(amount*100-cents(amount))>0.00001
+
+||cents(amount)>cents(availableBalance())){
+
+status(t.invalidAmount);
+
+return;
+
+}
+
+if(!/^\d{4}-\d{2}-\d{2}$/.test(paymentDate)
+
+||paymentDate>sriLankaToday()
+
+||!Number.isFinite(Date.parse(paymentDate))){
+
+status(t.invalidDate);
+
+return;
+
+}
+
+if(reference.length<3
+
+||reference.length>100
+
+||/[\u0000-\u001F\u007F]/.test(reference)){
+
+status(t.invalidReference);
+
+return;
+
+}
+
+if(payerName.length<2
+
+||payerName.length>100){
+
+status(t.invalidName);
+
+return;
+
+}
+
+if(!$("confirmPayment").checked){
+
+status(t.agree);
+
+return;
+
+}
+
+busy=true;
+
+updateForm();
+
+try{
+
+if(!await validFile(file)){
+
+status(t.invalidFile);
+
+return;
+
+}
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(!confirm(t.confirmSubmit))return;
+
+const requestId=crypto.randomUUID();
+
+const driverUid=uid;
+
+const settingsVersion=bankSettings?.version;
+
+if(!settingsVersion
+
+||!balance
+
+||cents(amount)>cents(availableBalance())){
+
+status(t.invalidAmount);
+
+return;
+
+}
+
+currentRequest={
+
+driverUid,
+
+requestId
+
+};
+
+// Persist only the request ID,
+// not the bank slip or personal data.
+
+saveRequest(currentRequest);
+
+status(t.submitting);
+
+// Server creates a private upload reservation.
+
+const prepared=await serverCall(
+
+"prepareCommissionPaymentUpload",
+
+{
+
+requestId,
+
+amount,
+
+paymentDate,
+
+reference,
+
+payerName,
+
+bankSettingsVersion:settingsVersion,
+
+fileType:file.type,
+
+fileSize:file.size,
+
+language:lang,
+
+declarationAccepted:true
+
+}
+
+);
+
+if(prepared?.accepted!==true
+
+||prepared.requestId!==requestId){
+
+throw new Error("Upload not authorized");
+
+}
+
+const extension=
+
+file.type==="image/jpeg"
+
+?"jpg"
+
+:file.type==="image/png"
+
+?"png":"pdf";
+
+const expectedPath=
+
+"commissionSlips/"
+
++driverUid+"/"
+
++requestId+"/slip."
+
++extension;
+
+if(prepared.storagePath!==expectedPath){
+
+throw new Error("Invalid upload path");
+
+}
+
+await uploadSlip(
+
+file,
+
+expectedPath
+
+);
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+status(t.submitting);
+
+// Backend verifies the stored file
+// and creates a pending payment.
+
+const result=await serverCall(
+
+"submitDriverCommissionPayment",
+
+{
+
+requestId
+
+}
+
+);
+
+if(result?.accepted!==true
+
+||!validId(result.paymentId)
+
+||!["pending","approved","rejected"]
+
+.includes(result.status)){
+
+throw new Error("Submission not confirmed");
+
+}
+
+removeRequest();
+
+$("paymentForm").reset();
+
+clearPreview();
+
+$("uploadPanel").hidden=true;
+
+subscribeReceipt(result.paymentId);
+
+status(t.submitted);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+status(t.failed);
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+$("uploadPanel").hidden=true;
+
+updateForm();
+
+}
+
+}
+
+};
+
+// DRIVER STATUS MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+if(uploadTask){
+
+uploadTask.cancel();
+
+}
+
+stopDataListeners();
+
+stopGps();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true){
+
+denyAccess();
+
+return;
+
+}
+
+driver=data;
+
+$("driverName").textContent=
+
+typeof data.fullName==="string"
+
+?data.fullName:"—";
+
+$("driverId").textContent=
+
+typeof data.driverId==="string"
+
+?data.driverId:"—";
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(data.availability)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(!balanceUnsubscribe){
+
+subscribeBalance();
+
+}
+
+if(!bankUnsubscribe){
+
+subscribeBank();
+
+}
+
+if(!busy&&!currentRequest){
+
+currentRequest=restoreRequest();
+
+}
+
+updateForm();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!functions||!db||!storage){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+await syncClock();
+
+if(currentGeneration!==generation)return;
+
+$("paymentDate").value=sriLankaToday();
+
+status(t.loading);
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// SERVER TIME UPDATE
+
+setInterval(async()=>{
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+try{
+
+await syncClock();
+
+if(currentGeneration!==generation)return;
+
+updateForm();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+clockCheckedAt=0;
+
+updateForm();
+
+}
+
+},60000);
+
+// REFRESH
+
+$("refreshButton").onclick=()=>{
+
+if(auth&&!busy){
+
+verifyDriver(auth.currentUser);
+
+}
+
+};
+
+// INTERNET CONNECTION
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
