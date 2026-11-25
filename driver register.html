@@ -1,0 +1,1333 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<title>MY RIDE - Driver Registration</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+main{
+max-width:600px;
+margin:auto;
+padding:20px;
+}
+h1{
+color:#FFD600;
+text-align:center;
+font-size:36px;
+margin-bottom:5px;
+}
+.country{
+text-align:center;
+color:#FFD600;
+letter-spacing:5px;
+}
+h2{text-align:center;line-height:1.6}
+h3{color:#FFD600;line-height:1.6}
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:12px;
+padding:16px;
+margin:20px 0;
+}
+label{
+display:block;
+margin:18px 0 8px;
+font-weight:bold;
+line-height:1.7;
+}
+input,select,textarea{
+width:100%;
+padding:14px;
+background:#252525;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+font-family:inherit;
+color-scheme:dark;
+}
+textarea{min-height:85px}
+.check{
+display:flex;
+align-items:flex-start;
+gap:12px;
+font-weight:normal;
+}
+.check input{
+width:20px;
+height:20px;
+flex-shrink:0;
+accent-color:#FFD600;
+}
+button{
+width:100%;
+padding:16px;
+margin:15px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+}
+button:disabled{opacity:.5}
+.note{
+color:#CCC;
+font-size:14px;
+line-height:1.8;
+}
+summary{
+color:#FFD600;
+cursor:pointer;
+line-height:1.8;
+}
+li{margin:12px 0;line-height:1.8}
+#status{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+#driverId{
+font-size:24px;
+color:#FFD600;
+overflow-wrap:anywhere;
+}
+.back{
+display:block;
+text-align:center;
+color:#FFD600;
+padding:25px;
+text-decoration:none;
+}
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+[hidden]{display:none!important}
+</style>
+</head>
+
+<body>
+<main>
+
+<h1>MY RIDE</h1>
+<div class="country">SRI LANKA</div>
+
+<h2 id="heading"></h2>
+
+<p id="intro" class="note"></p>
+
+<form id="registerForm">
+
+<section class="panel">
+<h3 id="personalHeading"></h3>
+<div id="personalFields"></div>
+</section>
+
+<section class="panel">
+<h3 id="vehicleHeading"></h3>
+<div id="vehicleFields"></div>
+</section>
+
+<section class="panel">
+
+<h3 id="termsHeading"></h3>
+
+<details>
+<summary id="readTerms"></summary>
+<ol id="termsList"></ol>
+</details>
+
+<div id="consentFields"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 id="otpHeading"></h3>
+
+<p id="otpNote" class="note"></p>
+
+<div id="recaptcha-container"></div>
+
+<button type="button" id="sendOtp"></button>
+
+<div id="otpPanel" hidden>
+
+<label for="otp" id="otpLabel"></label>
+
+<input id="otp"
+type="text"
+inputmode="numeric"
+autocomplete="one-time-code"
+maxlength="6">
+
+<button type="button" id="verifyOtp"></button>
+
+</div>
+
+<p id="verifiedStatus" class="note"></p>
+
+</section>
+
+<button type="submit"
+id="submitButton" disabled></button>
+
+</form>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="successPanel"
+class="panel" hidden>
+
+<h2 id="successHeading"></h2>
+
+<p id="driverIdLabel"></p>
+
+<strong id="driverId"></strong>
+
+<p id="pendingMessage" class="note"></p>
+
+</section>
+
+<a id="backButton" class="back"></a>
+
+<footer>© MY RIDE SRI LANKA</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+RecaptchaVerifier,
+signInWithPhoneNumber,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+savedLanguage=localStorage.getItem("myride_language")||"si";
+}catch(e){}
+
+const allowed=["si","en","ta"];
+
+const lang=allowed.includes(params.get("lang"))
+?params.get("lang")
+:allowed.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const languageIndex={si:0,en:1,ta:2}[lang];
+
+const tr=(si,en,ta)=>[si,en,ta][languageIndex];
+
+const text=(id,si,en,ta)=>{
+$(id).textContent=tr(si,en,ta);
+};
+
+text("heading",
+"රියදුරු ලියාපදිංචිය",
+"Driver Registration",
+"சாரதி பதிவு");
+
+text("intro",
+"නිවැරදි තොරතුරු ඇතුළත් කරන්න. පරිපාලක අනුමැතිය ලැබෙන තෙක් හයර් ලබාගත නොහැක.",
+"Enter accurate information. You cannot receive rides until approved by the administrator.",
+"சரியான தகவல்களை உள்ளிடவும். நிர்வாக அனுமதி கிடைக்கும் வரை பயணங்களைப் பெற முடியாது.");
+
+text("personalHeading",
+"පෞද්ගලික තොරතුරු",
+"Personal Information",
+"தனிப்பட்ட தகவல்கள்");
+
+text("vehicleHeading",
+"වාහන සහ සේවා තොරතුරු",
+"Vehicle and Service Information",
+"வாகனம் மற்றும் சேவை தகவல்கள்");
+
+text("termsHeading",
+"රියදුරු නීති සහ එකඟතා",
+"Driver Terms and Consent",
+"சாரதி விதிமுறைகள் மற்றும் ஒப்புதல்");
+
+text("readTerms",
+"රියදුරු නීති 27 කියවන්න",
+"Read the 27 Driver Terms",
+"27 சாரதி விதிமுறைகளைப் படிக்கவும்");
+
+text("otpHeading",
+"දුරකථන අංකය තහවුරු කිරීම",
+"Phone Verification",
+"தொலைபேசி சரிபார்ப்பு");
+
+text("otpNote",
+"ඔබගේ දුරකථනයට ලැබෙන OTP අංකය ඇතුළත් කරන්න.",
+"Enter the OTP received on your phone.",
+"உங்கள் தொலைபேசிக்கு வரும் OTP எண்ணை உள்ளிடவும்.");
+
+text("sendOtp",
+"OTP අංකය ලබාගන්න",
+"Send OTP",
+"OTP அனுப்பவும்");
+
+text("otpLabel",
+"OTP අංකය",
+"OTP Code",
+"OTP எண்");
+
+text("verifyOtp",
+"OTP තහවුරු කරන්න",
+"Verify OTP",
+"OTP சரிபார்க்கவும்");
+
+text("submitButton",
+"ලියාපදිංචිය යොමු කරන්න",
+"Submit Registration",
+"பதிவை அனுப்பவும்");
+
+text("successHeading",
+"ලියාපදිංචිය ලැබී ඇත",
+"Registration Received",
+"பதிவு பெறப்பட்டது");
+
+text("driverIdLabel",
+"ඔබගේ රියදුරු අංකය",
+"Your Driver ID",
+"உங்கள் சாரதி எண்");
+
+text("pendingMessage",
+"ඔබගේ අයදුම්පත පරීක්ෂා කරමින් පවතී. අනුමැතිය ලැබෙන තෙක් රැඳී සිටින්න.",
+"Your application is pending review. Please wait for approval.",
+"உங்கள் விண்ணப்பம் பரிசீலனையில் உள்ளது. அனுமதிக்காக காத்திருக்கவும்.");
+
+text("backButton",
+"← ප්‍රධාන මෙනුව",
+"← Main Menu",
+"← முதன்மை பட்டியல்");
+
+$("backButton").href="./menu.html?lang="+lang;
+
+// FIELD DEFINITIONS
+
+const fields=[
+
+["fullName","text",
+"සම්පූර්ණ නම","Full Name","முழுப் பெயர்"],
+
+["nic","text",
+"ජාතික හැඳුනුම්පත් අංකය","NIC Number","தேசிய அடையாள அட்டை எண்"],
+
+["dob","date",
+"උපන් දිනය","Date of Birth","பிறந்த தேதி"],
+
+["phone","tel",
+"දුරකථන අංකය","Phone Number","தொலைபேசி எண்"],
+
+["whatsapp","tel",
+"WhatsApp අංකය","WhatsApp Number","WhatsApp எண்"],
+
+["address","textarea",
+"ස්ථිර ලිපිනය","Permanent Address","நிரந்தர முகவரி"],
+
+["district","select",
+"දිස්ත්‍රික්කය","District","மாவட்டம்"],
+
+["licenceNumber","text",
+"රියදුරු බලපත්‍ර අංකය","Driving Licence Number","ஓட்டுநர் உரிம எண்"],
+
+["licenceExpiry","date",
+"රියදුරු බලපත්‍ර කල් ඉකුත්වන දිනය","Driving Licence Expiry","ஓட்டுநர் உரிம காலாவதி தேதி"],
+
+["experience","number",
+"රියදුරු පළපුරුද්ද අවුරුදු","Driving Experience (Years)","ஓட்டுநர் அனுபவம் (ஆண்டுகள்)"],
+
+["vehicleType","select",
+"වාහන වර්ගය","Vehicle Type","வாகன வகை"],
+
+["vehicleNumber","text",
+"වාහන ලියාපදිංචි අංකය","Vehicle Registration Number","வாகன பதிவு எண்"],
+
+["vehicleModel","text",
+"වාහන මාදිලිය","Vehicle Model","வாகன மாதிரி"],
+
+["vehicleColor","text",
+"වාහනයේ වර්ණය","Vehicle Colour","வாகன நிறம்"],
+
+["capacity","number",
+"මගීන් ගණන (රියදුරු හැර)","Passenger Capacity (excluding driver)","பயணிகள் எண்ணிக்கை (சாரதி தவிர)"],
+
+["insuranceNumber","text",
+"රක්ෂණ අංකය","Insurance Number","காப்பீட்டு எண்"],
+
+["insuranceExpiry","date",
+"රක්ෂණ කල් ඉකුත්වන දිනය","Insurance Expiry","காப்பீட்டு காலாவதி தேதி"],
+
+["revenueExpiry","date",
+"ආදායම් බලපත්‍ර කල් ඉකුත්වන දිනය","Revenue Licence Expiry","வருவாய் உரிம காலாவதி தேதி"],
+
+["serviceArea","text",
+"සේවා සපයන ප්‍රදේශය","Service Area","சேவைப் பகுதி"],
+
+["workingTime","select",
+"සේවා සපයන කාලය","Working Time","சேவை நேரம்"]
+
+];
+
+// ALL 25 DISTRICTS
+
+const districts=[
+
+["Colombo","කොළඹ","கொழும்பு"],
+["Gampaha","ගම්පහ","கம்பஹா"],
+["Kalutara","කළුතර","களுத்துறை"],
+["Kandy","මහනුවර","கண்டி"],
+["Matale","මාතලේ","மாத்தளை"],
+["Nuwara Eliya","නුවරඑළිය","நுவரெலியா"],
+["Galle","ගාල්ල","காலி"],
+["Matara","මාතර","மாத்தறை"],
+["Hambantota","හම්බන්තොට","அம்பாந்தோட்டை"],
+["Jaffna","යාපනය","யாழ்ப்பாணம்"],
+["Kilinochchi","කිලිනොච්චිය","கிளிநொச்சி"],
+["Mannar","මන්නාරම","மன்னார்"],
+["Vavuniya","වවුනියාව","வவுனியா"],
+["Mullaitivu","මුලතිව්","முல்லைத்தீவு"],
+["Batticaloa","මඩකලපුව","மட்டக்களப்பு"],
+["Ampara","අම්පාර","அம்பாறை"],
+["Trincomalee","ත්‍රිකුණාමලය","திருகோணமலை"],
+["Kurunegala","කුරුණෑගල","குருநாகல்"],
+["Puttalam","පුත්තලම","புத்தளம்"],
+["Anuradhapura","අනුරාධපුර","அனுராதபுரம்"],
+["Polonnaruwa","පොළොන්නරුව","பொலன்னறுவை"],
+["Badulla","බදුල්ල","பதுளை"],
+["Monaragala","මොනරාගල","மொனராகலை"],
+["Ratnapura","රත්නපුර","இரத்தினபுரி"],
+["Kegalle","කෑගල්ල","கேகாலை"]
+
+];
+
+const choices={
+
+district:districts.map(d=>[
+d[0],d[1],d[0],d[2]
+]),
+
+vehicleType:[
+
+["bike","Scooter / Bike","Scooter / Bike","மோட்டார் சைக்கிள்"],
+["tuk","ත්‍රිරෝද රථය","Three Wheeler","முச்சக்கர வண்டி"],
+["car","කාර් රථය","Car","கார்"],
+["van","වෑන් රථය","Van","வேன்"]
+
+],
+
+workingTime:[
+
+["day","දිවා","Day","பகல்"],
+["night","රාත්‍රී","Night","இரவு"],
+["both","දිවා සහ රාත්‍රී","Day and Night","பகல் மற்றும் இரவு"]
+
+]
+
+};
+
+fields.forEach((field,index)=>{
+
+const [id,type,si,en,ta]=field;
+
+const parent=index<10
+?$("personalFields")
+:$("vehicleFields");
+
+const label=document.createElement("label");
+
+label.htmlFor=id;
+
+label.textContent=
+String(index+1).padStart(2,"0")+". "+
+tr(si,en,ta);
+
+parent.appendChild(label);
+
+const input=document.createElement(
+type==="select"?"select":
+type==="textarea"?"textarea":"input"
+);
+
+input.id=id;
+input.name=id;
+input.required=true;
+
+if(type==="select"){
+
+input.add(new Option(
+tr("තෝරන්න","Select","தேர்ந்தெடுக்கவும்"),
+""
+));
+
+choices[id].forEach(option=>{
+
+input.add(new Option(
+option[languageIndex+1],
+option[0]
+));
+
+});
+
+}else if(type!=="textarea"){
+
+input.type=type;
+
+}
+
+if(type==="text"||type==="textarea"){
+
+input.maxLength=id==="address"?300:100;
+
+}
+
+if(type==="tel"){
+
+input.maxLength=16;
+input.placeholder="07XXXXXXXX";
+
+}
+
+parent.appendChild(input);
+
+});
+
+$("nic").maxLength=12;
+$("experience").min=0;
+$("experience").max=70;
+$("experience").step=1;
+$("capacity").min=1;
+$("capacity").max=10;
+$("capacity").step=1;
+
+const capacityLimits={
+bike:1,
+tuk:3,
+car:4,
+van:10
+};
+
+$("vehicleType").onchange=()=>{
+
+$("capacity").max=
+capacityLimits[$("vehicleType").value]||10;
+
+$("capacity").value="";
+
+};
+
+// DRIVER TERMS - VERSION 1
+
+const TERMS_VERSION="driver-v1";
+
+const terms=[
+
+["නිවැරදි ලියාපදිංචි තොරතුරු ලබාදිය යුතුය.",
+"Provide accurate registration information.",
+"சரியான பதிவு தகவல்களை வழங்க வேண்டும்."],
+
+["වලංගු රියදුරු බලපත්‍රයක් තිබිය යුතුය.",
+"Maintain a valid driving licence.",
+"செல்லுபடியாகும் ஓட்டுநர் உரிமம் வேண்டும்."],
+
+["මගී ප්‍රවාහනයට වලංගු රක්ෂණයක් තිබිය යුතුය.",
+"Maintain valid passenger transport insurance.",
+"செல்லுபடியாகும் பயணிகள் போக்குவரத்து காப்பீடு வேண்டும்."],
+
+["වලංගු ආදායම් බලපත්‍රයක් තිබිය යුතුය.",
+"Maintain a valid revenue licence.",
+"செல்லுபடியாகும் வருவாய் உரிமம் வேண்டும்."],
+
+["පරිපාලක අනුමැතිය අනිවාර්යයි.",
+"Administrator approval is mandatory.",
+"நிர்வாக அனுமதி கட்டாயம்."],
+
+["ලියාපදිංචි රියදුරා සහ වාහනය පමණක් භාවිතා කළ යුතුය.",
+"Use only the registered driver and vehicle.",
+"பதிவு செய்யப்பட்ட சாரதி மற்றும் வாகனத்தை மட்டுமே பயன்படுத்த வேண்டும்."],
+
+["ගිණුම වෙනත් අයට ලබා නොදිය යුතුය.",
+"Do not share your account.",
+"கணக்கை மற்றவர்களுடன் பகிர வேண்டாம்."],
+
+["සේවයේදී Online සහ GPS සක්‍රියව තබාගත යුතුය.",
+"Keep online status and GPS active while working.",
+"சேவையின்போது இணையம் மற்றும் GPS செயல்பாட்டில் இருக்க வேண்டும்."],
+
+["හයර් එක පිළිගත් පසු මගියා සිටින ස්ථානයට යා යුතුය.",
+"Proceed to the pickup after accepting a ride.",
+"பயணத்தை ஏற்றபின் பயணியை ஏற்றும் இடத்திற்குச் செல்ல வேண்டும்."],
+
+["සාධාරණ හේතුවක් නොමැතිව හයර් අත්හැරිය නොහැක.",
+"Do not abandon rides without reasonable cause.",
+"நியாயமான காரணமின்றி பயணத்தை கைவிட வேண்டாம்."],
+
+["මගීන්ට ගෞරවයෙන් සැලකිය යුතුය.",
+"Treat passengers respectfully.",
+"பயணிகளை மரியாதையுடன் நடத்த வேண்டும்."],
+
+["මගියා වාහනයට නැගීමෙන් පසු ගමන ආරම්භ කළ යුතුය.",
+"Start the trip after the passenger boards.",
+"பயணி ஏறிய பிறகு பயணத்தைத் தொடங்க வேண்டும்."],
+
+["දුර, කාලය හෝ ගාස්තු වංචනිකව වෙනස් නොකළ යුතුය.",
+"Do not manipulate distance, time or fares.",
+"தூரம், நேரம் அல்லது கட்டணத்தை மோசடியாக மாற்ற வேண்டாம்."],
+
+["අනුමත නොකළ අමතර ගාස්තු අය නොකළ යුතුය.",
+"Do not charge unauthorized extras.",
+"அனுமதியற்ற கூடுதல் கட்டணம் வசூலிக்க வேண்டாம்."],
+
+["ගමන අවසන් වූ විට END TRIP කළ යුතුය.",
+"End the trip immediately upon completion.",
+"பயணம் முடிந்தவுடன் அதை நிறைவு செய்ய வேண்டும்."],
+
+["පවතින හයර් එක අවසන් වන තෙක් අලුත් හයර් ලබාගත නොහැක.",
+"Do not accept another ride until the current ride ends.",
+"தற்போதைய பயணம் முடியும் வரை புதிய பயணத்தை ஏற்க வேண்டாம்."],
+
+["සෑම හයර් එකකටම MY RIDE 5% කොමිස් ගෙවිය යුතුය.",
+"Pay the applicable MY RIDE 5% commission for each ride.",
+"ஒவ்வொரு பயணத்திற்கும் MY RIDE 5% கமிஷன் செலுத்த வேண்டும்."],
+
+["කොමිස් මගහැරීමට ව්‍යාජ ගමන් දත්ත ඇතුළත් නොකළ යුතුය.",
+"Do not falsify trip data to avoid commission.",
+"கமிஷனைத் தவிர்க்க போலியான பயணத் தகவல்களை வழங்க வேண்டாம்."],
+
+["මගීන්ගේ දුරකථන අංක පෞද්ගලික කටයුතු සඳහා භාවිතා නොකළ යුතුය.",
+"Do not use passenger phone numbers for personal purposes.",
+"பயணிகளின் தொலைபேசி எண்களை தனிப்பட்ட தேவைகளுக்குப் பயன்படுத்த வேண்டாம்."],
+
+["මත්පැන් හෝ මත්ද්‍රව්‍ය භාවිතයෙන් රිය පැදවිය නොහැක.",
+"Do not drive under the influence of alcohol or drugs.",
+"மது அல்லது போதைப்பொருள் தாக்கத்தில் வாகனம் ஓட்ட வேண்டாம்."],
+
+["මාර්ග නීති පිළිපැදිය යුතුය.",
+"Follow all applicable traffic laws.",
+"போக்குவரத்து சட்டங்களைப் பின்பற்ற வேண்டும்."],
+
+["වාහනය පිරිසිදුව හා ආරක්ෂිතව තබාගත යුතුය.",
+"Keep the vehicle clean and safe.",
+"வாகனத்தை சுத்தமாகவும் பாதுகாப்பாகவும் வைத்திருக்க வேண்டும்."],
+
+["අනුමත මගී ධාරිතාව ඉක්මවිය නොහැක.",
+"Do not exceed approved passenger capacity.",
+"அனுமதிக்கப்பட்ட பயணிகள் எண்ணிக்கையை மீற வேண்டாம்."],
+
+["බලපත්‍ර සහ රක්ෂණ නියමිත වේලාවට අලුත් කළ යුතුය.",
+"Renew licences and insurance on time.",
+"உரிமங்கள் மற்றும் காப்பீட்டை உரிய நேரத்தில் புதுப்பிக்க வேண்டும்."],
+
+["ව්‍යාජ GPS දත්ත ලබා නොදිය යුතුය.",
+"Do not submit fake GPS data.",
+"போலியான GPS தகவல்களை வழங்க வேண்டாம்."],
+
+["මගීන්ගේ පෞද්ගලික දත්ත අනවසරයෙන් බෙදා නොහැරිය යුතුය.",
+"Do not disclose passenger private data without authorization.",
+"பயணிகளின் தனிப்பட்ட தகவல்களை அனுமதியின்றி பகிர வேண்டாம்."],
+
+["නීති උල්ලංඝනය කිරීමේදී පරිපාලක පරීක්ෂාව, අත්හිටුවීම හෝ සේවය අවසන් කිරීම සිදුවිය හැක.",
+"Violations may result in administrative review, suspension or termination.",
+"விதிமீறல்கள் நிர்வாக விசாரணை, இடைநீக்கம் அல்லது சேவை நிறுத்தத்திற்கு வழிவகுக்கும்."]
+
+];
+
+terms.forEach(term=>{
+
+const li=document.createElement("li");
+
+li.textContent=term[languageIndex];
+
+$("termsList").appendChild(li);
+
+});
+
+// FIVE CONSENT CHECKBOXES
+
+const consents=[
+
+["truthConsent",
+"මා ලබාදුන් තොරතුරු සත්‍ය බව තහවුරු කරමි.",
+"I confirm that my information is accurate.",
+"எனது தகவல்கள் உண்மையானவை என்பதை உறுதிப்படுத்துகிறேன்."],
+
+["termsConsent",
+"රියදුරු නීති 27 සඳහා එකඟ වෙමි.",
+"I agree to the 27 driver terms.",
+"27 சாரதி விதிமுறைகளுக்கு ஒப்புக்கொள்கிறேன்."],
+
+["commissionConsent",
+"MY RIDE 5% කොමිස් ගෙවීමට එකඟ වෙමි.",
+"I agree to pay the MY RIDE 5% commission.",
+"MY RIDE 5% கமிஷன் செலுத்த ஒப்புக்கொள்கிறேன்."],
+
+["gpsConsent",
+"සේවයට අවශ්‍ය GPS දත්ත භාවිතයට එකඟ වෙමි.",
+"I consent to GPS use necessary for the service.",
+"சேவைக்குத் தேவையான GPS பயன்பாட்டிற்கு ஒப்புக்கொள்கிறேன்."],
+
+["whatsappConsent",
+"WhatsApp පණිවිඩ ලබාගැනීමට එකඟ වෙමි. (අත්‍යවශ්‍ය නොවේ)",
+"I consent to WhatsApp messages. (Optional)",
+"WhatsApp செய்திகளைப் பெற ஒப்புக்கொள்கிறேன். (விருப்பத்தேர்வு)"]
+
+];
+
+consents.forEach((item,index)=>{
+
+const label=document.createElement("label");
+
+label.className="check";
+
+const input=document.createElement("input");
+
+input.type="checkbox";
+input.id=item[0];
+input.required=index<4;
+
+const span=document.createElement("span");
+
+span.textContent=item[languageIndex+1];
+
+label.append(input,span);
+
+$("consentFields").appendChild(label);
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let functions=null;
+let verifier=null;
+let confirmation=null;
+let otpPhone=null;
+let verifiedPhone=null;
+let verifiedUid=null;
+let busy=false;
+let submitted=false;
+let requestId=null;
+let requestPayload=null;
+
+function status(si,en,ta){
+
+$("status").textContent=tr(si,en,ta);
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+auth.languageCode=lang;
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(
+"පද්ධතියට සම්බන්ධ විය නොහැක.",
+"Unable to connect to the system.",
+"அமைப்புடன் இணைக்க முடியவில்லை."
+);
+
+}
+
+// PHONE VALIDATION
+
+function normalizePhone(value){
+
+const phone=value.replace(/[\s-]/g,"");
+
+if(!/^(?:\+94|94|0)7\d{8}$/.test(phone)){
+
+return null;
+
+}
+
+return "+94"+phone.slice(-9);
+
+}
+
+function isVerified(){
+
+return auth?.currentUser?.uid===verifiedUid
+
+&& verifiedPhone!==null
+
+&& auth.currentUser.phoneNumber===verifiedPhone
+
+&& normalizePhone($("phone").value)===verifiedPhone;
+
+}
+
+function updateButtons(){
+
+$("sendOtp").disabled=
+
+busy||submitted||!auth||!navigator.onLine;
+
+$("verifyOtp").disabled=
+
+busy||submitted||!confirmation||!navigator.onLine;
+
+$("submitButton").disabled=
+
+busy||submitted||!functions||!isVerified()||!navigator.onLine;
+
+}
+
+$("phone").addEventListener("input",()=>{
+
+confirmation=null;
+otpPhone=null;
+verifiedPhone=null;
+verifiedUid=null;
+
+$("otpPanel").hidden=true;
+$("verifiedStatus").textContent="";
+
+updateButtons();
+
+});
+
+if(auth){
+
+onAuthStateChanged(auth,user=>{
+
+if(!user||user.uid!==verifiedUid){
+
+verifiedPhone=null;
+verifiedUid=null;
+
+$("verifiedStatus").textContent="";
+
+}
+
+updateButtons();
+
+});
+
+}
+
+// SEND OTP
+
+$("sendOtp").onclick=async()=>{
+
+if(busy||!auth||submitted)return;
+
+const phone=normalizePhone($("phone").value);
+
+if(!phone){
+
+status(
+"නිවැරදි දුරකථන අංකයක් ඇතුළත් කරන්න.",
+"Enter a valid phone number.",
+"சரியான தொலைபேசி எண்ணை உள்ளிடவும்."
+);
+
+return;
+
+}
+
+busy=true;
+confirmation=null;
+verifiedPhone=null;
+verifiedUid=null;
+
+$("phone").readOnly=true;
+$("otpPanel").hidden=true;
+$("verifiedStatus").textContent="";
+
+updateButtons();
+
+try{
+
+if(verifier)verifier.clear();
+
+verifier=new RecaptchaVerifier(
+auth,
+"recaptcha-container",
+{size:"normal"}
+);
+
+confirmation=await signInWithPhoneNumber(
+auth,
+phone,
+verifier
+);
+
+otpPhone=phone;
+
+$("otpPanel").hidden=false;
+
+status(
+"OTP අංකය යවා ඇත.",
+"OTP sent.",
+"OTP அனுப்பப்பட்டது."
+);
+
+}catch(e){
+
+if(verifier){
+
+verifier.clear();
+verifier=null;
+
+}
+
+status(
+"OTP යැවීමට නොහැකි විය. නැවත උත්සාහ කරන්න.",
+"Unable to send OTP. Try again.",
+"OTP அனுப்ப முடியவில்லை. மீண்டும் முயற்சிக்கவும்."
+);
+
+}finally{
+
+busy=false;
+$("phone").readOnly=false;
+updateButtons();
+
+}
+
+};
+
+// VERIFY OTP
+
+$("verifyOtp").onclick=async()=>{
+
+if(busy||!confirmation)return;
+
+const code=$("otp").value.trim();
+
+if(!/^\d{6}$/.test(code)){
+
+status(
+"ඉලක්කම් 6ක OTP අංකය ඇතුළත් කරන්න.",
+"Enter the six-digit OTP.",
+"ஆறு இலக்க OTP எண்ணை உள்ளிடவும்."
+);
+
+return;
+
+}
+
+busy=true;
+$("phone").readOnly=true;
+
+updateButtons();
+
+try{
+
+const result=await confirmation.confirm(code);
+
+if(result.user.phoneNumber!==otpPhone){
+
+throw new Error("Phone mismatch");
+
+}
+
+verifiedPhone=otpPhone;
+verifiedUid=result.user.uid;
+
+confirmation=null;
+
+$("otpPanel").hidden=true;
+$("otp").value="";
+
+text("verifiedStatus",
+"✓ දුරකථන අංකය තහවුරු කර ඇත.",
+"✓ Phone number verified.",
+"✓ தொலைபேசி எண் சரிபார்க்கப்பட்டது.");
+
+$("status").textContent="";
+
+}catch(e){
+
+status(
+"OTP තහවුරු කළ නොහැක.",
+"OTP verification failed.",
+"OTP சரிபார்ப்பு தோல்வியடைந்தது."
+);
+
+}finally{
+
+busy=false;
+$("phone").readOnly=false;
+
+updateButtons();
+
+}
+
+};
+
+// SRI LANKA DATE
+
+function todaySL(){
+
+return new Date(
+Date.now()+330*60000
+).toISOString().slice(0,10);
+
+}
+
+$("dob").max=todaySL();
+
+["licenceExpiry","insuranceExpiry","revenueExpiry"]
+.forEach(id=>$(id).min=todaySL());
+
+// FORM VALIDATION
+
+function getData(){
+
+const data={};
+
+for(const field of fields){
+
+const id=field[0];
+
+data[id]=$(id).value.trim();
+
+if(!data[id]){
+
+status(
+"සියලු තොරතුරු ඇතුළත් කරන්න.",
+"Complete all fields.",
+"அனைத்து தகவல்களையும் உள்ளிடவும்."
+);
+
+return null;
+
+}
+
+}
+
+data.nic=data.nic.toUpperCase();
+
+if(!/^(?:\d{9}[VX]|\d{12})$/.test(data.nic)){
+
+status(
+"නිවැරදි NIC අංකයක් ඇතුළත් කරන්න.",
+"Enter a valid NIC number.",
+"சரியான NIC எண்ணை உள்ளிடவும்."
+);
+
+return null;
+
+}
+
+data.phone=normalizePhone(data.phone);
+
+data.whatsapp=normalizePhone(data.whatsapp);
+
+if(!data.phone||!data.whatsapp||!isVerified()){
+
+status(
+"දුරකථන අංක පරීක්ෂා කරන්න.",
+"Check your phone numbers.",
+"தொலைபேசி எண்களைச் சரிபார்க்கவும்."
+);
+
+return null;
+
+}
+
+const adultDate=new Date(todaySL()+"T00:00:00Z");
+
+adultDate.setUTCFullYear(
+adultDate.getUTCFullYear()-18
+);
+
+if(data.dob>adultDate.toISOString().slice(0,10)){
+
+status(
+"අවම වයස අවුරුදු 18යි.",
+"Minimum age is 18.",
+"குறைந்தபட்ச வயது 18."
+
+);
+
+return null;
+
+}
+
+for(const id of [
+"licenceExpiry",
+"insuranceExpiry",
+"revenueExpiry"
+]){
+
+if(data[id]<todaySL()){
+
+status(
+"කල් ඉකුත් වූ බලපත්‍ර හෝ රක්ෂණ භාවිතා කළ නොහැක.",
+"Expired licences or insurance are not accepted.",
+"காலாவதியான உரிமங்கள் அல்லது காப்பீடு ஏற்கப்படாது."
+);
+
+return null;
+
+}
+
+}
+
+data.capacity=Number(data.capacity);
+
+data.experience=Number(data.experience);
+
+if(!Number.isInteger(data.capacity)
+
+||data.capacity<1
+
+||data.capacity>capacityLimits[data.vehicleType]
+
+||!Number.isInteger(data.experience)
+
+||data.experience<0
+
+||data.experience>70){
+
+status(
+"මගී ධාරිතාව සහ පළපුරුද්ද පරීක්ෂා කරන්න.",
+"Check capacity and driving experience.",
+"பயணிகள் எண்ணிக்கை மற்றும் அனுபவத்தைச் சரிபார்க்கவும்."
+);
+
+return null;
+
+}
+
+for(const item of consents){
+
+data[item[0]]=$(item[0]).checked;
+
+}
+
+if(!data.truthConsent
+
+||!data.termsConsent
+
+||!data.commissionConsent
+
+||!data.gpsConsent){
+
+status(
+"අනිවාර්ය එකඟතා සලකුණු කරන්න.",
+"Accept the required consents.",
+"கட்டாய ஒப்புதல்களை ஏற்கவும்."
+);
+
+return null;
+
+}
+
+data.language=lang;
+data.termsVersion=TERMS_VERSION;
+
+return data;
+
+}
+
+// SECURE REGISTRATION
+
+$("registerForm").addEventListener(
+"submit",
+async event=>{
+
+event.preventDefault();
+
+if(busy||submitted||!isVerified()||!functions){
+
+return;
+
+}
+
+const data=getData();
+
+if(!data)return;
+
+const payload=JSON.stringify(data);
+
+if(!requestId||requestPayload!==payload){
+
+requestId=crypto.randomUUID();
+requestPayload=payload;
+
+}
+
+const uid=auth.currentUser.uid;
+
+busy=true;
+
+const controls=$("registerForm")
+.querySelectorAll("input,select,textarea");
+
+controls.forEach(el=>el.disabled=true);
+
+updateButtons();
+
+status(
+"ලියාපදිංචිය යොමු කරමින්...",
+"Submitting registration...",
+"பதிவு அனுப்பப்படுகிறது..."
+);
+
+try{
+
+const registerDriver=httpsCallable(
+functions,
+"submitDriverRegistration"
+);
+
+const response=await registerDriver({
+
+...data,
+requestId
+
+});
+
+if(auth.currentUser?.uid!==uid){
+
+throw new Error("Session changed");
+
+}
+
+const result=response.data;
+
+if(result?.accepted!==true
+
+||result.status!=="pending"
+
+||typeof result.driverId!=="string"
+
+||! /^[A-Za-z0-9_-]{1,128}$/.test(result.driverId)){
+
+throw new Error("Invalid response");
+
+}
+
+submitted=true;
+
+$("driverId").textContent=result.driverId;
+
+$("registerForm").hidden=true;
+
+$("successPanel").hidden=false;
+
+$("registerForm").reset();
+
+$("status").textContent="";
+
+}catch(e){
+
+if(e.code==="functions/already-exists"){
+
+status(
+"මෙම රියදුරු තොරතුරු දැනටමත් ලියාපදිංචි කර ඇත.",
+"These driver details are already registered.",
+"இந்த சாரதி தகவல்கள் ஏற்கனவே பதிவு செய்யப்பட்டுள்ளன."
+);
+
+}else{
+
+status(
+"ලියාපදිංචිය යොමු කළ නොහැක. නැවත උත්සාහ කරන්න.",
+"Unable to submit registration. Try again.",
+"பதிவை அனுப்ப முடியவில்லை. மீண்டும் முயற்சிக்கவும்."
+);
+
+}
+
+}finally{
+
+busy=false;
+
+controls.forEach(el=>el.disabled=false);
+
+updateButtons();
+
+}
+
+});
+
+window.addEventListener("offline",updateButtons);
+window.addEventListener("online",updateButtons);
+
+updateButtons();
+
+</script>
+</body>
+</html>
