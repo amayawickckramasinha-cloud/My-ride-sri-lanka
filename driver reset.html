@@ -1,0 +1,1558 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Password Recovery</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:500px;
+margin:auto;
+padding:20px;
+}
+
+.logo{
+width:90px;
+height:90px;
+margin:25px auto 10px;
+background:#FFD600;
+border-radius:20px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:36px;
+margin-bottom:5px;
+}
+
+.country{
+text-align:center;
+color:#FFD600;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:14px;
+padding:20px;
+margin:20px 0;
+}
+
+label{
+display:block;
+margin:18px 0 8px;
+font-weight:bold;
+line-height:1.7;
+}
+
+input{
+width:100%;
+padding:15px;
+background:#292929;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:16px;
+margin:15px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.check{
+display:flex;
+align-items:center;
+gap:10px;
+font-weight:normal;
+}
+
+.check input{
+width:20px;
+height:20px;
+accent-color:#FFD600;
+}
+
+.note{
+color:#BBB;
+font-size:14px;
+line-height:1.8;
+}
+
+#status{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+#passwordMeter{
+height:7px;
+background:#444;
+border-radius:10px;
+overflow:hidden;
+margin-top:12px;
+}
+
+#passwordBar{
+height:100%;
+width:0;
+background:#FFD600;
+}
+
+.success{
+color:#4ADE80;
+text-align:center;
+}
+
+.back{
+display:block;
+text-align:center;
+color:#FFD600;
+text-decoration:none;
+padding:20px;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<div class="logo">
+
+<svg width="65" height="65"
+viewBox="0 0 100 100">
+
+<path d="M20 45 L29 24 H71 L80 45 Z"
+fill="#111"/>
+
+<rect x="12" y="43"
+width="76" height="30"
+rx="9" fill="#111"/>
+
+<rect x="18" y="66"
+width="13" height="15"
+rx="4" fill="#111"/>
+
+<rect x="69" y="66"
+width="13" height="15"
+rx="4" fill="#111"/>
+
+<circle cx="26" cy="56"
+r="6" fill="#FFD600"/>
+
+<circle cx="74" cy="56"
+r="6" fill="#FFD600"/>
+
+<path d="M32 29 H68 L74 42 H26 Z"
+fill="#FFD600"/>
+
+</svg>
+
+</div>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p class="note"
+data-t="intro"></p>
+
+<section id="phonePanel"
+class="panel">
+
+<h3 data-t="step1"></h3>
+
+<label for="phone"
+data-t="phone"></label>
+
+<input id="phone"
+type="tel"
+autocomplete="tel"
+maxlength="16"
+placeholder="07XXXXXXXX">
+
+<div id="recaptcha-container"></div>
+
+<button id="sendOtp"
+type="button"
+data-t="sendOtp"
+disabled></button>
+
+</section>
+
+<section id="otpPanel"
+class="panel" hidden>
+
+<h3 data-t="step2"></h3>
+
+<label for="otp"
+data-t="otp"></label>
+
+<input id="otp"
+type="text"
+inputmode="numeric"
+autocomplete="one-time-code"
+maxlength="6">
+
+<button id="verifyOtp"
+type="button"
+data-t="verifyOtp"></button>
+
+<button id="resendOtp"
+type="button"
+class="secondary"
+data-t="resend"></button>
+
+<p id="countdown"
+class="note"></p>
+
+</section>
+
+<form id="passwordForm"
+class="panel" hidden>
+
+<h3 data-t="step3"></h3>
+
+<p class="success"
+data-t="verified"></p>
+
+<label for="password"
+data-t="password"></label>
+
+<input id="password"
+type="password"
+autocomplete="new-password"
+minlength="15"
+maxlength="128"
+required>
+
+<div id="passwordMeter">
+
+<div id="passwordBar"></div>
+
+</div>
+
+<p class="note"
+data-t="passwordRules"></p>
+
+<label for="confirmPassword"
+data-t="confirmPassword"></label>
+
+<input id="confirmPassword"
+type="password"
+autocomplete="new-password"
+minlength="15"
+maxlength="128"
+required>
+
+<label class="check">
+
+<input id="showPassword"
+type="checkbox">
+
+<span data-t="showPassword"></span>
+
+</label>
+
+<button id="resetButton"
+type="submit"
+data-t="reset"
+disabled></button>
+
+</form>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="successPanel"
+class="panel" hidden>
+
+<h2 class="success"
+data-t="success"></h2>
+
+<p class="note"
+data-t="successMessage"></p>
+
+<a id="successLogin"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<p class="note"
+data-t="security"></p>
+
+<a id="backButton"
+class="back"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+RecaptchaVerifier,
+signInWithPhoneNumber,
+signOut,
+setPersistence,
+inMemoryPersistence,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"මුරපදය නැවත සකස් කිරීම",
+
+intro:"ලියාපදිංචි දුරකථන අංකය තහවුරු කර අලුත් මුරපදයක් සකස් කරන්න.",
+
+step1:"01. දුරකථන අංකය",
+
+phone:"ලියාපදිංචි දුරකථන අංකය",
+
+sendOtp:"OTP අංකය ලබාගන්න",
+
+step2:"02. OTP තහවුරු කිරීම",
+
+otp:"OTP අංකය",
+
+verifyOtp:"OTP තහවුරු කරන්න",
+
+resend:"OTP නැවත ලබාගන්න",
+
+step3:"03. අලුත් මුරපදය",
+
+verified:"✓ දුරකථන අංකය තහවුරු කර ඇත",
+
+password:"අලුත් මුරපදය",
+
+confirmPassword:"මුරපදය නැවත ඇතුළත් කරන්න",
+
+passwordRules:"අවම අක්ෂර 15ක් භාවිතා කරන්න. වෙනත් ගිණුමකට භාවිතා නොකරන මුරපදයක් තෝරන්න.",
+
+showPassword:"මුරපදය පෙන්වන්න",
+
+reset:"අලුත් මුරපදය සුරකින්න",
+
+success:"✓ මුරපදය වෙනස් කර ඇත",
+
+successMessage:"අලුත් මුරපදය භාවිතයෙන් නැවත Driver Login වෙත ඇතුළු වන්න.",
+
+login:"Driver Login",
+
+security:"ඔබගේ OTP අංකය හෝ මුරපදය වෙනත් අයෙකුට ලබා නොදෙන්න.",
+
+back:"← Driver Login",
+
+connecting:"පද්ධතියට සම්බන්ධ වෙමින්...",
+
+phoneError:"නිවැරදි දුරකථන අංකයක් ඇතුළත් කරන්න.",
+
+sending:"OTP යවමින්...",
+
+sent:"OTP ඉල්ලීම යොමු කර ඇත.",
+
+sendError:"OTP ලබාගත නොහැක. පසුව උත්සාහ කරන්න.",
+
+otpFormat:"ඉලක්කම් 6ක OTP අංකය ඇතුළත් කරන්න.",
+
+verifying:"OTP තහවුරු කරමින්...",
+
+otpError:"OTP තහවුරු කළ නොහැක.",
+
+denied:"මුරපදය වෙනස් කිරීමට අවසර නැත. පරිපාලක සම්බන්ධ කරගන්න.",
+
+passwordError:"මුරපදය අක්ෂර 15 සිට 128 දක්වා විය යුතුය.",
+
+mismatch:"මුරපද දෙක සමාන නොවේ.",
+
+saving:"අලුත් මුරපදය සුරකිමින්...",
+
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+
+error:"ක්‍රියාව සම්පූර්ණ කළ නොහැක. නැවත උත්සාහ කරන්න.",
+
+expired:"තහවුරු කිරීමේ කාලය අවසන් වී ඇත. නැවත OTP ලබාගන්න.",
+
+limit:"උත්සාහ සීමාව ඉක්මවා ඇත. පසුව උත්සාහ කරන්න.",
+
+seconds:"නැවත OTP ලබාගැනීමට ඉතිරි තත්පර: "
+
+},
+
+en:{
+
+heading:"Reset Driver Password",
+
+intro:"Verify your registered phone number and create a new password.",
+
+step1:"01. Phone Number",
+
+phone:"Registered Phone Number",
+
+sendOtp:"Send OTP",
+
+step2:"02. OTP Verification",
+
+otp:"OTP Code",
+
+verifyOtp:"Verify OTP",
+
+resend:"Resend OTP",
+
+step3:"03. New Password",
+
+verified:"✓ Phone number verified",
+
+password:"New Password",
+
+confirmPassword:"Confirm Password",
+
+passwordRules:"Use at least 15 characters. Choose a password not used on another account.",
+
+showPassword:"Show Password",
+
+reset:"Save New Password",
+
+success:"✓ Password Changed",
+
+successMessage:"Return to Driver Login and use your new password.",
+
+login:"Driver Login",
+
+security:"Never share your OTP or password.",
+
+back:"← Driver Login",
+
+connecting:"Connecting to the system...",
+
+phoneError:"Enter a valid phone number.",
+
+sending:"Sending OTP...",
+
+sent:"OTP request submitted.",
+
+sendError:"Unable to obtain OTP. Try again later.",
+
+otpFormat:"Enter the six-digit OTP.",
+
+verifying:"Verifying OTP...",
+
+otpError:"OTP verification failed.",
+
+denied:"Password recovery is not authorized. Contact the administrator.",
+
+passwordError:"Password must contain 15 to 128 characters.",
+
+mismatch:"Passwords do not match.",
+
+saving:"Saving new password...",
+
+offline:"No internet connection.",
+
+error:"Unable to complete the operation. Try again.",
+
+expired:"Verification expired. Request a new OTP.",
+
+limit:"Too many attempts. Try again later.",
+
+seconds:"Seconds until OTP resend: "
+
+},
+
+ta:{
+
+heading:"சாரதி கடவுச்சொல் மீட்டமைப்பு",
+
+intro:"பதிவு செய்யப்பட்ட தொலைபேசி எண்ணைச் சரிபார்த்து புதிய கடவுச்சொல்லை உருவாக்கவும்.",
+
+step1:"01. தொலைபேசி எண்",
+
+phone:"பதிவு செய்யப்பட்ட தொலைபேசி எண்",
+
+sendOtp:"OTP அனுப்பவும்",
+
+step2:"02. OTP சரிபார்ப்பு",
+
+otp:"OTP எண்",
+
+verifyOtp:"OTP சரிபார்க்கவும்",
+
+resend:"OTP மீண்டும் அனுப்பவும்",
+
+step3:"03. புதிய கடவுச்சொல்",
+
+verified:"✓ தொலைபேசி எண் சரிபார்க்கப்பட்டது",
+
+password:"புதிய கடவுச்சொல்",
+
+confirmPassword:"கடவுச்சொல்லை மீண்டும் உள்ளிடவும்",
+
+passwordRules:"குறைந்தது 15 எழுத்துகளைப் பயன்படுத்தவும். வேறு கணக்கில் பயன்படுத்தாத கடவுச்சொல்லைத் தேர்ந்தெடுக்கவும்.",
+
+showPassword:"கடவுச்சொல்லைக் காட்டவும்",
+
+reset:"புதிய கடவுச்சொல்லைச் சேமிக்கவும்",
+
+success:"✓ கடவுச்சொல் மாற்றப்பட்டது",
+
+successMessage:"புதிய கடவுச்சொல்லைப் பயன்படுத்தி சாரதி உள்நுழைவு பக்கத்திற்குச் செல்லவும்.",
+
+login:"சாரதி உள்நுழைவு",
+
+security:"OTP அல்லது கடவுச்சொல்லை மற்றவர்களுடன் பகிர வேண்டாம்.",
+
+back:"← சாரதி உள்நுழைவு",
+
+connecting:"அமைப்புடன் இணைக்கப்படுகிறது...",
+
+phoneError:"சரியான தொலைபேசி எண்ணை உள்ளிடவும்.",
+
+sending:"OTP அனுப்பப்படுகிறது...",
+
+sent:"OTP கோரிக்கை அனுப்பப்பட்டது.",
+
+sendError:"OTP பெற முடியவில்லை. பின்னர் முயற்சிக்கவும்.",
+
+otpFormat:"ஆறு இலக்க OTP எண்ணை உள்ளிடவும்.",
+
+verifying:"OTP சரிபார்க்கப்படுகிறது...",
+
+otpError:"OTP சரிபார்ப்பு தோல்வியடைந்தது.",
+
+denied:"கடவுச்சொல்லை மீட்டமைக்க அனுமதி இல்லை. நிர்வாகத்தைத் தொடர்புகொள்ளவும்.",
+
+passwordError:"கடவுச்சொல் 15 முதல் 128 எழுத்துகள் வரை இருக்க வேண்டும்.",
+
+mismatch:"கடவுச்சொற்கள் பொருந்தவில்லை.",
+
+saving:"புதிய கடவுச்சொல் சேமிக்கப்படுகிறது...",
+
+offline:"இணைய இணைப்பு இல்லை.",
+
+error:"செயல்பாட்டை முடிக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+
+expired:"சரிபார்ப்பு காலாவதியானது. புதிய OTP கோரவும்.",
+
+limit:"அதிகமான முயற்சிகள். பின்னர் முயற்சிக்கவும்.",
+
+seconds:"OTP மீண்டும் அனுப்ப மீதமுள்ள விநாடிகள்: "
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+$("backButton").href=
+"./driver-login.html?lang="+lang;
+
+$("successLogin").href=
+"./driver-login.html?lang="+lang;
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let functions=null;
+let verifier=null;
+let confirmation=null;
+
+let otpPhone=null;
+let verifiedUid=null;
+let verifiedPhone=null;
+
+let recoveryId=null;
+let recoveryToken=null;
+let recoveryExpiresAt=0;
+
+let ready=false;
+let busy=false;
+let completed=false;
+
+let resendAt=0;
+let timer=null;
+
+let requestId=null;
+let submittedPassword=null;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+// PHONE VALIDATION
+
+function normalizePhone(value){
+
+const phone=value.replace(/[\s-]/g,"");
+
+if(!/^(?:\+94|94|0)7\d{8}$/.test(phone)){
+
+return null;
+
+}
+
+return "+94"+phone.slice(-9);
+
+}
+
+// RECOVERY SESSION VALIDATION
+
+function verified(){
+
+return verifiedUid!==null
+
+&&verifiedPhone!==null
+
+&&auth?.currentUser?.uid===verifiedUid
+
+&&auth.currentUser.phoneNumber===verifiedPhone
+
+&&recoveryToken!==null
+
+&&Date.now()<recoveryExpiresAt;
+
+}
+
+function updateButtons(){
+
+const unavailable=
+
+!ready||busy||completed||!navigator.onLine;
+
+$("sendOtp").disabled=
+
+unavailable||Date.now()<resendAt;
+
+$("resendOtp").disabled=
+
+unavailable||Date.now()<resendAt;
+
+$("verifyOtp").disabled=
+
+unavailable||!confirmation;
+
+$("resetButton").disabled=
+
+unavailable||!verified();
+
+}
+
+// FIREBASE CONNECTION
+
+async function initialize(){
+
+status(t.connecting);
+
+try{
+
+// Separate recovery authentication session.
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-driver-recovery"
+
+);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+auth.languageCode=lang;
+
+await setPersistence(
+
+auth,
+
+inMemoryPersistence
+
+);
+
+functions=getFunctions(app);
+
+onAuthStateChanged(auth,user=>{
+
+if(verifiedUid&&user?.uid!==verifiedUid){
+
+clearRecovery();
+
+$("phonePanel").hidden=false;
+
+$("passwordForm").hidden=true;
+
+status(t.denied);
+
+}
+
+updateButtons();
+
+});
+
+ready=true;
+
+status("");
+
+}catch(e){
+
+status(t.error);
+
+}
+
+updateButtons();
+
+}
+
+// CLEAR RECOVERY DATA
+
+function clearRecovery(){
+
+verifiedUid=null;
+verifiedPhone=null;
+recoveryToken=null;
+recoveryExpiresAt=0;
+requestId=null;
+submittedPassword=null;
+
+$("password").value="";
+$("confirmPassword").value="";
+$("passwordBar").style.width="0";
+
+}
+
+// OTP RESEND TIMER
+
+function startTimer(){
+
+resendAt=Date.now()+60000;
+
+if(timer){
+
+clearInterval(timer);
+
+}
+
+timer=setInterval(()=>{
+
+const remaining=Math.max(
+
+0,
+
+Math.ceil((resendAt-Date.now())/1000)
+
+);
+
+$("countdown").textContent=
+
+remaining>0
+
+?t.seconds+remaining:"";
+
+if(remaining===0){
+
+clearInterval(timer);
+
+timer=null;
+
+}
+
+updateButtons();
+
+},1000);
+
+updateButtons();
+
+}
+
+// PHONE NUMBER CHANGE
+
+$("phone").addEventListener("input",()=>{
+
+confirmation=null;
+otpPhone=null;
+recoveryId=null;
+
+clearRecovery();
+
+$("otpPanel").hidden=true;
+
+$("passwordForm").hidden=true;
+
+$("otp").value="";
+
+updateButtons();
+
+});
+
+// SEND OTP
+
+async function sendOtp(){
+
+if(!ready||busy||completed
+
+||Date.now()<resendAt)return;
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+const phone=normalizePhone(
+
+$("phone").value
+
+);
+
+if(!phone){
+
+status(t.phoneError);
+
+return;
+
+}
+
+busy=true;
+
+$("phone").readOnly=true;
+
+confirmation=null;
+recoveryId=null;
+otpPhone=null;
+
+clearRecovery();
+
+$("otpPanel").hidden=true;
+
+$("passwordForm").hidden=true;
+
+updateButtons();
+
+status(t.sending);
+
+try{
+
+// Server creates a rate-limited recovery request.
+// It must not disclose whether a phone is registered.
+
+const begin=httpsCallable(
+
+functions,
+
+"beginDriverPasswordReset"
+
+);
+
+const response=await begin({
+
+phone
+
+});
+
+const result=response.data;
+
+if(result?.accepted!==true
+
+||typeof result.recoveryId!=="string"
+
+||! /^[A-Za-z0-9_-]{20,128}$/
+
+.test(result.recoveryId)){
+
+throw new Error("Recovery unavailable");
+
+}
+
+recoveryId=result.recoveryId;
+
+if(verifier){
+
+verifier.clear();
+
+}
+
+verifier=new RecaptchaVerifier(
+
+auth,
+
+"recaptcha-container",
+
+{size:"normal"}
+
+);
+
+confirmation=await signInWithPhoneNumber(
+
+auth,
+
+phone,
+
+verifier
+
+);
+
+otpPhone=phone;
+
+$("otpPanel").hidden=false;
+
+$("otp").value="";
+
+startTimer();
+
+status(t.sent);
+
+}catch(e){
+
+if(verifier){
+
+verifier.clear();
+
+verifier=null;
+
+}
+
+if(e.code==="functions/resource-exhausted"
+
+||e.code==="auth/too-many-requests"){
+
+status(t.limit);
+
+startTimer();
+
+}else{
+
+status(t.sendError);
+
+}
+
+}finally{
+
+busy=false;
+
+$("phone").readOnly=false;
+
+updateButtons();
+
+}
+
+}
+
+$("sendOtp").onclick=sendOtp;
+
+$("resendOtp").onclick=sendOtp;
+
+// VERIFY OTP
+
+$("verifyOtp").onclick=async()=>{
+
+if(busy||!confirmation||!recoveryId)return;
+
+const code=$("otp").value.trim();
+
+if(!/^\d{6}$/.test(code)){
+
+status(t.otpFormat);
+
+return;
+
+}
+
+busy=true;
+
+$("phone").readOnly=true;
+
+updateButtons();
+
+status(t.verifying);
+
+try{
+
+const credential=
+
+await confirmation.confirm(code);
+
+confirmation=null;
+
+if(credential.user.phoneNumber!==otpPhone){
+
+throw new Error("Phone mismatch");
+
+}
+
+// Server verifies phone ownership,
+// account approval and recent OTP login.
+
+const verify=httpsCallable(
+
+functions,
+
+"verifyDriverPasswordReset"
+
+);
+
+const response=await verify({
+
+recoveryId
+
+});
+
+const result=response.data;
+
+if(result?.authorized!==true
+
+||result.status!=="approved"
+
+||result.activationComplete!==true
+
+||typeof result.recoveryToken!=="string"
+
+||! /^[A-Za-z0-9_-]{43,256}$/
+
+.test(result.recoveryToken)
+
+||!Number.isFinite(result.expiresAtMs)
+
+||result.expiresAtMs<=Date.now()){
+
+clearRecovery();
+
+$("otpPanel").hidden=true;
+
+await signOut(auth);
+
+status(t.denied);
+
+return;
+
+}
+
+verifiedUid=credential.user.uid;
+
+verifiedPhone=credential.user.phoneNumber;
+
+recoveryToken=result.recoveryToken;
+
+recoveryExpiresAt=result.expiresAtMs;
+
+$("phonePanel").hidden=true;
+
+$("otpPanel").hidden=true;
+
+$("otp").value="";
+
+$("passwordForm").hidden=false;
+
+status("");
+
+}catch(e){
+
+clearRecovery();
+
+if(!confirmation){
+
+$("phonePanel").hidden=false;
+
+$("otpPanel").hidden=true;
+
+try{
+
+await signOut(auth);
+
+}catch(error){}
+
+}
+
+status(t.otpError);
+
+}finally{
+
+busy=false;
+
+$("phone").readOnly=false;
+
+updateButtons();
+
+}
+
+};
+
+// SHOW PASSWORD
+
+$("showPassword").onchange=()=>{
+
+const type=$("showPassword").checked
+
+?"text":"password";
+
+$("password").type=type;
+
+$("confirmPassword").type=type;
+
+};
+
+// PASSWORD LENGTH INDICATOR
+
+$("password").oninput=()=>{
+
+const length=$("password").value.length;
+
+$("passwordBar").style.width=
+
+Math.min(100,length/15*100)+"%";
+
+$("passwordBar").style.background=
+
+length>=15?"#4ADE80":"#FFD600";
+
+};
+
+// RESET PASSWORD
+
+$("passwordForm").addEventListener(
+
+"submit",
+
+async event=>{
+
+event.preventDefault();
+
+if(busy||completed)return;
+
+if(!verified()){
+
+clearRecovery();
+
+$("passwordForm").hidden=true;
+
+$("phonePanel").hidden=false;
+
+status(t.expired);
+
+updateButtons();
+
+return;
+
+}
+
+const password=$("password").value;
+
+const confirmPassword=
+
+$("confirmPassword").value;
+
+if(password.length<15
+
+||password.length>128){
+
+status(t.passwordError);
+
+return;
+
+}
+
+if(password!==confirmPassword){
+
+status(t.mismatch);
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+if(!requestId||submittedPassword!==password){
+
+requestId=crypto.randomUUID();
+
+submittedPassword=password;
+
+}
+
+busy=true;
+
+$("password").disabled=true;
+
+$("confirmPassword").disabled=true;
+
+updateButtons();
+
+status(t.saving);
+
+try{
+
+const reset=httpsCallable(
+
+functions,
+
+"completeDriverPasswordReset"
+
+);
+
+const response=await reset({
+
+recoveryId,
+
+recoveryToken,
+
+password,
+
+requestId
+
+});
+
+if(response.data?.reset!==true){
+
+throw new Error("Reset failed");
+
+}
+
+completed=true;
+
+clearRecovery();
+
+recoveryId=null;
+
+confirmation=null;
+
+otpPhone=null;
+
+$("passwordForm").hidden=true;
+
+$("successPanel").hidden=false;
+
+status("");
+
+try{
+
+await signOut(auth);
+
+}catch(e){
+
+// Recovery session is memory-only.
+
+}
+
+}catch(e){
+
+if([
+
+"functions/permission-denied",
+
+"functions/failed-precondition",
+
+"functions/unauthenticated"
+
+].includes(e.code)){
+
+clearRecovery();
+
+$("passwordForm").hidden=true;
+
+$("phonePanel").hidden=false;
+
+status(t.denied);
+
+try{
+
+await signOut(auth);
+
+}catch(error){}
+
+}else if(
+
+e.code==="functions/resource-exhausted"
+
+){
+
+status(t.limit);
+
+}else{
+
+status(t.error);
+
+}
+
+}finally{
+
+busy=false;
+
+$("password").disabled=false;
+
+$("confirmPassword").disabled=false;
+
+updateButtons();
+
+}
+
+}
+
+);
+
+// RECOVERY EXPIRATION CHECK
+
+setInterval(()=>{
+
+if(recoveryToken
+
+&&Date.now()>=recoveryExpiresAt
+
+&&!busy&&!completed){
+
+clearRecovery();
+
+$("passwordForm").hidden=true;
+
+$("phonePanel").hidden=false;
+
+status(t.expired);
+
+updateButtons();
+
+if(auth){
+
+signOut(auth).catch(()=>{});
+
+}
+
+}
+
+},1000);
+
+// INTERNET CONNECTION
+
+window.addEventListener("offline",()=>{
+
+status(t.offline);
+
+updateButtons();
+
+});
+
+window.addEventListener("online",()=>{
+
+if(!busy&&!completed){
+
+status("");
+
+}
+
+updateButtons();
+
+});
+
+// CLEAR SENSITIVE DATA ON PAGE EXIT
+
+window.addEventListener("pagehide",()=>{
+
+clearRecovery();
+
+confirmation=null;
+
+recoveryId=null;
+
+otpPhone=null;
+
+$("otp").value="";
+
+$("passwordForm").hidden=true;
+
+if(!completed){
+
+$("phonePanel").hidden=false;
+
+}
+
+$("otpPanel").hidden=true;
+
+if(auth){
+
+signOut(auth).catch(()=>{});
+
+}
+
+});
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted){
+
+updateButtons();
+
+}
+
+});
+
+initialize();
+
+</script>
+
+</body>
+</html>
