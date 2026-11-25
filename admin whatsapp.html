@@ -1,1 +1,1567 @@
 
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+<title>MY RIDE - WhatsApp Management</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+main{
+max-width:850px;
+margin:auto;
+padding:16px;
+}
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+h2{text-align:center}
+h3{color:#FFD600}
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+label{
+display:block;
+margin:12px 0 8px;
+line-height:1.7;
+}
+input,select,textarea{
+width:100%;
+padding:13px;
+background:#292929;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+font-family:inherit;
+}
+textarea{
+min-height:160px;
+resize:vertical;
+}
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:12px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+button:disabled{opacity:.45}
+.check{
+display:flex;
+align-items:center;
+gap:12px;
+background:#292929;
+padding:12px;
+border-radius:8px;
+}
+.check input{
+width:22px;
+height:22px;
+accent-color:#FFD600;
+}
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+#status,#result{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+#preview{
+white-space:pre-wrap;
+overflow-wrap:anywhere;
+line-height:1.8;
+background:#18392A;
+border-radius:10px;
+padding:16px;
+}
+.historyItem{
+background:#292929;
+border-radius:9px;
+padding:14px;
+margin:12px 0;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+.stat{
+background:#292929;
+padding:14px;
+border-radius:9px;
+}
+.stat strong{
+display:block;
+color:#FFD600;
+font-size:25px;
+margin-top:10px;
+}
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+.languages button{
+padding:10px 4px;
+}
+.back{
+background:transparent;
+border:1px solid #FFD600;
+color:#FFD600;
+}
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+[hidden]{display:none!important}
+</style>
+</head>
+
+<body>
+<main>
+
+<h1>MY RIDE</h1>
+<div class="country">SRI LANKA</div>
+
+<h2 data-t="heading"></h2>
+
+<div class="languages">
+<button data-lang="si">සිංහල</button>
+<button data-lang="en">English</button>
+<button data-lang="ta">தமிழ்</button>
+</div>
+
+<p id="status" role="status" aria-live="polite"></p>
+
+<section id="accessPanel" class="panel" hidden>
+<h3>🔒 Owner Admin Only</h3>
+<p data-t="denied"></p>
+<a id="loginLink" class="action">Admin Login</a>
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink" class="action back" data-t="back"></a>
+
+<section class="panel">
+<h3 data-t="statistics"></h3>
+<div id="statistics" class="grid"></div>
+</section>
+
+<section class="panel">
+
+<h3 data-t="settings"></h3>
+
+<label for="adminPhone" data-t="phone"></label>
+
+<input id="adminPhone"
+type="tel"
+placeholder="+94 / +965"
+maxlength="16"
+autocomplete="off">
+
+<label class="check">
+<input id="autoEnabled" type="checkbox">
+<span data-t="automatic"></span>
+</label>
+
+<p id="providerStatus" class="note"></p>
+
+<p class="note" data-t="apiNotice"></p>
+
+<h3 data-t="notifications"></h3>
+
+<div id="notificationOptions"></div>
+
+<button id="saveSettings" data-t="saveSettings"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="templates"></h3>
+
+<label for="messageType" data-t="messageType"></label>
+
+<select id="messageType">
+<option value="pending" data-t="pending"></option>
+<option value="approved" data-t="approved"></option>
+<option value="rejected" data-t="rejected"></option>
+<option value="suspended" data-t="suspended"></option>
+<option value="blocked" data-t="blocked"></option>
+</select>
+
+<label for="messageLanguage" data-t="language"></label>
+
+<select id="messageLanguage">
+<option value="si">සිංහල</option>
+<option value="en">English</option>
+<option value="ta">தமிழ்</option>
+</select>
+
+<label for="messageTemplate" data-t="message"></label>
+
+<textarea id="messageTemplate" maxlength="1024"></textarea>
+
+<p class="note">
+{driverName}<br>
+{driverId}<br>
+{reason}<br>
+{activationLink}
+</p>
+
+<p class="note" data-t="activationNotice"></p>
+
+<h3 data-t="preview"></h3>
+
+<div id="preview"></div>
+
+<button id="saveTemplate" data-t="saveTemplate"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="history"></h3>
+
+<select id="historyFilter">
+<option value="all" data-t="all"></option>
+<option value="queued" data-t="queued"></option>
+<option value="sent" data-t="sent"></option>
+<option value="delivered" data-t="delivered"></option>
+<option value="read" data-t="read"></option>
+<option value="failed" data-t="failed"></option>
+</select>
+
+<button id="refreshHistory" data-t="search"></button>
+
+<div id="history"></div>
+
+<button id="loadMore" data-t="loadMore" hidden></button>
+
+</section>
+
+<p id="result" role="status" aria-live="polite"></p>
+
+<button id="refreshButton" data-t="refresh"></button>
+
+<a id="backLink" class="action back" data-t="back"></a>
+
+</div>
+
+<footer>© MY RIDE SRI LANKA</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const types=[
+"pending",
+"approved",
+"rejected",
+"suspended",
+"blocked"
+];
+
+const languages=["si","en","ta"];
+
+const deliveryStatuses=[
+"queued","sent","delivered","read","failed"
+];
+
+const words={
+
+si:{
+heading:"WhatsApp කළමනාකරණය",
+statistics:"පණිවිඩ සංඛ්‍යාලේඛන",
+totalMessages:"මුළු පණිවිඩ",
+settings:"Admin WhatsApp සැකසුම්",
+phone:"ඔබගේ WhatsApp අංකය",
+automatic:"ස්වයංක්‍රීය පණිවිඩ සක්‍රිය කරන්න",
+notifications:"ස්වයංක්‍රීය පණිවිඩ වර්ග",
+pending:"ලියාපදිංචිය පරීක්ෂා කරමින්",
+approved:"රියදුරු අනුමත කිරීම",
+rejected:"රියදුරු ප්‍රතික්ෂේප කිරීම",
+suspended:"ගිණුම අත්හිටුවීම",
+blocked:"ගිණුම අවහිර කිරීම",
+saveSettings:"සැකසුම් සුරකින්න",
+templates:"පණිවිඩ ආකෘති",
+messageType:"පණිවිඩ වර්ගය",
+language:"පණිවිඩයේ භාෂාව",
+message:"පණිවිඩය",
+preview:"පණිවිඩයේ පෙරදසුන",
+saveTemplate:"පණිවිඩ ආකෘතිය සුරකින්න",
+history:"WhatsApp පණිවිඩ ඉතිහාසය",
+all:"සියල්ල",
+queued:"යැවීමට නියමිත",
+sent:"යවා ඇත",
+delivered:"ලැබී ඇත",
+read:"කියවා ඇත",
+failed:"අසාර්ථකයි",
+search:"සොයන්න",
+loadMore:"තවත් පණිවිඩ",
+refresh:"යාවත්කාලීන කරන්න",
+back:"Admin Dashboard වෙත",
+checking:"ආරක්ෂාව පරීක්ෂා කරමින්...",
+denied:"Owner Admin අවසරය තහවුරු කර නොමැත.",
+verified:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+loading:"දත්ත ලබාගනිමින්...",
+error:"Server දත්ත ලබාගත නොහැක.",
+saved:"සැකසුම් සුරැකීම තහවුරු කර ඇත.",
+invalid:"ඇතුළත් කළ දත්ත පරීක්ෂා කරන්න.",
+connected:"API සම්බන්ධ කර ඇත.",
+disconnected:"API සම්බන්ධ කර නැත.",
+apiNotice:"ස්වයංක්‍රීය පණිවිඩ සඳහා නිල WhatsApp Business API සහ අනුමත පණිවිඩ ආකෘති අවශ්‍යයි.",
+activationNotice:"අනුමත කිරීමේ පණිවිඩයට activationLink අනිවාර්යයි. අනෙක් පණිවිඩවලට එය ඇතුළත් නොකරන්න.",
+retry:"නැවත යැවීමට ඉල්ලන්න",
+confirmRetry:"නැවත යැවීමට අවශ්‍යද?",
+retryAccepted:"නැවත යැවීමේ ඉල්ලීම පිළිගෙන ඇත.",
+noRecords:"පණිවිඩ වාර්තා නොමැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+reauth:"Google ගිණුම නැවත තහවුරු කරන්න.",
+providerRequired:"WhatsApp API සම්බන්ධතාව සහ ලියාපදිංචි අංකය පරීක්ෂා කරන්න.",
+driverId:"රියදුරු ID",
+recipient:"ලබන්නා",
+date:"දිනය",
+reason:"හේතුව",
+status:"තත්ත්වය"
+},
+
+en:{
+heading:"WhatsApp Management",
+statistics:"Message Statistics",
+totalMessages:"Total Messages",
+settings:"Admin WhatsApp Settings",
+phone:"Your WhatsApp Number",
+automatic:"Enable Automatic Messages",
+notifications:"Automatic Notifications",
+pending:"Registration Pending",
+approved:"Driver Approved",
+rejected:"Driver Rejected",
+suspended:"Account Suspended",
+blocked:"Account Blocked",
+saveSettings:"Save Settings",
+templates:"Message Templates",
+messageType:"Message Type",
+language:"Message Language",
+message:"Message",
+preview:"Message Preview",
+saveTemplate:"Save Message Template",
+history:"WhatsApp Message History",
+all:"All",
+queued:"Queued",
+sent:"Sent",
+delivered:"Delivered",
+read:"Read",
+failed:"Failed",
+search:"Search",
+loadMore:"Load More",
+refresh:"Refresh",
+back:"Back to Admin Dashboard",
+checking:"Checking security...",
+denied:"Owner Admin authorization is not verified.",
+verified:"Owner authorization verified.",
+loading:"Loading server data...",
+error:"Unable to retrieve server data.",
+saved:"Settings saved by the server.",
+invalid:"Check the entered information.",
+connected:"API Connected.",
+disconnected:"API Not Connected.",
+apiNotice:"Automatic messages require an official WhatsApp Business API and approved message templates.",
+activationNotice:"Approval messages require activationLink. Other messages must not contain it.",
+retry:"Request Retry",
+confirmRetry:"Request this message again?",
+retryAccepted:"Retry request accepted.",
+noRecords:"No message records.",
+offline:"No internet connection.",
+reauth:"Verify your Google account again.",
+providerRequired:"Check the WhatsApp API connection and registered number.",
+driverId:"Driver ID",
+recipient:"Recipient",
+date:"Date",
+reason:"Reason",
+status:"Status"
+},
+
+ta:{
+heading:"WhatsApp நிர்வாகம்",
+statistics:"செய்தி புள்ளிவிவரங்கள்",
+totalMessages:"மொத்த செய்திகள்",
+settings:"நிர்வாக WhatsApp அமைப்புகள்",
+phone:"உங்கள் WhatsApp எண்",
+automatic:"தானியங்கி செய்திகளை இயக்கவும்",
+notifications:"தானியங்கி அறிவிப்புகள்",
+pending:"பதிவு பரிசீலனையில்",
+approved:"சாரதி அங்கீகரிக்கப்பட்டார்",
+rejected:"சாரதி நிராகரிக்கப்பட்டார்",
+suspended:"கணக்கு இடைநிறுத்தப்பட்டது",
+blocked:"கணக்கு தடுக்கப்பட்டது",
+saveSettings:"அமைப்புகளை சேமிக்கவும்",
+templates:"செய்தி வடிவங்கள்",
+messageType:"செய்தி வகை",
+language:"செய்தி மொழி",
+message:"செய்தி",
+preview:"செய்தி முன்னோட்டம்",
+saveTemplate:"செய்தி வடிவத்தை சேமிக்கவும்",
+history:"WhatsApp செய்தி வரலாறு",
+all:"அனைத்தும்",
+queued:"வரிசையில் உள்ளது",
+sent:"அனுப்பப்பட்டது",
+delivered:"பெறப்பட்டது",
+read:"படிக்கப்பட்டது",
+failed:"தோல்வியடைந்தது",
+search:"தேடவும்",
+loadMore:"மேலும் செய்திகள்",
+refresh:"புதுப்பிக்கவும்",
+back:"நிர்வாக முதன்மைப் பக்கத்திற்கு",
+checking:"பாதுகாப்பு சரிபார்க்கப்படுகிறது...",
+denied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+verified:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+loading:"தரவு பெறப்படுகிறது...",
+error:"சேவையக தரவை பெற முடியவில்லை.",
+saved:"அமைப்புகள் சேமிக்கப்பட்டன.",
+invalid:"உள்ளிட்ட தகவலை சரிபார்க்கவும்.",
+connected:"API இணைக்கப்பட்டுள்ளது.",
+disconnected:"API இணைக்கப்படவில்லை.",
+apiNotice:"தானியங்கி செய்திகளுக்கு அதிகாரப்பூர்வ WhatsApp Business API மற்றும் அங்கீகரிக்கப்பட்ட செய்தி வடிவங்கள் தேவை.",
+activationNotice:"அங்கீகார செய்தியில் activationLink அவசியம். மற்ற செய்திகளில் சேர்க்க வேண்டாம்.",
+retry:"மீண்டும் அனுப்ப கோரவும்",
+confirmRetry:"மீண்டும் அனுப்ப வேண்டுமா?",
+retryAccepted:"கோரிக்கை ஏற்கப்பட்டது.",
+noRecords:"செய்தி பதிவுகள் இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+reauth:"Google கணக்கை மீண்டும் உறுதிப்படுத்தவும்.",
+providerRequired:"WhatsApp API இணைப்பையும் பதிவு எண்ணையும் சரிபார்க்கவும்.",
+driverId:"சாரதி ID",
+recipient:"பெறுநர்",
+date:"தேதி",
+reason:"காரணம்",
+status:"நிலை"
+}
+
+};
+
+let lang="si";
+
+try{
+const selected=new URLSearchParams(location.search).get("lang")
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected))lang=selected;
+}catch(e){}
+
+const t=key=>words[lang][key]||key;
+
+const firebaseConfig={
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+projectId:"my-ride-sri-lanka",
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+messagingSenderId:"88909447786",
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+};
+
+let auth=null;
+let functions=null;
+let db=null;
+let appCheck=null;
+
+let ownerUid=null;
+let authorized=false;
+let generation=0;
+let busy=false;
+let settings=null;
+let records=[];
+let statistics=null;
+let cursor=null;
+let filter="all";
+let unsubscribe=null;
+let pendingRequest=null;
+let statusKey="checking";
+
+function status(key){
+statusKey=key;
+$("status").textContent=t(key);
+}
+
+function result(key){
+$("result").textContent=t(key);
+}
+
+function validId(value){
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+}
+
+function validPhone(value){
+return typeof value==="string"
+&&/^\+[1-9]\d{7,14}$/.test(value);
+}
+
+function validCount(value){
+return Number.isSafeInteger(value)&&value>=0;
+}
+
+function isOwner(){
+return authorized
+&&ownerUid!==null
+&&auth?.currentUser?.uid===ownerUid
+&&navigator.onLine;
+}
+
+function validOwner(data,uid){
+return data?.authorized===true
+&&data.uid===uid
+&&data.role==="owner"
+&&data.ownerUidVerified===true
+&&data.sessionValid===true;
+}
+
+function pageLink(page){
+return "./"+page+"?lang="+encodeURIComponent(lang);
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]").forEach(element=>{
+element.textContent=t(element.dataset.t);
+});
+
+document.querySelectorAll("[data-notification]").forEach(element=>{
+element.textContent=t(element.dataset.notification);
+});
+
+$("loginLink").href=pageLink("admin-login.html");
+$("dashboardLink").href=pageLink("admin-dashboard.html");
+$("backLink").href=pageLink("admin-dashboard.html");
+
+status(statusKey);
+
+renderStatistics();
+renderProvider();
+renderHistory();
+updatePreview();
+
+}
+
+document.querySelectorAll("[data-lang]").forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+localStorage.setItem("myride_admin_language",lang);
+const url=new URL(location.href);
+url.searchParams.set("lang",lang);
+history.replaceState(null,"",url);
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+types.forEach(type=>{
+
+const label=document.createElement("label");
+label.className="check";
+
+const input=document.createElement("input");
+input.type="checkbox";
+input.id="notify_"+type;
+
+const span=document.createElement("span");
+span.dataset.notification=type;
+span.textContent=t(type);
+
+label.append(input,span);
+$("notificationOptions").appendChild(label);
+
+});
+
+function setBusy(value){
+
+busy=value;
+
+const enabled=isOwner()&&!busy&&settings!==null;
+
+[
+"adminPhone",
+"autoEnabled",
+"saveSettings",
+"messageType",
+"messageLanguage",
+"messageTemplate",
+"saveTemplate"
+].forEach(id=>$(id).disabled=!enabled);
+
+types.forEach(type=>{
+$("notify_"+type).disabled=!enabled;
+});
+
+[
+"refreshHistory",
+"historyFilter",
+"loadMore",
+"refreshButton"
+].forEach(id=>{
+$(id).disabled=busy||!isOwner();
+});
+
+renderHistory();
+
+}
+
+async function serverCall(name,data={}){
+
+if(!isOwner())throw new Error("Unauthorized");
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+functions,name,{timeout:25000}
+)(data);
+
+if(currentGeneration!==generation||!isOwner()){
+throw new Error("Session changed");
+}
+
+return response.data;
+
+}
+
+async function reauthenticate(){
+
+if(!isOwner())throw new Error("Unauthorized");
+
+const user=auth.currentUser;
+const currentGeneration=generation;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+prompt:"select_account"
+});
+
+const credential=await reauthenticateWithPopup(user,provider);
+
+if(credential.user.uid!==ownerUid
+||currentGeneration!==generation
+||!isOwner()){
+throw new Error("Owner mismatch");
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+||token.claims.email_verified!==true
+||token.signInProvider!=="google.com"){
+throw new Error("Access denied");
+}
+
+const response=await serverCall("verifyOwnerAdmin");
+
+if(!validOwner(response,ownerUid)){
+throw new Error("Access denied");
+}
+
+}
+
+function requestId(name,payload){
+
+const signature=JSON.stringify([name,payload]);
+
+if(pendingRequest?.signature!==signature){
+
+pendingRequest={
+signature,
+id:crypto.randomUUID()
+};
+
+}
+
+return pendingRequest.id;
+
+}
+
+function renderStatistics(){
+
+const container=$("statistics");
+container.replaceChildren();
+
+["totalMessages",...deliveryStatuses].forEach(key=>{
+
+const box=document.createElement("div");
+box.className="stat";
+
+const label=document.createElement("span");
+label.textContent=t(key);
+
+const value=document.createElement("strong");
+value.textContent=statistics?String(statistics[key]):"—";
+
+box.append(label,value);
+container.appendChild(box);
+
+});
+
+}
+
+function subscribeStatistics(){
+
+if(unsubscribe)unsubscribe();
+
+const currentGeneration=generation;
+
+unsubscribe=onSnapshot(
+doc(db,"adminDashboard","whatsapp"),
+{includeMetadataChanges:true},
+snapshot=>{
+
+if(currentGeneration!==generation||!isOwner())return;
+
+const data=snapshot.data();
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites
+||!snapshot.exists()
+||!["totalMessages",...deliveryStatuses].every(
+key=>validCount(data[key])
+)
+||deliveryStatuses.reduce((sum,key)=>sum+data[key],0)
+!==data.totalMessages){
+
+statistics=null;
+
+}else{
+
+statistics=data;
+
+}
+
+renderStatistics();
+
+},
+()=>{
+
+if(currentGeneration!==generation)return;
+
+statistics=null;
+renderStatistics();
+
+});
+
+}
+
+function validSettings(data){
+
+return data
+&&Number.isSafeInteger(data.version)
+&&data.version>0
+&&(data.adminPhone===""||validPhone(data.adminPhone))
+&&typeof data.autoEnabled==="boolean"
+&&typeof data.providerConnected==="boolean"
+&&data.notifications
+&&types.every(type=>typeof data.notifications[type]==="boolean")
+&&data.templates
+&&languages.every(language=>
+data.templates[language]
+&&types.every(type=>
+typeof data.templates[language][type]==="string"
+&&data.templates[language][type].length<=1024
+)
+);
+
+}
+
+function renderProvider(){
+
+$("providerStatus").textContent=settings
+?t(settings.providerConnected?"connected":"disconnected")
+:"—";
+
+}
+
+async function loadSettings(){
+
+const response=await serverCall("getAdminWhatsAppSettings");
+
+if(response?.success!==true
+||!validSettings(response.settings)
+||(response.ownerUid!==undefined&&response.ownerUid!==ownerUid)){
+throw new Error("Invalid settings");
+}
+
+settings=response.settings;
+
+$("adminPhone").value=settings.adminPhone;
+$("autoEnabled").checked=settings.autoEnabled;
+
+types.forEach(type=>{
+$("notify_"+type).checked=settings.notifications[type];
+});
+
+renderProvider();
+loadTemplate();
+
+}
+
+function loadTemplate(){
+
+const language=$("messageLanguage").value;
+const type=$("messageType").value;
+
+$("messageTemplate").value=
+settings?.templates?.[language]?.[type]||"";
+
+updatePreview();
+
+}
+
+function updatePreview(){
+
+const samples={
+driverName:"Sample Driver",
+driverId:"MR-DEMO-001",
+reason:"Sample Reason",
+activationLink:"[DEMO - SECURE ACTIVATION LINK]"
+};
+
+$("preview").textContent=$("messageTemplate").value.replace(
+/\{(driverName|driverId|reason|activationLink)\}/g,
+(match,key)=>samples[key]
+)||"—";
+
+}
+
+$("messageType").onchange=loadTemplate;
+$("messageLanguage").onchange=loadTemplate;
+$("messageTemplate").oninput=updatePreview;
+
+async function saveSection(section,data){
+
+if(!isOwner()||busy||!settings)return;
+
+const currentGeneration=generation;
+
+const payload={
+section,
+data,
+expectedVersion:settings.version
+};
+
+const id=requestId("saveAdminWhatsAppSettings",payload);
+
+setBusy(true);
+result("reauth");
+
+try{
+
+await reauthenticate();
+
+const response=await serverCall(
+"saveAdminWhatsAppSettings",
+{...payload,requestId:id}
+);
+
+if(response?.success!==true&&response?.saved!==true){
+throw new Error("Save failed");
+}
+
+if(response.ownerUid!==undefined&&response.ownerUid!==ownerUid){
+throw new Error("Owner mismatch");
+}
+
+pendingRequest=null;
+
+await loadSettings();
+
+result("saved");
+
+}catch(e){
+
+if(currentGeneration===generation)result("error");
+
+}finally{
+
+if(currentGeneration===generation)setBusy(false);
+
+}
+
+}
+
+$("saveSettings").onclick=()=>{
+
+if(!settings||!isOwner()||busy)return;
+
+const phone=$("adminPhone").value.trim().replace(/[\s()-]/g,"");
+
+if(!validPhone(phone)){
+result("invalid");
+return;
+}
+
+const autoEnabled=$("autoEnabled").checked;
+
+if(autoEnabled&&(
+!settings.providerConnected
+||settings.registeredPhone!==phone
+)){
+result("providerRequired");
+return;
+}
+
+const notifications={};
+
+types.forEach(type=>{
+notifications[type]=$("notify_"+type).checked;
+});
+
+saveSection("settings",{
+adminPhone:phone,
+autoEnabled,
+notifications
+});
+
+};
+
+$("saveTemplate").onclick=()=>{
+
+if(!settings||!isOwner()||busy)return;
+
+const language=$("messageLanguage").value;
+const type=$("messageType").value;
+const template=$("messageTemplate").value.trim();
+
+const allowedVariables=[
+"driverName","driverId","reason","activationLink"
+];
+
+if(!languages.includes(language)
+||!types.includes(type)
+||template.length<5
+||template.length>1024){
+
+result("invalid");
+return;
+
+}
+
+const matches=[...template.matchAll(/\{([^{}]+)\}/g)];
+
+if(matches.some(match=>!allowedVariables.includes(match[1]))
+||/[{}]/.test(template.replace(/\{[^{}]+\}/g,""))
+||(type==="approved"&&!template.includes("{activationLink}"))
+||(type!=="approved"&&template.includes("{activationLink}"))){
+
+result("invalid");
+return;
+
+}
+
+const templates=JSON.parse(JSON.stringify(settings.templates));
+
+templates[language][type]=template;
+
+saveSection("templates",{templates});
+
+};
+
+function validRecord(item){
+
+return item
+&&validId(item.messageId)
+&&validId(item.driverId)
+&&types.includes(item.type)
+&&languages.includes(item.language)
+&&deliveryStatuses.includes(item.status)
+&&typeof item.recipientMasked==="string"
+&&item.recipientMasked.length<=40
+&&Number.isFinite(item.createdAtMs)
+&&item.createdAtMs>0
+&&item.createdAtMs<=8640000000000000
+&&typeof item.retryAllowed==="boolean"
+&&(item.failureReason===null
+||typeof item.failureReason==="string");
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function renderHistory(){
+
+const container=$("history");
+container.replaceChildren();
+
+records.forEach(item=>{
+
+const panel=document.createElement("div");
+panel.className="historyItem";
+
+const title=document.createElement("strong");
+title.textContent=t(item.type);
+
+panel.appendChild(title);
+
+addLine(panel,"driverId",item.driverId);
+addLine(panel,"recipient",item.recipientMasked);
+addLine(panel,"status",t(item.status));
+addLine(panel,"language",item.language);
+
+addLine(panel,"date",new Intl.DateTimeFormat(
+lang==="si"?"si-LK":lang==="ta"?"ta-LK":"en-LK",
+{
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"short"
+}
+).format(new Date(item.createdAtMs)));
+
+if(item.status==="failed"){
+
+addLine(panel,"reason",item.failureReason);
+
+if(item.retryAllowed){
+
+const button=document.createElement("button");
+button.textContent=t("retry");
+
+button.disabled=busy
+||!isOwner()
+||!settings?.autoEnabled
+||!settings?.providerConnected;
+
+button.onclick=()=>retryMessage(item);
+
+panel.appendChild(button);
+
+}
+
+}
+
+container.appendChild(panel);
+
+});
+
+$("loadMore").hidden=cursor===null;
+
+}
+
+async function loadHistory(reset=true){
+
+const response=await serverCall(
+"getAdminWhatsAppHistory",
+{
+status:filter,
+limit:30,
+cursor:reset?null:cursor
+}
+);
+
+if(response?.success!==true
+||!Array.isArray(response.records)
+||response.records.length>30
+||!response.records.every(validRecord)
+||(response.ownerUid!==undefined&&response.ownerUid!==ownerUid)
+||!(response.nextCursor===null
+||typeof response.nextCursor==="string")
+||(filter!=="all"&&response.records.some(
+item=>item.status!==filter
+))){
+
+throw new Error("Invalid history");
+
+}
+
+const unique=new Map(
+(reset?[]:records).map(item=>[item.messageId,item])
+);
+
+response.records.forEach(item=>{
+unique.set(item.messageId,item);
+});
+
+records=[...unique.values()];
+
+cursor=response.nextCursor;
+
+renderHistory();
+
+if(records.length===0){
+$("history").textContent=t("noRecords");
+}
+
+}
+
+async function refreshHistory(reset){
+
+if(!isOwner()||busy)return;
+
+const currentGeneration=generation;
+
+setBusy(true);
+result("loading");
+
+try{
+
+if(reset){
+
+filter=$("historyFilter").value;
+
+if(!["all",...deliveryStatuses].includes(filter)){
+throw new Error("Invalid filter");
+}
+
+records=[];
+cursor=null;
+renderHistory();
+
+}
+
+await loadHistory(reset);
+
+$("result").textContent="";
+
+}catch(e){
+
+if(currentGeneration===generation)result("error");
+
+}finally{
+
+if(currentGeneration===generation)setBusy(false);
+
+}
+
+}
+
+$("refreshHistory").onclick=()=>refreshHistory(true);
+
+$("loadMore").onclick=()=>{
+
+if(cursor!==null)refreshHistory(false);
+
+};
+
+async function retryMessage(item){
+
+if(!isOwner()
+||busy
+||!validRecord(item)
+||item.status!=="failed"
+||!item.retryAllowed
+||!settings?.autoEnabled
+||!settings?.providerConnected)return;
+
+if(!confirm(t("confirmRetry")))return;
+
+const currentGeneration=generation;
+
+const payload={messageId:item.messageId};
+
+const id=requestId("retryAdminWhatsAppMessage",payload);
+
+setBusy(true);
+result("reauth");
+
+try{
+
+await reauthenticate();
+
+const response=await serverCall(
+"retryAdminWhatsAppMessage",
+{...payload,requestId:id}
+);
+
+if(response?.accepted!==true&&response?.success!==true){
+throw new Error("Retry failed");
+}
+
+if(response.ownerUid!==undefined&&response.ownerUid!==ownerUid){
+throw new Error("Owner mismatch");
+}
+
+pendingRequest=null;
+
+await loadHistory(true);
+
+result("retryAccepted");
+
+}catch(e){
+
+if(currentGeneration===generation)result("error");
+
+}finally{
+
+if(currentGeneration===generation)setBusy(false);
+
+}
+
+}
+
+$("refreshButton").onclick=async()=>{
+
+if(!isOwner()||busy)return;
+
+const currentGeneration=generation;
+
+setBusy(true);
+result("loading");
+
+try{
+
+await loadSettings();
+await loadHistory(true);
+
+$("result").textContent="";
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+settings=null;
+records=[];
+cursor=null;
+$("adminPhone").value="";
+$("messageTemplate").value="";
+$("autoEnabled").checked=false;
+
+types.forEach(type=>{
+$("notify_"+type).checked=false;
+});
+
+renderProvider();
+renderHistory();
+updatePreview();
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation)setBusy(false);
+
+}
+
+};
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+ownerUid=null;
+settings=null;
+statistics=null;
+records=[];
+cursor=null;
+pendingRequest=null;
+filter="all";
+
+if(unsubscribe){
+unsubscribe();
+unsubscribe=null;
+}
+
+$("adminContent").hidden=true;
+$("accessPanel").hidden=true;
+
+$("adminPhone").value="";
+$("autoEnabled").checked=false;
+$("messageTemplate").value="";
+$("historyFilter").value="all";
+$("result").textContent="";
+
+types.forEach(type=>{
+$("notify_"+type).checked=false;
+});
+
+renderStatistics();
+renderProvider();
+renderHistory();
+updatePreview();
+
+setBusy(false);
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+status("denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+return;
+
+}
+
+if(!navigator.onLine){
+
+status("offline");
+return;
+
+}
+
+status("checking");
+
+try{
+
+const appToken=await getToken(appCheck,false);
+
+if(!appToken?.token)throw new Error("App Check failed");
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+||token.claims.email_verified!==true
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+functions,
+"verifyOwnerAdmin",
+{timeout:15000}
+)({});
+
+if(currentGeneration!==generation
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+throw new Error("Access denied");
+}
+
+ownerUid=user.uid;
+authorized=true;
+
+$("adminContent").hidden=false;
+
+status("verified");
+
+subscribeStatistics();
+
+setBusy(true);
+
+try{
+
+await loadSettings();
+await loadHistory(true);
+
+}catch(e){
+
+if(currentGeneration===generation)result("error");
+
+}finally{
+
+if(currentGeneration===generation)setBusy(false);
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation)denyAccess();
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+firebaseConfig,
+"myride-owner-admin"
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+db=getFirestore(app);
+functions=getFunctions(app);
+
+await setPersistence(
+auth,
+browserSessionPersistence
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+let checking=false;
+
+setInterval(async()=>{
+
+if(!isOwner()||busy||checking)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await serverCall("verifyOwnerAdmin");
+
+if(!validOwner(response,ownerUid)){
+throw new Error("Access revoked");
+}
+
+}catch(e){
+
+if(currentGeneration===generation)denyAccess();
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+status("offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth)verifyOwner(auth.currentUser);
+
+});
+
+window.addEventListener("pagehide",clearSession);
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+verifyOwner(auth.currentUser);
+}
+
+});
+
+renderLanguage();
+setBusy(false);
+initializeSecurity();
+
+</script>
+</body>
+</html>
+
