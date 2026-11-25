@@ -1,0 +1,2028 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<title>MY RIDE - Driver Dashboard</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.6;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:18px;
+margin:16px 0;
+}
+
+.profileName{
+font-size:22px;
+font-weight:bold;
+overflow-wrap:anywhere;
+}
+
+.driverId{
+color:#FFD600;
+margin-top:8px;
+}
+
+.approved{
+color:#4ADE80;
+font-weight:bold;
+margin:10px 0;
+}
+
+.row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+padding:12px 0;
+border-bottom:1px solid #444;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#202020;
+border:1px solid #444;
+border-radius:10px;
+padding:14px;
+}
+
+.statLabel{
+font-size:13px;
+color:#CCC;
+line-height:1.6;
+}
+
+.statValue{
+font-size:21px;
+font-weight:bold;
+color:#FFD600;
+margin-top:10px;
+overflow-wrap:anywhere;
+}
+
+button,.menuButton{
+display:block;
+width:100%;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:10px;
+padding:16px;
+margin:12px 0;
+font-size:16px;
+font-weight:bold;
+text-decoration:none;
+cursor:pointer;
+line-height:1.6;
+}
+
+.menuButton{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.menuIcon{
+font-size:23px;
+width:30px;
+flex-shrink:0;
+}
+
+.menuText{
+flex:1;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+.secondary{
+background:transparent;
+border:1px solid #FFD600;
+color:#FFD600;
+text-align:center;
+}
+
+.offline{
+color:#FF6464;
+}
+
+.online{
+color:#4ADE80;
+}
+
+.busy{
+color:#FFA500;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.8;
+}
+
+#status{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+
+footer{
+color:#AAA;
+text-align:center;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 id="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p id="accessMessage"></p>
+
+<a id="loginLink"
+class="menuButton secondary"></a>
+
+</section>
+
+<div id="dashboard" hidden>
+
+<section class="panel">
+
+<div id="driverName"
+class="profileName"></div>
+
+<div id="driverId"
+class="driverId"></div>
+
+<div id="approvalStatus"
+class="approved"></div>
+
+<div class="row">
+
+<span id="vehicleLabel"></span>
+
+<strong id="vehicleValue">—</strong>
+
+</div>
+
+<div class="row">
+
+<span id="availabilityLabel"></span>
+
+<strong id="availabilityValue">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>GPS</span>
+
+<strong id="gpsValue">—</strong>
+
+</div>
+
+<button id="onlineButton"
+disabled></button>
+
+<p id="gpsNote"
+class="note"></p>
+
+</section>
+
+<h3 id="statsHeading"></h3>
+
+<div class="stats"
+id="stats"></div>
+
+<h3 id="servicesHeading"></h3>
+
+<nav id="services"></nav>
+
+<button id="logoutButton"
+class="secondary"></button>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const allowedLanguages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+allowedLanguages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:allowedLanguages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"රියදුරු ප්‍රධාන පිටුව",
+
+approved:"✓ අනුමත රියදුරු",
+
+vehicle:"වාහන වර්ගය",
+
+availability:"සේවා තත්ත්වය",
+
+online:"ONLINE",
+
+offline:"OFFLINE",
+
+busy:"හයර් එකක සිටී",
+
+goOnline:"ONLINE වන්න",
+
+goOffline:"OFFLINE වන්න",
+
+gpsActive:"GPS ක්‍රියාත්මකයි",
+
+gpsInactive:"GPS ක්‍රියාත්මක නැත",
+
+gpsNote:"හයර් ලබාගැනීමට GPS සහ අන්තර්ජාල සම්බන්ධතාව ක්‍රියාත්මකව තබන්න.",
+
+stats:"අද දින වාර්තාව",
+
+services:"රියදුරු සේවා",
+
+logout:"23. ගිණුමෙන් ඉවත් වීම",
+
+login:"Driver Login",
+
+checking:"රියදුරු ගිණුම පරීක්ෂා කරමින්...",
+
+denied:"රියදුරු සේවා සඳහා ප්‍රවේශය තහවුරු කළ නොහැක.",
+
+connection:"පද්ධතියට සම්බන්ධ විය නොහැක.",
+
+noInternet:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+
+gpsPermission:"GPS අවසරය ලබාදෙන්න.",
+
+gpsError:"GPS ස්ථානය ලබාගත නොහැක.",
+
+updating:"සේවා තත්ත්වය යාවත්කාලීන කරමින්...",
+
+updateError:"සේවා තත්ත්වය වෙනස් කළ නොහැක.",
+
+busyError:"හයර් එක අවසන් කරන තෙක් මෙම ක්‍රියාව සිදු කළ නොහැක.",
+
+logoutConfirm:"ගිණුමෙන් ඉවත් වීමට අවශ්‍යද?",
+
+logoutError:"ගිණුමෙන් ඉවත් වීමට නොහැකි විය.",
+
+bike:"Scooter / Bike",
+
+tuk:"ත්‍රිරෝද රථය",
+
+car:"කාර් රථය",
+
+van:"වෑන් රථය",
+
+statLabels:[
+
+"ලැබුණු හයර්",
+
+"අවසන් කළ හයර්",
+
+"මුළු ආදායම",
+
+"කොමිස් මුදල",
+
+"ශුද්ධ ආදායම",
+
+"ගෙවිය යුතු කොමිස්",
+
+"ගමන් කළ දුර",
+
+"GPS තත්ත්වය"
+
+],
+
+menus:[
+
+"අලුත් හයර්",
+
+"වෙන්කර ඇති හයර්",
+
+"දැනට ගමන් කරන හයර්",
+
+"මගේ ආදායම",
+
+"කොමිස් මුදල්",
+
+"කොමිස් ගෙවීම",
+
+"හයර් ඉතිහාසය",
+
+"මගේ විස්තර",
+
+"අදහස් සහ පැමිණිලි",
+
+"උපකාර",
+
+"හදිසි අවස්ථා",
+
+"භාෂාව වෙනස් කිරීම",
+
+"රියදුරු නීති සහ කොන්දේසි",
+
+"දැනුම්දීම්",
+
+"GPS තත්ත්වය",
+
+"පාරිභෝගික ඇගයීම්",
+
+"බලපත්‍ර අලුත් කිරීම",
+
+"සේවා වාර්තාව",
+
+"ගෙවීම් ඉතිහාසය",
+
+"කාලගුණය සහ මාර්ග තත්ත්වය",
+
+"ගාස්තු වගුව",
+
+"ගිණුමේ තත්ත්වය"
+
+]
+
+},
+
+en:{
+
+heading:"Driver Dashboard",
+
+approved:"✓ Approved Driver",
+
+vehicle:"Vehicle Type",
+
+availability:"Availability",
+
+online:"ONLINE",
+
+offline:"OFFLINE",
+
+busy:"BUSY",
+
+goOnline:"Go Online",
+
+goOffline:"Go Offline",
+
+gpsActive:"GPS Active",
+
+gpsInactive:"GPS Inactive",
+
+gpsNote:"Keep GPS and internet enabled to receive ride requests.",
+
+stats:"Today's Report",
+
+services:"Driver Services",
+
+logout:"23. Logout",
+
+login:"Driver Login",
+
+checking:"Verifying driver account...",
+
+denied:"Driver access could not be authorized.",
+
+connection:"Unable to connect to the system.",
+
+noInternet:"No internet connection.",
+
+gpsPermission:"Allow GPS location access.",
+
+gpsError:"Unable to obtain GPS location.",
+
+updating:"Updating availability...",
+
+updateError:"Unable to change availability.",
+
+busyError:"Complete your current ride before performing this action.",
+
+logoutConfirm:"Do you want to log out?",
+
+logoutError:"Unable to log out.",
+
+bike:"Scooter / Bike",
+
+tuk:"Three Wheeler",
+
+car:"Car",
+
+van:"Van",
+
+statLabels:[
+
+"Received Rides",
+
+"Completed Rides",
+
+"Gross Income",
+
+"Commission",
+
+"Net Income",
+
+"Outstanding Commission",
+
+"Travelled Distance",
+
+"GPS Status"
+
+],
+
+menus:[
+
+"New Hires",
+
+"Scheduled Hires",
+
+"Active Ride",
+
+"My Income",
+
+"Commission",
+
+"Pay Commission",
+
+"Ride History",
+
+"My Profile",
+
+"Feedback & Complaints",
+
+"Help",
+
+"Emergency SOS",
+
+"Change Language",
+
+"Driver Terms & Conditions",
+
+"Notifications",
+
+"GPS Status",
+
+"Customer Ratings",
+
+"Licence Renewal",
+
+"Service Report",
+
+"Payment History",
+
+"Weather & Road Conditions",
+
+"Fare Chart",
+
+"Account Status"
+
+]
+
+},
+
+ta:{
+
+heading:"சாரதி முதன்மைப் பக்கம்",
+
+approved:"✓ அங்கீகரிக்கப்பட்ட சாரதி",
+
+vehicle:"வாகன வகை",
+
+availability:"சேவை நிலை",
+
+online:"ONLINE",
+
+offline:"OFFLINE",
+
+busy:"பயணத்தில் உள்ளார்",
+
+goOnline:"ONLINE செல்லவும்",
+
+goOffline:"OFFLINE செல்லவும்",
+
+gpsActive:"GPS செயல்படுகிறது",
+
+gpsInactive:"GPS செயல்படவில்லை",
+
+gpsNote:"பயண கோரிக்கைகளைப் பெற GPS மற்றும் இணையத்தை இயக்கி வைக்கவும்.",
+
+stats:"இன்றைய அறிக்கை",
+
+services:"சாரதி சேவைகள்",
+
+logout:"23. வெளியேறு",
+
+login:"சாரதி உள்நுழைவு",
+
+checking:"சாரதி கணக்கு சரிபார்க்கப்படுகிறது...",
+
+denied:"சாரதி அணுகலை அங்கீகரிக்க முடியவில்லை.",
+
+connection:"அமைப்புடன் இணைக்க முடியவில்லை.",
+
+noInternet:"இணைய இணைப்பு இல்லை.",
+
+gpsPermission:"GPS அனுமதி வழங்கவும்.",
+
+gpsError:"GPS இருப்பிடத்தைப் பெற முடியவில்லை.",
+
+updating:"சேவை நிலை புதுப்பிக்கப்படுகிறது...",
+
+updateError:"சேவை நிலையை மாற்ற முடியவில்லை.",
+
+busyError:"தற்போதைய பயணத்தை முதலில் முடிக்கவும்.",
+
+logoutConfirm:"வெளியேற விரும்புகிறீர்களா?",
+
+logoutError:"வெளியேற முடியவில்லை.",
+
+bike:"மோட்டார் சைக்கிள்",
+
+tuk:"முச்சக்கர வண்டி",
+
+car:"கார்",
+
+van:"வேன்",
+
+statLabels:[
+
+"பெறப்பட்ட பயணங்கள்",
+
+"முடிக்கப்பட்ட பயணங்கள்",
+
+"மொத்த வருமானம்",
+
+"கமிஷன்",
+
+"நிகர வருமானம்",
+
+"செலுத்த வேண்டிய கமிஷன்",
+
+"பயணித்த தூரம்",
+
+"GPS நிலை"
+
+],
+
+menus:[
+
+"புதிய பயணங்கள்",
+
+"முன்பதிவு பயணங்கள்",
+
+"தற்போதைய பயணம்",
+
+"எனது வருமானம்",
+
+"கமிஷன்",
+
+"கமிஷன் செலுத்துதல்",
+
+"பயண வரலாறு",
+
+"எனது சுயவிவரம்",
+
+"கருத்துகள் மற்றும் புகார்கள்",
+
+"உதவி",
+
+"அவசர உதவி",
+
+"மொழியை மாற்றவும்",
+
+"சாரதி விதிமுறைகள்",
+
+"அறிவிப்புகள்",
+
+"GPS நிலை",
+
+"வாடிக்கையாளர் மதிப்பீடுகள்",
+
+"உரிமம் புதுப்பித்தல்",
+
+"சேவை அறிக்கை",
+
+"கட்டண வரலாறு",
+
+"வானிலை மற்றும் சாலை நிலை",
+
+"கட்டண அட்டவணை",
+
+"கணக்கு நிலை"
+
+]
+
+}
+
+};
+
+const t=translations[lang];
+
+$("heading").textContent=t.heading;
+
+$("approvalStatus").textContent=t.approved;
+
+$("vehicleLabel").textContent=t.vehicle;
+
+$("availabilityLabel").textContent=t.availability;
+
+$("gpsNote").textContent=t.gpsNote;
+
+$("statsHeading").textContent=t.stats;
+
+$("servicesHeading").textContent=t.services;
+
+$("logoutButton").textContent=t.logout;
+
+$("loginLink").textContent=t.login;
+
+$("loginLink").href=
+
+"./driver-login.html?lang="+lang;
+
+document.title="MY RIDE - "+t.heading;
+
+// ALL DRIVER MENU LINKS
+
+const menuPages=[
+
+"driver-new-hires.html",
+
+"driver-scheduled.html",
+
+"driver-active-ride.html",
+
+"driver-income.html",
+
+"driver-commission.html",
+
+"driver-pay-commission.html",
+
+"driver-history.html",
+
+"driver-profile.html",
+
+"driver-feedback.html",
+
+"driver-help.html",
+
+"driver-sos.html",
+
+"driver-language.html",
+
+"driver-terms.html",
+
+"driver-notifications.html",
+
+"driver-gps.html",
+
+"driver-ratings.html",
+
+"driver-renewal.html",
+
+"driver-service-report.html",
+
+"driver-payment-history.html",
+
+"driver-weather-road.html",
+
+"driver-fare-chart.html",
+
+"driver-account-status.html"
+
+];
+
+const menuIcons=[
+
+"🚕","📅","📍","💰","%","💳",
+
+"📋","👤","💬","☎","🚨","🌐",
+
+"📄","🔔","📡","⭐","🪪","📊",
+
+"🧾","🌧","📑","🔒"
+
+];
+
+menuPages.forEach((page,index)=>{
+
+const link=document.createElement("a");
+
+link.className="menuButton";
+
+link.href="./"+page+"?lang="+lang;
+
+const icon=document.createElement("span");
+
+icon.className="menuIcon";
+
+icon.textContent=menuIcons[index];
+
+const label=document.createElement("span");
+
+label.className="menuText";
+
+label.textContent=
+
+String(index+1).padStart(2,"0")
+
++". "+t.menus[index];
+
+const arrow=document.createElement("span");
+
+arrow.textContent="›";
+
+link.append(icon,label,arrow);
+
+$("services").appendChild(link);
+
+});
+
+// DAILY STATISTICS
+
+const statKeys=[
+
+"receivedRides",
+
+"completedRides",
+
+"grossIncome",
+
+"commission",
+
+"netIncome",
+
+"outstandingCommission",
+
+"distanceKm",
+
+"gps"
+
+];
+
+statKeys.forEach((key,index)=>{
+
+const panel=document.createElement("div");
+
+panel.className="stat";
+
+const label=document.createElement("div");
+
+label.className="statLabel";
+
+label.textContent=t.statLabels[index];
+
+const value=document.createElement("div");
+
+value.className="statValue";
+
+value.id="stat_"+key;
+
+value.textContent="—";
+
+panel.append(label,value);
+
+$("stats").appendChild(panel);
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+
+let db=null;
+
+let functions=null;
+
+let currentUid=null;
+
+let authorized=false;
+
+let driver=null;
+
+let driverUnsubscribe=null;
+
+let statsUnsubscribe=null;
+
+let gpsWatch=null;
+
+let gpsActive=false;
+
+let gpsSending=false;
+
+let lastGpsSent=0;
+
+let lastGpsFix=0;
+
+let busy=false;
+
+let generation=0;
+
+let statsDay=null;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+function validSession(){
+
+return authorized
+
+&&currentUid!==null
+
+&&auth?.currentUser?.uid===currentUid
+
+&&navigator.onLine;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.connection);
+
+}
+
+// SERVER FUNCTIONS
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const uid=currentUid;
+
+const callGeneration=generation;
+
+const callable=httpsCallable(functions,name);
+
+const response=await callable(data);
+
+if(!validSession()
+
+||currentUid!==uid
+
+||callGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// GPS DISPLAY
+
+function updateGpsDisplay(){
+
+const active=gpsActive
+
+&&Date.now()-lastGpsFix<30000;
+
+$("gpsValue").textContent=
+
+active?t.gpsActive:t.gpsInactive;
+
+$("gpsValue").className=
+
+active?"online":"offline";
+
+$("stat_gps").textContent=
+
+active?t.gpsActive:t.gpsInactive;
+
+}
+
+// STOP GPS
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+gpsActive=false;
+
+lastGpsFix=0;
+
+updateGpsDisplay();
+
+}
+
+// GPS VALIDATION
+
+function validPosition(position){
+
+const c=position.coords;
+
+return Number.isFinite(c.latitude)
+
+&&Number.isFinite(c.longitude)
+
+&&Number.isFinite(c.accuracy)
+
+&&c.latitude>=5.85
+
+&&c.latitude<=9.9
+
+&&c.longitude>=79.5
+
+&&c.longitude<=82
+
+&&c.accuracy>=0
+
+&&c.accuracy<=100
+
+&&Date.now()-position.timestamp<30000
+
+&&position.timestamp<=Date.now()+5000;
+
+}
+
+// SEND DRIVER LOCATION
+
+async function sendGps(position){
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(driver.availability)
+
+||!validPosition(position))return;
+
+gpsActive=true;
+
+lastGpsFix=Date.now();
+
+updateGpsDisplay();
+
+if(gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+const result=await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:position.coords.latitude,
+
+lon:position.coords.longitude,
+
+accuracy:position.coords.accuracy,
+
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+if(result?.accepted!==true){
+
+throw new Error("GPS rejected");
+
+}
+
+}catch(e){
+
+gpsActive=false;
+
+updateGpsDisplay();
+
+status(t.gpsError);
+
+}finally{
+
+gpsSending=false;
+
+}
+
+}
+
+// START GPS TRACKING
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+sendGps,
+
+error=>{
+
+gpsActive=false;
+
+lastGpsFix=0;
+
+updateGpsDisplay();
+
+status(t.gpsError);
+
+},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+// CLEAR PRIVATE DATA
+
+function clearStats(){
+
+statKeys.forEach(key=>{
+
+$("stat_"+key).textContent="—";
+
+});
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+currentUid=null;
+
+driver=null;
+
+statsDay=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+if(statsUnsubscribe){
+
+statsUnsubscribe();
+
+statsUnsubscribe=null;
+
+}
+
+stopGps();
+
+clearStats();
+
+$("driverName").textContent="";
+
+$("driverId").textContent="";
+
+$("vehicleValue").textContent="—";
+
+$("availabilityValue").textContent="—";
+
+$("dashboard").hidden=true;
+
+$("onlineButton").disabled=true;
+
+}
+
+// ACCESS DENIED
+
+function denyAccess(message){
+
+disconnect();
+
+$("accessMessage").textContent=message;
+
+$("accessPanel").hidden=false;
+
+status(message);
+
+}
+
+// DRIVER APPROVAL CHECK
+
+function eligible(data){
+
+return data
+
+&&data.uid===currentUid
+
+&&data.status==="approved"
+
+&&data.activationComplete===true
+
+&&data.documentsValid===true;
+
+}
+
+// UPDATE ONLINE BUTTON
+
+function updateAvailability(){
+
+if(!driver)return;
+
+const availability=driver.availability;
+
+$("availabilityValue").textContent=
+
+availability==="busy"
+
+?t.busy
+
+:availability==="online"
+
+?t.online:t.offline;
+
+$("availabilityValue").className=
+
+availability==="busy"
+
+?"busy"
+
+:availability==="online"
+
+?"online":"offline";
+
+$("onlineButton").textContent=
+
+availability==="online"
+
+?t.goOffline
+
+:availability==="busy"
+
+?t.busy:t.goOnline;
+
+$("onlineButton").disabled=
+
+busy
+
+||!validSession()
+
+||availability==="busy"
+
+||!["online","offline"].includes(availability);
+
+}
+
+// DISPLAY DRIVER DATA
+
+function displayDriver(data){
+
+if(!eligible(data)){
+
+denyAccess(t.denied);
+
+return;
+
+}
+
+if(!["online","offline","busy"]
+
+.includes(data.availability)){
+
+denyAccess(t.denied);
+
+return;
+
+}
+
+driver=data;
+
+$("driverName").textContent=
+
+typeof data.fullName==="string"
+
+?data.fullName:"—";
+
+$("driverId").textContent=
+
+typeof data.driverId==="string"
+
+?data.driverId:"—";
+
+$("vehicleValue").textContent=
+
+["bike","tuk","car","van"]
+
+.includes(data.vehicleType)
+
+?t[data.vehicleType]:"—";
+
+$("dashboard").hidden=false;
+
+$("accessPanel").hidden=true;
+
+updateAvailability();
+
+if(["online","busy"].includes(data.availability)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+}
+
+// SRI LANKA DATE
+
+function sriLankaDate(){
+
+return new Date(
+
+Date.now()+330*60000
+
+).toISOString().slice(0,10);
+
+}
+
+// STATISTICS DISPLAY
+
+function safeNumber(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=0
+
+?value:null;
+
+}
+
+function money(value){
+
+const number=safeNumber(value);
+
+return number===null
+
+?"—"
+
+:"Rs. "+number.toLocaleString(
+
+"en-LK",
+
+{maximumFractionDigits:2}
+
+);
+
+}
+
+function displayStats(data){
+
+const countKeys=[
+
+"receivedRides",
+
+"completedRides"
+
+];
+
+countKeys.forEach(key=>{
+
+const number=safeNumber(data[key]);
+
+$("stat_"+key).textContent=
+
+number!==null&&Number.isInteger(number)
+
+?number.toLocaleString("en-LK")
+
+:"—";
+
+});
+
+[
+
+"grossIncome",
+
+"commission",
+
+"netIncome",
+
+"outstandingCommission"
+
+].forEach(key=>{
+
+$("stat_"+key).textContent=
+
+money(data[key]);
+
+});
+
+const distance=safeNumber(data.distanceKm);
+
+$("stat_distanceKm").textContent=
+
+distance===null
+
+?"—"
+
+:distance.toFixed(2)+" KM";
+
+updateGpsDisplay();
+
+}
+
+// DAILY STATISTICS LISTENER
+
+function subscribeStats(){
+
+if(!validSession())return;
+
+const day=sriLankaDate();
+
+if(statsUnsubscribe){
+
+statsUnsubscribe();
+
+}
+
+statsDay=day;
+
+clearStats();
+
+const uid=currentUid;
+
+const listenerGeneration=generation;
+
+const ref=doc(
+
+db,
+
+"drivers",
+
+uid,
+
+"dailyStats",
+
+day
+
+);
+
+statsUnsubscribe=onSnapshot(
+
+ref,
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(listenerGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+clearStats();
+
+return;
+
+}
+
+if(snapshot.exists()){
+
+displayStats(snapshot.data());
+
+}else{
+
+clearStats();
+
+}
+
+},
+
+error=>{
+
+if(listenerGeneration!==generation)return;
+
+clearStats();
+
+status(t.connection);
+
+}
+
+);
+
+}
+
+// VERIFY AUTHENTICATED DRIVER
+
+async function verifyDriver(user){
+
+disconnect();
+
+const checkGeneration=generation;
+
+if(!user||!functions||!db){
+
+denyAccess(t.denied);
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+denyAccess(t.noInternet);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true){
+
+throw new Error("Driver role required");
+
+}
+
+const verify=httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+);
+
+const response=await verify({});
+
+if(checkGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true){
+
+throw new Error("Driver not eligible");
+
+}
+
+authorized=true;
+
+currentUid=user.uid;
+
+$("accessPanel").hidden=true;
+
+const ref=doc(
+
+db,
+
+"drivers",
+
+currentUid
+
+);
+
+driverUnsubscribe=onSnapshot(
+
+ref,
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(checkGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+$("dashboard").hidden=true;
+
+stopGps();
+
+status(t.checking);
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+denyAccess(t.denied);
+
+return;
+
+}
+
+displayDriver(snapshot.data());
+
+if(validSession()){
+
+status("");
+
+}
+
+},
+
+error=>{
+
+if(checkGeneration!==generation)return;
+
+denyAccess(t.denied);
+
+}
+
+);
+
+subscribeStats();
+
+}catch(e){
+
+if(checkGeneration!==generation)return;
+
+denyAccess(t.denied);
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// GET CURRENT GPS POSITION
+
+function getPosition(){
+
+return new Promise((resolve,reject)=>{
+
+if(!navigator.geolocation){
+
+reject(new Error("GPS unavailable"));
+
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+resolve,
+
+reject,
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:0,
+
+timeout:15000
+
+}
+
+);
+
+});
+
+}
+
+// ONLINE / OFFLINE SYSTEM
+
+$("onlineButton").onclick=async()=>{
+
+if(busy||!validSession()||!driver)return;
+
+if(driver.availability==="busy"){
+
+status(t.busyError);
+
+return;
+
+}
+
+const next=
+
+driver.availability==="online"
+
+?"offline":"online";
+
+busy=true;
+
+updateAvailability();
+
+status(t.updating);
+
+try{
+
+let locationData=null;
+
+if(next==="online"){
+
+status(t.gpsPermission);
+
+const position=await getPosition();
+
+if(!validPosition(position)){
+
+throw new Error("Invalid GPS");
+
+}
+
+locationData={
+
+lat:position.coords.latitude,
+
+lon:position.coords.longitude,
+
+accuracy:position.coords.accuracy,
+
+capturedAtMs:position.timestamp
+
+};
+
+}
+
+const result=await serverCall(
+
+"setDriverAvailability",
+
+{
+
+availability:next,
+
+location:locationData
+
+}
+
+);
+
+if(result?.accepted!==true){
+
+throw new Error("Availability rejected");
+
+}
+
+// The Firestore listener displays
+// the server-confirmed availability.
+
+if(next==="offline"){
+
+stopGps();
+
+}
+
+status("");
+
+}catch(e){
+
+status(t.updateError);
+
+}finally{
+
+busy=false;
+
+updateAvailability();
+
+}
+
+};
+
+// DRIVER LOGOUT
+
+$("logoutButton").onclick=async()=>{
+
+if(busy||!validSession())return;
+
+if(driver?.availability==="busy"){
+
+status(t.busyError);
+
+return;
+
+}
+
+if(!confirm(t.logoutConfirm))return;
+
+busy=true;
+
+$("logoutButton").disabled=true;
+
+updateAvailability();
+
+try{
+
+const result=await serverCall(
+
+"endDriverSession"
+
+);
+
+if(result?.accepted!==true){
+
+throw new Error("Logout rejected");
+
+}
+
+disconnect();
+
+await signOut(auth);
+
+location.replace(
+
+"./driver-login.html?lang="+lang
+
+);
+
+}catch(e){
+
+status(t.logoutError);
+
+}finally{
+
+busy=false;
+
+$("logoutButton").disabled=false;
+
+updateAvailability();
+
+}
+
+};
+
+// CHECK GPS AND DATE
+
+setInterval(()=>{
+
+updateGpsDisplay();
+
+if(validSession()
+
+&&statsDay!==sriLankaDate()){
+
+subscribeStats();
+
+}
+
+},5000);
+
+// INTERNET CONNECTION
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.noInternet);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener("pagehide",()=>{
+
+disconnect();
+
+});
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+status(t.checking);
+
+</script>
+
+</body>
+</html>
