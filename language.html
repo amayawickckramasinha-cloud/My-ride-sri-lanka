@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+
+<title>MY RIDE - Language Selection</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #111111;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    text-align: center;
+}
+
+.logo {
+    width: 95px;
+    height: 95px;
+    margin-bottom: 15px;
+}
+
+h1 {
+    color: #FFD600;
+    font-size: 42px;
+    margin: 0;
+}
+
+.country {
+    color: #FFD600;
+    letter-spacing: 5px;
+    margin: 10px 0 30px;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 17px;
+    line-height: 1.8;
+    margin: 0 0 25px;
+}
+
+.language-button {
+    width: 100%;
+    max-width: 320px;
+    padding: 18px;
+    margin: 8px 0;
+    background: #FFD600;
+    color: #111111;
+    border: none;
+    border-radius: 12px;
+    font-size: 21px;
+    font-weight: bold;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.language-button:hover {
+    background: #E6C200;
+}
+
+.language-button:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 4px;
+}
+
+.language-button:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+.language-button.selected {
+    outline: 2px solid white;
+    outline-offset: 3px;
+}
+
+#status {
+    min-height: 25px;
+    color: #FFD600;
+    font-size: 15px;
+    margin-top: 15px;
+}
+
+.back-button {
+    display: block;
+    color: #FFD600;
+    text-decoration: none;
+    font-size: 15px;
+    margin-top: 20px;
+    padding: 12px;
+}
+
+footer {
+    margin-top: 30px;
+    color: #AAAAAA;
+    font-size: 12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+<svg class="logo"
+viewBox="0 0 100 100"
+aria-hidden="true">
+
+<rect width="100" height="100"
+rx="24" fill="#FFD600"/>
+
+<path d="M22 47 L30 28 H70 L78 47
+V70 H22 Z" fill="#111111"/>
+
+<path d="M34 34 H66 L72 47 H28 Z"
+fill="#FFD600"/>
+
+<circle cx="34" cy="58" r="6"
+fill="#FFD600"/>
+
+<circle cx="66" cy="58" r="6"
+fill="#FFD600"/>
+
+<rect x="25" y="66" width="12"
+height="12" rx="3" fill="#111111"/>
+
+<rect x="63" y="66" width="12"
+height="12" rx="3" fill="#111111"/>
+
+</svg>
+
+<h1>MY RIDE</h1>
+
+<div class="country">SRI LANKA</div>
+
+<h2>භාෂාව තෝරන්න</h2>
+
+<p class="subtitle">
+Select your language
+<br>
+மொழியைத் தேர்ந்தெடுக்கவும்
+</p>
+
+<button type="button"
+class="language-button"
+data-lang="si"
+lang="si"
+aria-pressed="false">
+සිංහල
+</button>
+
+<button type="button"
+class="language-button"
+data-lang="en"
+lang="en"
+aria-pressed="false">
+English
+</button>
+
+<button type="button"
+class="language-button"
+data-lang="ta"
+lang="ta"
+aria-pressed="false">
+தமிழ்
+</button>
+
+<div id="status"
+role="status"
+aria-live="polite"></div>
+
+<a class="back-button"
+href="./index.html">
+← ආපසු / Back / பின்செல்
+</a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script>
+
+"use strict";
+
+const LANGUAGE_KEY = "myride_language";
+
+const allowedLanguages = [
+    "si",
+    "en",
+    "ta"
+];
+
+const messages = {
+
+    si: "භාෂාව තෝරාගෙන ඇත. ඉදිරියට යමින්...",
+
+    en: "Language selected. Continuing...",
+
+    ta: "மொழி தேர்ந்தெடுக்கப்பட்டது. தொடர்கிறது..."
+
+};
+
+const buttons = document.querySelectorAll(
+    ".language-button"
+);
+
+const statusBox = document.getElementById(
+    "status"
+);
+
+let navigating = false;
+
+
+// AUTO LOAD SAVED LANGUAGE
+
+function loadSavedLanguage() {
+
+    try {
+
+        const savedLanguage =
+            localStorage.getItem(LANGUAGE_KEY);
+
+        if (allowedLanguages.includes(savedLanguage)) {
+
+            document.documentElement.lang =
+                savedLanguage;
+
+            buttons.forEach(function(button) {
+
+                const selected =
+                    button.dataset.lang === savedLanguage;
+
+                button.classList.toggle(
+                    "selected",
+                    selected
+                );
+
+                button.setAttribute(
+                    "aria-pressed",
+                    String(selected)
+                );
+
+            });
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Language storage unavailable."
+        );
+
+    }
+
+}
+
+
+// AUTO SAVE AND SELECT LANGUAGE
+
+function selectLanguage(language) {
+
+    if (navigating) {
+        return;
+    }
+
+    if (!allowedLanguages.includes(language)) {
+        return;
+    }
+
+    navigating = true;
+
+    try {
+
+        localStorage.setItem(
+            LANGUAGE_KEY,
+            language
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Language will be passed through URL."
+        );
+
+    }
+
+    document.documentElement.lang = language;
+
+    buttons.forEach(function(button) {
+
+        const selected =
+            button.dataset.lang === language;
+
+        button.disabled = true;
+
+        button.classList.toggle(
+            "selected",
+            selected
+        );
+
+        button.setAttribute(
+            "aria-pressed",
+            String(selected)
+        );
+
+    });
+
+    statusBox.textContent =
+        messages[language];
+
+    statusBox.lang = language;
+
+
+// AUTO OPEN NEXT PAGE
+
+    const nextPage = new URL(
+        "./menu.html",
+        window.location.href
+    );
+
+    nextPage.searchParams.set(
+        "lang",
+        language
+    );
+
+    window.setTimeout(function() {
+
+        window.location.href =
+            nextPage.href;
+
+    }, 500);
+
+}
+
+
+// ACTIVATE ALL LANGUAGE BUTTONS
+
+buttons.forEach(function(button) {
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            selectLanguage(
+                button.dataset.lang
+            );
+
+        }
+    );
+
+});
+
+
+// RESTORE BUTTONS WHEN RETURNING
+
+window.addEventListener(
+    "pageshow",
+    function() {
+
+        navigating = false;
+
+        buttons.forEach(function(button) {
+
+            button.disabled = false;
+
+        });
+
+        statusBox.textContent = "";
+
+        loadSavedLanguage();
+
+    }
+);
+
+loadSavedLanguage();
+
+</script>
+
+</body>
+</html>
