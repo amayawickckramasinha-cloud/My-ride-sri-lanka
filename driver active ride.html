@@ -1,0 +1,2659 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Active Ride</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+padding:12px 0;
+border-bottom:1px solid #444;
+}
+
+.row strong{
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+.yellow{color:#FFD600}
+.green{color:#4ADE80}
+.red{color:#FF6464}
+
+#map{
+height:320px;
+border-radius:12px;
+background:#333;
+margin:15px 0;
+}
+
+.meter{
+text-align:center;
+border-color:#FFD600;
+}
+
+.fare{
+font-size:38px;
+color:#FFD600;
+font-weight:bold;
+margin:15px 0;
+}
+
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border-radius:10px;
+padding:15px 8px;
+}
+
+.statValue{
+font-size:23px;
+font-weight:bold;
+color:#FFD600;
+margin-top:10px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:16px;
+margin:12px 0;
+border:0;
+border-radius:10px;
+background:#FFD600;
+color:#111;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.danger{
+background:#DC2626;
+color:white;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+.note{
+color:#BBB;
+font-size:13px;
+line-height:1.8;
+}
+
+#status{
+text-align:center;
+color:#FFD600;
+line-height:1.8;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<p id="bookingId"></p>
+
+<div class="row">
+
+<span data-t="rideStatus"></span>
+
+<strong id="rideStatus"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="availability"></span>
+
+<strong id="availability"
+class="red">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>GPS</span>
+
+<strong id="gpsStatus">—</strong>
+
+</div>
+
+</section>
+
+<section id="customerPanel"
+class="panel">
+
+<div class="row">
+
+<span data-t="customer"></span>
+
+<strong id="customerName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="phone"></span>
+
+<strong id="customerPhone">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="pickup"></span>
+
+<strong id="pickup">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="destination"></span>
+
+<strong id="destination">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="passengers"></span>
+
+<strong id="passengers">—</strong>
+
+</div>
+
+<a id="callButton"
+class="action"
+data-t="call" hidden></a>
+
+<a id="whatsappButton"
+class="action"
+data-t="whatsapp" hidden></a>
+
+</section>
+
+<section id="mapPanel">
+
+<div id="map"></div>
+
+<button id="centerButton"
+class="secondary"
+data-t="center"></button>
+
+<p class="note"
+data-t="mapNote"></p>
+
+</section>
+
+<section id="meterPanel"
+class="panel meter">
+
+<div id="fareLabel"
+data-t="currentFare"></div>
+
+<div id="fare"
+class="fare">—</div>
+
+<div class="stats">
+
+<div class="stat">
+
+<span data-t="distance"></span>
+
+<div id="distance"
+class="statValue">—</div>
+
+</div>
+
+<div class="stat">
+
+<span data-t="duration"></span>
+
+<div id="duration"
+class="statValue">—</div>
+
+</div>
+
+</div>
+
+<p id="meterStatus"
+class="note"></p>
+
+</section>
+
+<section id="fareDetails"
+class="panel">
+
+<div class="row">
+
+<span data-t="period"></span>
+
+<strong id="period">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="weather"></span>
+
+<strong id="weather">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="road"></span>
+
+<strong id="road">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="discount"></span>
+
+<strong id="discount">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="rainCharge"></span>
+
+<strong id="rainCharge">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="roadCharge"></span>
+
+<strong id="roadCharge">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="tollParking"></span>
+
+<strong id="tollParking">—</strong>
+
+</div>
+
+<div class="row">
+
+<span id="commissionLabel">
+MY RIDE
+</span>
+
+<strong id="commission"
+class="red">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="income"></span>
+
+<strong id="income"
+class="green">—</strong>
+
+</div>
+
+</section>
+
+<button id="arrivedButton"
+data-t="arrivedButton" hidden></button>
+
+<button id="startButton"
+data-t="startButton" hidden></button>
+
+<button id="endButton"
+class="danger"
+data-t="endButton" hidden></button>
+
+<section id="endConfirmPanel"
+class="panel" hidden>
+
+<h3 data-t="endConfirm"></h3>
+
+<p class="note"
+data-t="endNote"></p>
+
+<button id="confirmEndButton"
+class="danger"
+data-t="confirmEnd"></button>
+
+<button id="continueRideButton"
+class="secondary"
+data-t="continueRide"></button>
+
+</section>
+
+<section id="completedPanel"
+class="panel" hidden>
+
+<h3 class="green"
+data-t="completed"></h3>
+
+<p data-t="completedNote"></p>
+
+<a id="historyLink"
+class="action"
+data-t="history"></a>
+
+</section>
+
+<button id="refreshButton"
+class="secondary"
+data-t="refresh"></button>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+// LANGUAGE SYSTEM
+
+const translations={
+
+si:{
+
+heading:"දැනට ගමන් කරන හයර් එක",
+rideStatus:"හයර් තත්ත්වය",
+availability:"සේවා තත්ත්වය",
+customer:"පාරිභෝගිකයා",
+phone:"දුරකථන අංකය",
+pickup:"ලබාගන්නා ස්ථානය",
+destination:"ගමනාන්තය",
+passengers:"මගීන් ගණන",
+call:"පාරිභෝගිකයාට ඇමතුමක් ලබාගන්න",
+whatsapp:"WhatsApp පණිවිඩයක් යවන්න",
+center:"මගේ GPS ස්ථානය",
+mapNote:"සිතියමේ මාර්ගය මාර්ගෝපදේශයක් පමණි.",
+currentFare:"දැනට හයර් ගාස්තුව",
+finalFare:"අවසාන හයර් ගාස්තුව",
+distance:"ගමන් දුර",
+duration:"ගමන් කාලය",
+period:"ගාස්තු කාණ්ඩය",
+weather:"කාලගුණය",
+road:"මාර්ග තත්ත්වය",
+discount:"දුර වට්ටම්",
+rainCharge:"වැසි ගාස්තු",
+roadCharge:"දුෂ්කර මාර්ග ගාස්තු",
+tollParking:"අධිවේගී මාර්ග / Parking",
+income:"රියදුරු ආදායම",
+arrivedButton:"ARRIVED - පැමිණියා",
+startButton:"START TRIP - ගමන ආරම්භ කරන්න",
+endButton:"END TRIP - ගමන අවසන් කරන්න",
+endConfirm:"ගමන අවසන් කිරීමට අවශ්‍යද?",
+endNote:"ගමන අවසන් කළ පසු අවසාන ගාස්තුව සහ කොමිස් මුදල පද්ධතියෙන් ගණනය කර සුරකිනු ලැබේ.",
+confirmEnd:"ඔව්, ගමන අවසන් කරන්න",
+continueRide:"ගමන දිගටම කරගෙන යන්න",
+completed:"✓ හයර් එක අවසන් කරන ලදී",
+completedNote:"අවසාන ගමන් වාර්තාව සුරකින ලදී.",
+history:"හයර් ඉතිහාසය",
+refresh:"නැවත පරීක්ෂා කරන්න",
+back:"← Driver Dashboard",
+login:"Driver Login",
+denied:"මෙම හයර් එකට ප්‍රවේශ වීමට අවසර නැත.",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+empty:"දැනට භාරගත් හයර් එකක් නොමැත.",
+error:"පද්ධතියට සම්බන්ධ විය නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+gpsActive:"GPS ක්‍රියාත්මකයි",
+gpsInactive:"GPS සම්බන්ධතාව නැත",
+gpsError:"GPS අවසරය සහ සම්බන්ධතාව පරීක්ෂා කරන්න.",
+processing:"තොරතුරු සුරකිමින්...",
+failed:"ක්‍රියාව සම්පූර්ණ කළ නොහැක. තත්ත්වය නැවත පරීක්ෂා කරන්න.",
+accepted:"හයර් එක භාරගෙන ඇත",
+arrived:"පාරිභෝගිකයා සිටින ස්ථානයට පැමිණ ඇත",
+active:"ගමන ක්‍රියාත්මකයි",
+cancelled:"හයර් එක අවලංගු කර ඇත",
+busy:"BUSY",
+available:"AVAILABLE",
+day:"දිවා",
+night:"රාත්‍රී",
+rain:"වැසි සහිතයි",
+dry:"සාමාන්‍යයි",
+normal:"සාමාන්‍ය මාර්ග",
+difficult:"දුෂ්කර මාර්ග",
+mixed:"මිශ්‍ර",
+unknown:"තහවුරු කර නැත",
+live:"සජීවී ගමන් මීටරය",
+stale:"අලුත් මීටර් දත්ත ලැබී නැත. පෙන්වන්නේ අවසන් තහවුරු කළ අගයන්ය.",
+confirmArrived:"ඔබ Pickup ස්ථානයට පැමිණ තිබේද?",
+confirmStart:"පාරිභෝගිකයා වාහනයට නැග තිබේද?"
+
+},
+
+en:{
+
+heading:"Active Ride",
+rideStatus:"Ride Status",
+availability:"Availability",
+customer:"Customer",
+phone:"Phone Number",
+pickup:"Pickup Location",
+destination:"Destination",
+passengers:"Passengers",
+call:"Call Customer",
+whatsapp:"Send WhatsApp Message",
+center:"Center on My Location",
+mapNote:"The displayed route is for navigation guidance only.",
+currentFare:"Current Fare",
+finalFare:"Final Fare",
+distance:"Distance",
+duration:"Duration",
+period:"Fare Period",
+weather:"Weather",
+road:"Road Conditions",
+discount:"Distance Discount",
+rainCharge:"Rain Charge",
+roadCharge:"Difficult Road Charge",
+tollParking:"Tolls / Parking",
+income:"Driver Income",
+arrivedButton:"ARRIVED",
+startButton:"START TRIP",
+endButton:"END TRIP",
+endConfirm:"Do you want to end this trip?",
+endNote:"The server will calculate and save the final fare and commission.",
+confirmEnd:"Yes, End Trip",
+continueRide:"Continue Ride",
+completed:"✓ Ride Completed",
+completedNote:"The final trip report has been saved.",
+history:"Ride History",
+refresh:"Refresh",
+back:"← Driver Dashboard",
+login:"Driver Login",
+denied:"Access to this ride is not authorized.",
+checking:"Verifying account...",
+empty:"No assigned active ride.",
+error:"Unable to connect to the system.",
+offline:"No internet connection.",
+gpsActive:"GPS Active",
+gpsInactive:"GPS Disconnected",
+gpsError:"Check GPS permission and connection.",
+processing:"Saving information...",
+failed:"Unable to complete the action. Refresh the status.",
+accepted:"Ride Accepted",
+arrived:"Arrived at Pickup",
+active:"Trip Active",
+cancelled:"Ride Cancelled",
+busy:"BUSY",
+available:"AVAILABLE",
+day:"Day",
+night:"Night",
+rain:"Rain",
+dry:"Normal Weather",
+normal:"Normal Roads",
+difficult:"Difficult Roads",
+mixed:"Mixed",
+unknown:"Unverified",
+live:"Live Trip Meter",
+stale:"No recent meter update. Showing last verified values.",
+confirmArrived:"Have you reached the pickup location?",
+confirmStart:"Has the customer entered the vehicle?"
+
+},
+
+ta:{
+
+heading:"தற்போதைய பயணம்",
+rideStatus:"பயண நிலை",
+availability:"சேவை நிலை",
+customer:"வாடிக்கையாளர்",
+phone:"தொலைபேசி எண்",
+pickup:"புறப்படும் இடம்",
+destination:"செல்லும் இடம்",
+passengers:"பயணிகள்",
+call:"வாடிக்கையாளரை அழைக்கவும்",
+whatsapp:"WhatsApp செய்தி அனுப்பவும்",
+center:"எனது GPS இருப்பிடம்",
+mapNote:"காட்டப்படும் பாதை வழிகாட்டலுக்கு மட்டுமே.",
+currentFare:"தற்போதைய கட்டணம்",
+finalFare:"இறுதி கட்டணம்",
+distance:"பயண தூரம்",
+duration:"பயண நேரம்",
+period:"கட்டண காலம்",
+weather:"வானிலை",
+road:"சாலை நிலை",
+discount:"தூர தள்ளுபடி",
+rainCharge:"மழை கட்டணம்",
+roadCharge:"கடின சாலை கட்டணம்",
+tollParking:"சுங்கம் / வாகன நிறுத்தம்",
+income:"சாரதி வருமானம்",
+arrivedButton:"வந்துவிட்டேன்",
+startButton:"பயணத்தை தொடங்கவும்",
+endButton:"பயணத்தை முடிக்கவும்",
+endConfirm:"பயணத்தை முடிக்க விரும்புகிறீர்களா?",
+endNote:"இறுதி கட்டணம் மற்றும் கமிஷன் கணக்கிடப்பட்டு சேமிக்கப்படும்.",
+confirmEnd:"ஆம், பயணத்தை முடிக்கவும்",
+continueRide:"பயணத்தை தொடரவும்",
+completed:"✓ பயணம் முடிந்தது",
+completedNote:"இறுதி பயண அறிக்கை சேமிக்கப்பட்டது.",
+history:"பயண வரலாறு",
+refresh:"புதுப்பிக்கவும்",
+back:"← சாரதி முதன்மைப் பக்கம்",
+login:"சாரதி உள்நுழைவு",
+denied:"இந்த பயணத்தை அணுக அனுமதி இல்லை.",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+empty:"தற்போது ஒதுக்கப்பட்ட பயணம் இல்லை.",
+error:"அமைப்புடன் இணைக்க முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+gpsActive:"GPS செயல்படுகிறது",
+gpsInactive:"GPS இணைப்பு இல்லை",
+gpsError:"GPS அனுமதி மற்றும் இணைப்பை சரிபார்க்கவும்.",
+processing:"தகவல் சேமிக்கப்படுகிறது...",
+failed:"செயலை முடிக்க முடியவில்லை. நிலையை புதுப்பிக்கவும்.",
+accepted:"பயணம் ஏற்கப்பட்டது",
+arrived:"புறப்படும் இடத்திற்கு வந்துவிட்டார்",
+active:"பயணம் நடைபெறுகிறது",
+cancelled:"பயணம் ரத்து செய்யப்பட்டது",
+busy:"BUSY",
+available:"AVAILABLE",
+day:"பகல்",
+night:"இரவு",
+rain:"மழை",
+dry:"சாதாரண வானிலை",
+normal:"சாதாரண சாலை",
+difficult:"கடின சாலை",
+mixed:"கலப்பு",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+live:"நேரடி பயண மீட்டர்",
+stale:"புதிய மீட்டர் தகவல் இல்லை. கடைசியாக உறுதிப்படுத்தப்பட்ட மதிப்புகள் காட்டப்படுகின்றன.",
+confirmArrived:"புறப்படும் இடத்தை அடைந்துவிட்டீர்களா?",
+confirmStart:"வாடிக்கையாளர் வாகனத்தில் ஏறிவிட்டாரா?"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+$("backButton").href=
+"./driver-dashboard.html?lang="+lang;
+
+$("loginLink").href=
+"./driver-login.html?lang="+lang;
+
+$("historyLink").href=
+"./driver-history.html?lang="+lang;
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let authorized=false;
+let driver=null;
+let booking=null;
+let bookingId=null;
+
+let driverUnsubscribe=null;
+let bookingUnsubscribe=null;
+let meterUnsubscribe=null;
+
+let generation=0;
+let rideGeneration=0;
+let busy=false;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+let lastGpsConfirmed=0;
+let lastPosition=null;
+
+let meterUpdatedAt=0;
+
+let map=null;
+let driverMarker=null;
+let targetMarker=null;
+let routeLine=null;
+let routeController=null;
+let lastRouteRequest=0;
+
+let pendingAction=null;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function number(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=0;
+
+}
+
+function validPoint(point){
+
+return point
+
+&&Number.isFinite(point.lat)
+
+&&Number.isFinite(point.lon)
+
+&&point.lat>=5.85
+
+&&point.lat<=9.9
+
+&&point.lon>=79.5
+
+&&point.lon<=82;
+
+}
+
+function validPosition(position){
+
+return validPoint({
+
+lat:position.coords.latitude,
+
+lon:position.coords.longitude
+
+})
+
+&&number(position.coords.accuracy)
+
+&&position.coords.accuracy<=100
+
+&&Date.now()-position.timestamp<30000
+
+&&position.timestamp<=Date.now()+5000;
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||generation!==currentGeneration){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// FORMAT VALUES
+
+function money(value){
+
+return number(value)
+
+?"Rs. "+value.toLocaleString(
+
+"en-LK",
+
+{
+
+minimumFractionDigits:2,
+
+maximumFractionDigits:2
+
+}
+
+)
+
+:"—";
+
+}
+
+function formatDuration(seconds){
+
+if(!number(seconds))return "—";
+
+seconds=Math.floor(seconds);
+
+return [
+
+Math.floor(seconds/3600),
+
+Math.floor((seconds%3600)/60),
+
+seconds%60
+
+].map(value=>
+
+String(value).padStart(2,"0")
+
+).join(":");
+
+}
+
+function normalizePhone(value){
+
+if(typeof value!=="string")return null;
+
+const phone=value.replace(/[\s-]/g,"");
+
+if(!/^(?:\+94|94|0)7\d{8}$/.test(phone)){
+
+return null;
+
+}
+
+return "+94"+phone.slice(-9);
+
+}
+
+// MAP SYSTEM
+
+function initMap(){
+
+if(map||!window.L)return;
+
+map=L.map("map").setView(
+
+[7.8731,80.7718],
+
+7
+
+);
+
+L.tileLayer(
+
+"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+{
+
+maxZoom:19,
+
+attribution:"© OpenStreetMap contributors"
+
+}
+
+).addTo(map);
+
+}
+
+function clearRoute(){
+
+if(routeController){
+
+routeController.abort();
+
+routeController=null;
+
+}
+
+if(map&&routeLine){
+
+map.removeLayer(routeLine);
+
+routeLine=null;
+
+}
+
+if(map&&targetMarker){
+
+map.removeLayer(targetMarker);
+
+targetMarker=null;
+
+}
+
+lastRouteRequest=0;
+
+}
+
+function clearMap(){
+
+clearRoute();
+
+if(map&&driverMarker){
+
+map.removeLayer(driverMarker);
+
+driverMarker=null;
+
+}
+
+}
+
+function updateMapPosition(position){
+
+if(!validSession()||!booking)return;
+
+initMap();
+
+if(!map)return;
+
+map.invalidateSize();
+
+const point=[
+
+position.coords.latitude,
+
+position.coords.longitude
+
+];
+
+if(!driverMarker){
+
+driverMarker=L.circleMarker(point,{
+
+radius:10,
+
+color:"#FFFFFF",
+
+fillColor:"#FFD600",
+
+fillOpacity:1,
+
+weight:3
+
+}).addTo(map);
+
+map.setView(point,15);
+
+}else{
+
+driverMarker.setLatLng(point);
+
+}
+
+updateRoute(position);
+
+}
+
+// ROUTE GUIDANCE
+
+async function updateRoute(position){
+
+if(!map||!booking
+
+||Date.now()-lastRouteRequest<15000){
+
+return;
+
+}
+
+const target=
+
+booking.status==="active"
+
+?booking.destination
+
+:booking.pickup;
+
+if(!validPoint(target))return;
+
+lastRouteRequest=Date.now();
+
+if(routeController){
+
+routeController.abort();
+
+}
+
+const controller=new AbortController();
+
+routeController=controller;
+
+const currentGeneration=generation;
+
+const currentRideGeneration=rideGeneration;
+
+const targetPoint=[target.lat,target.lon];
+
+if(targetMarker){
+
+targetMarker.setLatLng(targetPoint);
+
+}else{
+
+targetMarker=L.marker(targetPoint)
+
+.addTo(map);
+
+}
+
+const c=position.coords;
+
+const url=
+
+"https://router.project-osrm.org/route/v1/driving/"
+
++c.longitude+","+c.latitude
+
++";"+target.lon+","+target.lat
+
++"?overview=full&geometries=geojson";
+
+const timeout=setTimeout(
+
+()=>controller.abort(),
+
+15000
+
+);
+
+try{
+
+const response=await fetch(url,{
+
+signal:controller.signal,
+
+cache:"no-store"
+
+});
+
+if(!response.ok){
+
+throw new Error("Route unavailable");
+
+}
+
+const data=await response.json();
+
+if(currentGeneration!==generation
+
+||currentRideGeneration!==rideGeneration
+
+||controller.signal.aborted
+
+||routeController!==controller
+
+||!validSession())return;
+
+if(data.code!=="Ok"
+
+||!data.routes?.[0]?.geometry){
+
+throw new Error("Route unavailable");
+
+}
+
+if(routeLine){
+
+map.removeLayer(routeLine);
+
+}
+
+routeLine=L.geoJSON(
+
+data.routes[0].geometry,
+
+{
+
+style:{
+
+color:"#2684FF",
+
+weight:6
+
+}
+
+}
+
+).addTo(map);
+
+}catch(e){
+
+// GPS tracking continues even if
+// route guidance is unavailable.
+
+}finally{
+
+clearTimeout(timeout);
+
+}
+
+}
+
+$("centerButton").onclick=()=>{
+
+if(map&&lastPosition){
+
+map.setView([
+
+lastPosition.coords.latitude,
+
+lastPosition.coords.longitude
+
+],16);
+
+}
+
+};
+
+// GPS SYSTEM
+
+function updateGpsStatus(){
+
+const active=
+
+lastGpsConfirmed>0
+
+&&Date.now()-lastGpsConfirmed<30000;
+
+$("gpsStatus").textContent=
+
+active?t.gpsActive:t.gpsInactive;
+
+$("gpsStatus").className=
+
+active?"green":"red";
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+lastGpsConfirmed=0;
+
+lastPosition=null;
+
+updateGpsStatus();
+
+}
+
+function locationData(position){
+
+return{
+
+lat:position.coords.latitude,
+
+lon:position.coords.longitude,
+
+accuracy:position.coords.accuracy,
+
+capturedAtMs:position.timestamp
+
+};
+
+}
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+if(!validSession()
+
+||!booking
+
+||!["accepted","arrived","active"]
+
+.includes(booking.status)
+
+||!validPosition(position))return;
+
+lastPosition=position;
+
+updateMapPosition(position);
+
+if(gpsSending
+
+||Date.now()-lastGpsSent<5000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+const currentRideGeneration=rideGeneration;
+
+try{
+
+const result=await serverCall(
+
+"updateDriverLocation",
+
+{
+
+...locationData(position),
+
+bookingId
+
+}
+
+);
+
+if(currentRideGeneration!==rideGeneration){
+
+return;
+
+}
+
+lastGpsConfirmed=
+
+result?.accepted===true
+
+?Date.now():0;
+
+}catch(e){
+
+lastGpsConfirmed=0;
+
+}finally{
+
+gpsSending=false;
+
+updateGpsStatus();
+
+updateButtons();
+
+}
+
+},
+
+()=>{
+
+lastGpsConfirmed=0;
+
+updateGpsStatus();
+
+updateButtons();
+
+status(t.gpsError);
+
+},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:3000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function getPosition(){
+
+return new Promise((resolve,reject)=>{
+
+if(!navigator.geolocation){
+
+reject(new Error("GPS unavailable"));
+
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+resolve,
+
+reject,
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:0,
+
+timeout:15000
+
+}
+
+);
+
+});
+
+}
+
+// CLEAR PRIVATE INFORMATION
+
+function clearMeter(){
+
+meterUpdatedAt=0;
+
+[
+
+"fare","distance","duration",
+
+"period","weather","road",
+
+"discount","rainCharge","roadCharge",
+
+"tollParking","commission","income"
+
+].forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+$("meterStatus").textContent="";
+
+$("commissionLabel").textContent="MY RIDE";
+
+}
+
+function clearCustomer(){
+
+[
+
+"customerName","customerPhone",
+
+"pickup","destination","passengers"
+
+].forEach(id=>{
+
+$(id).textContent="—";
+
+});
+
+["callButton","whatsappButton"]
+
+.forEach(id=>{
+
+$(id).hidden=true;
+
+$(id).removeAttribute("href");
+
+});
+
+}
+
+function clearRide(){
+
+rideGeneration++;
+
+if(bookingUnsubscribe){
+
+bookingUnsubscribe();
+
+bookingUnsubscribe=null;
+
+}
+
+if(meterUnsubscribe){
+
+meterUnsubscribe();
+
+meterUnsubscribe=null;
+
+}
+
+booking=null;
+
+bookingId=null;
+
+pendingAction=null;
+
+stopGps();
+
+clearMap();
+
+clearMeter();
+
+clearCustomer();
+
+$("content").hidden=true;
+
+$("endConfirmPanel").hidden=true;
+
+$("completedPanel").hidden=true;
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+clearRide();
+
+}
+
+// CUSTOMER INFORMATION
+
+function displayCustomer(data){
+
+$("customerName").textContent=
+
+typeof data.customerName==="string"
+
+?data.customerName:"—";
+
+const phone=normalizePhone(
+
+data.customerPhone
+
+);
+
+$("customerPhone").textContent=
+
+phone||"—";
+
+$("pickup").textContent=
+
+data.pickupName||"—";
+
+$("destination").textContent=
+
+data.destinationName||"—";
+
+$("passengers").textContent=
+
+Number.isInteger(data.passengers)
+
+?data.passengers:"—";
+
+$("callButton").hidden=!phone;
+
+if(phone){
+
+$("callButton").href="tel:"+phone;
+
+}
+
+const whatsapp=normalizePhone(
+
+data.customerWhatsApp
+
+);
+
+$("whatsappButton").hidden=true;
+
+if(whatsapp&&data.whatsappConsent===true){
+
+const customerLanguage=
+
+languages.includes(data.language)
+
+?data.language:"si";
+
+const driverName=
+
+String(driver?.fullName||"MY RIDE Driver");
+
+const driverPhone=
+
+normalizePhone(driver?.phone)||"";
+
+const url=new URL(
+
+"./tracking.html",
+
+location.href
+
+);
+
+url.searchParams.set("booking",bookingId);
+
+url.searchParams.set("lang",customerLanguage);
+
+const messages={
+
+si:"ආයුබෝවන්! මම ඔබගේ MY RIDE රියදුරු "+driverName+".\n"+driverPhone+"\n"+url.href,
+
+en:"Hello! I am your MY RIDE driver "+driverName+".\n"+driverPhone+"\n"+url.href,
+
+ta:"வணக்கம்! நான் உங்கள் MY RIDE சாரதி "+driverName+".\n"+driverPhone+"\n"+url.href
+
+};
+
+$("whatsappButton").href=
+
+"https://wa.me/"
+
++whatsapp.replace("+","")
+
++"?text="
+
++encodeURIComponent(messages[customerLanguage]);
+
+$("whatsappButton").target="_blank";
+
+$("whatsappButton").rel="noopener noreferrer";
+
+$("whatsappButton").hidden=false;
+
+}
+
+}
+
+// SERVER-CALCULATED METER
+
+function displayMeter(data,final=false){
+
+const fare=final
+
+?data.finalFare
+
+:data.currentFare;
+
+if(!number(fare)
+
+||!number(data.distanceMeters)
+
+||!number(data.durationSeconds)){
+
+clearMeter();
+
+return false;
+
+}
+
+$("fareLabel").textContent=
+
+final?t.finalFare:t.currentFare;
+
+$("fare").textContent=money(fare);
+
+$("distance").textContent=
+
+(data.distanceMeters/1000).toFixed(2)
+
++" KM";
+
+$("duration").textContent=
+
+formatDuration(data.durationSeconds);
+
+$("period").textContent=
+
+["day","night","mixed"].includes(data.period)
+
+?t[data.period]:t.unknown;
+
+$("weather").textContent=
+
+["rain","dry","mixed"]
+
+.includes(data.weatherStatus)
+
+?t[data.weatherStatus]:t.unknown;
+
+$("road").textContent=
+
+["normal","difficult","mixed"]
+
+.includes(data.roadStatus)
+
+?t[data.roadStatus]:t.unknown;
+
+$("discount").textContent=
+
+money(data.distanceDiscount);
+
+$("rainCharge").textContent=
+
+money(data.rainCharge);
+
+$("roadCharge").textContent=
+
+money(data.roadCharge);
+
+$("tollParking").textContent=
+
+money(data.tollParking);
+
+$("commissionLabel").textContent=
+
+"MY RIDE "+
+
+(number(data.commissionRate)
+
+?data.commissionRate+"%":"");
+
+$("commission").textContent=
+
+money(data.commission);
+
+$("income").textContent=
+
+money(data.driverIncome);
+
+if(final){
+
+$("meterStatus").textContent="";
+
+}else{
+
+meterUpdatedAt=
+
+data.updatedAt?.toMillis?.()||0;
+
+updateMeterStatus();
+
+}
+
+return true;
+
+}
+
+function updateMeterStatus(){
+
+if(booking?.status!=="active")return;
+
+const fresh=
+
+meterUpdatedAt>0
+
+&&Date.now()-meterUpdatedAt<30000
+
+&&meterUpdatedAt<=Date.now()+30000;
+
+$("meterStatus").textContent=
+
+fresh?t.live:t.stale;
+
+$("meterStatus").className=
+
+fresh?"green":"red";
+
+}
+
+// LIVE METER LISTENER
+
+function subscribeMeter(){
+
+if(meterUnsubscribe||!bookingId)return;
+
+const currentRideGeneration=rideGeneration;
+
+meterUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"bookings",
+
+bookingId,
+
+"meter",
+
+"current"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentRideGeneration!==rideGeneration
+
+||!validSession()
+
+||booking?.status!=="active")return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()){
+
+$("meterStatus").textContent=t.stale;
+
+return;
+
+}
+
+displayMeter(snapshot.data());
+
+},
+
+()=>{
+
+$("meterStatus").textContent=t.stale;
+
+}
+
+);
+
+}
+
+// BUTTON STATUS
+
+function updateButtons(){
+
+const state=booking?.status;
+
+const gpsFresh=
+
+lastGpsConfirmed>0
+
+&&Date.now()-lastGpsConfirmed<30000;
+
+const enabled=
+
+validSession()&&!busy;
+
+$("arrivedButton").hidden=
+
+state!=="accepted";
+
+$("startButton").hidden=
+
+state!=="arrived";
+
+$("endButton").hidden=
+
+state!=="active";
+
+$("arrivedButton").disabled=
+
+!enabled||!gpsFresh;
+
+$("startButton").disabled=
+
+!enabled||!gpsFresh;
+
+$("endButton").disabled=!enabled;
+
+$("confirmEndButton").disabled=!enabled;
+
+if(state!=="active"){
+
+$("endConfirmPanel").hidden=true;
+
+}
+
+}
+
+// BOOKING STATUS
+
+function displayBooking(data){
+
+const previousStatus=booking?.status;
+
+booking=data;
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+$("bookingId").textContent=
+
+"Booking ID: "+bookingId;
+
+$("rideStatus").textContent=
+
+data.status==="completed"
+
+?t.completed
+
+:t[data.status]||"—";
+
+$("completedPanel").hidden=true;
+
+if(data.status==="completed"){
+
+stopGps();
+
+clearMap();
+
+clearCustomer();
+
+if(meterUnsubscribe){
+
+meterUnsubscribe();
+
+meterUnsubscribe=null;
+
+}
+
+$("customerPanel").hidden=true;
+
+$("mapPanel").hidden=true;
+
+$("meterPanel").hidden=false;
+
+$("fareDetails").hidden=false;
+
+const validFinal=displayMeter(
+
+data.finalMeter||{},
+
+true
+
+);
+
+$("completedPanel").hidden=!validFinal;
+
+$("availability").textContent=
+
+driver?.availability==="online"
+
+?t.available
+
+:driver?.availability||"—";
+
+updateButtons();
+
+status(validFinal?"":t.error);
+
+return;
+
+}
+
+if(data.status==="cancelled"){
+
+stopGps();
+
+clearMap();
+
+clearCustomer();
+
+clearMeter();
+
+if(meterUnsubscribe){
+
+meterUnsubscribe();
+
+meterUnsubscribe=null;
+
+}
+
+$("customerPanel").hidden=true;
+
+$("mapPanel").hidden=true;
+
+$("meterPanel").hidden=true;
+
+$("fareDetails").hidden=true;
+
+$("availability").textContent=
+
+driver?.availability||"—";
+
+updateButtons();
+
+status(t.cancelled);
+
+return;
+
+}
+
+$("availability").textContent=t.busy;
+
+$("customerPanel").hidden=false;
+
+$("mapPanel").hidden=false;
+
+$("meterPanel").hidden=false;
+
+$("fareDetails").hidden=false;
+
+displayCustomer(data);
+
+if(previousStatus!==data.status){
+
+clearRoute();
+
+if(lastPosition){
+
+updateMapPosition(lastPosition);
+
+}
+
+}
+
+if(data.status==="active"){
+
+subscribeMeter();
+
+}else{
+
+clearMeter();
+
+$("fare").textContent=money(0);
+
+$("distance").textContent="0.00 KM";
+
+$("duration").textContent="00:00:00";
+
+}
+
+startGps();
+
+updateButtons();
+
+status("");
+
+}
+
+// LIVE BOOKING LISTENER
+
+function subscribeBooking(id){
+
+if(bookingId===id&&bookingUnsubscribe){
+
+return;
+
+}
+
+clearRide();
+
+if(!validSession()||!validId(id))return;
+
+bookingId=id;
+
+const currentRideGeneration=rideGeneration;
+
+bookingUnsubscribe=onSnapshot(
+
+doc(db,"bookings",id),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentRideGeneration!==rideGeneration
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+$("content").hidden=true;
+
+stopGps();
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.assignedDriver?.uid!==uid
+
+||!["accepted","arrived","active",
+
+"completed","cancelled"]
+
+.includes(data.status)){
+
+clearRide();
+
+status(t.denied);
+
+return;
+
+}
+
+displayBooking(data);
+
+},
+
+()=>{
+
+clearRide();
+
+status(t.error);
+
+}
+
+);
+
+}
+
+// TRIP ACTIONS
+
+async function performAction(action){
+
+if(busy||!validSession()||!booking)return;
+
+const requiredStatus={
+
+arrived:"accepted",
+
+start:"arrived",
+
+end:"active"
+
+};
+
+if(booking.status!==requiredStatus[action]){
+
+return;
+
+}
+
+const id=bookingId;
+
+const currentRideGeneration=rideGeneration;
+
+busy=true;
+
+updateButtons();
+
+status(t.processing);
+
+try{
+
+let location=null;
+
+if(action!=="end"){
+
+const position=await getPosition();
+
+if(!validPosition(position)){
+
+throw new Error("Invalid GPS");
+
+}
+
+location=locationData(position);
+
+}
+
+if(!pendingAction
+
+||pendingAction.bookingId!==id
+
+||pendingAction.action!==action){
+
+pendingAction={
+
+bookingId:id,
+
+action,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const functionNames={
+
+arrived:"markDriverArrived",
+
+start:"startDriverTrip",
+
+end:"endDriverTrip"
+
+};
+
+const result=await serverCall(
+
+functionNames[action],
+
+{
+
+bookingId:id,
+
+requestId:pendingAction.requestId,
+
+location
+
+}
+
+);
+
+if(currentRideGeneration!==rideGeneration){
+
+return;
+
+}
+
+const expectedStatus={
+
+arrived:"arrived",
+
+start:"active",
+
+end:"completed"
+
+};
+
+if(result?.accepted!==true
+
+||result.bookingId!==id
+
+||result.status!==expectedStatus[action]){
+
+throw new Error("Action not confirmed");
+
+}
+
+pendingAction=null;
+
+$("endConfirmPanel").hidden=true;
+
+// Firestore supplies the confirmed
+// trip status and final meter.
+
+status("");
+
+}catch(e){
+
+status(t.failed);
+
+}finally{
+
+busy=false;
+
+updateButtons();
+
+}
+
+}
+
+$("arrivedButton").onclick=()=>{
+
+if(confirm(t.confirmArrived)){
+
+performAction("arrived");
+
+}
+
+};
+
+$("startButton").onclick=()=>{
+
+if(confirm(t.confirmStart)){
+
+performAction("start");
+
+}
+
+};
+
+$("endButton").onclick=()=>{
+
+if(booking?.status==="active"
+
+&&validSession()&&!busy){
+
+$("endConfirmPanel").hidden=false;
+
+}
+
+};
+
+$("continueRideButton").onclick=()=>{
+
+$("endConfirmPanel").hidden=true;
+
+};
+
+$("confirmEndButton").onclick=()=>{
+
+performAction("end");
+
+};
+
+// DRIVER ACCOUNT LISTENER
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+$("content").hidden=true;
+
+stopGps();
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true){
+
+disconnect();
+
+status(t.denied);
+
+return;
+
+}
+
+driver=data;
+
+const requestedId=params.get("booking");
+
+const activeId=data.activeBookingId;
+
+if(validId(activeId)){
+
+if(bookingId!==activeId){
+
+subscribeBooking(activeId);
+
+}
+
+}else if(bookingId){
+
+// Keep the current listener briefly
+// to receive the completed report.
+
+updateButtons();
+
+}else if(validId(requestedId)){
+
+subscribeBooking(requestedId);
+
+}else{
+
+clearRide();
+
+status(t.empty);
+
+}
+
+},
+
+()=>{
+
+disconnect();
+
+status(t.denied);
+
+}
+
+);
+
+}
+
+// DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!functions||!db){
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true){
+
+throw new Error("Driver role required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// REFRESH STATUS
+
+setInterval(()=>{
+
+updateGpsStatus();
+
+updateMeterStatus();
+
+updateButtons();
+
+},1000);
+
+$("refreshButton").onclick=()=>{
+
+if(auth&&!busy){
+
+verifyDriver(auth.currentUser);
+
+}
+
+};
+
+// INTERNET CONNECTION
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
