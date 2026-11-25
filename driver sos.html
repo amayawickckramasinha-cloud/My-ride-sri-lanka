@@ -1,0 +1,2680 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver SOS</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.sosIcon{
+width:100px;
+height:100px;
+border-radius:50%;
+background:#B91C1C;
+border:4px solid #FF6464;
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:30px;
+font-weight:bold;
+margin:20px auto;
+}
+
+.center{
+text-align:center;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+margin:15px 0;
+}
+
+.success{
+background:#163322;
+border:1px solid #4ADE80;
+border-radius:10px;
+padding:15px;
+color:#4ADE80;
+line-height:1.8;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.7;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+
+.yellow{
+color:#FFD600;
+}
+
+.green{
+color:#4ADE80;
+}
+
+.red{
+color:#FF6464;
+}
+
+.action{
+display:block;
+width:100%;
+padding:16px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.emergency{
+background:#B91C1C;
+color:#fff;
+}
+
+.sosButton{
+background:#B91C1C;
+color:#fff;
+font-size:21px;
+padding:23px;
+border:2px solid #FF6464;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.whatsapp{
+background:#25D366;
+color:#111;
+}
+
+label{
+display:block;
+margin-top:18px;
+margin-bottom:8px;
+font-size:14px;
+font-weight:bold;
+}
+
+input,select,textarea{
+width:100%;
+padding:14px;
+background:#292929;
+color:#fff;
+border:1px solid #555;
+border-radius:9px;
+font-size:16px;
+}
+
+textarea{
+min-height:120px;
+resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+outline:2px solid #FFD600;
+}
+
+input[type="checkbox"]{
+width:22px;
+height:22px;
+accent-color:#FFD600;
+flex-shrink:0;
+}
+
+.checkboxRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin:18px 0;
+}
+
+.checkboxRow label{
+margin:0;
+font-weight:normal;
+line-height:1.8;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.8;
+}
+
+#status,
+#gpsStatus,
+#sosStatus,
+#adminStatus{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+overflow-wrap:anywhere;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<div class="sosIcon">
+SOS
+</div>
+
+<div class="warning"
+data-t="emergencyWarning"></div>
+
+<!-- EMERGENCY NUMBERS -->
+
+<section class="panel">
+
+<h3 data-t="emergencyServices"></h3>
+
+<a href="tel:119"
+class="action emergency"
+data-t="police"></a>
+
+<a href="tel:1990"
+class="action emergency"
+data-t="ambulance"></a>
+
+<p class="note"
+data-t="emergencyNote"></p>
+
+</section>
+
+<!-- GPS LOCATION -->
+
+<section class="panel">
+
+<h3 data-t="currentLocation"></h3>
+
+<button id="gpsButton"
+class="action"
+data-t="getLocation"></button>
+
+<p id="gpsStatus"
+role="status"
+aria-live="polite"></p>
+
+<div id="locationDetails" hidden>
+
+<div class="row">
+
+<span data-t="latitude"></span>
+
+<strong id="latitude">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="longitude"></span>
+
+<strong id="longitude">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="accuracy"></span>
+
+<strong id="accuracy">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="locationTime"></span>
+
+<strong id="locationTime">—</strong>
+
+</div>
+
+<a id="mapButton"
+class="action secondary"
+target="_blank"
+rel="noopener noreferrer"
+data-t="openMap"></a>
+
+<button id="copyLocation"
+class="action secondary"
+data-t="copyLocation"></button>
+
+</div>
+
+</section>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<!-- ACCESS DENIED -->
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<!-- APPROVED DRIVER CONTENT -->
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="driverDetails"></h3>
+
+<div class="row">
+
+<span data-t="driverName"></span>
+
+<strong id="driverName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>Driver ID</span>
+
+<strong id="driverId"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="vehicleNumber"></span>
+
+<strong id="vehicleNumber">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="activeBooking"></span>
+
+<strong id="activeBooking">—</strong>
+
+</div>
+
+</section>
+
+<!-- SOS FORM -->
+
+<section class="panel">
+
+<h3 data-t="sendEmergency"></h3>
+
+<form id="sosForm">
+
+<label for="emergencyType"
+data-t="emergencyType"></label>
+
+<select id="emergencyType" required>
+
+<option value=""
+data-t="select"></option>
+
+<option value="accident"
+data-t="accident"></option>
+
+<option value="medical"
+data-t="medical"></option>
+
+<option value="threat"
+data-t="threat"></option>
+
+<option value="vehicle_breakdown"
+data-t="breakdown"></option>
+
+<option value="passenger_emergency"
+data-t="passengerEmergency"></option>
+
+<option value="other"
+data-t="other"></option>
+
+</select>
+
+<label for="description"
+data-t="description"></label>
+
+<textarea
+id="description"
+maxlength="1000"></textarea>
+
+<p class="note"
+data-t="descriptionNote"></p>
+
+<div class="checkboxRow">
+
+<input
+id="locationConsent"
+type="checkbox"
+checked>
+
+<label for="locationConsent"
+data-t="locationConsent"></label>
+
+</div>
+
+<p class="note"
+data-t="privacyNote"></p>
+
+<button id="sosButton"
+type="submit"
+class="action sosButton"
+data-t="sendSOS"></button>
+
+</form>
+
+<p id="sosStatus"
+role="status"
+aria-live="polite"></p>
+
+</section>
+
+<!-- SOS CONFIRMATION -->
+
+<section id="confirmPanel"
+class="panel" hidden>
+
+<div class="warning"
+data-t="confirmWarning"></div>
+
+<button id="confirmSOS"
+class="action emergency"
+data-t="confirmSOS"></button>
+
+<button id="cancelSOS"
+class="action secondary"
+data-t="cancel"></button>
+
+</section>
+
+<!-- SOS SERVER STATUS -->
+
+<section id="incidentPanel"
+class="panel" hidden>
+
+<h3 data-t="incidentDetails"></h3>
+
+<div class="row">
+
+<span data-t="incidentId"></span>
+
+<strong id="incidentId"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="incidentStatus"></span>
+
+<strong id="incidentStatus">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="submittedTime"></span>
+
+<strong id="submittedTime">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="adminReply"></span>
+
+<strong id="adminReply">—</strong>
+
+</div>
+
+<p id="incidentNote"
+class="note"></p>
+
+<button id="refreshIncident"
+class="action secondary"
+data-t="refresh"></button>
+
+</section>
+
+<!-- ADMIN EMERGENCY CONTACT -->
+
+<section class="panel">
+
+<h3 data-t="contactAdmin"></h3>
+
+<div class="row">
+
+<span data-t="adminPhone"></span>
+
+<strong id="adminPhone">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>WhatsApp</span>
+
+<strong id="adminWhatsApp">—</strong>
+
+</div>
+
+<p id="adminStatus"
+role="status"></p>
+
+<a id="callAdmin"
+class="action"
+data-t="callAdmin"
+hidden></a>
+
+<button id="whatsappAdmin"
+class="action whatsapp"
+data-t="whatsappAdmin"
+disabled></button>
+
+<p class="note"
+data-t="whatsappNote"></p>
+
+</section>
+
+<a id="feedbackLink"
+class="action secondary"
+data-t="feedback"></a>
+
+<a id="helpLink"
+class="action secondary"
+data-t="help"></a>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const languages=["si","en","ta"];
+
+const params=new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"රියදුරු හදිසි සහාය",
+emergencyWarning:"ජීවිත අවදානමක් හෝ හදිසි අනතුරක් තිබේ නම් Admin පිළිතුරක් ලැබෙන තුරු රැඳී නොසිටින්න. ආරක්ෂිත ස්ථානයක සිට අදාළ හදිසි සේවාව අමතන්න.",
+emergencyServices:"ශ්‍රී ලංකාවේ හදිසි සේවා",
+police:"පොලිස් හදිසි සේවාව - 119",
+ambulance:"සුවසැරිය ගිලන් රථ - 1990",
+emergencyNote:"මෙම අංක ශ්‍රී ලංකාව සඳහාය. හදිසි ඇමතුම් සඳහා MY RIDE Login අවශ්‍ය නොවේ.",
+currentLocation:"මගේ වත්මන් GPS ස්ථානය",
+getLocation:"GPS ස්ථානය ලබාගන්න",
+latitude:"අක්ෂාංශය",
+longitude:"දේශාංශය",
+accuracy:"GPS නිරවද්‍යතාව",
+locationTime:"ස්ථානය ලබාගත් වේලාව",
+openMap:"Google Maps විවෘත කරන්න",
+copyLocation:"ස්ථානය Copy කරන්න",
+locating:"GPS ස්ථානය ලබාගනිමින්...",
+locationReady:"GPS ස්ථානය ලබාගෙන ඇත.",
+locationFailed:"GPS ස්ථානය ලබාගත නොහැක. Location Permission පරීක්ෂා කරන්න.",
+locationOld:"GPS ස්ථානය පැරණියි. නැවත ලබාගන්න.",
+locationUnsupported:"මෙම Browser එක GPS සඳහා සහාය නොදක්වයි.",
+copied:"ස්ථානය Copy කර ඇත.",
+copyFailed:"ස්ථානය Copy කළ නොහැක.",
+driverDetails:"රියදුරු තොරතුරු",
+driverName:"රියදුරුගේ නම",
+vehicleNumber:"වාහන අංකය",
+activeBooking:"දැනට පවතින Booking ID",
+noBooking:"සක්‍රිය හයර් එකක් නැත",
+sendEmergency:"Admin වෙත හදිසි දැනුම්දීම",
+emergencyType:"හදිසි අවස්ථාවේ වර්ගය",
+select:"තෝරන්න",
+accident:"රිය අනතුරක්",
+medical:"වෛද්‍ය හදිසි අවස්ථාවක්",
+threat:"තර්ජනයක් හෝ ආරක්ෂක අවදානමක්",
+breakdown:"වාහනයේ දෝෂයක්",
+passengerEmergency:"මගියෙකුගේ හදිසි අවස්ථාවක්",
+other:"වෙනත් හදිසි අවස්ථාවක්",
+description:"අමතර විස්තර",
+descriptionNote:"හැකි නම් කෙටි විස්තරයක් ඇතුළත් කරන්න. මෙය අනිවාර්ය නොවේ.",
+locationConsent:"මාගේ වත්මන් GPS ස්ථානය Admin වෙත ලබාදීමට එකඟ වෙමි.",
+privacyNote:"Password, OTP හෝ බැංකු PIN ඇතුළත් නොකරන්න.",
+sendSOS:"SOS දැනුම්දීම යොමු කරන්න",
+confirmWarning:"මෙම SOS දැනුම්දීම Admin වෙත යොමු කිරීමට ඔබට අවශ්‍යද?",
+confirmSOS:"ඔව් - SOS යොමු කරන්න",
+cancel:"ආපසු යන්න",
+sending:"SOS ඉල්ලීම යොමු කරමින්...",
+submitted:"SOS ඉල්ලීම පද්ධතියට ලැබී ඇත. Admin එය දැක ඇති බව තවම තහවුරු කර නැත.",
+sendFailed:"SOS ඉල්ලීම ලැබුණු බව තහවුරු කළ නොහැක. හදිසි සේවාව අමතන්න හෝ නැවත උත්සාහ කරන්න.",
+invalid:"හදිසි අවස්ථාවේ වර්ගය තෝරන්න.",
+noLocation:"GPS ස්ථානය ලබාගත නොහැක. ස්ථානය නොමැතිව SOS යොමු කරන්නද?",
+incidentDetails:"SOS ඉල්ලීමේ විස්තර",
+incidentId:"SOS අංකය",
+incidentStatus:"ඉල්ලීමේ තත්ත්වය",
+submittedTime:"යොමු කළ වේලාව",
+adminReply:"Admin පිළිතුර",
+new:"පද්ධතියට ලැබී ඇත",
+acknowledged:"Admin විසින් දැක ඇත",
+in_progress:"Admin විසින් පරීක්ෂා කරමින් පවතී",
+resolved:"විසඳා ඇති බව සටහන් කර ඇත",
+closed:"අවසන් කර ඇත",
+waiting:"Admin පිළිතුර තවම ලැබී නැත.",
+incidentWarning:"මෙම තත්ත්වය හදිසි සේවාවක් පැමිණෙන බවට තහවුරු කිරීමක් නොවේ.",
+incidentUnavailable:"SOS තත්ත්වය තහවුරු කළ නොහැක.",
+refresh:"නැවත පරීක්ෂා කරන්න",
+contactAdmin:"Admin සම්බන්ධ කරගන්න",
+adminPhone:"Admin දුරකථන අංකය",
+callAdmin:"Admin අමතන්න",
+whatsappAdmin:"WhatsApp හදිසි පණිවිඩය",
+whatsappNote:"WhatsApp විවෘත වූ පසු Send ඔබන්න. පණිවිඩය ස්වයංක්‍රීයව යවන්නේ නැත.",
+notConfigured:"Admin සහාය අංක තවම සකස් කර නැත.",
+contactError:"Admin සහාය අංක ලබාගත නොහැක.",
+feedback:"අදහස් සහ පැමිණිලි",
+help:"රියදුරු සහාය",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+denied:"MY RIDE SOS ඉල්ලීම යොමු කිරීමට අනුමත රියදුරු ගිණුමක් අවශ්‍යයි. ඉහත හදිසි අංක භාවිතා කළ හැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත. අවශ්‍ය නම් දුරකථනයෙන් හදිසි සේවා අමතන්න.",
+error:"පද්ධතිය සම්බන්ධ කරගත නොහැක.",
+emergencyMessage:"MY RIDE හදිසි සහාය ඉල්ලීම",
+meters:"මීටර්",
+locationNotShared:"GPS ස්ථානය යොමු කර නැත"
+
+},
+
+en:{
+
+heading:"Driver SOS & Emergency Assistance",
+emergencyWarning:"For immediate danger or an accident, do not wait for an Admin response. Contact the appropriate emergency service from a safe location.",
+emergencyServices:"Sri Lanka Emergency Services",
+police:"Police Emergency - 119",
+ambulance:"Suwa Seriya Ambulance - 1990",
+emergencyNote:"These numbers are for Sri Lanka. MY RIDE login is not required to use these emergency call buttons.",
+currentLocation:"My Current GPS Location",
+getLocation:"Get GPS Location",
+latitude:"Latitude",
+longitude:"Longitude",
+accuracy:"GPS Accuracy",
+locationTime:"Location Capture Time",
+openMap:"Open Google Maps",
+copyLocation:"Copy Location",
+locating:"Getting GPS location...",
+locationReady:"GPS location obtained.",
+locationFailed:"Unable to obtain GPS location. Check location permissions.",
+locationOld:"GPS location is outdated. Get a new location.",
+locationUnsupported:"This browser does not support GPS.",
+copied:"Location copied.",
+copyFailed:"Unable to copy location.",
+driverDetails:"Driver Details",
+driverName:"Driver Name",
+vehicleNumber:"Vehicle Number",
+activeBooking:"Active Booking ID",
+noBooking:"No Active Ride",
+sendEmergency:"Send Emergency Alert to Admin",
+emergencyType:"Emergency Type",
+select:"Select",
+accident:"Road Accident",
+medical:"Medical Emergency",
+threat:"Threat or Safety Risk",
+breakdown:"Vehicle Breakdown",
+passengerEmergency:"Passenger Emergency",
+other:"Other Emergency",
+description:"Additional Details",
+descriptionNote:"Enter a short description if possible. This is optional.",
+locationConsent:"I agree to share my current GPS location with Admin.",
+privacyNote:"Do not include passwords, OTPs or bank PINs.",
+sendSOS:"SEND SOS ALERT",
+confirmWarning:"Do you want to submit this SOS alert to Admin?",
+confirmSOS:"Yes - Send SOS",
+cancel:"Go Back",
+sending:"Submitting SOS request...",
+submitted:"SOS request received by the system. Admin acknowledgment has not yet been confirmed.",
+sendFailed:"SOS submission could not be confirmed. Contact emergency services or retry.",
+invalid:"Select the emergency type.",
+noLocation:"GPS location is unavailable. Send SOS without a location?",
+incidentDetails:"SOS Request Details",
+incidentId:"SOS Reference ID",
+incidentStatus:"Request Status",
+submittedTime:"Submitted Time",
+adminReply:"Admin Reply",
+new:"Received by System",
+acknowledged:"Acknowledged by Admin",
+in_progress:"Under Admin Review",
+resolved:"Marked as Resolved",
+closed:"Closed",
+waiting:"No Admin reply yet.",
+incidentWarning:"This status does not confirm that emergency responders are on their way.",
+incidentUnavailable:"Unable to confirm SOS status.",
+refresh:"Refresh",
+contactAdmin:"Contact Admin",
+adminPhone:"Admin Phone Number",
+callAdmin:"Call Admin",
+whatsappAdmin:"WhatsApp Emergency Message",
+whatsappNote:"Press Send after WhatsApp opens. Messages are not sent automatically.",
+notConfigured:"Admin support numbers have not been configured.",
+contactError:"Unable to load Admin contact numbers.",
+feedback:"Feedback & Complaints",
+help:"Driver Help",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"Verifying account...",
+denied:"An approved driver account is required to submit MY RIDE SOS requests. The emergency numbers above remain available.",
+offline:"No internet connection. Call emergency services directly if necessary.",
+error:"Unable to connect to the system.",
+emergencyMessage:"MY RIDE Emergency Assistance Request",
+meters:"metres",
+locationNotShared:"GPS location not shared"
+
+},
+
+ta:{
+
+heading:"சாரதி அவசர உதவி",
+emergencyWarning:"உடனடி ஆபத்து அல்லது விபத்து ஏற்பட்டால் நிர்வாகியின் பதிலுக்காக காத்திருக்க வேண்டாம். பாதுகாப்பான இடத்திலிருந்து அவசர சேவையை தொடர்புகொள்ளவும்.",
+emergencyServices:"இலங்கை அவசர சேவைகள்",
+police:"பொலிஸ் அவசர சேவை - 119",
+ambulance:"சுவசெரிய ஆம்புலன்ஸ் - 1990",
+emergencyNote:"இந்த எண்கள் இலங்கைக்கானவை. அவசர அழைப்புகளுக்கு MY RIDE உள்நுழைவு தேவையில்லை.",
+currentLocation:"எனது தற்போதைய GPS இருப்பிடம்",
+getLocation:"GPS இருப்பிடத்தை பெறவும்",
+latitude:"அட்சரேகை",
+longitude:"தீர்க்கரேகை",
+accuracy:"GPS துல்லியம்",
+locationTime:"இருப்பிடம் பெறப்பட்ட நேரம்",
+openMap:"Google Maps திறக்கவும்",
+copyLocation:"இருப்பிடத்தை நகலெடுக்கவும்",
+locating:"GPS இருப்பிடம் பெறப்படுகிறது...",
+locationReady:"GPS இருப்பிடம் பெறப்பட்டது.",
+locationFailed:"GPS இருப்பிடத்தை பெற முடியவில்லை. இருப்பிட அனுமதியை சரிபார்க்கவும்.",
+locationOld:"GPS இருப்பிடம் பழையது. மீண்டும் பெறவும்.",
+locationUnsupported:"இந்த உலாவி GPS வசதியை ஆதரிக்கவில்லை.",
+copied:"இருப்பிடம் நகலெடுக்கப்பட்டது.",
+copyFailed:"இருப்பிடத்தை நகலெடுக்க முடியவில்லை.",
+driverDetails:"சாரதி விவரங்கள்",
+driverName:"சாரதியின் பெயர்",
+vehicleNumber:"வாகன இலக்கம்",
+activeBooking:"செயலில் உள்ள முன்பதிவு இலக்கம்",
+noBooking:"செயலில் பயணம் இல்லை",
+sendEmergency:"நிர்வாகிக்கு அவசர அறிவிப்பு",
+emergencyType:"அவசர நிலை வகை",
+select:"தேர்ந்தெடுக்கவும்",
+accident:"சாலை விபத்து",
+medical:"மருத்துவ அவசரம்",
+threat:"அச்சுறுத்தல் அல்லது பாதுகாப்பு ஆபத்து",
+breakdown:"வாகன பழுது",
+passengerEmergency:"பயணியின் அவசர நிலை",
+other:"மற்ற அவசர நிலை",
+description:"கூடுதல் விவரங்கள்",
+descriptionNote:"முடிந்தால் சுருக்கமான விவரத்தை உள்ளிடவும். இது கட்டாயமில்லை.",
+locationConsent:"எனது தற்போதைய GPS இருப்பிடத்தை நிர்வாகியுடன் பகிர ஒப்புக்கொள்கிறேன்.",
+privacyNote:"கடவுச்சொல், OTP அல்லது வங்கி PIN உள்ளிட வேண்டாம்.",
+sendSOS:"SOS அறிவிப்பை அனுப்பவும்",
+confirmWarning:"இந்த SOS அறிவிப்பை நிர்வாகிக்கு அனுப்ப விரும்புகிறீர்களா?",
+confirmSOS:"ஆம் - SOS அனுப்பவும்",
+cancel:"திரும்பிச் செல்லவும்",
+sending:"SOS கோரிக்கை அனுப்பப்படுகிறது...",
+submitted:"SOS கோரிக்கை கணினி அமைப்பால் பெறப்பட்டது. நிர்வாகி பார்த்ததை இன்னும் உறுதிப்படுத்தவில்லை.",
+sendFailed:"SOS கோரிக்கை பெறப்பட்டதை உறுதிப்படுத்த முடியவில்லை. அவசர சேவையை அழைக்கவும் அல்லது மீண்டும் முயற்சிக்கவும்.",
+invalid:"அவசர நிலை வகையை தேர்ந்தெடுக்கவும்.",
+noLocation:"GPS இருப்பிடம் கிடைக்கவில்லை. இருப்பிடம் இல்லாமல் SOS அனுப்பவா?",
+incidentDetails:"SOS கோரிக்கை விவரங்கள்",
+incidentId:"SOS குறிப்பு இலக்கம்",
+incidentStatus:"கோரிக்கை நிலை",
+submittedTime:"அனுப்பிய நேரம்",
+adminReply:"நிர்வாகியின் பதில்",
+new:"கணினி அமைப்பால் பெறப்பட்டது",
+acknowledged:"நிர்வாகி பார்த்துள்ளார்",
+in_progress:"நிர்வாக பரிசீலனையில்",
+resolved:"தீர்க்கப்பட்டதாக பதிவு செய்யப்பட்டது",
+closed:"முடிக்கப்பட்டது",
+waiting:"நிர்வாகியின் பதில் இன்னும் கிடைக்கவில்லை.",
+incidentWarning:"அவசர உதவி பணியாளர்கள் வருகிறார்கள் என்பதை இந்த நிலை உறுதிப்படுத்தாது.",
+incidentUnavailable:"SOS நிலையை உறுதிப்படுத்த முடியவில்லை.",
+refresh:"புதுப்பிக்கவும்",
+contactAdmin:"நிர்வாகியை தொடர்புகொள்ளவும்",
+adminPhone:"நிர்வாகி தொலைபேசி எண்",
+callAdmin:"நிர்வாகியை அழைக்கவும்",
+whatsappAdmin:"WhatsApp அவசர செய்தி",
+whatsappNote:"WhatsApp திறந்த பிறகு Send அழுத்தவும். செய்திகள் தானாக அனுப்பப்படாது.",
+notConfigured:"நிர்வாக உதவி எண்கள் இன்னும் அமைக்கப்படவில்லை.",
+contactError:"நிர்வாக தொடர்பு எண்களை பெற முடியவில்லை.",
+feedback:"கருத்துகள் மற்றும் புகார்கள்",
+help:"சாரதி உதவி",
+back:"← சாரதி முதன்மைப் பக்கம்",
+login:"சாரதி உள்நுழைவு",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+denied:"MY RIDE SOS அனுப்ப அங்கீகரிக்கப்பட்ட சாரதி கணக்கு தேவை. மேலுள்ள அவசர எண்களை பயன்படுத்தலாம்.",
+offline:"இணைய இணைப்பு இல்லை. தேவைப்பட்டால் அவசர சேவைகளை நேரடியாக அழைக்கவும்.",
+error:"அமைப்புடன் இணைக்க முடியவில்லை.",
+emergencyMessage:"MY RIDE அவசர உதவி கோரிக்கை",
+meters:"மீட்டர்",
+locationNotShared:"GPS இருப்பிடம் பகிரப்படவில்லை"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+// PAGE LINKS
+
+const links={
+
+backButton:"driver-dashboard.html",
+loginLink:"driver-login.html",
+feedbackLink:"driver-feedback.html",
+helpLink:"driver-help.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+
+let generation=0;
+
+let driverUnsubscribe=null;
+let supportUnsubscribe=null;
+let incidentUnsubscribe=null;
+
+let supportSettings=null;
+let currentLocation=null;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+let sending=false;
+let checkingSession=false;
+
+let pendingRequest=null;
+let confirmedDraft=null;
+
+let activeIncidentId=null;
+
+const EMERGENCY_TYPES=[
+
+"accident",
+"medical",
+"threat",
+"vehicle_breakdown",
+"passenger_emergency",
+"other"
+
+];
+
+const TYPE_LABELS={
+
+accident:"accident",
+medical:"medical",
+threat:"threat",
+vehicle_breakdown:"breakdown",
+passenger_emergency:"passengerEmergency",
+other:"other"
+
+};
+
+const INCIDENT_STATUSES=[
+
+"new",
+"acknowledged",
+"in_progress",
+"resolved",
+"closed"
+
+];
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function normalizePhone(value){
+
+if(typeof value!=="string")return null;
+
+const phone=value.replace(/[\s()-]/g,"");
+
+return /^\+[1-9]\d{7,14}$/.test(phone)
+
+?phone:null;
+
+}
+
+function formatDate(ms){
+
+if(!Number.isFinite(ms)
+
+||ms<=0
+
+||ms>8640000000000000){
+
+return "—";
+
+}
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(ms));
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// GPS LOCATION VALIDATION
+
+function validLocation(data,maxAge=60000){
+
+return data
+
+&&Number.isFinite(data.lat)
+
+&&Number.isFinite(data.lon)
+
+&&Number.isFinite(data.accuracy)
+
+&&Number.isFinite(data.capturedAtMs)
+
+&&data.lat>=-90
+
+&&data.lat<=90
+
+&&data.lon>=-180
+
+&&data.lon<=180
+
+&&data.accuracy>=0
+
+&&data.capturedAtMs<=Date.now()+5000
+
+&&Date.now()-data.capturedAtMs<=maxAge;
+
+}
+
+function positionData(position){
+
+return {
+
+lat:position.coords.latitude,
+
+lon:position.coords.longitude,
+
+accuracy:position.coords.accuracy,
+
+capturedAtMs:position.timestamp
+
+};
+
+}
+
+function mapUrl(data){
+
+return "https://www.google.com/maps/search/?api=1&query="
+
++encodeURIComponent(
+
+data.lat+","+data.lon
+
+);
+
+}
+
+function displayLocation(data){
+
+if(!validLocation(data))return;
+
+currentLocation=data;
+
+$("latitude").textContent=
+
+data.lat.toFixed(6);
+
+$("longitude").textContent=
+
+data.lon.toFixed(6);
+
+$("accuracy").textContent=
+
+Math.round(data.accuracy)+" "+t.meters;
+
+$("locationTime").textContent=
+
+formatDate(data.capturedAtMs);
+
+$("mapButton").href=mapUrl(data);
+
+$("locationDetails").hidden=false;
+
+$("gpsStatus").textContent=t.locationReady;
+
+}
+
+function clearLocation(){
+
+currentLocation=null;
+
+$("locationDetails").hidden=true;
+
+$("mapButton").removeAttribute("href");
+
+$("latitude").textContent="—";
+
+$("longitude").textContent="—";
+
+$("accuracy").textContent="—";
+
+$("locationTime").textContent="—";
+
+}
+
+// GET CURRENT GPS
+
+function getCurrentLocation(){
+
+return new Promise((resolve,reject)=>{
+
+if(!navigator.geolocation){
+
+reject(new Error("GPS unsupported"));
+
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+position=>{
+
+const data=positionData(position);
+
+if(!validLocation(data)){
+
+reject(new Error("Invalid location"));
+
+return;
+
+}
+
+resolve(data);
+
+},
+
+reject,
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:12000
+
+}
+
+);
+
+});
+
+}
+
+$("gpsButton").onclick=async()=>{
+
+if(!navigator.geolocation){
+
+$("gpsStatus").textContent=
+
+t.locationUnsupported;
+
+return;
+
+}
+
+$("gpsButton").disabled=true;
+
+$("gpsStatus").textContent=t.locating;
+
+try{
+
+const data=await getCurrentLocation();
+
+displayLocation(data);
+
+}catch(e){
+
+clearLocation();
+
+$("gpsStatus").textContent=
+
+t.locationFailed;
+
+}finally{
+
+$("gpsButton").disabled=false;
+
+}
+
+};
+
+// COPY LOCATION
+
+$("copyLocation").onclick=async()=>{
+
+if(!validLocation(currentLocation)){
+
+$("gpsStatus").textContent=t.locationOld;
+
+return;
+
+}
+
+try{
+
+await navigator.clipboard.writeText(
+
+mapUrl(currentLocation)
+
+);
+
+$("gpsStatus").textContent=t.copied;
+
+}catch(e){
+
+$("gpsStatus").textContent=t.copyFailed;
+
+}
+
+};
+
+// GPS CONTINUITY FOR ONLINE DRIVERS
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const data=positionData(position);
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(
+
+driver.availability
+
+)
+
+||!validLocation(data,30000)
+
+||data.accuracy>100
+
+||data.lat<5.85
+
+||data.lat>9.9
+
+||data.lon<79.5
+
+||data.lon>82
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+
+"updateDriverLocation",
+
+data
+
+);
+
+}catch(e){
+
+// Backend must expire stale GPS records.
+
+}finally{
+
+gpsSending=false;
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// CLEAR ADMIN CONTACTS
+
+function clearContacts(){
+
+supportSettings=null;
+
+$("adminPhone").textContent="—";
+
+$("adminWhatsApp").textContent="—";
+
+$("callAdmin").hidden=true;
+
+$("callAdmin").removeAttribute("href");
+
+$("whatsappAdmin").disabled=true;
+
+$("adminStatus").textContent="";
+
+}
+
+function stopSupportListener(){
+
+if(supportUnsubscribe){
+
+supportUnsubscribe();
+
+supportUnsubscribe=null;
+
+}
+
+clearContacts();
+
+}
+
+// ADMIN CONTACT SETTINGS
+
+function subscribeSupport(){
+
+stopSupportListener();
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+supportUnsubscribe=onSnapshot(
+
+doc(db,"publicSettings","driverSupport"),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession()
+
+||!driver)return;
+
+clearContacts();
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()){
+
+$("adminStatus").textContent=
+
+t.notConfigured;
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(data.enabled!==true){
+
+$("adminStatus").textContent=
+
+t.notConfigured;
+
+return;
+
+}
+
+supportSettings=data;
+
+const phone=normalizePhone(data.phone);
+
+const whatsapp=normalizePhone(data.whatsapp);
+
+if(data.callEnabled===true&&phone){
+
+$("adminPhone").textContent=phone;
+
+$("callAdmin").href="tel:"+phone;
+
+$("callAdmin").hidden=false;
+
+}
+
+if(data.whatsappEnabled===true&&whatsapp){
+
+$("adminWhatsApp").textContent=whatsapp;
+
+$("whatsappAdmin").disabled=false;
+
+}
+
+if($("callAdmin").hidden
+
+&&$("whatsappAdmin").disabled){
+
+$("adminStatus").textContent=
+
+t.notConfigured;
+
+}
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+clearContacts();
+
+$("adminStatus").textContent=
+
+t.contactError;
+
+}
+
+);
+
+}
+
+// SOS INCIDENT STATUS
+
+function stopIncidentListener(){
+
+if(incidentUnsubscribe){
+
+incidentUnsubscribe();
+
+incidentUnsubscribe=null;
+
+}
+
+activeIncidentId=null;
+
+$("incidentPanel").hidden=true;
+
+$("incidentId").textContent="—";
+
+$("incidentStatus").textContent="—";
+
+$("submittedTime").textContent="—";
+
+$("adminReply").textContent="—";
+
+$("incidentNote").textContent="";
+
+}
+
+function displayIncident(data){
+
+if(!data
+
+||data.driverUid!==uid
+
+||!validId(data.incidentId)
+
+||!INCIDENT_STATUSES.includes(data.status)){
+
+return false;
+
+}
+
+activeIncidentId=data.incidentId;
+
+$("incidentId").textContent=
+
+data.incidentId;
+
+$("incidentStatus").textContent=
+
+t[data.status];
+
+$("incidentStatus").className=
+
+data.status==="resolved"
+
+||data.status==="closed"
+
+?"green":"yellow";
+
+$("submittedTime").textContent=
+
+formatDate(data.createdAt?.toMillis?.());
+
+$("adminReply").textContent=
+
+typeof data.adminReply==="string"
+
+&&data.adminReply.length<=4000
+
+&&data.adminReply.trim()
+
+?data.adminReply
+
+:t.waiting;
+
+$("incidentNote").textContent=
+
+t.incidentWarning;
+
+$("incidentPanel").hidden=false;
+
+return true;
+
+}
+
+function subscribeIncident(){
+
+stopIncidentListener();
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+incidentUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"drivers",
+
+uid,
+
+"sosIncidents",
+
+"latest"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession()
+
+||!driver)return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+$("incidentStatus").textContent="—";
+
+$("adminReply").textContent="—";
+
+$("incidentNote").textContent=
+
+t.incidentUnavailable;
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+$("incidentPanel").hidden=true;
+
+activeIncidentId=null;
+
+return;
+
+}
+
+if(!displayIncident(snapshot.data())){
+
+$("incidentPanel").hidden=true;
+
+activeIncidentId=null;
+
+}
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+$("incidentStatus").textContent="—";
+
+$("adminReply").textContent="—";
+
+$("incidentNote").textContent=
+
+t.incidentUnavailable;
+
+}
+
+);
+
+}
+
+$("refreshIncident").onclick=()=>{
+
+if(validSession()&&driver){
+
+subscribeIncident();
+
+}
+
+};
+
+// SOS FORM CONTROLS
+
+function updateControls(){
+
+const enabled=
+
+validSession()
+
+&&driver!==null
+
+&&!sending
+
+&&confirmedDraft===null;
+
+[
+
+"emergencyType",
+
+"description",
+
+"locationConsent",
+
+"sosButton"
+
+].forEach(id=>{
+
+$(id).disabled=!enabled;
+
+});
+
+$("confirmSOS").disabled=sending;
+
+$("cancelSOS").disabled=sending;
+
+}
+
+function closeConfirmation(){
+
+confirmedDraft=null;
+
+$("confirmPanel").hidden=true;
+
+updateControls();
+
+}
+
+// FIRST SOS CONFIRMATION
+
+$("sosForm").onsubmit=event=>{
+
+event.preventDefault();
+
+if(!validSession()
+
+||!driver
+
+||sending)return;
+
+const type=$("emergencyType").value;
+
+const description=
+
+$("description").value.trim();
+
+if(!EMERGENCY_TYPES.includes(type)
+
+||description.length>1000){
+
+$("sosStatus").textContent=t.invalid;
+
+return;
+
+}
+
+confirmedDraft={
+
+type,
+
+description,
+
+shareLocation:$("locationConsent").checked
+
+};
+
+$("confirmPanel").hidden=false;
+
+$("sosStatus").textContent="";
+
+updateControls();
+
+$("confirmPanel").scrollIntoView({
+
+behavior:"smooth",
+
+block:"center"
+
+});
+
+};
+
+$("cancelSOS").onclick=()=>{
+
+if(!sending){
+
+closeConfirmation();
+
+}
+
+};
+
+// SEND SOS TO BACKEND
+
+$("confirmSOS").onclick=async()=>{
+
+if(!validSession()
+
+||!driver
+
+||!confirmedDraft
+
+||sending)return;
+
+const currentGeneration=generation;
+
+const draft={...confirmedDraft};
+
+sending=true;
+
+updateControls();
+
+$("sosStatus").textContent=t.sending;
+
+try{
+
+let gps=null;
+
+if(draft.shareLocation){
+
+if(validLocation(currentLocation,30000)){
+
+gps={...currentLocation};
+
+}else{
+
+try{
+
+gps=await getCurrentLocation();
+
+if(currentGeneration!==generation)return;
+
+displayLocation(gps);
+
+}catch(e){
+
+gps=null;
+
+}
+
+}
+
+if(currentGeneration!==generation
+
+||!validSession()
+
+||!driver)return;
+
+if(!gps&&!confirm(t.noLocation)){
+
+return;
+
+}
+
+}
+
+const fingerprint=JSON.stringify([
+
+draft.type,
+
+draft.description,
+
+draft.shareLocation,
+
+lang
+
+]);
+
+if(!pendingRequest
+
+||pendingRequest.fingerprint!==fingerprint){
+
+pendingRequest={
+
+fingerprint,
+
+requestId:crypto.randomUUID(),
+
+location:gps
+
+};
+
+}
+
+const result=await serverCall(
+
+"submitDriverSOS",
+
+{
+
+requestId:pendingRequest.requestId,
+
+type:draft.type,
+
+description:draft.description,
+
+locationConsent:draft.shareLocation,
+
+location:pendingRequest.location,
+
+language:lang
+
+}
+
+);
+
+if(currentGeneration!==generation
+
+||!driver)return;
+
+if(result?.accepted!==true
+
+||!validId(result.incidentId)){
+
+throw new Error("SOS not confirmed");
+
+}
+
+activeIncidentId=result.incidentId;
+
+pendingRequest=null;
+
+$("sosForm").reset();
+
+$("incidentId").textContent=
+
+result.incidentId;
+
+$("incidentStatus").textContent=t.new;
+
+$("incidentStatus").className="yellow";
+
+$("submittedTime").textContent=
+
+formatDate(result.createdAtMs);
+
+$("adminReply").textContent=t.waiting;
+
+$("incidentNote").textContent=
+
+t.incidentWarning;
+
+$("incidentPanel").hidden=false;
+
+$("sosStatus").textContent=t.submitted;
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("sosStatus").textContent=t.sendFailed;
+
+}finally{
+
+if(currentGeneration===generation){
+
+sending=false;
+
+closeConfirmation();
+
+updateControls();
+
+}
+
+}
+
+};
+
+// ADMIN WHATSAPP MESSAGE
+
+$("whatsappAdmin").onclick=()=>{
+
+if(!validSession()
+
+||!driver
+
+||supportSettings?.enabled!==true
+
+||supportSettings?.whatsappEnabled!==true){
+
+return;
+
+}
+
+const phone=normalizePhone(
+
+supportSettings.whatsapp
+
+);
+
+if(!phone)return;
+
+const lines=[
+
+"MY RIDE SRI LANKA",
+
+t.emergencyMessage,
+
+"",
+
+t.driverName+": "+driver.fullName,
+
+"Driver ID: "+driver.driverId
+
+];
+
+if(typeof driver.vehicleNumber==="string"){
+
+lines.push(
+
+t.vehicleNumber+": "+driver.vehicleNumber
+
+);
+
+}
+
+if(validId(driver.activeBookingId)){
+
+lines.push(
+
+"Booking ID: "+driver.activeBookingId
+
+);
+
+}
+
+if(validId(activeIncidentId)){
+
+lines.push(
+
+"SOS ID: "+activeIncidentId
+
+);
+
+}
+
+const type=$("emergencyType").value;
+
+if(EMERGENCY_TYPES.includes(type)){
+
+lines.push(
+
+t.emergencyType+": "+t[TYPE_LABELS[type]]
+
+);
+
+}
+
+const description=
+
+$("description").value.trim();
+
+if(description){
+
+lines.push(
+
+t.description+": "+description.slice(0,1000)
+
+);
+
+}
+
+if($("locationConsent").checked
+
+&&validLocation(currentLocation)){
+
+lines.push(
+
+"",
+
+t.currentLocation+":",
+
+mapUrl(currentLocation),
+
+t.accuracy+": "+
+
+Math.round(currentLocation.accuracy)
+
++" "+t.meters
+
+);
+
+}else{
+
+lines.push(t.locationNotShared);
+
+}
+
+const url=
+
+"https://wa.me/"
+
++phone.slice(1)
+
++"?text="
+
++encodeURIComponent(lines.join("\n"));
+
+window.location.assign(url);
+
+};
+
+// ADMIN CALL VALIDATION
+
+$("callAdmin").addEventListener(
+
+"click",
+
+event=>{
+
+if(!validSession()
+
+||!driver
+
+||supportSettings?.enabled!==true
+
+||supportSettings?.callEnabled!==true
+
+||!normalizePhone(supportSettings.phone)){
+
+event.preventDefault();
+
+}
+
+}
+
+);
+
+// CLEAR PRIVATE DRIVER INFORMATION
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+sending=false;
+
+pendingRequest=null;
+
+confirmedDraft=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+stopSupportListener();
+
+stopIncidentListener();
+
+stopGps();
+
+clearLocation();
+
+$("gpsStatus").textContent="";
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("vehicleNumber").textContent="—";
+
+$("activeBooking").textContent="—";
+
+$("sosForm").reset();
+
+$("sosStatus").textContent="";
+
+$("confirmPanel").hidden=true;
+
+$("content").hidden=true;
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps();
+
+stopSupportListener();
+
+stopIncidentListener();
+
+closeConfirmation();
+
+$("sosForm").reset();
+
+pendingRequest=null;
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||typeof data.fullName!=="string"
+
+||!data.fullName.trim()
+
+||!validId(data.driverId)){
+
+denyAccess();
+
+return;
+
+}
+
+const firstLoad=driver===null;
+
+driver=data;
+
+$("driverName").textContent=
+
+data.fullName;
+
+$("driverId").textContent=
+
+data.driverId;
+
+$("vehicleNumber").textContent=
+
+typeof data.vehicleNumber==="string"
+
+?data.vehicleNumber:"—";
+
+$("activeBooking").textContent=
+
+validId(data.activeBookingId)
+
+?data.activeBookingId
+
+:t.noBooking;
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(
+
+data.availability
+
+)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(firstLoad||!supportUnsubscribe){
+
+subscribeSupport();
+
+}
+
+if(firstLoad||!incidentUnsubscribe){
+
+subscribeIncident();
+
+}
+
+updateControls();
+
+status("");
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSOSSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+
+||!driver
+
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyDriverSOSSession"
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+
+||result.uid!==uid
+
+||result.status!=="approved"
+
+||result.activationComplete!==true){
+
+denyAccess();
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+checkingSession=false;
+
+}
+
+},60000);
+
+// GPS EXPIRY MONITORING
+
+setInterval(()=>{
+
+if(currentLocation
+
+&&!validLocation(currentLocation)){
+
+clearLocation();
+
+$("gpsStatus").textContent=t.locationOld;
+
+}
+
+},5000);
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
