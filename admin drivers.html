@@ -1,0 +1,4255 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Management</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+header{
+text-align:center;
+padding:15px 0;
+}
+
+h1{
+color:#FFD600;
+font-size:38px;
+margin:8px 0;
+}
+
+.country{
+color:#FFD600;
+letter-spacing:5px;
+font-size:13px;
+}
+
+h2{
+font-size:23px;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.statsGrid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border:1px solid #444;
+border-radius:10px;
+padding:14px;
+}
+
+.stat span{
+display:block;
+font-size:13px;
+color:#CCC;
+line-height:1.7;
+}
+
+.stat strong{
+display:block;
+font-size:25px;
+color:#FFD600;
+margin-top:10px;
+}
+
+input,select,textarea{
+width:100%;
+background:#292929;
+color:#fff;
+border:1px solid #666;
+border-radius:8px;
+padding:13px;
+font-size:16px;
+margin:8px 0 15px;
+font-family:inherit;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+label{
+display:block;
+font-size:14px;
+line-height:1.8;
+}
+
+.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-weight:bold;
+font-size:14px;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.success{
+background:#15803D;
+color:#fff;
+}
+
+.danger{
+background:#A51D2D;
+color:#fff;
+}
+
+.driverCard,.record{
+background:#292929;
+border:1px solid #555;
+border-radius:12px;
+padding:14px;
+margin:12px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+border-bottom:1px solid #444;
+padding:11px 0;
+font-size:14px;
+line-height:1.8;
+}
+
+.row strong{
+max-width:60%;
+text-align:right;
+overflow-wrap:anywhere;
+white-space:pre-wrap;
+}
+
+.green{
+color:#4ADE80!important;
+}
+
+.red{
+color:#FF6464!important;
+}
+
+.yellow{
+color:#FFD600!important;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:14px;
+margin:12px 0;
+line-height:1.8;
+}
+
+.notice{
+background:#302C17;
+border:1px solid #FFD600;
+border-radius:10px;
+padding:14px;
+margin:12px 0;
+line-height:1.8;
+}
+
+.note{
+color:#BBB;
+font-size:13px;
+line-height:1.8;
+}
+
+.languageGrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+.languageButton{
+background:#292929;
+color:#FFD600;
+border:1px solid #FFD600;
+border-radius:7px;
+padding:12px 4px;
+cursor:pointer;
+}
+
+.languageButton.selected{
+background:#FFD600;
+color:#111;
+}
+
+.checkItem{
+display:flex;
+align-items:flex-start;
+gap:12px;
+padding:13px;
+background:#292929;
+border:1px solid #555;
+border-radius:8px;
+margin:9px 0;
+line-height:1.8;
+}
+
+.checkItem input{
+width:21px;
+height:21px;
+margin:3px 0 0;
+flex-shrink:0;
+accent-color:#FFD600;
+}
+
+#status,#listStatus,#detailStatus,
+#actionStatus,#historyStatus{
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#999;
+font-size:12px;
+padding:25px 0;
+}
+
+[hidden]{
+display:none!important;
+}
+
+@media(min-width:700px){
+
+.statsGrid{
+grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<header>
+
+<h1>MY RIDE</h1>
+
+<div class="country">SRI LANKA</div>
+
+<h2 data-t="heading">
+Driver Management
+</h2>
+
+</header>
+
+<div class="languageGrid">
+
+<button class="languageButton"
+data-lang="si">සිංහල</button>
+
+<button class="languageButton"
+data-lang="en">English</button>
+
+<button class="languageButton"
+data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+class="yellow"
+role="status"
+aria-live="polite">
+
+Checking owner authorization...
+
+</p>
+
+<section id="deniedPanel"
+class="panel" hidden>
+
+<div class="warning"
+data-t="denied"></div>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+<button id="retryButton"
+class="action secondary"
+data-t="refresh"></button>
+
+</section>
+
+<div id="content" hidden>
+
+<a id="dashboardLink"
+class="action secondary"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="overview"></h3>
+
+<div id="statsGrid"
+class="statsGrid"></div>
+
+<p id="updatedAt"
+class="note"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="searchDrivers"></h3>
+
+<form id="searchForm">
+
+<label for="searchText"
+data-t="searchLabel"></label>
+
+<input id="searchText"
+type="search"
+maxlength="100"
+autocomplete="off">
+
+<label for="statusFilter"
+data-t="accountStatus"></label>
+
+<select id="statusFilter">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="pending"
+data-t="pending"></option>
+
+<option value="approved"
+data-t="approved"></option>
+
+<option value="activated"
+data-t="activated"></option>
+
+<option value="rejected"
+data-t="rejected"></option>
+
+<option value="suspended"
+data-t="suspended"></option>
+
+<option value="blocked"
+data-t="blocked"></option>
+
+</select>
+
+<label for="vehicleFilter"
+data-t="vehicleType"></label>
+
+<select id="vehicleFilter">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="bike"
+data-t="bike"></option>
+
+<option value="tuk"
+data-t="tuk"></option>
+
+<option value="car"
+data-t="car"></option>
+
+<option value="van"
+data-t="van"></option>
+
+</select>
+
+<label for="districtFilter"
+data-t="district"></label>
+
+<select id="districtFilter"></select>
+
+<button id="searchButton"
+type="submit"
+class="action"
+data-t="search"></button>
+
+<button id="clearButton"
+type="button"
+class="action secondary"
+data-t="clear"></button>
+
+</form>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="driverList"></h3>
+
+<p id="listStatus"
+class="note"
+role="status"></p>
+
+<div id="driverList"></div>
+
+<button id="loadMore"
+class="action secondary"
+data-t="loadMore"
+hidden></button>
+
+</section>
+
+<section id="details"
+class="panel" hidden>
+
+<h3 data-t="driverDetails"></h3>
+
+<button id="closeDetails"
+class="action secondary"
+data-t="close"></button>
+
+<p id="detailStatus"
+role="status"></p>
+
+<div id="personalDetails"></div>
+
+<div id="vehiclePanel" hidden>
+
+<h3 data-t="vehicleDetails"></h3>
+
+<div id="vehicleDetails"></div>
+
+<h3 data-t="documentDetails"></h3>
+
+<div id="documentDetails"></div>
+
+<h3 data-t="consentDetails"></h3>
+
+<div id="consentDetails"></div>
+
+<h3 data-t="systemDetails"></h3>
+
+<div id="systemDetails"></div>
+
+</div>
+
+<div id="contactButtons" hidden>
+
+<a id="callDriver"
+class="action success"
+data-t="call"></a>
+
+<a id="whatsappDriver"
+class="action success"
+target="_blank"
+rel="noopener noreferrer"
+data-t="whatsapp"></a>
+
+</div>
+
+<section id="verificationPanel" hidden>
+
+<h3 data-t="verification"></h3>
+
+<div class="notice"
+data-t="verificationNote"></div>
+
+<div id="checklist"></div>
+
+<button id="saveChecklist"
+class="action"
+data-t="saveChecklist"></button>
+
+</section>
+
+<section id="accountControl" hidden>
+
+<h3 data-t="accountControl"></h3>
+
+<div class="notice"
+data-t="controlNote"></div>
+
+<button id="approveButton"
+class="action success"
+data-t="approve"
+hidden></button>
+
+<button id="rejectButton"
+class="action danger"
+data-t="reject"
+hidden></button>
+
+<button id="suspendButton"
+class="action danger"
+data-t="suspend"
+hidden></button>
+
+<button id="blockButton"
+class="action danger"
+data-t="block"
+hidden></button>
+
+<button id="restoreButton"
+class="action success"
+data-t="restore"
+hidden></button>
+
+<button id="reviewButton"
+class="action secondary"
+data-t="reviewAgain"
+hidden></button>
+
+<form id="accountForm" hidden>
+
+<h3 id="actionTitle"></h3>
+
+<label for="reason"
+data-t="reason"></label>
+
+<textarea id="reason"
+minlength="10"
+maxlength="500"
+required></textarea>
+
+<p id="confirmationInstruction"
+class="note"></p>
+
+<input id="confirmationText"
+maxlength="20"
+autocomplete="off"
+required>
+
+<button id="confirmAction"
+type="submit"
+class="action danger"
+data-t="confirm"></button>
+
+<button id="cancelAction"
+type="button"
+class="action secondary"
+data-t="cancel"></button>
+
+</form>
+
+</section>
+
+<section id="activationPanel" hidden>
+
+<h3 data-t="activation"></h3>
+
+<div id="activationDetails"></div>
+
+<div class="notice"
+data-t="activationNote"></div>
+
+<button id="activationButton"
+class="action"
+data-t="sendActivation"></button>
+
+</section>
+
+<p id="actionStatus"
+role="status"
+aria-live="polite"></p>
+
+<section id="historyPanel" hidden>
+
+<h3 data-t="history"></h3>
+
+<button id="historyButton"
+class="action secondary"
+data-t="viewHistory"></button>
+
+<p id="historyStatus"
+class="note"></p>
+
+<div id="historyRecords"></div>
+
+<button id="moreHistory"
+class="action secondary"
+data-t="loadMore"
+hidden></button>
+
+</section>
+
+</section>
+
+<button id="refreshButton"
+class="action"
+data-t="refresh"></button>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const LANGUAGES=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_admin_language")
+||"si";
+
+}catch(e){}
+
+const params=new URLSearchParams(location.search);
+
+let lang=
+
+LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+// LANGUAGE TRANSLATIONS
+
+const translations={
+
+si:{
+
+heading:"රියදුරු කළමනාකරණය",
+overview:"රියදුරු සංඛ්‍යාලේඛන",
+totalDrivers:"මුළු රියදුරන්",
+pending:"අනුමැතිය බලාපොරොත්තුවෙන්",
+approved:"අනුමත කර ඇත",
+activated:"ගිණුම සක්‍රියයි",
+rejected:"ප්‍රතික්ෂේප කර ඇත",
+suspended:"අත්හිටුවා ඇත",
+blocked:"අවහිර කර ඇත",
+online:"Online",
+offline:"Offline",
+busy:"හයර් එකක සිටී",
+all:"සියල්ල",
+searchDrivers:"රියදුරන් සොයන්න",
+searchLabel:"නම / Driver ID / NIC / දුරකථන අංකය",
+accountStatus:"ගිණුමේ තත්ත්වය",
+search:"සොයන්න",
+clear:"සෙවුම ඉවත් කරන්න",
+driverList:"රියදුරු ලැයිස්තුව",
+driverDetails:"රියදුරු විස්තර",
+driverId:"රියදුරු ID",
+fullName:"සම්පූර්ණ නම",
+nic:"ජාතික හැඳුනුම්පත් අංකය",
+dob:"උපන් දිනය",
+phone:"දුරකථන අංකය",
+whatsappNumber:"WhatsApp අංකය",
+address:"ස්ථිර ලිපිනය",
+district:"දිස්ත්‍රික්කය",
+licenceNumber:"රියදුරු බලපත්‍ර අංකය",
+licenceExpiry:"රියදුරු බලපත්‍ර කල් ඉකුත් වන දිනය",
+experience:"රියදුරු පළපුරුද්ද",
+vehicleType:"වාහන වර්ගය",
+vehicleNumber:"වාහන ලියාපදිංචි අංකය",
+vehicleModel:"වාහන මාදිලිය",
+vehicleColor:"වාහනයේ වර්ණය",
+capacity:"මගී ධාරිතාව",
+insuranceNumber:"රක්ෂණ අංකය",
+insuranceExpiry:"රක්ෂණ කල් ඉකුත් වන දිනය",
+revenueExpiry:"ආදායම් බලපත්‍ර කල් ඉකුත් වන දිනය",
+serviceArea:"සේවා ප්‍රදේශය",
+workingTime:"සේවා කාලය",
+vehicleDetails:"වාහනයේ විස්තර",
+documentDetails:"බලපත්‍ර සහ රක්ෂණ විස්තර",
+consentDetails:"රියදුරු එකඟතා",
+systemDetails:"පද්ධති විස්තර",
+truthConsent:"නිවැරදි දත්ත ලබාදුන් බවට එකඟතාව",
+termsConsent:"රියදුරු නීතිවලට එකඟතාව",
+commissionConsent:"කොමිස් මුදලට එකඟතාව",
+gpsConsent:"GPS අවසරය",
+whatsappConsent:"WhatsApp පණිවිඩ අවසරය",
+phoneVerified:"දුරකථන අංකය තහවුරු කිරීම",
+documentsValid:"ලේඛන වලංගුභාවය",
+activationComplete:"ගිණුම සක්‍රිය කිරීම",
+registeredAt:"ලියාපදිංචි දිනය",
+acceptedAt:"එකඟතා ලබාදුන් දිනය",
+termsVersion:"නීති සංස්කරණය",
+language:"භාෂාව",
+availability:"සේවා තත්ත්වය",
+statusReason:"ගිණුමේ තත්ත්වයට හේතුව",
+view:"විස්තර බලන්න",
+close:"විස්තර වසන්න",
+call:"රියදුරුට අමතන්න",
+whatsapp:"WhatsApp පණිවිඩයක් යවන්න",
+verification:"රියදුරු අනුමැතිය සඳහා පරීක්ෂාව",
+verificationNote:"මුල් ලේඛන සහ සැබෑ විස්තර පරීක්ෂා කිරීමෙන් පසුව පමණක් අදාළ කොටු සලකුණු කරන්න.",
+checkNic:"ජාතික හැඳුනුම්පත පරීක්ෂා කර ඇත",
+checkLicence:"රියදුරු බලපත්‍රය පරීක්ෂා කර ඇත",
+checkVehicle:"වාහන ලියාපදිංචිය සහ මගී ධාරිතාව පරීක්ෂා කර ඇත",
+checkInsurance:"මගී ප්‍රවාහන රක්ෂණය පරීක්ෂා කර ඇත",
+checkRevenue:"ආදායම් බලපත්‍රය පරීක්ෂා කර ඇත",
+checkTerms:"නීති සහ කොමිස් එකඟතා පරීක්ෂා කර ඇත",
+saveChecklist:"පරීක්ෂණ වාර්තාව සුරකින්න",
+accountControl:"රියදුරු ගිණුම් පාලනය",
+controlNote:"අත්හිටුවීම සහ අවහිර කිරීම මගින් නව හයර් සහ අනවසර ප්‍රවේශ නතර කළ යුතුය. ක්‍රියාත්මක ගමනක අත්‍යවශ්‍ය ආරක්ෂක සේවා පවත්වාගත යුතුය.",
+approve:"රියදුරු අනුමත කරන්න",
+reject:"අයදුම්පත ප්‍රතික්ෂේප කරන්න",
+suspend:"ගිණුම අත්හිටුවන්න",
+block:"ගිණුම අවහිර කරන්න",
+restore:"ගිණුම නැවත අනුමත කරන්න",
+reviewAgain:"නැවත පරීක්ෂාවට යොමු කරන්න",
+reason:"තීරණයට හේතුව",
+confirm:"තහවුරු කරන්න",
+cancel:"අවලංගු කරන්න",
+activation:"රියදුරු ගිණුම සක්‍රිය කිරීම",
+activationNote:"අනුමත කළ නමුත් සක්‍රිය නොකළ ගිණුම් සඳහා පමණක් එක්වරක් භාවිත කළ හැකි කල් ඉකුත් වන Link එකක් Server එකෙන් නිකුත් කළ යුතුය.",
+sendActivation:"සක්‍රිය කිරීමේ Link එක යැවීමට ඉල්ලන්න",
+deliveryStatus:"Link යැවීමේ තත්ත්වය",
+expiresAt:"Link කල් ඉකුත් වන වේලාව",
+notIssued:"නිකුත් කර නැත",
+queued:"යැවීමට පෝලිමේ",
+sent:"යවා ඇත",
+delivered:"ලැබී ඇත",
+failed:"යැවීම අසාර්ථකයි",
+expired:"කල් ඉකුත් වී ඇත",
+used:"භාවිත කර ඇත",
+history:"ගිණුම් තීරණ ඉතිහාසය",
+viewHistory:"තීරණ වාර්තා බලන්න",
+previousStatus:"පෙර තත්ත්වය",
+newStatus:"නව තත්ත්වය",
+date:"දිනය සහ වේලාව",
+action:"කාර්යය",
+loadMore:"තවත් වාර්තා බලන්න",
+refresh:"යාවත්කාලීන කරන්න",
+back:"Admin Dashboard වෙත",
+login:"Owner Admin Login",
+denied:"හිමිකරුගේ ප්‍රවේශ අවසරය තහවුරු කර නොමැත.",
+checking:"ආරක්ෂක අවසර පරීක්ෂා කරමින්...",
+verified:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+loading:"Server දත්ත ලබාගනිමින්...",
+error:"Server දත්ත ලබාගත නොහැක.",
+offlineError:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+noRecords:"වාර්තා හමු නොවීය.",
+updated:"අවසන් යාවත්කාලීන කිරීම",
+yes:"ඔව්",
+no:"නැහැ",
+day:"දිවා",
+night:"රාත්‍රී",
+both:"දිවා සහ රාත්‍රී",
+bike:"Scooter / Bike",
+tuk:"ත්‍රීරෝද රථය",
+car:"මෝටර් රථය",
+van:"වෑන් රථය",
+si:"සිංහල",
+en:"English",
+ta:"தமிழ்",
+years:"වසර",
+invalidReason:"අක්ෂර 10–500 අතර හේතුවක් ඇතුළත් කරන්න.",
+reauth:"Google ගිණුම නැවත තහවුරු කරන්න.",
+actionSuccess:"Server එක වෙනස් කිරීම තහවුරු කර ඇත.",
+actionError:"වෙනස් කිරීම තහවුරු කළ නොහැක. නැවත පරීක්ෂා කරන්න.",
+checklistRequired:"සියලුම අවශ්‍ය පරීක්ෂණ සම්පූර්ණ කර සුරකින්න.",
+invalidDocuments:"අවශ්‍ය ලේඛන හෝ එකඟතා වලංගු නොවේ.",
+expiredDocument:"කල් ඉකුත් වී ඇත",
+expiringDocument:"දින 30ක් ඇතුළත කල් ඉකුත් වේ",
+typeConfirm:"තහවුරු කිරීමට මෙම වචනය ඇතුළත් කරන්න: ",
+activationQueued:"Link යැවීමේ ඉල්ලීම Server එක පිළිගෙන ඇත. යැවීමේ තත්ත්වය පරීක්ෂා කරන්න.",
+activationUnavailable:"WhatsApp අවසරය නොමැති නිසා ස්වයංක්‍රීයව Link යැවිය නොහැක.",
+checklistSaved:"පරීක්ෂණ වාර්තාව සුරකින ලදී.",
+checklistAction:"ලේඛන පරීක්ෂාව",
+activationAction:"සක්‍රිය කිරීමේ Link ඉල්ලීම",
+unknown:"තහවුරු කර නැත"
+
+},
+
+en:{
+
+heading:"Driver Management",
+overview:"Driver Statistics",
+totalDrivers:"Total Drivers",
+pending:"Pending Approval",
+approved:"Approved",
+activated:"Activated",
+rejected:"Rejected",
+suspended:"Suspended",
+blocked:"Blocked",
+online:"Online",
+offline:"Offline",
+busy:"On a Ride",
+all:"All",
+searchDrivers:"Search Drivers",
+searchLabel:"Name / Driver ID / NIC / Phone Number",
+accountStatus:"Account Status",
+search:"Search",
+clear:"Clear Search",
+driverList:"Driver List",
+driverDetails:"Driver Details",
+driverId:"Driver ID",
+fullName:"Full Name",
+nic:"National Identity Card Number",
+dob:"Date of Birth",
+phone:"Phone Number",
+whatsappNumber:"WhatsApp Number",
+address:"Permanent Address",
+district:"District",
+licenceNumber:"Driving Licence Number",
+licenceExpiry:"Driving Licence Expiry",
+experience:"Driving Experience",
+vehicleType:"Vehicle Type",
+vehicleNumber:"Vehicle Registration Number",
+vehicleModel:"Vehicle Model",
+vehicleColor:"Vehicle Colour",
+capacity:"Passenger Capacity",
+insuranceNumber:"Insurance Number",
+insuranceExpiry:"Insurance Expiry",
+revenueExpiry:"Revenue Licence Expiry",
+serviceArea:"Service Area",
+workingTime:"Working Time",
+vehicleDetails:"Vehicle Details",
+documentDetails:"Licence and Insurance Details",
+consentDetails:"Driver Consents",
+systemDetails:"System Details",
+truthConsent:"Truthful Information Declaration",
+termsConsent:"Driver Terms Agreement",
+commissionConsent:"Commission Agreement",
+gpsConsent:"GPS Consent",
+whatsappConsent:"WhatsApp Consent",
+phoneVerified:"Phone Verification",
+documentsValid:"Document Validity",
+activationComplete:"Account Activation",
+registeredAt:"Registration Date",
+acceptedAt:"Consent Acceptance Date",
+termsVersion:"Terms Version",
+language:"Language",
+availability:"Service Availability",
+statusReason:"Account Status Reason",
+view:"View Details",
+close:"Close Details",
+call:"Call Driver",
+whatsapp:"Message Driver on WhatsApp",
+verification:"Driver Approval Checklist",
+verificationNote:"Mark each item only after checking the original documents and actual information.",
+checkNic:"NIC verified",
+checkLicence:"Driving licence verified",
+checkVehicle:"Vehicle registration and capacity verified",
+checkInsurance:"Passenger transport insurance verified",
+checkRevenue:"Revenue licence verified",
+checkTerms:"Terms and commission agreements verified",
+saveChecklist:"Save Verification Checklist",
+accountControl:"Driver Account Control",
+controlNote:"Suspension and blocking must stop new hires and unauthorized access while preserving essential safety services for active rides.",
+approve:"Approve Driver",
+reject:"Reject Application",
+suspend:"Suspend Account",
+block:"Block Account",
+restore:"Restore Approved Account",
+reviewAgain:"Return for Review",
+reason:"Reason for this decision",
+confirm:"Confirm",
+cancel:"Cancel",
+activation:"Driver Account Activation",
+activationNote:"The server must issue an expiring, single-use activation link only for approved, unactivated accounts.",
+sendActivation:"Request Activation Link Delivery",
+deliveryStatus:"Link Delivery Status",
+expiresAt:"Link Expiry",
+notIssued:"Not Issued",
+queued:"Queued",
+sent:"Sent",
+delivered:"Delivered",
+failed:"Failed",
+expired:"Expired",
+used:"Used",
+history:"Account Decision History",
+viewHistory:"View Decision History",
+previousStatus:"Previous Status",
+newStatus:"New Status",
+date:"Date and Time",
+action:"Action",
+loadMore:"Load More",
+refresh:"Refresh",
+back:"Back to Admin Dashboard",
+login:"Owner Admin Login",
+denied:"Owner authorization has not been verified.",
+checking:"Verifying security permissions...",
+verified:"Owner authorization verified.",
+loading:"Loading server data...",
+error:"Unable to retrieve server data.",
+offlineError:"No internet connection.",
+noRecords:"No records found.",
+updated:"Last Updated",
+yes:"Yes",
+no:"No",
+day:"Day",
+night:"Night",
+both:"Day and Night",
+bike:"Scooter / Bike",
+tuk:"Three Wheeler",
+car:"Car",
+van:"Van",
+si:"සිංහල",
+en:"English",
+ta:"தமிழ்",
+years:"Years",
+invalidReason:"Enter a reason containing 10–500 characters.",
+reauth:"Verify your Google account again.",
+actionSuccess:"The server confirmed the change.",
+actionError:"Unable to confirm the change. Refresh and check.",
+checklistRequired:"Complete and save all required verification checks.",
+invalidDocuments:"Required documents or consents are invalid.",
+expiredDocument:"Expired",
+expiringDocument:"Expires within 30 days",
+typeConfirm:"Type this word to confirm: ",
+activationQueued:"The server accepted the delivery request. Check the delivery status.",
+activationUnavailable:"Automatic delivery is unavailable without WhatsApp consent.",
+checklistSaved:"Verification checklist saved.",
+checklistAction:"Document Verification",
+activationAction:"Activation Link Request",
+unknown:"Not Verified"
+
+},
+
+ta:{
+
+heading:"சாரதி நிர்வாகம்",
+overview:"சாரதி புள்ளிவிவரங்கள்",
+totalDrivers:"மொத்த சாரதிகள்",
+pending:"அங்கீகாரம் நிலுவையில்",
+approved:"அங்கீகரிக்கப்பட்டது",
+activated:"செயல்படுத்தப்பட்டது",
+rejected:"நிராகரிக்கப்பட்டது",
+suspended:"இடைநிறுத்தப்பட்டது",
+blocked:"தடுக்கப்பட்டது",
+online:"இணைப்பில்",
+offline:"இணைப்பில்லை",
+busy:"பயணத்தில்",
+all:"அனைத்தும்",
+searchDrivers:"சாரதிகளை தேடவும்",
+searchLabel:"பெயர் / சாரதி ID / NIC / தொலைபேசி எண்",
+accountStatus:"கணக்கு நிலை",
+search:"தேடவும்",
+clear:"தேடலை நீக்கவும்",
+driverList:"சாரதி பட்டியல்",
+driverDetails:"சாரதி விவரங்கள்",
+driverId:"சாரதி ID",
+fullName:"முழுப் பெயர்",
+nic:"தேசிய அடையாள அட்டை எண்",
+dob:"பிறந்த தேதி",
+phone:"தொலைபேசி எண்",
+whatsappNumber:"WhatsApp எண்",
+address:"நிரந்தர முகவரி",
+district:"மாவட்டம்",
+licenceNumber:"ஓட்டுநர் உரிம எண்",
+licenceExpiry:"ஓட்டுநர் உரிம காலாவதி",
+experience:"ஓட்டுநர் அனுபவம்",
+vehicleType:"வாகன வகை",
+vehicleNumber:"வாகன பதிவு எண்",
+vehicleModel:"வாகன மாதிரி",
+vehicleColor:"வாகன நிறம்",
+capacity:"பயணிகள் கொள்ளளவு",
+insuranceNumber:"காப்புறுதி எண்",
+insuranceExpiry:"காப்புறுதி காலாவதி",
+revenueExpiry:"வருமான உரிம காலாவதி",
+serviceArea:"சேவை பகுதி",
+workingTime:"சேவை நேரம்",
+vehicleDetails:"வாகன விவரங்கள்",
+documentDetails:"உரிமம் மற்றும் காப்புறுதி விவரங்கள்",
+consentDetails:"சாரதி ஒப்புதல்கள்",
+systemDetails:"அமைப்பு விவரங்கள்",
+truthConsent:"உண்மையான தகவல் அறிவிப்பு",
+termsConsent:"சாரதி விதிமுறை ஒப்புதல்",
+commissionConsent:"கமிஷன் ஒப்புதல்",
+gpsConsent:"GPS அனுமதி",
+whatsappConsent:"WhatsApp அனுமதி",
+phoneVerified:"தொலைபேசி சரிபார்ப்பு",
+documentsValid:"ஆவண செல்லுபடியாகும் நிலை",
+activationComplete:"கணக்கு செயல்படுத்தல்",
+registeredAt:"பதிவு தேதி",
+acceptedAt:"ஒப்புதல் தேதி",
+termsVersion:"விதிமுறை பதிப்பு",
+language:"மொழி",
+availability:"சேவை நிலை",
+statusReason:"கணக்கு நிலைக்கான காரணம்",
+view:"விவரங்களை பார்க்கவும்",
+close:"விவரங்களை மூடவும்",
+call:"சாரதியை அழைக்கவும்",
+whatsapp:"WhatsApp செய்தி அனுப்பவும்",
+verification:"சாரதி அங்கீகார சரிபார்ப்பு",
+verificationNote:"அசல் ஆவணங்கள் மற்றும் உண்மையான தகவல்களை சரிபார்த்த பின்னரே குறியிடவும்.",
+checkNic:"தேசிய அடையாள அட்டை சரிபார்க்கப்பட்டது",
+checkLicence:"ஓட்டுநர் உரிமம் சரிபார்க்கப்பட்டது",
+checkVehicle:"வாகன பதிவு மற்றும் கொள்ளளவு சரிபார்க்கப்பட்டது",
+checkInsurance:"பயணிகள் காப்புறுதி சரிபார்க்கப்பட்டது",
+checkRevenue:"வருமான உரிமம் சரிபார்க்கப்பட்டது",
+checkTerms:"விதிமுறைகள் மற்றும் கமிஷன் ஒப்புதல் சரிபார்க்கப்பட்டது",
+saveChecklist:"சரிபார்ப்பை சேமிக்கவும்",
+accountControl:"சாரதி கணக்கு கட்டுப்பாடு",
+controlNote:"கணக்கை தடுத்தல் புதிய பயணங்களையும் அனுமதியற்ற அணுகலையும் நிறுத்த வேண்டும். தற்போதைய பயணத்தின் பாதுகாப்பு சேவைகள் தொடர வேண்டும்.",
+approve:"சாரதியை அங்கீகரிக்கவும்",
+reject:"விண்ணப்பத்தை நிராகரிக்கவும்",
+suspend:"கணக்கை இடைநிறுத்தவும்",
+block:"கணக்கை தடுக்கவும்",
+restore:"கணக்கை மீண்டும் அங்கீகரிக்கவும்",
+reviewAgain:"மீண்டும் பரிசீலிக்கவும்",
+reason:"முடிவுக்கான காரணம்",
+confirm:"உறுதிப்படுத்தவும்",
+cancel:"ரத்து செய்யவும்",
+activation:"சாரதி கணக்கு செயல்படுத்தல்",
+activationNote:"அங்கீகரிக்கப்பட்ட செயல்படுத்தாத கணக்குகளுக்கு மட்டும் காலாவதியாகும் ஒருமுறை இணைப்பு வழங்கப்பட வேண்டும்.",
+sendActivation:"செயல்படுத்தல் இணைப்பை அனுப்ப கோரவும்",
+deliveryStatus:"இணைப்பு அனுப்பிய நிலை",
+expiresAt:"இணைப்பு காலாவதி நேரம்",
+notIssued:"வழங்கப்படவில்லை",
+queued:"வரிசையில் உள்ளது",
+sent:"அனுப்பப்பட்டது",
+delivered:"பெறப்பட்டது",
+failed:"தோல்வியடைந்தது",
+expired:"காலாவதியானது",
+used:"பயன்படுத்தப்பட்டது",
+history:"கணக்கு முடிவு வரலாறு",
+viewHistory:"முடிவு வரலாற்றை பார்க்கவும்",
+previousStatus:"முந்தைய நிலை",
+newStatus:"புதிய நிலை",
+date:"தேதி மற்றும் நேரம்",
+action:"செயல்",
+loadMore:"மேலும் பதிவுகள்",
+refresh:"புதுப்பிக்கவும்",
+back:"நிர்வாக முதன்மைப் பக்கத்திற்கு",
+login:"உரிமையாளர் உள்நுழைவு",
+denied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+checking:"பாதுகாப்பு அனுமதி சரிபார்க்கப்படுகிறது...",
+verified:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+loading:"சேவையக தரவு பெறப்படுகிறது...",
+error:"சேவையக தரவை பெற முடியவில்லை.",
+offlineError:"இணைய இணைப்பு இல்லை.",
+noRecords:"பதிவுகள் கிடைக்கவில்லை.",
+updated:"கடைசி புதுப்பிப்பு",
+yes:"ஆம்",
+no:"இல்லை",
+day:"பகல்",
+night:"இரவு",
+both:"பகல் மற்றும் இரவு",
+bike:"Scooter / Bike",
+tuk:"முச்சக்கர வண்டி",
+car:"கார்",
+van:"வேன்",
+si:"සිංහල",
+en:"English",
+ta:"தமிழ்",
+years:"ஆண்டுகள்",
+invalidReason:"10–500 எழுத்துகளுடன் காரணத்தை உள்ளிடவும்.",
+reauth:"Google கணக்கை மீண்டும் உறுதிப்படுத்தவும்.",
+actionSuccess:"மாற்றம் சேவையகத்தால் உறுதிப்படுத்தப்பட்டது.",
+actionError:"மாற்றத்தை உறுதிப்படுத்த முடியவில்லை.",
+checklistRequired:"அனைத்து சரிபார்ப்புகளையும் முடித்து சேமிக்கவும்.",
+invalidDocuments:"தேவையான ஆவணங்கள் அல்லது ஒப்புதல்கள் செல்லுபடியாகவில்லை.",
+expiredDocument:"காலாவதியானது",
+expiringDocument:"30 நாட்களுக்குள் காலாவதியாகும்",
+typeConfirm:"உறுதிப்படுத்த இந்த வார்த்தையை உள்ளிடவும்: ",
+activationQueued:"அனுப்பும் கோரிக்கை ஏற்கப்பட்டது. அனுப்பிய நிலையை சரிபார்க்கவும்.",
+activationUnavailable:"WhatsApp அனுமதி இல்லாமல் தானியங்கி அனுப்புதல் கிடைக்காது.",
+checklistSaved:"சரிபார்ப்பு சேமிக்கப்பட்டது.",
+checklistAction:"ஆவண சரிபார்ப்பு",
+activationAction:"செயல்படுத்தல் இணைப்பு கோரிக்கை",
+unknown:"உறுதிப்படுத்தப்படவில்லை"
+
+}
+
+};
+
+let t=translations[lang];
+
+// SRI LANKA DISTRICTS
+
+const districts=[
+
+["Colombo","කොළඹ","கொழும்பு"],
+["Gampaha","ගම්පහ","கம்பஹா"],
+["Kalutara","කළුතර","களுத்துறை"],
+["Kandy","මහනුවර","கண்டி"],
+["Matale","මාතලේ","மாத்தளை"],
+["Nuwara Eliya","නුවරඑළිය","நுவரெலியா"],
+["Galle","ගාල්ල","காலி"],
+["Matara","මාතර","மாத்தறை"],
+["Hambantota","හම්බන්තොට","அம்பாந்தோட்டை"],
+["Jaffna","යාපනය","யாழ்ப்பாணம்"],
+["Kilinochchi","කිලිනොච්චි","கிளிநொச்சி"],
+["Mannar","මන්නාරම","மன்னார்"],
+["Vavuniya","වවුනියාව","வவுனியா"],
+["Mullaitivu","මුලතිව්","முல்லைத்தீவு"],
+["Batticaloa","මඩකලපුව","மட்டக்களப்பு"],
+["Ampara","අම්පාර","அம்பாறை"],
+["Trincomalee","ත්‍රිකුණාමලය","திருகோணமலை"],
+["Kurunegala","කුරුණෑගල","குருநாகல்"],
+["Puttalam","පුත්තලම","புத்தளம்"],
+["Anuradhapura","අනුරාධපුරය","அனுராதபுரம்"],
+["Polonnaruwa","පොළොන්නරුව","பொலன்னறுவை"],
+["Badulla","බදුල්ල","பதுளை"],
+["Monaragala","මොනරාගල","மொனராகலை"],
+["Ratnapura","රත්නපුර","இரத்தினபுரி"],
+["Kegalle","කෑගල්ල","கேகாலை"]
+
+];
+
+const CHECK_KEYS=[
+
+"checkNic",
+"checkLicence",
+"checkVehicle",
+"checkInsurance",
+"checkRevenue",
+"checkTerms"
+
+];
+
+const STATUSES=[
+
+"pending",
+"approved",
+"rejected",
+"suspended",
+"blocked"
+
+];
+
+const FILTER_STATUSES=[
+
+"all",
+...STATUSES,
+"activated"
+
+];
+
+const VEHICLES=["bike","tuk","car","van"];
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+const APP_CHECK_SITE_KEY=
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa";
+
+let app=null;
+let auth=null;
+let db=null;
+let functions=null;
+let appCheck=null;
+
+let uid=null;
+let authorized=false;
+let generation=0;
+let verifying=false;
+let busy=false;
+let listBusy=false;
+let historyBusy=false;
+
+let overview=null;
+let overviewUnsubscribe=null;
+
+let drivers=[];
+let nextCursor=null;
+let listGeneration=0;
+
+let selectedUid=null;
+let selectedDriver=null;
+let detailGeneration=0;
+
+let checklistDraft={};
+let accountAction=null;
+let pendingRequest=null;
+
+let historyRecords=[];
+let historyCursor=null;
+let historyGeneration=0;
+
+let statusKey="checking";
+
+let filters={
+
+search:"",
+status:"all",
+vehicle:"all",
+district:"all"
+
+};
+
+// VALIDATION HELPERS
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,max=500){
+
+return typeof value==="string"
+
+&&value.length<=max;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+
+&&value>=0;
+
+}
+
+function validPhone(value){
+
+return typeof value==="string"
+
+&&/^\+[1-9]\d{7,14}$/.test(value);
+
+}
+
+function validTime(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>0
+
+&&value<=8640000000000000;
+
+}
+
+function validDate(value){
+
+if(
+
+typeof value!=="string"
+
+||!/^\d{4}-\d{2}-\d{2}$/.test(value)
+
+)return false;
+
+const date=new Date(value+"T00:00:00Z");
+
+return Number.isFinite(date.getTime())
+
+&&date.toISOString().slice(0,10)===value;
+
+}
+
+function validCursor(value){
+
+return value===null
+
+||(typeof value==="string"
+
+&&value.length>0
+
+&&value.length<=4096);
+
+}
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function ownerValid(result,userUid){
+
+return result?.authorized===true
+
+&&result.uid===userUid
+
+&&result.role==="owner"
+
+&&result.ownerUidVerified===true
+
+&&result.sessionValid===true;
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+
+encodeURIComponent(lang);
+
+}
+
+function translateValue(value){
+
+return Object.prototype.hasOwnProperty.call(t,value)
+
+?t[value]:t.unknown;
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(value));
+
+}
+
+function sriLankaToday(){
+
+return new Date(Date.now()+330*60000)
+
+.toISOString().slice(0,10);
+
+}
+
+function displayStatus(driver){
+
+return driver.status==="approved"
+
+&&driver.activationComplete===true
+
+?"activated":driver.status;
+
+}
+
+function statusColor(status){
+
+if(["approved","activated","online"].includes(status)){
+
+return "green";
+
+}
+
+if(["blocked","rejected","suspended"].includes(status)){
+
+return "red";
+
+}
+
+return "yellow";
+
+}
+
+function districtName(value){
+
+const item=districts.find(d=>d[0]===value);
+
+if(!item)return value;
+
+return item[lang==="si"?1:lang==="ta"?2:0];
+
+}
+
+function showStatus(key){
+
+statusKey=key;
+
+$("status").textContent=t[key]||"";
+
+}
+
+// SAFE DOM CREATION
+
+function addRow(container,label,value,color=""){
+
+const row=document.createElement("div");
+
+row.className="row";
+
+const name=document.createElement("span");
+
+name.textContent=t[label]||label;
+
+const text=document.createElement("strong");
+
+text.textContent=
+
+value===null
+
+||value===undefined
+
+||value===""
+
+?"—":String(value);
+
+if(color)text.classList.add(color);
+
+row.append(name,text);
+
+container.appendChild(row);
+
+}
+
+function addBoolean(container,label,value){
+
+addRow(
+
+container,
+
+label,
+
+value===true?t.yes:t.no,
+
+value===true?"green":"red"
+
+);
+
+}
+
+function addExpiry(container,label,date){
+
+const today=sriLankaToday();
+
+let color="";
+
+let value=date;
+
+if(date<today){
+
+color="red";
+
+value+="\n"+t.expiredDocument;
+
+}else{
+
+const days=Math.floor(
+
+(Date.parse(date+"T00:00:00Z")-
+
+Date.parse(today+"T00:00:00Z"))
+
+/86400000
+
+);
+
+if(days<=30){
+
+color="yellow";
+
+value+="\n"+t.expiringDocument;
+
+}
+
+}
+
+addRow(container,label,value,color);
+
+}
+
+// LANGUAGE SYSTEM
+
+function renderDistricts(){
+
+const select=$("districtFilter");
+
+const old=select.value||filters.district;
+
+select.replaceChildren();
+
+const all=document.createElement("option");
+
+all.value="all";
+
+all.textContent=t.all;
+
+select.appendChild(all);
+
+districts.forEach(item=>{
+
+const option=document.createElement("option");
+
+option.value=item[0];
+
+option.textContent=districtName(item[0]);
+
+select.appendChild(option);
+
+});
+
+select.value=
+
+["all",...districts.map(d=>d[0])].includes(old)
+
+?old:"all";
+
+}
+
+function renderLanguage(){
+
+t=translations[lang];
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t[element.dataset.t]||"";
+
+});
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+const selected=button.dataset.lang===lang;
+
+button.classList.toggle("selected",selected);
+
+button.setAttribute("aria-pressed",String(selected));
+
+});
+
+$("dashboardLink").href=
+
+pageLink("admin-dashboard.html");
+
+$("loginLink").href=
+
+pageLink("admin-login.html");
+
+$("searchText").placeholder=t.searchLabel;
+
+renderDistricts();
+
+showStatus(statusKey);
+
+renderOverview();
+
+renderDrivers();
+
+renderDetails();
+
+renderHistory();
+
+if(accountAction){
+
+renderActionInstruction();
+
+}
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!LANGUAGES.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+
+"myride_admin_language",lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+// SECURE SERVER REQUESTS
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+
+name,
+
+{timeout:25000}
+
+)(data);
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+async function freshOwnerAuthentication(){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const user=auth.currentUser;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=
+
+await reauthenticateWithPopup(user,provider);
+
+if(
+
+currentGeneration!==generation
+
+||credential.user.uid!==uid
+
+||!validSession()
+
+){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+||token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"
+
+){
+
+throw new Error("Owner denied");
+
+}
+
+const result=await serverCall("verifyOwnerAdmin");
+
+if(!ownerValid(result,uid)){
+
+throw new Error("Owner authorization failed");
+
+}
+
+}
+
+// DRIVER STATISTICS
+
+const statKeys=[
+
+"totalDrivers",
+"pending",
+"approved",
+"activated",
+"rejected",
+"suspended",
+"blocked",
+"online",
+"offline",
+"busy"
+
+];
+
+function validOverview(data){
+
+return data
+
+&&statKeys.every(key=>validCount(data[key]))
+
+&&data.pending+
+
+data.approved+
+
+data.activated+
+
+data.rejected+
+
+data.suspended+
+
+data.blocked===data.totalDrivers
+
+&&data.online+
+
+data.offline+
+
+data.busy<=data.activated
+
+&&data.updatedAt
+
+&&typeof data.updatedAt.toMillis==="function"
+
+&&validTime(data.updatedAt.toMillis());
+
+}
+
+function renderOverview(){
+
+const grid=$("statsGrid");
+
+grid.replaceChildren();
+
+statKeys.forEach(key=>{
+
+const card=document.createElement("div");
+
+card.className="stat";
+
+const label=document.createElement("span");
+
+label.textContent=t[key];
+
+const value=document.createElement("strong");
+
+value.textContent=overview
+
+?String(overview[key])
+
+:"—";
+
+if(["blocked","suspended","rejected"].includes(key)){
+
+value.classList.add("red");
+
+}
+
+if(["activated","online"].includes(key)){
+
+value.classList.add("green");
+
+}
+
+card.append(label,value);
+
+grid.appendChild(card);
+
+});
+
+$("updatedAt").textContent=
+
+overview
+
+?t.updated+": "+
+
+formatDate(overview.updatedAt.toMillis())
+
+:"—";
+
+}
+
+function subscribeOverview(){
+
+if(overviewUnsubscribe){
+
+overviewUnsubscribe();
+
+}
+
+const currentGeneration=generation;
+
+overviewUnsubscribe=onSnapshot(
+
+doc(db,"adminDashboard","drivers"),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+)return;
+
+if(
+
+snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()
+
+||!validOverview(snapshot.data())
+
+){
+
+overview=null;
+
+}else{
+
+overview=snapshot.data();
+
+}
+
+renderOverview();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+overview=null;
+
+renderOverview();
+
+}
+
+);
+
+}
+
+// DRIVER LIST
+
+function validDriver(item){
+
+return item
+
+&&validId(item.uid)
+
+&&validId(item.driverId)
+
+&&validText(item.fullName,150)
+
+&&validPhone(item.phone)
+
+&&validText(item.district,100)
+
+&&VEHICLES.includes(item.vehicleType)
+
+&&STATUSES.includes(item.status)
+
+&&typeof item.activationComplete==="boolean"
+
+&&["online","offline","busy"].includes(item.availability)
+
+&&validTime(item.createdAtMs);
+
+}
+
+function renderDrivers(){
+
+const container=$("driverList");
+
+container.replaceChildren();
+
+drivers.forEach(driver=>{
+
+const card=document.createElement("div");
+
+card.className="driverCard";
+
+addRow(card,"driverId",driver.driverId);
+
+addRow(card,"fullName",driver.fullName);
+
+addRow(card,"phone",driver.phone);
+
+addRow(card,"district",districtName(driver.district));
+
+addRow(card,"vehicleType",translateValue(driver.vehicleType));
+
+const status=displayStatus(driver);
+
+addRow(
+
+card,
+
+"accountStatus",
+
+translateValue(status),
+
+statusColor(status)
+
+);
+
+addRow(
+
+card,
+
+"availability",
+
+translateValue(driver.availability),
+
+statusColor(driver.availability)
+
+);
+
+addRow(card,"registeredAt",formatDate(driver.createdAtMs));
+
+const button=document.createElement("button");
+
+button.className="action";
+
+button.type="button";
+
+button.textContent=t.view;
+
+button.disabled=busy;
+
+button.onclick=()=>openDriver(driver.uid);
+
+card.appendChild(button);
+
+container.appendChild(card);
+
+});
+
+$("loadMore").hidden=nextCursor===null;
+
+$("loadMore").disabled=listBusy||busy;
+
+}
+
+async function loadDrivers(reset=true){
+
+if(!validSession()||busy)return;
+
+if(!reset&&(listBusy||nextCursor===null))return;
+
+if(reset){
+
+listGeneration++;
+
+drivers=[];
+
+nextCursor=null;
+
+renderDrivers();
+
+}
+
+const currentGeneration=generation;
+
+const currentListGeneration=listGeneration;
+
+listBusy=true;
+
+$("listStatus").textContent=t.loading;
+
+updateControls();
+
+try{
+
+const result=await serverCall(
+
+"getAdminDrivers",
+
+{
+
+...filters,
+
+limit:20,
+
+cursor:reset?null:nextCursor
+
+}
+
+);
+
+if(
+
+currentGeneration!==generation
+
+||currentListGeneration!==listGeneration
+
+)return;
+
+if(
+
+result?.success!==true
+
+||result.ownerUid!==uid
+
+||!Array.isArray(result.records)
+
+||result.records.length>20
+
+||!result.records.every(validDriver)
+
+||!validCursor(result.nextCursor)
+
+){
+
+throw new Error("Invalid driver list");
+
+}
+
+const unique=new Map(
+
+drivers.map(item=>[item.uid,item])
+
+);
+
+result.records.forEach(item=>{
+
+unique.set(item.uid,item);
+
+});
+
+drivers=[...unique.values()];
+
+nextCursor=result.nextCursor;
+
+renderDrivers();
+
+$("listStatus").textContent=
+
+drivers.length===0?t.noRecords:"";
+
+}catch(e){
+
+if(
+
+currentGeneration!==generation
+
+||currentListGeneration!==listGeneration
+
+)return;
+
+$("listStatus").textContent=t.error;
+
+}finally{
+
+if(
+
+currentGeneration===generation
+
+&&currentListGeneration===listGeneration
+
+){
+
+listBusy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("searchForm").onsubmit=event=>{
+
+event.preventDefault();
+
+if(!validSession()||busy)return;
+
+const search=$("searchText").value.trim();
+
+const status=$("statusFilter").value;
+
+const vehicle=$("vehicleFilter").value;
+
+const district=$("districtFilter").value;
+
+if(
+
+search.length>100
+
+||!FILTER_STATUSES.includes(status)
+
+||!["all",...VEHICLES].includes(vehicle)
+
+||!["all",...districts.map(d=>d[0])].includes(district)
+
+)return;
+
+filters={search,status,vehicle,district};
+
+loadDrivers(true);
+
+};
+
+$("clearButton").onclick=()=>{
+
+if(!validSession()||busy)return;
+
+$("searchForm").reset();
+
+filters={
+
+search:"",
+status:"all",
+vehicle:"all",
+district:"all"
+
+};
+
+$("districtFilter").value="all";
+
+loadDrivers(true);
+
+};
+
+$("loadMore").onclick=()=>loadDrivers(false);
+
+// DRIVER DETAILS VALIDATION
+
+function validChecklist(value){
+
+return value
+
+&&CHECK_KEYS.every(
+
+key=>typeof value[key]==="boolean"
+
+);
+
+}
+
+function validActivation(value){
+
+return value
+
+&&[
+
+"notIssued","queued","sent","delivered",
+
+"failed","expired","used"
+
+].includes(value.deliveryStatus)
+
+&&(
+
+value.expiresAtMs===null
+
+||validTime(value.expiresAtMs)
+
+);
+
+}
+
+function validProfile(driver,targetUid){
+
+if(!validDriver(driver)||driver.uid!==targetUid){
+
+return false;
+
+}
+
+const textKeys=[
+
+"nic","address","licenceNumber",
+
+"vehicleNumber","vehicleModel","vehicleColor",
+
+"insuranceNumber","serviceArea","termsVersion"
+
+];
+
+const dateKeys=[
+
+"dob","licenceExpiry",
+
+"insuranceExpiry","revenueExpiry"
+
+];
+
+const booleanKeys=[
+
+"truthConsent","termsConsent",
+
+"commissionConsent","gpsConsent",
+
+"whatsappConsent","phoneVerified",
+
+"documentsValid"
+
+];
+
+return textKeys.every(
+
+key=>validText(driver[key],500)
+
+)
+
+&&dateKeys.every(
+
+key=>validDate(driver[key])
+
+)
+
+&&booleanKeys.every(
+
+key=>typeof driver[key]==="boolean"
+
+)
+
+&&validCount(driver.experience)
+
+&&validCount(driver.capacity)
+
+&&driver.capacity>0
+
+&&driver.capacity<=10
+
+&&(
+
+driver.whatsapp===null
+
+||validPhone(driver.whatsapp)
+
+)
+
+&&["day","night","both"].includes(driver.workingTime)
+
+&&LANGUAGES.includes(driver.language)
+
+&&validTime(driver.acceptedAtMs)
+
+&&validCount(driver.revision)
+
+&&validChecklist(driver.verification)
+
+&&validActivation(driver.activation)
+
+&&(
+
+driver.statusReason===null
+
+||validText(driver.statusReason,500)
+
+);
+
+}
+
+// OPEN DRIVER PROFILE
+
+async function openDriver(targetUid){
+
+if(
+
+!validSession()
+
+||!validId(targetUid)
+
+||busy
+
+)return;
+
+closeDriver();
+
+selectedUid=targetUid;
+
+const currentGeneration=generation;
+
+const currentDetailGeneration=detailGeneration;
+
+$("details").hidden=false;
+
+$("detailStatus").textContent=t.loading;
+
+try{
+
+const result=await serverCall(
+
+"getAdminDriverDetails",
+
+{driverUid:targetUid}
+
+);
+
+if(
+
+currentGeneration!==generation
+
+||currentDetailGeneration!==detailGeneration
+
+||selectedUid!==targetUid
+
+)return;
+
+if(
+
+result?.success!==true
+
+||result.ownerUid!==uid
+
+||!validProfile(result.driver,targetUid)
+
+){
+
+throw new Error("Invalid driver profile");
+
+}
+
+selectedDriver=result.driver;
+
+checklistDraft={...selectedDriver.verification};
+
+renderDetails();
+
+$("detailStatus").textContent="";
+
+$("details").scrollIntoView({
+
+behavior:"smooth",
+
+block:"start"
+
+});
+
+}catch(e){
+
+if(
+
+currentGeneration!==generation
+
+||currentDetailGeneration!==detailGeneration
+
+)return;
+
+$("detailStatus").textContent=t.error;
+
+}
+
+}
+
+function closeDriver(){
+
+detailGeneration++;
+
+historyGeneration++;
+
+selectedUid=null;
+
+selectedDriver=null;
+
+checklistDraft={};
+
+historyRecords=[];
+
+historyCursor=null;
+
+historyBusy=false;
+
+pendingRequest=null;
+
+accountAction=null;
+
+$("details").hidden=true;
+
+[
+
+"personalDetails",
+
+"vehicleDetails",
+
+"documentDetails",
+
+"consentDetails",
+
+"systemDetails",
+
+"checklist",
+
+"activationDetails",
+
+"historyRecords"
+
+].forEach(id=>$(id).replaceChildren());
+
+[
+
+"vehiclePanel",
+
+"contactButtons",
+
+"verificationPanel",
+
+"accountControl",
+
+"activationPanel",
+
+"historyPanel",
+
+"moreHistory"
+
+].forEach(id=>$(id).hidden=true);
+
+$("callDriver").removeAttribute("href");
+
+$("whatsappDriver").removeAttribute("href");
+
+$("detailStatus").textContent="";
+
+$("actionStatus").textContent="";
+
+$("historyStatus").textContent="";
+
+closeAccountForm();
+
+}
+
+$("closeDetails").onclick=()=>{
+
+if(!busy)closeDriver();
+
+};
+
+// DRIVER PROFILE RENDERING
+
+function renderDetails(){
+
+const driver=selectedDriver;
+
+if(!driver)return;
+
+const personal=$("personalDetails");
+
+const vehicle=$("vehicleDetails");
+
+const documents=$("documentDetails");
+
+const consents=$("consentDetails");
+
+const system=$("systemDetails");
+
+[personal,vehicle,documents,consents,system]
+
+.forEach(element=>element.replaceChildren());
+
+addRow(personal,"driverId",driver.driverId);
+
+addRow(personal,"fullName",driver.fullName);
+
+addRow(personal,"nic",driver.nic);
+
+addRow(personal,"dob",driver.dob);
+
+addRow(personal,"phone",driver.phone);
+
+addRow(personal,"whatsappNumber",driver.whatsapp);
+
+addRow(personal,"address",driver.address);
+
+addRow(personal,"district",districtName(driver.district));
+
+addRow(
+
+personal,
+
+"experience",
+
+driver.experience+" "+t.years
+
+);
+
+addRow(personal,"serviceArea",driver.serviceArea);
+
+addRow(personal,"workingTime",translateValue(driver.workingTime));
+
+addRow(vehicle,"vehicleType",translateValue(driver.vehicleType));
+
+addRow(vehicle,"vehicleNumber",driver.vehicleNumber);
+
+addRow(vehicle,"vehicleModel",driver.vehicleModel);
+
+addRow(vehicle,"vehicleColor",driver.vehicleColor);
+
+addRow(vehicle,"capacity",driver.capacity);
+
+addRow(documents,"licenceNumber",driver.licenceNumber);
+
+addExpiry(documents,"licenceExpiry",driver.licenceExpiry);
+
+addRow(documents,"insuranceNumber",driver.insuranceNumber);
+
+addExpiry(documents,"insuranceExpiry",driver.insuranceExpiry);
+
+addExpiry(documents,"revenueExpiry",driver.revenueExpiry);
+
+[
+
+"truthConsent",
+
+"termsConsent",
+
+"commissionConsent",
+
+"gpsConsent",
+
+"whatsappConsent"
+
+].forEach(key=>addBoolean(consents,key,driver[key]));
+
+addRow(consents,"termsVersion",driver.termsVersion);
+
+addRow(consents,"acceptedAt",formatDate(driver.acceptedAtMs));
+
+addBoolean(system,"phoneVerified",driver.phoneVerified);
+
+addBoolean(system,"documentsValid",driver.documentsValid);
+
+addBoolean(system,"activationComplete",driver.activationComplete);
+
+addRow(system,"language",translateValue(driver.language));
+
+addRow(system,"registeredAt",formatDate(driver.createdAtMs));
+
+const status=displayStatus(driver);
+
+addRow(
+
+system,
+
+"accountStatus",
+
+translateValue(status),
+
+statusColor(status)
+
+);
+
+addRow(
+
+system,
+
+"availability",
+
+translateValue(driver.availability),
+
+statusColor(driver.availability)
+
+);
+
+addRow(system,"statusReason",driver.statusReason);
+
+$("vehiclePanel").hidden=false;
+
+$("contactButtons").hidden=false;
+
+$("callDriver").href="tel:"+driver.phone;
+
+const whatsappAllowed=
+
+driver.whatsappConsent===true
+
+&&validPhone(driver.whatsapp);
+
+$("whatsappDriver").hidden=!whatsappAllowed;
+
+if(whatsappAllowed){
+
+const messages={
+
+si:"MY RIDE පරිපාලන අංශයෙන් ඔබව සම්බන්ධ කර ගනිමු.",
+
+en:"We are contacting you from MY RIDE administration.",
+
+ta:"MY RIDE நிர்வாகத்திலிருந்து உங்களை தொடர்பு கொள்கிறோம்."
+
+};
+
+$("whatsappDriver").href=
+
+"https://wa.me/"+
+
+driver.whatsapp.replace(/\D/g,"")+
+
+"?text="+
+
+encodeURIComponent(messages[driver.language]);
+
+}else{
+
+$("whatsappDriver").removeAttribute("href");
+
+}
+
+$("verificationPanel").hidden=false;
+
+$("accountControl").hidden=false;
+
+$("historyPanel").hidden=false;
+
+renderChecklist();
+
+renderAccountButtons();
+
+renderActivation();
+
+updateControls();
+
+}
+
+// VERIFICATION CHECKLIST
+
+function renderChecklist(){
+
+const container=$("checklist");
+
+container.replaceChildren();
+
+if(!selectedDriver)return;
+
+CHECK_KEYS.forEach(key=>{
+
+const label=document.createElement("label");
+
+label.className="checkItem";
+
+const input=document.createElement("input");
+
+input.type="checkbox";
+
+input.checked=checklistDraft[key]===true;
+
+input.disabled=busy;
+
+input.onchange=()=>{
+
+checklistDraft[key]=input.checked;
+
+renderAccountButtons();
+
+updateControls();
+
+};
+
+const text=document.createElement("span");
+
+text.textContent=t[key];
+
+label.append(input,text);
+
+container.appendChild(label);
+
+});
+
+}
+
+function checklistSaved(){
+
+return selectedDriver
+
+&&CHECK_KEYS.every(
+
+key=>checklistDraft[key]===
+
+selectedDriver.verification[key]
+
+);
+
+}
+
+function allChecksPassed(){
+
+return selectedDriver
+
+&&checklistSaved()
+
+&&CHECK_KEYS.every(
+
+key=>selectedDriver.verification[key]===true
+
+);
+
+}
+
+function approvalEligible(){
+
+if(!selectedDriver)return false;
+
+const driver=selectedDriver;
+
+const today=sriLankaToday();
+
+return allChecksPassed()
+
+&&driver.phoneVerified===true
+
+&&driver.truthConsent===true
+
+&&driver.termsConsent===true
+
+&&driver.commissionConsent===true
+
+&&driver.gpsConsent===true
+
+&&driver.licenceExpiry>=today
+
+&&driver.insuranceExpiry>=today
+
+&&driver.revenueExpiry>=today;
+
+}
+
+// IDEMPOTENT REQUEST IDENTIFIERS
+
+function requestIdFor(name,payload){
+
+const signature=JSON.stringify([name,payload]);
+
+if(
+
+!pendingRequest
+
+||pendingRequest.signature!==signature
+
+){
+
+pendingRequest={
+
+signature,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+return pendingRequest.requestId;
+
+}
+
+// SAVE CHECKLIST
+
+$("saveChecklist").onclick=async()=>{
+
+if(
+
+!validSession()
+
+||!selectedDriver
+
+||busy
+
+||checklistSaved()
+
+)return;
+
+const targetUid=selectedUid;
+
+const expectedRevision=selectedDriver.revision;
+
+const verification={};
+
+CHECK_KEYS.forEach(key=>{
+
+verification[key]=checklistDraft[key]===true;
+
+});
+
+const payload={
+
+driverUid:targetUid,
+
+verification,
+
+expectedRevision
+
+};
+
+const requestId=requestIdFor(
+
+"saveAdminDriverVerification",
+
+payload
+
+);
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+$("actionStatus").textContent=t.reauth;
+
+try{
+
+await freshOwnerAuthentication();
+
+const result=await serverCall(
+
+"saveAdminDriverVerification",
+
+{...payload,requestId}
+
+);
+
+if(
+
+result?.accepted!==true
+
+||result.ownerUid!==uid
+
+||result.driverUid!==targetUid
+
+||!validCount(result.revision)
+
+||result.revision<=expectedRevision
+
+){
+
+throw new Error("Checklist not confirmed");
+
+}
+
+pendingRequest=null;
+
+busy=false;
+
+await openDriver(targetUid);
+
+if(currentGeneration!==generation)return;
+
+$("actionStatus").textContent=t.checklistSaved;
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("actionStatus").textContent=t.actionError;
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// DRIVER STATUS TRANSITIONS
+
+const actionConfig={
+
+approve:{
+
+from:["pending"],
+
+to:"approved",
+
+word:"APPROVE",
+
+label:"approve"
+
+},
+
+reject:{
+
+from:["pending"],
+
+to:"rejected",
+
+word:"REJECT",
+
+label:"reject"
+
+},
+
+suspend:{
+
+from:["approved"],
+
+to:"suspended",
+
+word:"SUSPEND",
+
+label:"suspend"
+
+},
+
+block:{
+
+from:["pending","approved","rejected","suspended"],
+
+to:"blocked",
+
+word:"BLOCK",
+
+label:"block"
+
+},
+
+restore:{
+
+from:["suspended","blocked"],
+
+to:"approved",
+
+word:"RESTORE",
+
+label:"restore"
+
+},
+
+review:{
+
+from:["rejected","suspended","blocked"],
+
+to:"pending",
+
+word:"REVIEW",
+
+label:"reviewAgain"
+
+}
+
+};
+
+const actionButtons={
+
+approve:"approveButton",
+
+reject:"rejectButton",
+
+suspend:"suspendButton",
+
+block:"blockButton",
+
+restore:"restoreButton",
+
+review:"reviewButton"
+
+};
+
+function renderAccountButtons(){
+
+Object.entries(actionButtons)
+
+.forEach(([action,id])=>{
+
+const allowed=selectedDriver
+
+&&actionConfig[action].from.includes(
+
+selectedDriver.status
+
+);
+
+$(id).hidden=!allowed;
+
+$(id).disabled=
+
+busy
+
+||!validSession()
+
+||!allowed
+
+||(
+
+["approve","restore"].includes(action)
+
+&&!approvalEligible()
+
+);
+
+});
+
+}
+
+function renderActionInstruction(){
+
+if(!accountAction)return;
+
+const config=actionConfig[accountAction];
+
+$("actionTitle").textContent=t[config.label];
+
+$("confirmationInstruction").textContent=
+
+t.typeConfirm+config.word;
+
+}
+
+function openAccountForm(action){
+
+if(
+
+!validSession()
+
+||!selectedDriver
+
+||busy
+
+||!actionConfig[action]
+
+||!actionConfig[action].from.includes(
+
+selectedDriver.status
+
+)
+
+)return;
+
+if(
+
+["approve","restore"].includes(action)
+
+&&!approvalEligible()
+
+){
+
+$("actionStatus").textContent=t.checklistRequired;
+
+return;
+
+}
+
+accountAction=action;
+
+pendingRequest=null;
+
+$("accountForm").reset();
+
+renderActionInstruction();
+
+$("accountForm").hidden=false;
+
+$("reason").focus();
+
+}
+
+Object.entries(actionButtons)
+
+.forEach(([action,id])=>{
+
+$(id).onclick=()=>openAccountForm(action);
+
+});
+
+function closeAccountForm(){
+
+accountAction=null;
+
+$("accountForm").reset();
+
+$("accountForm").hidden=true;
+
+}
+
+$("cancelAction").onclick=()=>{
+
+if(!busy){
+
+pendingRequest=null;
+
+closeAccountForm();
+
+}
+
+};
+
+// APPROVE / REJECT / SUSPEND / BLOCK / RESTORE
+
+$("accountForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(
+
+!validSession()
+
+||!selectedDriver
+
+||busy
+
+||!accountAction
+
+)return;
+
+const action=accountAction;
+
+const config=actionConfig[action];
+
+if(!config.from.includes(selectedDriver.status))return;
+
+if(
+
+["approve","restore"].includes(action)
+
+&&!approvalEligible()
+
+){
+
+$("actionStatus").textContent=t.invalidDocuments;
+
+return;
+
+}
+
+const reason=$("reason").value.trim();
+
+if(reason.length<10||reason.length>500){
+
+$("actionStatus").textContent=t.invalidReason;
+
+return;
+
+}
+
+if($("confirmationText").value.trim()!==config.word){
+
+$("actionStatus").textContent=t.typeConfirm+config.word;
+
+return;
+
+}
+
+const targetUid=selectedUid;
+
+const expectedRevision=selectedDriver.revision;
+
+const payload={
+
+driverUid:targetUid,
+
+action,
+
+status:config.to,
+
+reason,
+
+expectedRevision
+
+};
+
+const requestId=requestIdFor(
+
+"setAdminDriverStatus",
+
+payload
+
+);
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+$("actionStatus").textContent=t.reauth;
+
+try{
+
+await freshOwnerAuthentication();
+
+const result=await serverCall(
+
+"setAdminDriverStatus",
+
+{...payload,requestId}
+
+);
+
+// Backend must enforce all status transitions,
+// document validity, session revocation,
+// active ride safety and notification rules.
+
+if(
+
+result?.accepted!==true
+
+||result.ownerUid!==uid
+
+||result.driverUid!==targetUid
+
+||result.status!==config.to
+
+||!validCount(result.revision)
+
+||result.revision<=expectedRevision
+
+){
+
+throw new Error("Status not confirmed");
+
+}
+
+pendingRequest=null;
+
+closeAccountForm();
+
+busy=false;
+
+await openDriver(targetUid);
+
+if(currentGeneration!==generation)return;
+
+$("actionStatus").textContent=t.actionSuccess;
+
+await loadDrivers(true);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("actionStatus").textContent=t.actionError;
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// ACTIVATION LINK MANAGEMENT
+
+function renderActivation(){
+
+const driver=selectedDriver;
+
+const panel=$("activationPanel");
+
+const container=$("activationDetails");
+
+container.replaceChildren();
+
+if(
+
+!driver
+
+||driver.status!=="approved"
+
+||driver.activationComplete===true
+
+){
+
+panel.hidden=true;
+
+return;
+
+}
+
+panel.hidden=false;
+
+addRow(
+
+container,
+
+"deliveryStatus",
+
+translateValue(driver.activation.deliveryStatus)
+
+);
+
+addRow(
+
+container,
+
+"expiresAt",
+
+formatDate(driver.activation.expiresAtMs)
+
+);
+
+if(!driver.whatsappConsent){
+
+const warning=document.createElement("p");
+
+warning.className="warning";
+
+warning.textContent=t.activationUnavailable;
+
+container.appendChild(warning);
+
+}
+
+$("activationButton").disabled=
+
+busy
+
+||!validSession()
+
+||!driver.whatsappConsent
+
+||!validPhone(driver.whatsapp)
+
+||!driver.documentsValid
+
+||!approvalEligible()
+
+||driver.activation.deliveryStatus==="queued";
+
+}
+
+$("activationButton").onclick=async()=>{
+
+if(
+
+!validSession()
+
+||!selectedDriver
+
+||busy
+
+||selectedDriver.status!=="approved"
+
+||selectedDriver.activationComplete
+
+||!selectedDriver.whatsappConsent
+
+||!validPhone(selectedDriver.whatsapp)
+
+||!selectedDriver.documentsValid
+
+||!approvalEligible()
+
+||selectedDriver.activation.deliveryStatus==="queued"
+
+)return;
+
+if(!window.confirm(t.sendActivation+"?"))return;
+
+const targetUid=selectedUid;
+
+const expectedRevision=selectedDriver.revision;
+
+const payload={
+
+driverUid:targetUid,
+
+expectedRevision
+
+};
+
+const requestId=requestIdFor(
+
+"issueAdminDriverActivation",
+
+payload
+
+);
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+$("actionStatus").textContent=t.reauth;
+
+try{
+
+await freshOwnerAuthentication();
+
+const result=await serverCall(
+
+"issueAdminDriverActivation",
+
+{...payload,requestId}
+
+);
+
+// Activation token is generated and stored
+// securely by the backend, not by this page.
+
+if(
+
+result?.accepted!==true
+
+||result.ownerUid!==uid
+
+||result.driverUid!==targetUid
+
+||!validId(result.messageId)
+
+||!["queued","sent"].includes(result.deliveryStatus)
+
+){
+
+throw new Error("Delivery request not confirmed");
+
+}
+
+pendingRequest=null;
+
+busy=false;
+
+await openDriver(targetUid);
+
+if(currentGeneration!==generation)return;
+
+$("actionStatus").textContent=t.activationQueued;
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("actionStatus").textContent=t.actionError;
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// DRIVER ACCOUNT AUDIT HISTORY
+
+function validHistory(item,targetUid){
+
+return item
+
+&&item.driverUid===targetUid
+
+&&validId(item.eventId)
+
+&&validTime(item.createdAtMs)
+
+&&[
+
+"approve","reject","suspend",
+
+"block","restore","review",
+
+"checklistAction","activationAction"
+
+].includes(item.action)
+
+&&(
+
+item.previousStatus===null
+
+||STATUSES.includes(item.previousStatus)
+
+)
+
+&&(
+
+item.newStatus===null
+
+||STATUSES.includes(item.newStatus)
+
+)
+
+&&validText(item.reason,500);
+
+}
+
+function renderHistory(){
+
+const container=$("historyRecords");
+
+container.replaceChildren();
+
+historyRecords.forEach(item=>{
+
+const card=document.createElement("div");
+
+card.className="record";
+
+const actionLabel=
+
+actionConfig[item.action]?.label
+
+||item.action;
+
+addRow(card,"action",translateValue(actionLabel));
+
+addRow(
+
+card,
+
+"previousStatus",
+
+item.previousStatus
+
+?translateValue(item.previousStatus)
+
+:"—"
+
+);
+
+addRow(
+
+card,
+
+"newStatus",
+
+item.newStatus
+
+?translateValue(item.newStatus)
+
+:"—"
+
+);
+
+addRow(card,"reason",item.reason);
+
+addRow(card,"date",formatDate(item.createdAtMs));
+
+container.appendChild(card);
+
+});
+
+$("moreHistory").hidden=historyCursor===null;
+
+$("moreHistory").disabled=historyBusy||busy;
+
+}
+
+async function loadHistory(reset=true){
+
+if(!validSession()||!selectedDriver||busy)return;
+
+if(!reset&&(historyBusy||historyCursor===null))return;
+
+if(reset){
+
+historyGeneration++;
+
+historyRecords=[];
+
+historyCursor=null;
+
+renderHistory();
+
+}
+
+const targetUid=selectedUid;
+
+const currentGeneration=generation;
+
+const currentHistoryGeneration=historyGeneration;
+
+historyBusy=true;
+
+$("historyStatus").textContent=t.loading;
+
+updateControls();
+
+try{
+
+const result=await serverCall(
+
+"getAdminDriverAuditHistory",
+
+{
+
+driverUid:targetUid,
+
+limit:20,
+
+cursor:reset?null:historyCursor
+
+}
+
+);
+
+if(
+
+currentGeneration!==generation
+
+||currentHistoryGeneration!==historyGeneration
+
+||selectedUid!==targetUid
+
+)return;
+
+if(
+
+result?.success!==true
+
+||result.ownerUid!==uid
+
+||result.driverUid!==targetUid
+
+||!Array.isArray(result.records)
+
+||result.records.length>20
+
+||!result.records.every(
+
+item=>validHistory(item,targetUid)
+
+)
+
+||!validCursor(result.nextCursor)
+
+){
+
+throw new Error("Invalid audit history");
+
+}
+
+const unique=new Map(
+
+historyRecords.map(item=>[item.eventId,item])
+
+);
+
+result.records.forEach(item=>{
+
+unique.set(item.eventId,item);
+
+});
+
+historyRecords=[...unique.values()];
+
+historyCursor=result.nextCursor;
+
+renderHistory();
+
+$("historyStatus").textContent=
+
+historyRecords.length===0?t.noRecords:"";
+
+}catch(e){
+
+if(
+
+currentGeneration!==generation
+
+||currentHistoryGeneration!==historyGeneration
+
+)return;
+
+$("historyStatus").textContent=t.error;
+
+}finally{
+
+if(
+
+currentGeneration===generation
+
+&&currentHistoryGeneration===historyGeneration
+
+){
+
+historyBusy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("historyButton").onclick=()=>loadHistory(true);
+
+$("moreHistory").onclick=()=>loadHistory(false);
+
+// CONTROL STATES
+
+function updateControls(){
+
+const enabled=validSession()&&!busy;
+
+$("searchButton").disabled=!enabled||listBusy;
+
+$("clearButton").disabled=!enabled||listBusy;
+
+$("loadMore").disabled=!enabled||listBusy;
+
+$("refreshButton").disabled=!enabled;
+
+$("closeDetails").disabled=busy;
+
+$("saveChecklist").disabled=
+
+!enabled
+
+||!selectedDriver
+
+||checklistSaved();
+
+$("confirmAction").disabled=!enabled;
+
+$("cancelAction").disabled=busy;
+
+$("reason").disabled=busy;
+
+$("confirmationText").disabled=busy;
+
+$("historyButton").disabled=!enabled||historyBusy;
+
+$("moreHistory").disabled=!enabled||historyBusy;
+
+document.querySelectorAll("#checklist input")
+
+.forEach(input=>{
+
+input.disabled=!enabled;
+
+});
+
+document.querySelectorAll("#driverList button")
+
+.forEach(button=>{
+
+button.disabled=!enabled;
+
+});
+
+renderAccountButtons();
+
+if(selectedDriver){
+
+renderActivation();
+
+}
+
+}
+
+// REFRESH
+
+$("refreshButton").onclick=async()=>{
+
+if(!validSession()||busy)return;
+
+const targetUid=selectedUid;
+
+await loadDrivers(true);
+
+if(targetUid&&validSession()){
+
+await openDriver(targetUid);
+
+}
+
+};
+
+// CLEAR PRIVATE DATA
+
+function clearSession(){
+
+generation++;
+
+listGeneration++;
+
+authorized=false;
+
+uid=null;
+
+verifying=false;
+
+busy=false;
+
+listBusy=false;
+
+overview=null;
+
+drivers=[];
+
+nextCursor=null;
+
+if(overviewUnsubscribe){
+
+overviewUnsubscribe();
+
+overviewUnsubscribe=null;
+
+}
+
+closeDriver();
+
+$("content").hidden=true;
+
+$("deniedPanel").hidden=true;
+
+$("searchForm").reset();
+
+filters={
+
+search:"",
+status:"all",
+vehicle:"all",
+district:"all"
+
+};
+
+$("districtFilter").value="all";
+
+$("listStatus").textContent="";
+
+renderOverview();
+
+renderDrivers();
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("deniedPanel").hidden=false;
+
+showStatus("denied");
+
+}
+
+// OWNER AUTHORIZATION
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+showStatus("offlineError");
+
+return;
+
+}
+
+showStatus("checking");
+
+try{
+
+const appToken=await getToken(appCheck,false);
+
+if(currentGeneration!==generation)return;
+
+if(
+
+typeof appToken?.token!=="string"
+
+||appToken.token.length===0
+
+){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(currentGeneration!==generation)return;
+
+if(
+
+token.signInProvider!=="google.com"
+
+||token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+){
+
+throw new Error("Owner claim missing");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(
+
+currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid
+
+)return;
+
+if(!ownerValid(response.data,user.uid)){
+
+throw new Error("Owner denied");
+
+}
+
+uid=user.uid;
+
+authorized=true;
+
+$("content").hidden=false;
+
+$("deniedPanel").hidden=true;
+
+showStatus("verified");
+
+subscribeOverview();
+
+updateControls();
+
+await loadDrivers(true);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+$("retryButton").onclick=()=>{
+
+if(auth?.currentUser){
+
+verifyOwner(auth.currentUser);
+
+}else{
+
+location.replace(pageLink("admin-login.html"));
+
+}
+
+};
+
+// INITIALIZE FIREBASE
+
+async function initializeSecurity(){
+
+try{
+
+app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+APP_CHECK_SITE_KEY
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+// PERIODIC OWNER SECURITY CHECK
+
+setInterval(async()=>{
+
+if(
+
+!validSession()
+
+||verifying
+
+||busy
+
+)return;
+
+const currentGeneration=generation;
+
+verifying=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(!ownerValid(result,uid)){
+
+throw new Error("Owner access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+if(currentGeneration===generation){
+
+verifying=false;
+
+}
+
+}
+
+},60000);
+
+// NETWORK SECURITY
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+showStatus("offlineError");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("pagehide",()=>{
+
+clearSession();
+
+});
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+document.addEventListener(
+
+"visibilitychange",
+
+()=>{
+
+if(
+
+!document.hidden
+
+&&auth?.currentUser
+
+&&!busy
+
+&&!authorized
+
+){
+
+verifyOwner(auth.currentUser);
+
+}
+
+}
+
+);
+
+renderLanguage();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
