@@ -1,0 +1,1936 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Notifications</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.notificationIcon{
+width:90px;
+height:90px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.8;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,minmax(0,1fr));
+gap:8px;
+margin:16px 0;
+}
+
+.stat{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px 5px;
+text-align:center;
+}
+
+.stat strong{
+display:block;
+font-size:25px;
+color:#FFD600;
+margin-bottom:8px;
+}
+
+.stat span{
+font-size:12px;
+line-height:1.6;
+}
+
+.notification{
+background:#252525;
+border:1px solid #555;
+border-left:4px solid #777;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+overflow-wrap:anywhere;
+}
+
+.notification.unread{
+border-left-color:#FFD600;
+background:#302C17;
+}
+
+.notification.urgent{
+border-left-color:#FF6464;
+}
+
+.notificationTitle{
+font-size:16px;
+font-weight:bold;
+line-height:1.7;
+color:#FFD600;
+}
+
+.notificationMessage{
+font-size:14px;
+line-height:1.9;
+white-space:pre-wrap;
+margin:10px 0;
+}
+
+.notificationTime{
+font-size:12px;
+color:#BBB;
+line-height:1.7;
+}
+
+.notificationCategory{
+font-size:12px;
+color:#CCC;
+margin-bottom:8px;
+}
+
+.notificationState{
+font-size:12px;
+color:#FFD600;
+margin-top:8px;
+}
+
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.smallButton{
+padding:10px;
+font-size:13px;
+}
+
+select{
+width:100%;
+padding:14px;
+background:#292929;
+color:#fff;
+border:1px solid #555;
+border-radius:9px;
+font-size:16px;
+margin:8px 0 15px;
+}
+
+label{
+font-size:14px;
+font-weight:bold;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.9;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+}
+
+.yellow{
+color:#FFD600;
+}
+
+.green{
+color:#4ADE80;
+}
+
+.red{
+color:#FF6464;
+}
+
+#status,
+#notificationStatus,
+#browserStatus{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+overflow-wrap:anywhere;
+}
+
+button:disabled,
+select:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+<div class="country">SRI LANKA</div>
+
+<div class="notificationIcon">
+<svg width="50" height="50"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+<path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+<path d="M10 21h4"/>
+</svg>
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status" role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel" class="panel" hidden>
+<p data-t="denied"></p>
+<a id="loginLink" class="action"
+data-t="login"></a>
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="driverDetails"></h3>
+
+<div class="row">
+<span data-t="driverName"></span>
+<strong id="driverName">—</strong>
+</div>
+
+<div class="row">
+<span>Driver ID</span>
+<strong id="driverId" class="yellow">—</strong>
+</div>
+
+<div class="row">
+<span data-t="accountStatus"></span>
+<strong id="accountStatus">—</strong>
+</div>
+
+</section>
+
+<div class="stats">
+
+<div class="stat">
+<strong id="totalCount">—</strong>
+<span data-t="total"></span>
+</div>
+
+<div class="stat">
+<strong id="unreadCount">—</strong>
+<span data-t="unread"></span>
+</div>
+
+<div class="stat">
+<strong id="urgentCount">—</strong>
+<span data-t="urgent"></span>
+</div>
+
+</div>
+
+<section class="panel">
+
+<h3 data-t="notificationSettings"></h3>
+
+<div class="row">
+<span data-t="browserPermission"></span>
+<strong id="permissionState">—</strong>
+</div>
+
+<button id="enableBrowser"
+class="action"
+data-t="enableBrowser"></button>
+
+<p id="browserStatus" role="status"></p>
+
+<p class="note"
+data-t="browserNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="notificationList"></h3>
+
+<label for="readFilter"
+data-t="filterStatus"></label>
+
+<select id="readFilter">
+<option value="all" data-t="all"></option>
+<option value="unread" data-t="unread"></option>
+<option value="read" data-t="read"></option>
+<option value="urgent" data-t="urgent"></option>
+</select>
+
+<label for="categoryFilter"
+data-t="filterCategory"></label>
+
+<select id="categoryFilter">
+<option value="all" data-t="all"></option>
+<option value="new_hire" data-t="newHire"></option>
+<option value="scheduled_ride" data-t="scheduledRide"></option>
+<option value="admin_message" data-t="adminMessage"></option>
+<option value="commission_due" data-t="commissionDue"></option>
+<option value="commission_overdue" data-t="commissionOverdue"></option>
+<option value="licence_expiry" data-t="licenceExpiry"></option>
+<option value="insurance_expiry" data-t="insuranceExpiry"></option>
+<option value="revenue_expiry" data-t="revenueExpiry"></option>
+<option value="account_status" data-t="accountUpdate"></option>
+<option value="terms_update" data-t="termsUpdate"></option>
+<option value="payment_update" data-t="paymentUpdate"></option>
+<option value="emergency" data-t="emergency"></option>
+<option value="system" data-t="system"></option>
+</select>
+
+<button id="markAllButton"
+class="action"
+data-t="markAll"
+disabled></button>
+
+<button id="refreshButton"
+class="action secondary"
+data-t="refresh"></button>
+
+<p id="notificationStatus"
+role="status"
+aria-live="polite"></p>
+
+<div id="notificationList"></div>
+
+<button id="loadMoreButton"
+class="action secondary"
+data-t="loadMore"
+hidden></button>
+
+</section>
+
+<a id="helpLink"
+class="action secondary"
+data-t="help"></a>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const LANGUAGES=["si","en","ta"];
+const params=new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+savedLanguage=localStorage.getItem("myride_language")||"si";
+}catch(e){}
+
+const lang=LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+heading:"රියදුරු දැනුම්දීම්",
+driverDetails:"රියදුරු ගිණුමේ විස්තර",
+driverName:"රියදුරුගේ නම",
+accountStatus:"ගිණුමේ තත්ත්වය",
+approved:"අනුමත කර ඇත",
+suspended:"අත්හිටුවා ඇත",
+blocked:"අවහිර කර ඇත",
+total:"සියලු දැනුම්දීම්",
+unread:"නොකියවූ",
+read:"කියවූ",
+urgent:"හදිසි",
+all:"සියල්ල",
+notificationSettings:"දැනුම්දීම් සැකසුම්",
+browserPermission:"Browser දැනුම්දීම් අවසරය",
+enableBrowser:"Browser Notifications සක්‍රිය කරන්න",
+browserNote:"මෙම පිටුව විවෘතව තිබෙන විට Browser සහාය අනුව දැනුම්දීම් පෙන්විය හැක. පිටුව වසා ඇති විට Push Notifications සඳහා වෙනම සේවාවක් අවශ්‍යයි.",
+permissionGranted:"අවසර ලබාදී ඇත",
+permissionDenied:"අවසර ලබාදී නැත",
+permissionDefault:"අවසර ඉල්ලා නැත",
+unsupported:"මෙම Browser එක සහාය නොදක්වයි",
+permissionFailed:"දැනුම්දීම් අවසරය ලබාගත නොහැක.",
+notificationList:"මගේ දැනුම්දීම්",
+filterStatus:"දැනුම්දීම් තත්ත්වය",
+filterCategory:"දැනුම්දීම් වර්ගය",
+newHire:"අලුත් හයර්",
+scheduledRide:"කලින් වෙන්කරගත් හයර්",
+adminMessage:"Admin පණිවිඩ",
+commissionDue:"කොමිස් ගෙවීමේ සිහිකැඳවීම්",
+commissionOverdue:"කල් ඉකුත් වූ කොමිස් ගෙවීම්",
+licenceExpiry:"රියදුරු බලපත්‍ර දැනුම්දීම්",
+insuranceExpiry:"රක්ෂණ දැනුම්දීම්",
+revenueExpiry:"ආදායම් බලපත්‍ර දැනුම්දීම්",
+accountUpdate:"ගිණුමේ තත්ත්වය",
+termsUpdate:"නව නීති සහ කොන්දේසි",
+paymentUpdate:"ගෙවීම් තත්ත්වය",
+emergency:"හදිසි දැනුම්දීම්",
+system:"පද්ධති දැනුම්දීම්",
+markAll:"සියල්ල කියවූ ලෙස සලකුණු කරන්න",
+markRead:"කියවූ ලෙස සලකුණු කරන්න",
+confirmAll:"සියලු දැනුම්දීම් කියවූ ලෙස සලකුණු කරන්නද?",
+open:"අදාළ පිටුව විවෘත කරන්න",
+refresh:"නැවත පරීක්ෂා කරන්න",
+loadMore:"තවත් දැනුම්දීම් බලන්න",
+empty:"මෙම වර්ගයට අදාළ දැනුම්දීම් නොමැත.",
+loading:"දැනුම්දීම් ලබාගනිමින්...",
+saving:"යාවත්කාලීන කරමින්...",
+saved:"යාවත්කාලීන කර ඇත.",
+failed:"යාවත්කාලීන කිරීම තහවුරු කළ නොහැක.",
+error:"දැනුම්දීම් ලබාගත නොහැක.",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+login:"Driver Login",
+help:"රියදුරු සහාය",
+back:"← Driver Dashboard",
+newNotification:"ඔබට අලුත් MY RIDE දැනුම්දීමක් ලැබී ඇත.",
+restricted:"ඔබගේ ගිණුම සීමා කර ඇත. Admin සහාය ලබාගන්න."
+},
+
+en:{
+heading:"Driver Notifications",
+driverDetails:"Driver Account Details",
+driverName:"Driver Name",
+accountStatus:"Account Status",
+approved:"Approved",
+suspended:"Suspended",
+blocked:"Blocked",
+total:"Total",
+unread:"Unread",
+read:"Read",
+urgent:"Urgent",
+all:"All",
+notificationSettings:"Notification Settings",
+browserPermission:"Browser Notification Permission",
+enableBrowser:"Enable Browser Notifications",
+browserNote:"Notifications may be displayed while this page is open, depending on browser support. Background push notifications require a separate service.",
+permissionGranted:"Granted",
+permissionDenied:"Denied",
+permissionDefault:"Not Requested",
+unsupported:"Not Supported",
+permissionFailed:"Unable to obtain notification permission.",
+notificationList:"My Notifications",
+filterStatus:"Notification Status",
+filterCategory:"Notification Category",
+newHire:"New Hires",
+scheduledRide:"Scheduled Rides",
+adminMessage:"Admin Messages",
+commissionDue:"Commission Reminders",
+commissionOverdue:"Overdue Commission",
+licenceExpiry:"Driving Licence Notifications",
+insuranceExpiry:"Insurance Notifications",
+revenueExpiry:"Revenue Licence Notifications",
+accountUpdate:"Account Status Updates",
+termsUpdate:"New Terms and Conditions",
+paymentUpdate:"Payment Updates",
+emergency:"Emergency Notifications",
+system:"System Notifications",
+markAll:"Mark All as Read",
+markRead:"Mark as Read",
+confirmAll:"Mark all notifications as read?",
+open:"Open Related Page",
+refresh:"Refresh",
+loadMore:"Load More Notifications",
+empty:"No notifications match this filter.",
+loading:"Loading notifications...",
+saving:"Updating...",
+saved:"Updated successfully.",
+failed:"Unable to confirm the update.",
+error:"Unable to load notifications.",
+checking:"Verifying account...",
+denied:"Access to this page is not authorized.",
+offline:"No internet connection.",
+login:"Driver Login",
+help:"Driver Help",
+back:"← Driver Dashboard",
+newNotification:"You have a new MY RIDE notification.",
+restricted:"Your account is restricted. Contact Admin support."
+},
+
+ta:{
+heading:"சாரதி அறிவிப்புகள்",
+driverDetails:"சாரதி கணக்கு விவரங்கள்",
+driverName:"சாரதியின் பெயர்",
+accountStatus:"கணக்கு நிலை",
+approved:"அங்கீகரிக்கப்பட்டது",
+suspended:"இடைநிறுத்தப்பட்டது",
+blocked:"தடுக்கப்பட்டது",
+total:"அனைத்தும்",
+unread:"படிக்காதவை",
+read:"படித்தவை",
+urgent:"அவசரம்",
+all:"அனைத்தும்",
+notificationSettings:"அறிவிப்பு அமைப்புகள்",
+browserPermission:"உலாவி அறிவிப்பு அனுமதி",
+enableBrowser:"உலாவி அறிவிப்புகளை இயக்கவும்",
+browserNote:"இந்த பக்கம் திறந்திருக்கும் போது உலாவி ஆதரவுக்கு ஏற்ப அறிவிப்புகள் காட்டப்படலாம். பின்னணி அறிவிப்புகளுக்கு தனி சேவை தேவை.",
+permissionGranted:"அனுமதி வழங்கப்பட்டது",
+permissionDenied:"அனுமதி மறுக்கப்பட்டது",
+permissionDefault:"அனுமதி கோரப்படவில்லை",
+unsupported:"ஆதரவு இல்லை",
+permissionFailed:"அறிவிப்பு அனுமதியை பெற முடியவில்லை.",
+notificationList:"எனது அறிவிப்புகள்",
+filterStatus:"அறிவிப்பு நிலை",
+filterCategory:"அறிவிப்பு வகை",
+newHire:"புதிய பயணங்கள்",
+scheduledRide:"திட்டமிட்ட பயணங்கள்",
+adminMessage:"நிர்வாக செய்திகள்",
+commissionDue:"கமிஷன் நினைவூட்டல்கள்",
+commissionOverdue:"காலாவதியான கமிஷன்",
+licenceExpiry:"சாரதி அனுமதிப்பத்திர அறிவிப்புகள்",
+insuranceExpiry:"காப்புறுதி அறிவிப்புகள்",
+revenueExpiry:"வருமான அனுமதிப்பத்திர அறிவிப்புகள்",
+accountUpdate:"கணக்கு நிலை மாற்றங்கள்",
+termsUpdate:"புதிய விதிமுறைகள்",
+paymentUpdate:"கொடுப்பனவு நிலை",
+emergency:"அவசர அறிவிப்புகள்",
+system:"கணினி அறிவிப்புகள்",
+markAll:"அனைத்தையும் படித்ததாக குறிக்கவும்",
+markRead:"படித்ததாக குறிக்கவும்",
+confirmAll:"அனைத்து அறிவிப்புகளையும் படித்ததாக குறிக்கவா?",
+open:"தொடர்புடைய பக்கத்தை திறக்கவும்",
+refresh:"புதுப்பிக்கவும்",
+loadMore:"மேலும் அறிவிப்புகளை பார்க்கவும்",
+empty:"இந்த வகைக்கு அறிவிப்புகள் இல்லை.",
+loading:"அறிவிப்புகள் பெறப்படுகின்றன...",
+saving:"புதுப்பிக்கப்படுகிறது...",
+saved:"வெற்றிகரமாக புதுப்பிக்கப்பட்டது.",
+failed:"புதுப்பிப்பை உறுதிப்படுத்த முடியவில்லை.",
+error:"அறிவிப்புகளை பெற முடியவில்லை.",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+login:"சாரதி உள்நுழைவு",
+help:"சாரதி உதவி",
+back:"← சாரதி முதன்மைப் பக்கம்",
+newNotification:"புதிய MY RIDE அறிவிப்பு கிடைத்துள்ளது.",
+restricted:"உங்கள் கணக்கு கட்டுப்படுத்தப்பட்டுள்ளது. நிர்வாக உதவியை பெறவும்."
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+el.textContent=t[el.dataset.t];
+});
+
+document.title="MY RIDE - "+t.heading;
+
+// SAFE PAGE LINKS
+
+const links={
+loginLink:"driver-login.html",
+backButton:"driver-dashboard.html",
+helpLink:"driver-help.html"
+};
+
+Object.entries(links).forEach(([id,page])=>{
+$(id).href="./"+page+"?lang="+lang;
+});
+
+const CATEGORIES={
+new_hire:"newHire",
+scheduled_ride:"scheduledRide",
+admin_message:"adminMessage",
+commission_due:"commissionDue",
+commission_overdue:"commissionOverdue",
+licence_expiry:"licenceExpiry",
+insurance_expiry:"insuranceExpiry",
+revenue_expiry:"revenueExpiry",
+account_status:"accountUpdate",
+terms_update:"termsUpdate",
+payment_update:"paymentUpdate",
+emergency:"emergency",
+system:"system"
+};
+
+const CATEGORY_PAGES={
+new_hire:"driver-new-hires.html",
+scheduled_ride:"driver-scheduled.html",
+commission_due:"driver-commission.html",
+commission_overdue:"driver-pay-commission.html",
+licence_expiry:"driver-renewal.html",
+insurance_expiry:"driver-renewal.html",
+revenue_expiry:"driver-renewal.html",
+account_status:"driver-account-status.html",
+terms_update:"driver-terms.html",
+payment_update:"driver-payment-history.html",
+emergency:"driver-sos.html"
+};
+
+const RESTRICTED_CATEGORIES=[
+"admin_message",
+"account_status",
+"emergency",
+"system"
+];
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+projectId:"my-ride-sri-lanka",
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+messagingSenderId:"88909447786",
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+let generation=0;
+
+let driverUnsubscribe=null;
+let summaryUnsubscribe=null;
+
+let records=[];
+let nextCursor=null;
+let summary=null;
+
+let loading=false;
+let saving=false;
+let checkingSession=false;
+let listGeneration=0;
+let refreshPending=false;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+let previousRevision=null;
+let previousUnread=null;
+
+let pendingMarkAll=null;
+const pendingReadRequests=new Map();
+
+function status(message){
+$("status").textContent=message;
+}
+
+try{
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+provider:new ReCaptchaEnterpriseProvider(
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+),
+isTokenAutoRefreshEnabled:true
+});
+
+auth=getAuth(app);
+db=getFirestore(app);
+functions=getFunctions(app);
+
+}catch(e){
+status(t.error);
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+return authorized
+&&uid!==null
+&&auth?.currentUser?.uid===uid
+&&navigator.onLine;
+}
+
+function validId(value){
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+}
+
+function validText(value,min,max){
+return typeof value==="string"
+&&value.trim().length>=min
+&&value.length<=max;
+}
+
+function validCount(value){
+return Number.isSafeInteger(value)&&value>=0;
+}
+
+function restricted(){
+return driver!==null
+&&driver.status!=="approved";
+}
+
+function formatDate(ms){
+if(!Number.isFinite(ms)
+||ms<=0
+||ms>8640000000000000){
+return "—";
+}
+
+return new Intl.DateTimeFormat(
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+{
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"short"
+}
+).format(new Date(ms));
+}
+
+async function serverCall(name,data={}){
+if(!validSession()){
+throw new Error("Unauthorized");
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+functions,name
+)(data);
+
+if(!validSession()
+||currentGeneration!==generation){
+throw new Error("Session changed");
+}
+
+return response.data;
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+if(gpsWatch!==null
+||!navigator.geolocation
+||!validSession()
+||restricted())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+async position=>{
+
+const c=position.coords;
+
+if(!validSession()
+||!driver
+||restricted()
+||driver.documentsValid!==true
+||!["online","busy"].includes(driver.availability)
+||!Number.isFinite(c.latitude)
+||!Number.isFinite(c.longitude)
+||!Number.isFinite(c.accuracy)
+||c.accuracy<0
+||c.accuracy>100
+||c.latitude<5.85
+||c.latitude>9.9
+||c.longitude<79.5
+||c.longitude>82
+||Date.now()-position.timestamp>30000
+||position.timestamp>Date.now()+5000
+||gpsSending
+||Date.now()-lastGpsSent<10000){
+return;
+}
+
+gpsSending=true;
+lastGpsSent=Date.now();
+
+try{
+await serverCall(
+"updateDriverLocation",
+{
+lat:c.latitude,
+lon:c.longitude,
+accuracy:c.accuracy,
+capturedAtMs:position.timestamp
+}
+);
+}catch(e){
+// Backend must expire stale GPS data.
+}finally{
+gpsSending=false;
+}
+
+},
+()=>{},
+{
+enableHighAccuracy:true,
+maximumAge:5000,
+timeout:15000
+}
+);
+}
+
+function stopGps(){
+if(gpsWatch!==null){
+navigator.geolocation.clearWatch(gpsWatch);
+gpsWatch=null;
+}
+}
+
+// BROWSER NOTIFICATION PERMISSION
+
+function updatePermission(){
+
+if(!("Notification" in window)){
+$("permissionState").textContent=t.unsupported;
+$("enableBrowser").disabled=true;
+return;
+}
+
+const permission=Notification.permission;
+
+$("permissionState").textContent=
+permission==="granted"
+?t.permissionGranted
+:permission==="denied"
+?t.permissionDenied
+:t.permissionDefault;
+
+$("enableBrowser").disabled=
+!validSession()
+||!driver
+||permission!=="default";
+}
+
+$("enableBrowser").onclick=async()=>{
+
+if(!validSession()
+||!driver
+||!("Notification" in window))return;
+
+try{
+await Notification.requestPermission();
+updatePermission();
+}catch(e){
+$("browserStatus").textContent=t.permissionFailed;
+}
+};
+
+function showBrowserNotification(){
+
+if(!validSession()
+||!driver
+||document.visibilityState!=="visible"
+||!("Notification" in window)
+||Notification.permission!=="granted"){
+return;
+}
+
+try{
+const notice=new Notification(
+"MY RIDE SRI LANKA",
+{
+body:t.newNotification,
+tag:"myride-driver-notification"
+}
+);
+
+notice.onclick=()=>{
+window.focus();
+notice.close();
+};
+
+setTimeout(()=>notice.close(),8000);
+
+}catch(e){
+// Some mobile browsers require a service worker.
+$("browserStatus").textContent=t.unsupported;
+}
+}
+
+updatePermission();
+
+// NOTIFICATION DATA VALIDATION
+
+function validRecord(data){
+
+if(!data
+||data.driverUid!==uid
+||!validId(data.notificationId)
+||!Object.hasOwn(CATEGORIES,data.category)
+||!["normal","urgent"].includes(data.priority)
+||typeof data.read!=="boolean"
+||!Number.isFinite(data.createdAtMs)
+||data.createdAtMs<=0
+||data.createdAtMs>8640000000000000
+||!data.translations){
+return false;
+}
+
+if(restricted()
+&&!RESTRICTED_CATEGORIES.includes(data.category)){
+return false;
+}
+
+return LANGUAGES.every(language=>{
+
+const text=data.translations[language];
+
+return text
+&&validText(text.title,1,200)
+&&validText(text.message,1,5000);
+
+});
+}
+
+function validSummary(data){
+return data
+&&data.driverUid===uid
+&&validCount(data.totalCount)
+&&validCount(data.unreadCount)
+&&validCount(data.urgentUnreadCount)
+&&validCount(data.revision)
+&&data.unreadCount<=data.totalCount
+&&data.urgentUnreadCount<=data.unreadCount;
+}
+
+// SAFE DOM ELEMENTS
+
+function element(tag,className,text){
+
+const node=document.createElement(tag);
+
+if(className){
+node.className=className;
+}
+
+if(text!==undefined){
+node.textContent=text;
+}
+
+return node;
+}
+
+function relatedPage(record){
+
+if(restricted()
+&&record.category!=="account_status"
+&&record.category!=="emergency"){
+return null;
+}
+
+const page=CATEGORY_PAGES[record.category];
+
+if(!page)return null;
+
+const query=new URLSearchParams({
+lang
+});
+
+if(validId(record.bookingId)
+&&["new_hire","scheduled_ride"].includes(record.category)){
+query.set("booking",record.bookingId);
+}
+
+return "./"+page+"?"+query.toString();
+}
+
+// DISPLAY NOTIFICATIONS
+
+function renderNotifications(){
+
+const container=$("notificationList");
+
+container.replaceChildren();
+
+records.forEach(record=>{
+
+const item=element(
+"article",
+"notification"
++(!record.read?" unread":"")
++(record.priority==="urgent"?" urgent":"")
+);
+
+const content=record.translations[lang];
+
+item.appendChild(
+element(
+"div",
+"notificationCategory",
+t[CATEGORIES[record.category]]
+)
+);
+
+item.appendChild(
+element(
+"div",
+"notificationTitle",
+content.title
+)
+);
+
+item.appendChild(
+element(
+"div",
+"notificationMessage",
+content.message
+)
+);
+
+item.appendChild(
+element(
+"div",
+"notificationTime",
+formatDate(record.createdAtMs)
+)
+);
+
+item.appendChild(
+element(
+"div",
+"notificationState",
+(record.read?t.read:t.unread)
++(record.priority==="urgent"?" • "+t.urgent:"")
+)
+);
+
+if(!record.read){
+
+const button=element(
+"button",
+"action secondary smallButton",
+t.markRead
+);
+
+button.type="button";
+button.disabled=saving||!validSession();
+
+button.onclick=()=>{
+markNotificationRead(record.notificationId);
+};
+
+item.appendChild(button);
+}
+
+const page=relatedPage(record);
+
+if(page){
+
+const link=element(
+"a",
+"action smallButton",
+t.open
+);
+
+link.href=page;
+
+link.onclick=event=>{
+if(!validSession()||!driver){
+event.preventDefault();
+}
+};
+
+item.appendChild(link);
+}
+
+container.appendChild(item);
+
+});
+
+$("loadMoreButton").hidden=!nextCursor;
+
+updateControls();
+}
+
+// FORM CONTROLS
+
+function updateControls(){
+
+const enabled=validSession()
+&&driver!==null;
+
+$("markAllButton").disabled=
+!enabled
+||saving
+||loading
+||!summary
+||summary.unreadCount===0;
+
+$("refreshButton").disabled=
+!enabled||loading||saving;
+
+$("loadMoreButton").disabled=
+!enabled||loading||saving||!nextCursor;
+
+$("readFilter").disabled=
+!enabled||saving;
+
+$("categoryFilter").disabled=
+!enabled||saving;
+
+updatePermission();
+}
+
+// LOAD NOTIFICATIONS FROM SERVER
+
+async function loadNotifications(append=false){
+
+if(!validSession()||!driver)return;
+
+if(append&&(loading||!nextCursor))return;
+
+const currentGeneration=generation;
+const currentListGeneration=++listGeneration;
+
+const cursor=append?nextCursor:null;
+
+if(!append){
+records=[];
+nextCursor=null;
+}
+
+loading=true;
+
+$("notificationStatus").textContent=t.loading;
+
+renderNotifications();
+
+try{
+
+const result=await serverCall(
+"getDriverNotifications",
+{
+readFilter:$("readFilter").value,
+category:$("categoryFilter").value,
+limit:20,
+cursor
+}
+);
+
+if(currentGeneration!==generation
+||currentListGeneration!==listGeneration
+||!driver)return;
+
+if(result?.success!==true
+||result.driverUid!==uid
+||!Array.isArray(result.records)
+||result.records.length>20
+||!result.records.every(validRecord)
+||!(result.nextCursor===null
+||validText(result.nextCursor,1,2048))){
+throw new Error("Invalid notification response");
+}
+
+if(result.nextCursor!==null
+&&result.nextCursor===cursor){
+throw new Error("Invalid pagination");
+}
+
+const combined=new Map();
+
+if(append){
+records.forEach(record=>{
+combined.set(record.notificationId,record);
+});
+}
+
+result.records.forEach(record=>{
+combined.set(record.notificationId,record);
+});
+
+records=Array.from(combined.values())
+.sort((a,b)=>b.createdAtMs-a.createdAtMs);
+
+nextCursor=result.nextCursor;
+
+$("notificationStatus").textContent=
+records.length===0?t.empty:"";
+
+renderNotifications();
+
+}catch(e){
+
+if(currentGeneration!==generation
+||currentListGeneration!==listGeneration)return;
+
+$("notificationStatus").textContent=t.error;
+
+}finally{
+
+if(currentGeneration===generation
+&&currentListGeneration===listGeneration){
+
+loading=false;
+updateControls();
+
+if(refreshPending&&!saving){
+refreshPending=false;
+loadNotifications(false);
+}
+
+}
+
+}
+
+}
+
+// NOTIFICATION FILTERS
+
+$("readFilter").onchange=()=>{
+loadNotifications(false);
+};
+
+$("categoryFilter").onchange=()=>{
+loadNotifications(false);
+};
+
+$("refreshButton").onclick=()=>{
+loadNotifications(false);
+};
+
+$("loadMoreButton").onclick=()=>{
+loadNotifications(true);
+};
+
+// MARK SINGLE NOTIFICATION AS READ
+
+async function markNotificationRead(notificationId){
+
+if(!validSession()
+||!driver
+||saving
+||!validId(notificationId))return;
+
+const record=records.find(
+item=>item.notificationId===notificationId
+);
+
+if(!record||record.read)return;
+
+const currentGeneration=generation;
+
+if(!pendingReadRequests.has(notificationId)){
+pendingReadRequests.set(
+notificationId,
+crypto.randomUUID()
+);
+}
+
+saving=true;
+
+$("notificationStatus").textContent=t.saving;
+
+renderNotifications();
+
+try{
+
+const result=await serverCall(
+"markDriverNotificationRead",
+{
+notificationId,
+requestId:pendingReadRequests.get(notificationId)
+}
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.updated!==true
+||result.driverUid!==uid
+||result.notificationId!==notificationId){
+throw new Error("Read status not confirmed");
+}
+
+pendingReadRequests.delete(notificationId);
+
+$("notificationStatus").textContent=t.saved;
+
+refreshPending=false;
+
+await loadNotifications(false);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("notificationStatus").textContent=t.failed;
+
+}finally{
+
+if(currentGeneration===generation){
+
+saving=false;
+renderNotifications();
+
+if(refreshPending){
+refreshPending=false;
+loadNotifications(false);
+}
+
+}
+
+}
+
+}
+
+// MARK ALL NOTIFICATIONS AS READ
+
+$("markAllButton").onclick=async()=>{
+
+if(!validSession()
+||!driver
+||saving
+||!summary
+||summary.unreadCount===0)return;
+
+if(!confirm(t.confirmAll))return;
+
+const currentGeneration=generation;
+
+if(!pendingMarkAll
+||pendingMarkAll.revision!==summary.revision){
+
+pendingMarkAll={
+requestId:crypto.randomUUID(),
+revision:summary.revision
+};
+
+}
+
+saving=true;
+
+$("notificationStatus").textContent=t.saving;
+
+renderNotifications();
+
+try{
+
+const result=await serverCall(
+"markAllDriverNotificationsRead",
+{
+requestId:pendingMarkAll.requestId,
+expectedRevision:pendingMarkAll.revision
+}
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.updated!==true
+||result.driverUid!==uid){
+throw new Error("Update not confirmed");
+}
+
+pendingMarkAll=null;
+
+$("notificationStatus").textContent=t.saved;
+
+refreshPending=false;
+
+await loadNotifications(false);
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("notificationStatus").textContent=t.failed;
+
+}finally{
+
+if(currentGeneration===generation){
+
+saving=false;
+renderNotifications();
+
+if(refreshPending){
+refreshPending=false;
+loadNotifications(false);
+}
+
+}
+
+}
+
+};
+
+// LIVE NOTIFICATION SUMMARY
+
+function clearSummary(){
+
+summary=null;
+
+$("totalCount").textContent="—";
+$("unreadCount").textContent="—";
+$("urgentCount").textContent="—";
+
+updateControls();
+}
+
+function subscribeSummary(){
+
+if(summaryUnsubscribe){
+summaryUnsubscribe();
+summaryUnsubscribe=null;
+}
+
+clearSummary();
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+summaryUnsubscribe=onSnapshot(
+
+doc(
+db,
+"drivers",
+uid,
+"notificationState",
+"summary"
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession()
+||!driver)return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites
+||!snapshot.exists()
+||!validSummary(snapshot.data())){
+
+clearSummary();
+return;
+}
+
+const data=snapshot.data();
+
+const changed=previousRevision!==null
+&&data.revision!==previousRevision;
+
+const newUnread=previousUnread!==null
+&&data.unreadCount>previousUnread;
+
+summary=data;
+
+$("totalCount").textContent=data.totalCount;
+$("unreadCount").textContent=data.unreadCount;
+$("urgentCount").textContent=data.urgentUnreadCount;
+
+previousRevision=data.revision;
+previousUnread=data.unreadCount;
+
+if(newUnread){
+showBrowserNotification();
+}
+
+if(changed){
+
+if(loading||saving){
+refreshPending=true;
+}else{
+loadNotifications(false);
+}
+
+}
+
+updateControls();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+clearSummary();
+
+$("notificationStatus").textContent=t.error;
+
+}
+
+);
+
+}
+
+// CLEAR PRIVATE INFORMATION
+
+function clearNotificationData(){
+
+listGeneration++;
+
+if(summaryUnsubscribe){
+summaryUnsubscribe();
+summaryUnsubscribe=null;
+}
+
+records=[];
+nextCursor=null;
+loading=false;
+saving=false;
+refreshPending=false;
+
+previousRevision=null;
+previousUnread=null;
+
+pendingMarkAll=null;
+pendingReadRequests.clear();
+
+$("notificationList").replaceChildren();
+$("notificationStatus").textContent="";
+$("loadMoreButton").hidden=true;
+
+clearSummary();
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+uid=null;
+driver=null;
+
+if(driverUnsubscribe){
+driverUnsubscribe();
+driverUnsubscribe=null;
+}
+
+stopGps();
+clearNotificationData();
+
+$("driverName").textContent="—";
+$("driverId").textContent="—";
+$("accountStatus").textContent="—";
+$("browserStatus").textContent="";
+$("content").hidden=true;
+
+updateControls();
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+}
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+stopGps();
+clearNotificationData();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+||data.uid!==uid
+||!["approved","suspended","blocked"].includes(data.status)
+||data.activationComplete!==true
+||!validText(data.fullName,1,150)
+||!validId(data.driverId)){
+
+denyAccess();
+return;
+}
+
+const firstLoad=driver===null;
+
+const statusChanged=driver!==null
+&&driver.status!==data.status;
+
+driver=data;
+
+$("driverName").textContent=data.fullName;
+$("driverId").textContent=data.driverId;
+
+$("accountStatus").textContent=t[data.status];
+
+$("accountStatus").className=
+data.status==="approved"?"green":"red";
+
+$("content").hidden=false;
+$("accessPanel").hidden=true;
+
+if(data.status==="approved"
+&&data.documentsValid===true
+&&["online","busy"].includes(data.availability)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(firstLoad||statusChanged){
+
+clearNotificationData();
+
+$("readFilter").value="all";
+$("categoryFilter").value="all";
+
+subscribeSummary();
+loadNotifications(false);
+
+}
+
+status(restricted()?t.restricted:"");
+
+updateControls();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+denyAccess();
+return;
+}
+
+if(!navigator.onLine){
+status(t.offline);
+return;
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+||token.signInProvider!=="custom"){
+throw new Error("Driver login required");
+}
+
+const response=await httpsCallable(
+functions,
+"verifyDriverNotificationSession"
+)({});
+
+if(currentGeneration!==generation
+||auth.currentUser?.uid!==user.uid){
+return;
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+||account.uid!==user.uid
+||account.activationComplete!==true
+||!["approved","suspended","blocked"].includes(account.status)){
+throw new Error("Access denied");
+}
+
+authorized=true;
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+onAuthStateChanged(auth,verifyDriver);
+}
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+||!driver
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+"verifyDriverNotificationSession"
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+||result.uid!==uid
+||result.activationComplete!==true
+||!["approved","suspended","blocked"].includes(result.status)){
+
+denyAccess();
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+checkingSession=false;
+
+}
+
+},60000);
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+verifyDriver(auth.currentUser);
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+"pagehide",
+disconnect
+);
+
+window.addEventListener(
+"pageshow",
+event=>{
+
+if(event.persisted&&auth){
+verifyDriver(auth.currentUser);
+}
+
+}
+);
+
+document.addEventListener(
+"visibilitychange",
+()=>{
+
+if(document.visibilityState==="visible"){
+updatePermission();
+}
+
+}
+);
+
+</script>
+
+</body>
+</html>
