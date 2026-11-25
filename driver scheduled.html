@@ -1,0 +1,2195 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Scheduled Hires</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:18px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{text-align:center;line-height:1.7}
+
+h3{color:#FFD600}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:14px;
+padding:18px;
+margin:18px 0;
+}
+
+.ride{
+border-color:#FFD600;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:14px;
+padding:12px 0;
+border-bottom:1px solid #444;
+}
+
+.row strong{
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+.location{
+background:#292929;
+border-radius:9px;
+padding:15px;
+margin:12px 0;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+.label{
+color:#BBB;
+font-size:13px;
+}
+
+.yellow{color:#FFD600}
+.green{color:#4ADE80}
+.red{color:#FF6464}
+
+.money{
+font-size:22px;
+font-weight:bold;
+}
+
+.countdown{
+background:#292929;
+padding:15px;
+border-radius:10px;
+text-align:center;
+margin:15px 0;
+}
+
+.clock{
+font-size:28px;
+font-weight:bold;
+color:#FFD600;
+margin-top:10px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:16px;
+font-weight:bold;
+text-decoration:none;
+text-align:center;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+.secondary{
+background:transparent;
+border:1px solid #FFD600;
+color:#FFD600;
+}
+
+.note{
+color:#BBB;
+font-size:14px;
+line-height:1.8;
+}
+
+#status{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+
+.back{
+display:block;
+text-align:center;
+color:#FFD600;
+padding:25px;
+text-decoration:none;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="reminders"></h3>
+
+<p class="note"
+data-t="reminderNote"></p>
+
+<button id="notificationButton"
+class="secondary"
+data-t="enableNotifications"></button>
+
+<p id="notificationStatus"
+class="note"></p>
+
+</section>
+
+<section id="emptyPanel"
+class="panel" hidden>
+
+<h3 data-t="empty"></h3>
+
+<p class="note"
+data-t="emptyMessage"></p>
+
+</section>
+
+<div id="rideList"></div>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+</div>
+
+<a id="backButton"
+class="back"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+collection,
+query,
+where,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"වෙන්කර ඇති හයර්",
+
+scheduled:"වෙන්කර ඇති හයර් එක",
+
+date:"දිනය",
+
+time:"වේලාව",
+
+customer:"පාරිභෝගිකයා",
+
+phone:"දුරකථන අංකය",
+
+pickup:"ලබාගන්නා ස්ථානය",
+
+destination:"ගමනාන්තය",
+
+passengers:"මගීන් ගණන",
+
+vehicle:"වාහන වර්ගය",
+
+distance:"ඇස්තමේන්තුගත දුර",
+
+duration:"ඇස්තමේන්තුගත කාලය",
+
+fare:"ඇස්තමේන්තුගත ගාස්තුව",
+
+commission:"MY RIDE කොමිස්",
+
+income:"රියදුරු ආදායම",
+
+remaining:"හයර් එකට ඉතිරි කාලය",
+
+due:"නියමිත වේලාව පැමිණ ඇත",
+
+call:"පාරිභෝගිකයාට ඇමතුමක් ලබාගන්න",
+
+whatsapp:"WhatsApp පණිවිඩයක් යවන්න",
+
+prepare:"හයර් එකට සූදානම් වන්න",
+
+prepareConfirm:"මෙම හයර් එක සඳහා පිටත්වීමට සූදානම්ද?",
+
+openRide:"හයර් එක විවෘත කරන්න",
+
+notReady:"නියමිත වේලාවට පෙර සූදානම් වීමේ අවසරය ලැබෙන තෙක් රැඳී සිටින්න.",
+
+reminders:"හයර් දැනුම්දීම්",
+
+reminderNote:"හයර් එකට විනාඩි 60, 30 සහ 10කට පෙර මෙම පිටුව විවෘතව තිබෙන විට මතක් කරනු ලැබේ.",
+
+enableNotifications:"Notification අවසරය ලබාදෙන්න",
+
+notificationEnabled:"Notification අවසරය ලබාදී ඇත.",
+
+notificationDenied:"Notification අවසරය ලබාදී නොමැත.",
+
+notificationUnavailable:"මෙම Browser එකේ Notification පහසුකම නොමැත.",
+
+reminder:"ඔබගේ වෙන්කර ඇති හයර් එකට ඉතිරි කාලය:",
+
+minutes:"මිනිත්තු",
+
+empty:"වෙන්කර ඇති හයර් නොමැත",
+
+emptyMessage:"ඔබ භාරගත් ඉදිරි හයර් මෙහි පෙන්වනු ඇත.",
+
+checking:"රියදුරු ගිණුම පරීක්ෂා කරමින්...",
+
+denied:"මෙම සේවාව භාවිතා කිරීමට අවසර නැත.",
+
+login:"Driver Login",
+
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+
+error:"තොරතුරු ලබාගත නොහැක. නැවත උත්සාහ කරන්න.",
+
+processing:"හයර් තත්ත්වය පරීක්ෂා කරමින්...",
+
+gpsError:"GPS ස්ථානය ලබාගත නොහැක.",
+
+estimate:"අවසාන ගාස්තුව සැබෑ ගමන අනුව ගණනය වේ.",
+
+refresh:"නැවත පරීක්ෂා කරන්න",
+
+back:"← Driver Dashboard",
+
+bike:"Scooter / Bike",
+
+tuk:"ත්‍රිරෝද රථය",
+
+car:"කාර් රථය",
+
+van:"වෑන් රථය"
+
+},
+
+en:{
+
+heading:"Scheduled Hires",
+
+scheduled:"Scheduled Hire",
+
+date:"Date",
+
+time:"Time",
+
+customer:"Customer",
+
+phone:"Phone Number",
+
+pickup:"Pickup Location",
+
+destination:"Destination",
+
+passengers:"Passengers",
+
+vehicle:"Vehicle Type",
+
+distance:"Estimated Distance",
+
+duration:"Estimated Duration",
+
+fare:"Estimated Fare",
+
+commission:"MY RIDE Commission",
+
+income:"Driver Income",
+
+remaining:"Time Remaining",
+
+due:"Scheduled time has arrived",
+
+call:"Call Customer",
+
+whatsapp:"Send WhatsApp Message",
+
+prepare:"Prepare for Hire",
+
+prepareConfirm:"Are you ready to depart for this hire?",
+
+openRide:"Open Ride",
+
+notReady:"Wait until preparation is authorized.",
+
+reminders:"Hire Reminders",
+
+reminderNote:"Reminders are shown 60, 30 and 10 minutes before the hire while this page is running.",
+
+enableNotifications:"Enable Notifications",
+
+notificationEnabled:"Notification permission granted.",
+
+notificationDenied:"Notification permission not granted.",
+
+notificationUnavailable:"Notifications are unavailable in this browser.",
+
+reminder:"Time remaining before your scheduled hire:",
+
+minutes:"Minutes",
+
+empty:"No Scheduled Hires",
+
+emptyMessage:"Your accepted future hires will appear here.",
+
+checking:"Verifying driver account...",
+
+denied:"Access to this service is not authorized.",
+
+login:"Driver Login",
+
+offline:"No internet connection.",
+
+error:"Unable to load information. Try again.",
+
+processing:"Checking hire status...",
+
+gpsError:"Unable to obtain GPS location.",
+
+estimate:"The final fare is calculated from the actual trip.",
+
+refresh:"Refresh",
+
+back:"← Driver Dashboard",
+
+bike:"Scooter / Bike",
+
+tuk:"Three Wheeler",
+
+car:"Car",
+
+van:"Van"
+
+},
+
+ta:{
+
+heading:"முன்பதிவு பயணங்கள்",
+
+scheduled:"முன்பதிவு பயணம்",
+
+date:"தேதி",
+
+time:"நேரம்",
+
+customer:"வாடிக்கையாளர்",
+
+phone:"தொலைபேசி எண்",
+
+pickup:"புறப்படும் இடம்",
+
+destination:"செல்லும் இடம்",
+
+passengers:"பயணிகள் எண்ணிக்கை",
+
+vehicle:"வாகன வகை",
+
+distance:"மதிப்பிடப்பட்ட தூரம்",
+
+duration:"மதிப்பிடப்பட்ட நேரம்",
+
+fare:"மதிப்பிடப்பட்ட கட்டணம்",
+
+commission:"MY RIDE கமிஷன்",
+
+income:"சாரதி வருமானம்",
+
+remaining:"மீதமுள்ள நேரம்",
+
+due:"திட்டமிடப்பட்ட நேரம் வந்துவிட்டது",
+
+call:"வாடிக்கையாளரை அழைக்கவும்",
+
+whatsapp:"WhatsApp செய்தி அனுப்பவும்",
+
+prepare:"பயணத்திற்கு தயாராகவும்",
+
+prepareConfirm:"இந்த பயணத்திற்கு புறப்பட தயாரா?",
+
+openRide:"பயணத்தை திறக்கவும்",
+
+notReady:"தயாராக அனுமதி கிடைக்கும் வரை காத்திருக்கவும்.",
+
+reminders:"பயண நினைவூட்டல்கள்",
+
+reminderNote:"இந்தப் பக்கம் இயங்கும்போது பயணத்திற்கு 60, 30 மற்றும் 10 நிமிடங்களுக்கு முன் நினைவூட்டல்கள் காட்டப்படும்.",
+
+enableNotifications:"அறிவிப்புகளை இயக்கவும்",
+
+notificationEnabled:"அறிவிப்பு அனுமதி வழங்கப்பட்டது.",
+
+notificationDenied:"அறிவிப்பு அனுமதி வழங்கப்படவில்லை.",
+
+notificationUnavailable:"இந்த உலாவியில் அறிவிப்புகள் கிடைக்கவில்லை.",
+
+reminder:"முன்பதிவு பயணத்திற்கு மீதமுள்ள நேரம்:",
+
+minutes:"நிமிடங்கள்",
+
+empty:"முன்பதிவு பயணங்கள் இல்லை",
+
+emptyMessage:"நீங்கள் ஏற்ற எதிர்கால பயணங்கள் இங்கே காட்டப்படும்.",
+
+checking:"சாரதி கணக்கு சரிபார்க்கப்படுகிறது...",
+
+denied:"இந்த சேவையை அணுக அனுமதி இல்லை.",
+
+login:"சாரதி உள்நுழைவு",
+
+offline:"இணைய இணைப்பு இல்லை.",
+
+error:"தகவல்களைப் பெற முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+
+processing:"பயண நிலை சரிபார்க்கப்படுகிறது...",
+
+gpsError:"GPS இருப்பிடத்தைப் பெற முடியவில்லை.",
+
+estimate:"இறுதி கட்டணம் உண்மையான பயணத்தின் அடிப்படையில் கணக்கிடப்படும்.",
+
+refresh:"புதுப்பிக்கவும்",
+
+back:"← சாரதி முதன்மைப் பக்கம்",
+
+bike:"மோட்டார் சைக்கிள்",
+
+tuk:"முச்சக்கர வண்டி",
+
+car:"கார்",
+
+van:"வேன்"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+$("backButton").href=
+
+"./driver-dashboard.html?lang="+lang;
+
+$("loginLink").href=
+
+"./driver-login.html?lang="+lang;
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let authorized=false;
+let driver=null;
+
+let driverUnsubscribe=null;
+let ridesUnsubscribe=null;
+
+let generation=0;
+let busy=false;
+
+let serverOffset=0;
+let clockCheckedAt=0;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+const rides=new Map();
+
+const pendingRequests=new Map();
+
+const notified=new Set();
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SESSION SECURITY
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function number(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=0;
+
+}
+
+function money(value){
+
+return number(value)
+
+?"Rs. "+value.toLocaleString(
+
+"en-LK",
+
+{maximumFractionDigits:2}
+
+)
+
+:"—";
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const currentUid=uid;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||generation!==currentGeneration
+
+||uid!==currentUid){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// SERVER TIME
+
+async function syncClock(){
+
+const start=Date.now();
+
+const result=await serverCall(
+
+"getDriverServerTime"
+
+);
+
+const end=Date.now();
+
+if(!Number.isFinite(result?.serverTimeMs)
+
+||end-start>10000){
+
+throw new Error("Clock unavailable");
+
+}
+
+serverOffset=
+
+result.serverTimeMs-(start+end)/2;
+
+clockCheckedAt=end;
+
+}
+
+function clockValid(){
+
+return clockCheckedAt>0
+
+&&Date.now()-clockCheckedAt<120000;
+
+}
+
+function serverNow(){
+
+return Date.now()+serverOffset;
+
+}
+
+// GPS SYSTEM
+
+function validPosition(position){
+
+const c=position.coords;
+
+return Number.isFinite(c.latitude)
+
+&&Number.isFinite(c.longitude)
+
+&&Number.isFinite(c.accuracy)
+
+&&c.latitude>=5.85
+
+&&c.latitude<=9.9
+
+&&c.longitude>=79.5
+
+&&c.longitude<=82
+
+&&c.accuracy>=0
+
+&&c.accuracy<=100
+
+&&Date.now()-position.timestamp<30000
+
+&&position.timestamp<=Date.now()+5000;
+
+}
+
+function locationData(position){
+
+return{
+
+lat:position.coords.latitude,
+
+lon:position.coords.longitude,
+
+accuracy:position.coords.accuracy,
+
+capturedAtMs:position.timestamp
+
+};
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(driver.availability)
+
+||!validPosition(position)
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+
+"updateDriverLocation",
+
+locationData(position)
+
+);
+
+}catch(e){
+
+status(t.gpsError);
+
+}finally{
+
+gpsSending=false;
+
+}
+
+},
+
+()=>status(t.gpsError),
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function getPosition(){
+
+return new Promise((resolve,reject)=>{
+
+if(!navigator.geolocation){
+
+reject(new Error("GPS unavailable"));
+
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+resolve,
+
+reject,
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:0,
+
+timeout:15000
+
+}
+
+);
+
+});
+
+}
+
+// CLEAR PRIVATE DATA
+
+function clearRides(){
+
+rides.clear();
+
+$("rideList").replaceChildren();
+
+$("emptyPanel").hidden=true;
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+clockCheckedAt=0;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+if(ridesUnsubscribe){
+
+ridesUnsubscribe();
+
+ridesUnsubscribe=null;
+
+}
+
+stopGps();
+
+clearRides();
+
+pendingRequests.clear();
+
+notified.clear();
+
+$("content").hidden=true;
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// PHONE VALIDATION
+
+function normalizePhone(value){
+
+if(typeof value!=="string")return null;
+
+const phone=value.replace(/[\s-]/g,"");
+
+if(!/^(?:\+94|94|0)7\d{8}$/.test(phone)){
+
+return null;
+
+}
+
+return "+94"+phone.slice(-9);
+
+}
+
+// BOOKING VALIDATION
+
+function validRide(id,data){
+
+if(!validId(id)
+
+||data.assignedDriver?.uid!==uid
+
+||data.status!=="scheduled"
+
+||typeof data.pickupName!=="string"
+
+||typeof data.destinationName!=="string"
+
+||!["bike","tuk","car","van"].includes(data.vehicle)
+
+||!Number.isInteger(data.passengers)
+
+||data.passengers<1
+
+||!number(data.estimatedDistance)
+
+||!number(data.estimatedDuration)
+
+||!number(data.estimatedFare)
+
+||!number(data.estimatedCommission)
+
+||!number(data.estimatedDriverIncome)
+
+||!number(data.commissionRate)
+
+||data.commissionRate>100){
+
+return false;
+
+}
+
+const scheduledAt=data.scheduledAt?.toMillis?.();
+
+const prepareAt=data.prepareAllowedAt?.toMillis?.();
+
+if(!Number.isFinite(scheduledAt)
+
+||!Number.isFinite(prepareAt)
+
+||prepareAt>scheduledAt){
+
+return false;
+
+}
+
+if(Math.abs(
+
+data.estimatedFare
+
+-data.estimatedCommission
+
+-data.estimatedDriverIncome
+
+)>0.02){
+
+return false;
+
+}
+
+return true;
+
+}
+
+// SAFE UI ELEMENTS
+
+function addRow(parent,label,value,className=""){
+
+const row=document.createElement("div");
+
+row.className="row";
+
+const name=document.createElement("span");
+
+name.textContent=label;
+
+const content=document.createElement("strong");
+
+content.textContent=String(value??"—");
+
+content.className=className;
+
+row.append(name,content);
+
+parent.appendChild(row);
+
+}
+
+function addLocation(parent,label,value){
+
+const box=document.createElement("div");
+
+box.className="location";
+
+const name=document.createElement("div");
+
+name.className="label";
+
+name.textContent=label;
+
+const content=document.createElement("strong");
+
+content.textContent=value;
+
+box.append(name,content);
+
+parent.appendChild(box);
+
+}
+
+function addLink(parent,label,url){
+
+const link=document.createElement("a");
+
+link.className="action";
+
+link.textContent=label;
+
+link.href=url;
+
+parent.appendChild(link);
+
+return link;
+
+}
+
+// SRI LANKA DATE AND TIME
+
+function formatDate(timestamp){
+
+return new Intl.DateTimeFormat(
+
+"en-GB",
+
+{
+
+timeZone:"Asia/Colombo",
+
+year:"numeric",
+
+month:"2-digit",
+
+day:"2-digit"
+
+}
+
+).format(new Date(timestamp));
+
+}
+
+function formatTime(timestamp){
+
+return new Intl.DateTimeFormat(
+
+"en-GB",
+
+{
+
+timeZone:"Asia/Colombo",
+
+hour:"2-digit",
+
+minute:"2-digit",
+
+hour12:true
+
+}
+
+).format(new Date(timestamp));
+
+}
+
+// NOTIFICATIONS
+
+$("notificationButton").onclick=async()=>{
+
+if(!("Notification" in window)){
+
+$("notificationStatus").textContent=
+
+t.notificationUnavailable;
+
+return;
+
+}
+
+try{
+
+const permission=
+
+await Notification.requestPermission();
+
+$("notificationStatus").textContent=
+
+permission==="granted"
+
+?t.notificationEnabled
+
+:t.notificationDenied;
+
+}catch(e){
+
+$("notificationStatus").textContent=
+
+t.notificationUnavailable;
+
+}
+
+};
+
+function sendReminder(id,minutes){
+
+const key=id+"_"+minutes;
+
+if(notified.has(key))return;
+
+notified.add(key);
+
+const message=
+
+t.reminder+" "+minutes+" "+t.minutes;
+
+$("notificationStatus").textContent=
+
+message+" | "+id;
+
+if("Notification" in window
+
+&&Notification.permission==="granted"){
+
+try{
+
+new Notification(
+
+"MY RIDE",
+
+{
+
+body:message,
+
+tag:"myride-"+key
+
+}
+
+);
+
+}catch(e){
+
+// In-page reminder remains visible.
+
+}
+
+}
+
+}
+
+// WHATSAPP MESSAGE
+
+function whatsappUrl(id,data,phone){
+
+const customerLanguage=
+
+languages.includes(data.language)
+
+?data.language:"si";
+
+const driverName=
+
+String(driver?.fullName||"MY RIDE Driver");
+
+const driverPhone=
+
+normalizePhone(driver?.phone)||"";
+
+const scheduledTime=formatTime(
+
+data.scheduledAt.toMillis()
+
+);
+
+const scheduledDate=formatDate(
+
+data.scheduledAt.toMillis()
+
+);
+
+const messages={
+
+si:
+
+"ආයුබෝවන්! මම ඔබගේ MY RIDE රියදුරු "+driverName+".\nදුරකථන අංකය: "+driverPhone+"\nBooking ID: "+id+"\nඔබගේ වෙන්කර ඇති හයර් එක: "+scheduledDate+" "+scheduledTime,
+
+en:
+
+"Hello! I am your MY RIDE driver "+driverName+".\nPhone: "+driverPhone+"\nBooking ID: "+id+"\nYour scheduled ride: "+scheduledDate+" "+scheduledTime,
+
+ta:
+
+"வணக்கம்! நான் உங்கள் MY RIDE சாரதி "+driverName+".\nதொலைபேசி: "+driverPhone+"\nBooking ID: "+id+"\nஉங்கள் முன்பதிவு பயணம்: "+scheduledDate+" "+scheduledTime
+
+};
+
+return "https://wa.me/"
+
++phone.replace("+","")
+
++"?text="
+
++encodeURIComponent(
+
+messages[customerLanguage]
+
+);
+
+}
+
+// PREPARE FOR SCHEDULED HIRE
+
+async function prepareRide(id){
+
+if(busy||!validSession()
+
+||!clockValid())return;
+
+const ride=rides.get(id);
+
+if(!ride)return;
+
+if(serverNow()<ride.prepareAt){
+
+status(t.notReady);
+
+return;
+
+}
+
+if(!confirm(t.prepareConfirm))return;
+
+busy=true;
+
+updateCountdowns();
+
+status(t.processing);
+
+try{
+
+const position=await getPosition();
+
+if(!validPosition(position)){
+
+status(t.gpsError);
+
+return;
+
+}
+
+if(!pendingRequests.has(id)){
+
+pendingRequests.set(
+
+id,
+
+crypto.randomUUID()
+
+);
+
+}
+
+const result=await serverCall(
+
+"prepareScheduledRide",
+
+{
+
+bookingId:id,
+
+requestId:pendingRequests.get(id),
+
+location:locationData(position)
+
+}
+
+);
+
+if(result?.accepted!==true
+
+||result.bookingId!==id
+
+||result.status!=="accepted"){
+
+throw new Error("Preparation denied");
+
+}
+
+pendingRequests.delete(id);
+
+location.replace(
+
+"./driver-active-ride.html"
+
++"?lang="+lang
+
++"&booking="+encodeURIComponent(id)
+
+);
+
+}catch(e){
+
+status(t.error);
+
+}finally{
+
+busy=false;
+
+updateCountdowns();
+
+}
+
+}
+
+// BUILD SCHEDULED RIDE CARD
+
+function buildRide(id,data){
+
+const panel=document.createElement("section");
+
+panel.className="panel ride";
+
+const title=document.createElement("h3");
+
+title.textContent="📅 "+t.scheduled;
+
+panel.appendChild(title);
+
+const booking=document.createElement("p");
+
+booking.textContent="Booking ID: "+id;
+
+panel.appendChild(booking);
+
+const scheduledAt=data.scheduledAt.toMillis();
+
+const prepareAt=data.prepareAllowedAt.toMillis();
+
+addRow(panel,t.date,formatDate(scheduledAt));
+
+addRow(panel,t.time,formatTime(scheduledAt));
+
+addRow(
+
+panel,
+
+t.customer,
+
+typeof data.customerName==="string"
+
+?data.customerName:"—"
+
+);
+
+const phone=normalizePhone(data.customerPhone);
+
+addRow(panel,t.phone,phone||"—");
+
+addLocation(panel,t.pickup,data.pickupName);
+
+addLocation(panel,t.destination,data.destinationName);
+
+addRow(panel,t.passengers,data.passengers);
+
+addRow(panel,t.vehicle,t[data.vehicle]);
+
+addRow(
+
+panel,
+
+t.distance,
+
+data.estimatedDistance.toFixed(2)+" KM"
+
+);
+
+addRow(
+
+panel,
+
+t.duration,
+
+Math.ceil(data.estimatedDuration)+" "+t.minutes
+
+);
+
+addRow(
+
+panel,
+
+t.fare,
+
+money(data.estimatedFare),
+
+"yellow money"
+
+);
+
+addRow(
+
+panel,
+
+t.commission+" "+data.commissionRate+"%",
+
+money(data.estimatedCommission),
+
+"red"
+
+);
+
+addRow(
+
+panel,
+
+t.income,
+
+money(data.estimatedDriverIncome),
+
+"green money"
+
+);
+
+const countdown=document.createElement("div");
+
+countdown.className="countdown";
+
+const countdownLabel=document.createElement("div");
+
+countdownLabel.textContent=t.remaining;
+
+const clock=document.createElement("div");
+
+clock.className="clock";
+
+clock.textContent="—";
+
+countdown.append(countdownLabel,clock);
+
+panel.appendChild(countdown);
+
+if(phone){
+
+addLink(panel,t.call,"tel:"+phone);
+
+}
+
+const whatsapp=normalizePhone(
+
+data.customerWhatsApp
+
+);
+
+if(whatsapp&&data.whatsappConsent===true){
+
+const link=addLink(
+
+panel,
+
+t.whatsapp,
+
+whatsappUrl(id,data,whatsapp)
+
+);
+
+link.target="_blank";
+
+link.rel="noopener noreferrer";
+
+}
+
+const prepareButton=document.createElement("button");
+
+prepareButton.textContent=t.prepare;
+
+prepareButton.disabled=true;
+
+prepareButton.onclick=()=>prepareRide(id);
+
+panel.appendChild(prepareButton);
+
+const note=document.createElement("p");
+
+note.className="note";
+
+note.textContent=t.estimate;
+
+panel.appendChild(note);
+
+rides.set(id,{
+
+data,
+
+scheduledAt,
+
+prepareAt,
+
+clock,
+
+prepareButton,
+
+previousRemaining:null
+
+});
+
+return panel;
+
+}
+
+// COUNTDOWN SYSTEM
+
+function formatRemaining(milliseconds){
+
+const seconds=Math.max(
+
+0,
+
+Math.ceil(milliseconds/1000)
+
+);
+
+const hours=Math.floor(seconds/3600);
+
+const minutes=Math.floor((seconds%3600)/60);
+
+const remainingSeconds=seconds%60;
+
+return [
+
+hours,
+
+minutes,
+
+remainingSeconds
+
+].map(value=>
+
+String(value).padStart(2,"0")
+
+).join(":");
+
+}
+
+function updateCountdowns(){
+
+rides.forEach((ride,id)=>{
+
+if(!clockValid()||!validSession()){
+
+ride.clock.textContent="—";
+
+ride.prepareButton.disabled=true;
+
+return;
+
+}
+
+const remaining=
+
+ride.scheduledAt-serverNow();
+
+ride.clock.textContent=
+
+remaining>0
+
+?formatRemaining(remaining)
+
+:t.due;
+
+const thresholds=[60,30,10];
+
+if(ride.previousRemaining!==null){
+
+thresholds.forEach(minutes=>{
+
+const threshold=minutes*60000;
+
+if(remaining>0
+
+&&remaining<=threshold
+
+&&ride.previousRemaining>threshold){
+
+sendReminder(id,minutes);
+
+}
+
+});
+
+}
+
+ride.previousRemaining=remaining;
+
+const anotherRide=
+
+validId(driver?.activeBookingId)
+
+&&driver.activeBookingId!==id;
+
+ride.prepareButton.disabled=
+
+busy
+
+||anotherRide
+
+||serverNow()<ride.prepareAt
+
+||!validSession();
+
+});
+
+}
+
+setInterval(updateCountdowns,1000);
+
+// LIVE SCHEDULED BOOKINGS
+
+function subscribeRides(){
+
+if(ridesUnsubscribe){
+
+ridesUnsubscribe();
+
+ridesUnsubscribe=null;
+
+}
+
+if(!validSession())return;
+
+const currentGeneration=generation;
+
+const ref=query(
+
+collection(db,"bookings"),
+
+where("assignedDriver.uid","==",uid),
+
+where("status","==","scheduled")
+
+);
+
+ridesUnsubscribe=onSnapshot(
+
+ref,
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+clearRides();
+
+status(t.checking);
+
+return;
+
+}
+
+const previous=new Map(rides);
+
+clearRides();
+
+const items=[];
+
+snapshot.forEach(item=>{
+
+const data=item.data();
+
+if(validRide(item.id,data)){
+
+items.push({
+
+id:item.id,
+
+data
+
+});
+
+}
+
+});
+
+items.sort((a,b)=>
+
+a.data.scheduledAt.toMillis()
+
+-b.data.scheduledAt.toMillis()
+
+);
+
+items.forEach(item=>{
+
+const panel=buildRide(
+
+item.id,
+
+item.data
+
+);
+
+const old=previous.get(item.id);
+
+if(old){
+
+rides.get(item.id).previousRemaining=
+
+old.previousRemaining;
+
+}
+
+$("rideList").appendChild(panel);
+
+});
+
+$("emptyPanel").hidden=
+
+items.length!==0;
+
+status("");
+
+updateCountdowns();
+
+},
+
+error=>{
+
+if(currentGeneration!==generation)return;
+
+clearRides();
+
+status(t.error);
+
+}
+
+);
+
+}
+
+// LIVE DRIVER APPROVAL CHECK
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps();
+
+clearRides();
+
+$("content").hidden=true;
+
+if(ridesUnsubscribe){
+
+ridesUnsubscribe();
+
+ridesUnsubscribe=null;
+
+}
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true){
+
+denyAccess();
+
+return;
+
+}
+
+driver=data;
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(data.availability)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(!ridesUnsubscribe){
+
+subscribeRides();
+
+}
+
+updateCountdowns();
+
+},
+
+error=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// VERIFY DRIVER ACCOUNT
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!functions||!db){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true){
+
+throw new Error("Driver role required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+await syncClock();
+
+if(currentGeneration!==generation)return;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// REFRESH SERVER TIME
+
+setInterval(async()=>{
+
+if(!validSession())return;
+
+try{
+
+await syncClock();
+
+}catch(e){
+
+clockCheckedAt=0;
+
+}
+
+updateCountdowns();
+
+},60000);
+
+// REFRESH BUTTON
+
+$("refreshButton").onclick=()=>{
+
+if(auth&&!busy){
+
+verifyDriver(auth.currentUser);
+
+}
+
+};
+
+// INTERNET CONNECTION
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
