@@ -1,0 +1,1252 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+
+<title>MY RIDE - Booking</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+background:#111111;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:550px;
+margin:auto;
+padding:20px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+text-align:center;
+color:#FFD600;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.5;
+}
+
+label{
+display:block;
+margin:20px 0 8px;
+font-weight:bold;
+line-height:1.5;
+}
+
+input,select{
+width:100%;
+padding:15px;
+background:#252525;
+color:white;
+border:1px solid #666;
+border-radius:9px;
+font-size:16px;
+min-width:0;
+color-scheme:dark;
+}
+
+button{
+width:100%;
+padding:16px;
+margin:10px 0;
+border:0;
+border-radius:10px;
+background:#FFD600;
+color:#111111;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+#map{
+height:330px;
+width:100%;
+border-radius:12px;
+margin:15px 0;
+color:#111;
+}
+
+.map-buttons{
+display:flex;
+gap:8px;
+}
+
+.map-buttons button{
+font-size:13px;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin-top:20px;
+}
+
+.result-row{
+display:flex;
+justify-content:space-between;
+gap:10px;
+padding:12px 0;
+border-bottom:1px solid #444;
+}
+
+.result-row strong{
+color:#FFD600;
+text-align:right;
+}
+
+#status{
+color:#FFD600;
+line-height:1.6;
+overflow-wrap:anywhere;
+}
+
+#mapHint{
+font-size:14px;
+line-height:1.6;
+}
+
+a{
+color:#FFD600;
+text-decoration:none;
+}
+
+.back{
+display:block;
+text-align:center;
+padding:25px;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">SRI LANKA</div>
+
+<h2 data-t="heading"></h2>
+
+<form id="bookingForm">
+
+<label for="name" data-t="name"></label>
+
+<input id="name"
+type="text"
+autocomplete="name"
+maxlength="100"
+required>
+
+<label for="phone" data-t="phone"></label>
+
+<input id="phone"
+type="tel"
+autocomplete="tel"
+placeholder="07XXXXXXXX"
+maxlength="16"
+required>
+
+<label for="pickup" data-t="pickup"></label>
+
+<input id="pickup"
+type="text"
+maxlength="200"
+required>
+
+<label data-t="gps"></label>
+
+<button type="button"
+id="gpsButton"
+data-t="getGPS"></button>
+
+<input id="coordinates"
+type="text"
+readonly>
+
+<label for="destination"
+data-t="destination"></label>
+
+<input id="destination"
+type="text"
+maxlength="200"
+required>
+
+<div class="map-buttons">
+
+<button type="button"
+id="pickupMode"
+data-t="pinPickup"></button>
+
+<button type="button"
+id="destinationMode"
+data-t="pinDestination"></button>
+
+</div>
+
+<p id="mapHint" data-t="mapHint"></p>
+
+<div id="map"></div>
+
+<label for="date" data-t="date"></label>
+
+<input id="date" type="date" required>
+
+<label for="time" data-t="time"></label>
+
+<input id="time" type="time" required>
+
+<label for="passengers"
+data-t="passengers"></label>
+
+<select id="passengers" required></select>
+
+<label for="vehicle"
+data-t="vehicle"></label>
+
+<select id="vehicle" required></select>
+
+<button type="submit"
+id="calculateButton"
+data-t="calculate"></button>
+
+</form>
+
+<p id="status" role="status"
+aria-live="polite"></p>
+
+<section id="result"
+class="panel" hidden>
+
+<h2 data-t="estimate"></h2>
+
+<div class="result-row">
+<span data-t="distance"></span>
+<strong id="distanceResult"></strong>
+</div>
+
+<div class="result-row">
+<span data-t="duration"></span>
+<strong id="durationResult"></strong>
+</div>
+
+<div class="result-row">
+<span data-t="period"></span>
+<strong id="periodResult"></strong>
+</div>
+
+<div class="result-row">
+<span data-t="weather"></span>
+<strong id="weatherResult"></strong>
+</div>
+
+<div class="result-row">
+<span data-t="road"></span>
+<strong id="roadResult"></strong>
+</div>
+
+<div class="result-row">
+<span data-t="discount"></span>
+<strong id="discountResult"></strong>
+</div>
+
+<div class="result-row">
+<span data-t="fare"></span>
+<strong id="fareResult"></strong>
+</div>
+
+<p data-t="estimateNote"></p>
+
+<button type="button"
+id="continueButton"
+data-t="continue"></button>
+
+</section>
+
+<a id="backButton"
+class="back"
+href="./customer.html"
+data-t="back"></a>
+
+<footer>© MY RIDE SRI LANKA</footer>
+
+</main>
+
+<script>
+
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+const languages = ["si","en","ta"];
+
+let savedLanguage = null;
+
+try{
+savedLanguage =
+localStorage.getItem("myride_language");
+}catch(e){}
+
+const urlLanguage =
+new URLSearchParams(location.search).get("lang");
+
+const lang = languages.includes(urlLanguage)
+? urlLanguage
+: languages.includes(savedLanguage)
+? savedLanguage
+: "si";
+
+document.documentElement.lang = lang;
+
+try{
+localStorage.setItem("myride_language",lang);
+}catch(e){}
+
+const translations = {
+
+si:{
+
+heading:"හයර් එකක් ලබා ගැනීම",
+name:"01. සම්පූර්ණ නම",
+phone:"02. දුරකථන / WhatsApp අංකය",
+pickup:"03. ගමන ආරම්භ කරන ස්ථානය",
+gps:"04. GPS ස්ථානය",
+getGPS:"📍 මගේ GPS ස්ථානය ලබාගන්න",
+destination:"05. ගමනාන්තය",
+pinPickup:"ආරම්භක ස්ථානය",
+pinDestination:"ගමනාන්තය",
+mapHint:"අදාළ බොත්තම තෝරා සිතියමේ ස්ථානය සලකුණු කරන්න.",
+date:"06. ගමන් කරන දිනය",
+time:"07. ගමන් කරන වේලාව",
+passengers:"08. මගීන් සංඛ්‍යාව",
+vehicle:"09. වාහන වර්ගය",
+choose:"තෝරන්න",
+bike:"ස්කූටර් / බයික්",
+tuk:"ත්‍රීරෝද රථය",
+car:"කාර් රථය",
+van:"වෑන් රථය",
+calculate:"ගමන් ගාස්තුව ගණනය කරන්න",
+estimate:"ඇස්තමේන්තු ගාස්තුව",
+distance:"ගමන් දුර",
+duration:"ගමන් කාලය",
+period:"දිවා / රාත්‍රී",
+day:"දිවා",
+night:"රාත්‍රී",
+weather:"කාලගුණය",
+rain:"වැසි අනාවැකිය",
+dry:"වැසි නොමැති අනාවැකිය",
+unknown:"තහවුරු වී නැත",
+road:"මාර්ග තත්ත්වය",
+discount:"දුර අනුව වට්ටම",
+fare:"ඇස්තමේන්තු මුදල",
+continue:"ඉදිරියට යන්න ➜",
+back:"← ආපසු",
+estimateNote:"මෙය ඇස්තමේන්තුවකි. Highway සහ Parking ගාස්තු ඇතුළත් නැත.",
+gpsLoading:"GPS ස්ථානය ලබාගනිමින්...",
+gpsSuccess:"GPS ස්ථානය ලබාගෙන ඇත.",
+gpsError:"GPS අවසරය සහ Location සැකසුම් පරීක්ෂා කරන්න.",
+pinError:"ආරම්භක ස්ථානය සහ ගමනාන්තය සිතියමේ සලකුණු කරන්න.",
+phoneError:"නිවැරදි ශ්‍රී ලංකා ජංගම දුරකථන අංකයක් ඇතුළත් කරන්න.",
+loading:"මාර්ගය සහ ගාස්තුව ගණනය කරමින්...",
+routeError:"මාර්ග දත්ත ලබාගත නොහැක. නැවත උත්සාහ කරන්න.",
+dateError:"අතීත දිනයක් හෝ වේලාවක් තෝරාගත නොහැක.",
+mapError:"සිතියම ලබාගත නොහැක.",
+storageError:"Booking දත්ත තාවකාලිකව Save කළ නොහැක.",
+outside:"ශ්‍රී ලංකාව තුළ ස්ථාන තෝරන්න."
+
+},
+
+en:{
+
+heading:"Ride Booking",
+name:"01. Full Name",
+phone:"02. Phone / WhatsApp Number",
+pickup:"03. Pickup Location",
+gps:"04. GPS Location",
+getGPS:"📍 Get My GPS Location",
+destination:"05. Destination",
+pinPickup:"Set Pickup",
+pinDestination:"Set Destination",
+mapHint:"Choose a button and mark the location on the map.",
+date:"06. Travel Date",
+time:"07. Travel Time",
+passengers:"08. Number of Passengers",
+vehicle:"09. Vehicle Type",
+choose:"Select",
+bike:"Scooter / Bike",
+tuk:"Three Wheeler",
+car:"Car",
+van:"Van",
+calculate:"Calculate Fare",
+estimate:"Estimated Fare",
+distance:"Travel Distance",
+duration:"Estimated Duration",
+period:"Day / Night",
+day:"Day",
+night:"Night",
+weather:"Weather",
+rain:"Rain Forecast",
+dry:"No Rain Forecast",
+unknown:"Not Verified",
+road:"Road Condition",
+discount:"Distance Discount",
+fare:"Estimated Amount",
+continue:"Continue ➜",
+back:"← Back",
+estimateNote:"This is an estimate. Highway and parking charges are excluded.",
+gpsLoading:"Getting GPS location...",
+gpsSuccess:"GPS location received.",
+gpsError:"Check GPS permission and location settings.",
+pinError:"Mark pickup and destination on the map.",
+phoneError:"Enter a valid Sri Lankan mobile number.",
+loading:"Calculating route and fare...",
+routeError:"Unable to obtain route data. Try again.",
+dateError:"Select a current or future date and time.",
+mapError:"Map unavailable.",
+storageError:"Unable to save temporary booking data.",
+outside:"Select locations within Sri Lanka."
+
+},
+
+ta:{
+
+heading:"பயண முன்பதிவு",
+name:"01. முழுப் பெயர்",
+phone:"02. தொலைபேசி / WhatsApp எண்",
+pickup:"03. புறப்படும் இடம்",
+gps:"04. GPS இருப்பிடம்",
+getGPS:"📍 எனது GPS இருப்பிடம்",
+destination:"05. செல்லும் இடம்",
+pinPickup:"புறப்படும் இடம்",
+pinDestination:"செல்லும் இடம்",
+mapHint:"பொத்தானைத் தேர்ந்தெடுத்து வரைபடத்தில் இடத்தைக் குறிக்கவும்.",
+date:"06. பயணத் தேதி",
+time:"07. பயண நேரம்",
+passengers:"08. பயணிகளின் எண்ணிக்கை",
+vehicle:"09. வாகன வகை",
+choose:"தேர்ந்தெடுக்கவும்",
+bike:"மோட்டார் சைக்கிள்",
+tuk:"முச்சக்கர வண்டி",
+car:"கார்",
+van:"வேன்",
+calculate:"கட்டணத்தைக் கணக்கிடவும்",
+estimate:"மதிப்பிடப்பட்ட கட்டணம்",
+distance:"பயண தூரம்",
+duration:"பயண நேரம்",
+period:"பகல் / இரவு",
+day:"பகல்",
+night:"இரவு",
+weather:"வானிலை",
+rain:"மழை முன்னறிவிப்பு",
+dry:"மழையற்ற முன்னறிவிப்பு",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+road:"சாலை நிலை",
+discount:"தூரத் தள்ளுபடி",
+fare:"மதிப்பிடப்பட்ட தொகை",
+continue:"தொடரவும் ➜",
+back:"← பின்னால்",
+estimateNote:"இது மதிப்பீடு மட்டுமே. நெடுஞ்சாலை மற்றும் வாகன நிறுத்தக் கட்டணங்கள் சேர்க்கப்படவில்லை.",
+gpsLoading:"GPS இருப்பிடம் பெறப்படுகிறது...",
+gpsSuccess:"GPS இருப்பிடம் பெறப்பட்டது.",
+gpsError:"GPS அனுமதியைச் சரிபார்க்கவும்.",
+pinError:"இரண்டு இடங்களையும் வரைபடத்தில் குறிக்கவும்.",
+phoneError:"சரியான இலங்கை கைபேசி எண்ணை உள்ளிடவும்.",
+loading:"பாதை மற்றும் கட்டணம் கணக்கிடப்படுகிறது...",
+routeError:"பாதையைப் பெற முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+dateError:"தற்போதைய அல்லது எதிர்கால நேரத்தைத் தேர்ந்தெடுக்கவும்.",
+mapError:"வரைபடம் கிடைக்கவில்லை.",
+storageError:"தற்காலிக தரவைச் சேமிக்க முடியவில்லை.",
+outside:"இலங்கைக்குள் இடங்களைத் தேர்ந்தெடுக்கவும்."
+
+}
+
+};
+
+const t = translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(element=>{
+
+element.textContent =
+t[element.dataset.t];
+
+});
+
+document.title = "MY RIDE - "+t.heading;
+
+$("backButton").href =
+"./customer.html?lang="+lang;
+
+
+// SRI LANKA DATE AND TIME
+
+function sriLankaNow(){
+
+return new Date(
+Date.now()+330*60000
+).toISOString();
+
+}
+
+$("date").min =
+sriLankaNow().slice(0,10);
+
+$("date").value =
+sriLankaNow().slice(0,10);
+
+$("time").value =
+sriLankaNow().slice(11,16);
+
+
+// AUTOMATIC VEHICLE FILTER
+
+const vehicles = {
+
+bike:{capacity:1,min:100,day:60,night:75},
+
+tuk:{capacity:3,min:150,day:90,night:110},
+
+car:{capacity:4,min:200,day:120,night:150},
+
+van:{capacity:10,min:300,day:160,night:200}
+
+};
+
+for(let i=1;i<=10;i++){
+
+$("passengers").add(
+new Option(i,i)
+);
+
+}
+
+function filterVehicles(){
+
+const passengers =
+Number($("passengers").value);
+
+const previous = $("vehicle").value;
+
+$("vehicle").replaceChildren();
+
+$("vehicle").add(
+new Option(t.choose,"")
+);
+
+Object.entries(vehicles)
+.forEach(([key,vehicle])=>{
+
+if(passengers<=vehicle.capacity){
+
+$("vehicle").add(
+new Option(t[key],key)
+);
+
+}
+
+});
+
+if([...$("vehicle").options]
+.some(o=>o.value===previous)){
+
+$("vehicle").value=previous;
+
+}
+
+}
+
+$("passengers").addEventListener(
+"change",filterVehicles
+);
+
+filterVehicles();
+
+
+// MAP AND GPS
+
+let map=null;
+
+let pickupPoint=null;
+
+let destinationPoint=null;
+
+let pickupMarker=null;
+
+let destinationMarker=null;
+
+let routeLine=null;
+
+let mode="pickup";
+
+let bookingDraft=null;
+
+let revision=0;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+function invalidate(){
+
+revision++;
+
+bookingDraft=null;
+
+$("result").hidden=true;
+
+if(map&&routeLine){
+
+map.removeLayer(routeLine);
+
+routeLine=null;
+
+}
+
+}
+
+$("bookingForm").addEventListener(
+"input",invalidate
+);
+
+function inSriLanka(lat,lon){
+
+return lat>=5.85&&lat<=9.9
+&&lon>=79.5&&lon<=82.0;
+
+}
+
+function setPoint(type,lat,lon){
+
+if(!inSriLanka(lat,lon)){
+
+status(t.outside);
+
+return false;
+
+}
+
+invalidate();
+
+const point={lat,lon};
+
+const coordinates =
+lat.toFixed(6)+", "+lon.toFixed(6);
+
+if(type==="pickup"){
+
+pickupPoint=point;
+
+$("coordinates").value=coordinates;
+
+if(!$("pickup").value.trim()){
+
+$("pickup").value=coordinates;
+
+}
+
+if(pickupMarker){
+
+pickupMarker.setLatLng([lat,lon]);
+
+}else{
+
+pickupMarker=L.marker([lat,lon])
+.addTo(map);
+
+}
+
+pickupMarker.bindTooltip(t.pickup);
+
+}else{
+
+destinationPoint=point;
+
+if(!$("destination").value.trim()){
+
+$("destination").value=coordinates;
+
+}
+
+if(destinationMarker){
+
+destinationMarker.setLatLng([lat,lon]);
+
+}else{
+
+destinationMarker=L.marker([lat,lon])
+.addTo(map);
+
+}
+
+destinationMarker.bindTooltip(
+t.destination
+);
+
+}
+
+return true;
+
+}
+
+if(typeof L!=="undefined"){
+
+map=L.map("map")
+.setView([7.8731,80.7718],7);
+
+L.tileLayer(
+"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+maxZoom:19,
+attribution:"© OpenStreetMap contributors"
+}
+).addTo(map);
+
+map.on("click",event=>{
+
+if(setPoint(
+mode,
+event.latlng.lat,
+event.latlng.lng
+)){
+
+status(mode==="pickup"
+?t.pickup:t.destination);
+
+if(mode==="pickup"){
+
+mode="destination";
+
+}
+
+}
+
+});
+
+}else{
+
+status(t.mapError);
+
+$("calculateButton").disabled=true;
+
+}
+
+$("pickupMode").onclick=()=>{
+
+mode="pickup";
+
+status(t.pinPickup);
+
+};
+
+$("destinationMode").onclick=()=>{
+
+mode="destination";
+
+status(t.pinDestination);
+
+};
+
+
+// GPS LOCATION
+
+$("gpsButton").onclick=()=>{
+
+if(!navigator.geolocation||!map){
+
+status(t.gpsError);
+
+return;
+
+}
+
+status(t.gpsLoading);
+
+$("gpsButton").disabled=true;
+
+navigator.geolocation.getCurrentPosition(
+
+position=>{
+
+$("gpsButton").disabled=false;
+
+const lat=position.coords.latitude;
+
+const lon=position.coords.longitude;
+
+if(setPoint("pickup",lat,lon)){
+
+map.setView([lat,lon],16);
+
+mode="destination";
+
+status(t.gpsSuccess);
+
+}
+
+},
+
+()=>{
+
+$("gpsButton").disabled=false;
+
+status(t.gpsError);
+
+},
+
+{
+enableHighAccuracy:true,
+timeout:20000,
+maximumAge:0
+}
+
+);
+
+};
+
+
+// AUTOMATIC FARE CALCULATION
+
+function calculateFare(
+distance,
+vehicleType,
+night,
+rain
+){
+
+const vehicle=vehicles[vehicleType];
+
+const base=night
+?vehicle.night:vehicle.day;
+
+const rainExtra=rain?15:0;
+
+const limits=[10,25,50,100,Infinity];
+
+let remaining=distance;
+
+let previousLimit=0;
+
+let total=0;
+
+let discount=0;
+
+for(let i=0;i<limits.length;i++){
+
+const width=limits[i]-previousLimit;
+
+const km=Math.min(remaining,width);
+
+if(km<=0)break;
+
+const reduction=i*10;
+
+total+=km*(base-reduction+rainExtra);
+
+discount+=km*reduction;
+
+remaining-=km;
+
+previousLimit=limits[i];
+
+}
+
+return {
+
+fare:Math.ceil(
+Math.max(total,vehicle.min)
+),
+
+discount:Math.round(discount)
+
+};
+
+}
+
+
+// NETWORK REQUEST WITH TIMEOUT
+
+async function getJSON(url){
+
+const controller=new AbortController();
+
+const timeout=setTimeout(
+()=>controller.abort(),15000
+);
+
+try{
+
+const response=await fetch(url,{
+signal:controller.signal
+});
+
+if(!response.ok){
+
+throw new Error("Network error");
+
+}
+
+return await response.json();
+
+}finally{
+
+clearTimeout(timeout);
+
+}
+
+}
+
+
+// WEATHER FORECAST
+
+async function getWeather(point,date,time){
+
+try{
+
+const url=new URL(
+"https://api.open-meteo.com/v1/forecast"
+);
+
+url.searchParams.set(
+"latitude",point.lat
+);
+
+url.searchParams.set(
+"longitude",point.lon
+);
+
+url.searchParams.set(
+"hourly","precipitation"
+);
+
+url.searchParams.set(
+"timezone","Asia/Colombo"
+);
+
+url.searchParams.set("start_date",date);
+
+url.searchParams.set("end_date",date);
+
+const data=await getJSON(url);
+
+const hour=date+"T"+time.slice(0,2)+":00";
+
+const index=data.hourly.time.indexOf(hour);
+
+const amount=data.hourly.precipitation[index];
+
+if(!Number.isFinite(amount)){
+
+return null;
+
+}
+
+return amount>0;
+
+}catch(error){
+
+return null;
+
+}
+
+}
+
+
+// VALIDATE AND CALCULATE ROUTE
+
+$("bookingForm").addEventListener(
+"submit",
+async event=>{
+
+event.preventDefault();
+
+invalidate();
+
+if(!pickupPoint||!destinationPoint){
+
+status(t.pinError);
+
+return;
+
+}
+
+const phone=$("phone").value
+.replace(/[\s-]/g,"");
+
+if(!/^(?:\+94|94|0)7\d{8}$/.test(phone)){
+
+status(t.phoneError);
+
+return;
+
+}
+
+const date=$("date").value;
+
+const time=$("time").value;
+
+const travelTime=new Date(
+date+"T"+time+":00+05:30"
+).getTime();
+
+if(!Number.isFinite(travelTime)
+||travelTime<Date.now()-60000){
+
+status(t.dateError);
+
+return;
+
+}
+
+const vehicleType=$("vehicle").value;
+
+const passengers=Number(
+$("passengers").value
+);
+
+if(!vehicles[vehicleType]
+||passengers>vehicles[vehicleType].capacity){
+
+return;
+
+}
+
+const pickup={...pickupPoint};
+
+const destination={...destinationPoint};
+
+const currentRevision=revision;
+
+$("calculateButton").disabled=true;
+
+status(t.loading);
+
+try{
+
+const routeURL=
+"https://router.project-osrm.org/route/v1/driving/"
++pickup.lon+","+pickup.lat+";"
++destination.lon+","+destination.lat
++"?overview=full&geometries=geojson";
+
+const [routeData,rain]=await Promise.all([
+
+getJSON(routeURL),
+
+getWeather(pickup,date,time)
+
+]);
+
+if(currentRevision!==revision)return;
+
+if(routeData.code!=="Ok"
+||!routeData.routes?.length){
+
+throw new Error("No route");
+
+}
+
+const route=routeData.routes[0];
+
+const distance=route.distance/1000;
+
+const duration=Math.ceil(
+route.duration/60
+);
+
+if(!Number.isFinite(distance)
+||distance<=0
+||!Number.isFinite(duration)){
+
+throw new Error("Invalid route");
+
+}
+
+const hour=Number(time.slice(0,2));
+
+const night=hour>=20||hour<8;
+
+const result=calculateFare(
+distance,
+vehicleType,
+night,
+rain===true
+);
+
+routeLine=L.geoJSON(
+route.geometry,
+{
+style:{
+color:"#1677FF",
+weight:5
+}
+}
+).addTo(map);
+
+map.fitBounds(
+routeLine.getBounds(),
+{padding:[25,25]}
+);
+
+$("distanceResult").textContent=
+distance.toFixed(2)+" KM";
+
+$("durationResult").textContent=
+duration+" min";
+
+$("periodResult").textContent=
+night?t.night:t.day;
+
+$("weatherResult").textContent=
+rain===null?t.unknown:
+rain?t.rain:t.dry;
+
+$("roadResult").textContent=
+t.unknown;
+
+$("discountResult").textContent=
+"LKR "+result.discount.toLocaleString();
+
+$("fareResult").textContent=
+"LKR "+result.fare.toLocaleString();
+
+bookingDraft={
+
+language:lang,
+
+name:$("name").value.trim(),
+
+phone,
+
+pickupName:$("pickup").value.trim(),
+
+pickup,
+
+destinationName:
+$("destination").value.trim(),
+
+destination,
+
+date,
+
+time,
+
+passengers,
+
+vehicle:vehicleType,
+
+estimatedDistance:distance,
+
+estimatedDuration:duration,
+
+night,
+
+rainForecast:rain,
+
+difficultRoadVerified:false,
+
+discount:result.discount,
+
+estimatedFare:result.fare,
+
+status:"draft"
+
+};
+
+$("result").hidden=false;
+
+status("");
+
+$("result").scrollIntoView({
+behavior:"smooth"
+});
+
+}catch(error){
+
+if(currentRevision===revision){
+
+status(t.routeError);
+
+}
+
+}finally{
+
+$("calculateButton").disabled=false;
+
+}
+
+});
+
+
+// CONTINUE TO CONFIRMATION PAGE
+
+$("continueButton").onclick=()=>{
+
+if(!bookingDraft)return;
+
+try{
+
+sessionStorage.setItem(
+"myride_booking_draft",
+JSON.stringify(bookingDraft)
+);
+
+}catch(error){
+
+status(t.storageError);
+
+return;
+
+}
+
+location.href=
+"./booking-confirm.html?lang="+lang;
+
+};
+
+</script>
+
+</body>
+</html>
