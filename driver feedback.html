@@ -1,0 +1,2435 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Feedback</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.7;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+
+label{
+display:block;
+margin-top:18px;
+margin-bottom:8px;
+font-size:14px;
+font-weight:bold;
+}
+
+input,select,textarea{
+width:100%;
+padding:14px;
+background:#292929;
+color:#fff;
+border:1px solid #555;
+border-radius:9px;
+font-size:16px;
+}
+
+textarea{
+min-height:160px;
+resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+outline:2px solid #FFD600;
+}
+
+input[readonly]{
+color:#CCC;
+background:#181818;
+}
+
+input[type="checkbox"]{
+width:22px;
+height:22px;
+accent-color:#FFD600;
+flex-shrink:0;
+}
+
+.checkboxRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin:18px 0;
+}
+
+.checkboxRow label{
+margin:0;
+font-weight:normal;
+line-height:1.8;
+}
+
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.8;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+margin:15px 0;
+}
+
+.success{
+background:#163322;
+border:1px solid #4ADE80;
+border-radius:10px;
+padding:15px;
+color:#4ADE80;
+line-height:1.8;
+}
+
+.yellow{color:#FFD600}
+.green{color:#4ADE80}
+.red{color:#FF6464}
+
+.ticket{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+margin:14px 0;
+overflow:hidden;
+}
+
+.ticket summary{
+padding:16px;
+cursor:pointer;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+.ticketContent{
+padding:0 16px 16px;
+}
+
+.messageBox{
+background:#292929;
+border:1px solid #444;
+border-radius:8px;
+padding:14px;
+margin:12px 0;
+line-height:1.8;
+white-space:pre-wrap;
+overflow-wrap:anywhere;
+}
+
+.adminReply{
+border-left:3px solid #FFD600;
+}
+
+.badge{
+display:inline-block;
+padding:7px 12px;
+border-radius:6px;
+font-size:12px;
+font-weight:bold;
+margin:8px 0;
+}
+
+.new{
+background:#39320D;
+color:#FFD600;
+}
+
+.in_progress{
+background:#172D48;
+color:#93C5FD;
+}
+
+.resolved{
+background:#163322;
+color:#4ADE80;
+}
+
+.closed{
+background:#333;
+color:#CCC;
+}
+
+#status,
+#historyStatus{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+}
+
+#characterCount{
+text-align:right;
+color:#AAA;
+font-size:12px;
+margin-top:6px;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<div class="row">
+
+<span data-t="driverName"></span>
+
+<strong id="driverName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>Driver ID</span>
+
+<strong id="driverId"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="accountStatus"></span>
+
+<strong class="green"
+data-t="approved"></strong>
+
+</div>
+
+</section>
+
+<div class="warning"
+data-t="emergencyNote"></div>
+
+<a id="sosLink"
+class="action secondary"
+data-t="emergencyHelp"></a>
+
+<section class="panel">
+
+<h3 data-t="newFeedback"></h3>
+
+<form id="feedbackForm">
+
+<label for="name"
+data-t="driverName"></label>
+
+<input
+id="name"
+type="text"
+readonly>
+
+<label for="driverIdInput">
+Driver ID
+</label>
+
+<input
+id="driverIdInput"
+type="text"
+readonly>
+
+<label for="type"
+data-t="type"></label>
+
+<select id="type" required>
+
+<option value=""
+data-t="select"></option>
+
+<option value="complaint"
+data-t="complaint"></option>
+
+<option value="feedback"
+data-t="feedback"></option>
+
+<option value="suggestion"
+data-t="suggestion"></option>
+
+<option value="question"
+data-t="question"></option>
+
+</select>
+
+<label for="category"
+data-t="category"></label>
+
+<select id="category" required>
+
+<option value=""
+data-t="select"></option>
+
+<option value="customer"
+data-t="customerIssue"></option>
+
+<option value="payment"
+data-t="paymentIssue"></option>
+
+<option value="commission"
+data-t="commissionIssue"></option>
+
+<option value="booking"
+data-t="bookingIssue"></option>
+
+<option value="technical"
+data-t="technicalIssue"></option>
+
+<option value="gps"
+data-t="gpsIssue"></option>
+
+<option value="fare"
+data-t="fareIssue"></option>
+
+<option value="safety"
+data-t="safetyIssue"></option>
+
+<option value="account"
+data-t="accountIssue"></option>
+
+<option value="other"
+data-t="other"></option>
+
+</select>
+
+<label for="bookingId"
+data-t="bookingId"></label>
+
+<input
+id="bookingId"
+type="text"
+maxlength="128"
+autocomplete="off">
+
+<p class="note"
+data-t="bookingNote"></p>
+
+<label for="subject"
+data-t="subject"></label>
+
+<input
+id="subject"
+type="text"
+minlength="3"
+maxlength="100"
+required>
+
+<label for="message"
+data-t="message"></label>
+
+<textarea
+id="message"
+minlength="10"
+maxlength="2000"
+required></textarea>
+
+<div id="characterCount">
+0 / 2000
+</div>
+
+<p class="note"
+data-t="privacyNote"></p>
+
+<div class="checkboxRow">
+
+<input
+id="declaration"
+type="checkbox"
+required>
+
+<label for="declaration"
+data-t="declaration"></label>
+
+</div>
+
+<button
+id="submitButton"
+type="submit"
+class="action"
+data-t="submit"></button>
+
+</form>
+
+<p id="submitStatus"
+role="status"
+aria-live="polite"
+class="note"></p>
+
+</section>
+
+<section id="successPanel"
+class="panel" hidden>
+
+<div class="success"
+data-t="submitted"></div>
+
+<div class="row">
+
+<span data-t="referenceId"></span>
+
+<strong id="referenceId"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="ticketStatus"></span>
+
+<strong data-t="new"
+class="yellow"></strong>
+
+</div>
+
+<button
+id="copyReference"
+class="action secondary"
+data-t="copyReference"></button>
+
+<p id="copyStatus"
+class="note"
+role="status"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="myTickets"></h3>
+
+<label for="statusFilter"
+data-t="filterStatus"></label>
+
+<select id="statusFilter">
+
+<option value=""
+data-t="all"></option>
+
+<option value="new"
+data-t="new"></option>
+
+<option value="in_progress"
+data-t="in_progress"></option>
+
+<option value="resolved"
+data-t="resolved"></option>
+
+<option value="closed"
+data-t="closed"></option>
+
+</select>
+
+<button
+id="refreshButton"
+class="action secondary"
+data-t="refresh"></button>
+
+<p id="historyStatus"
+role="status"
+aria-live="polite"></p>
+
+<div id="ticketList"></div>
+
+<button
+id="loadMoreButton"
+class="action secondary"
+data-t="loadMore" hidden></button>
+
+</section>
+
+<a id="helpLink"
+class="action"
+data-t="help"></a>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"රියදුරු අදහස් සහ පැමිණිලි",
+driverName:"රියදුරුගේ නම",
+accountStatus:"ගිණුමේ තත්ත්වය",
+approved:"අනුමත රියදුරෙකි",
+newFeedback:"නව පැමිණිල්ලක් හෝ අදහසක්",
+type:"ඉල්ලීමේ වර්ගය",
+select:"තෝරන්න",
+complaint:"පැමිණිල්ලක්",
+feedback:"අදහසක්",
+suggestion:"යෝජනාවක්",
+question:"ප්‍රශ්නයක්",
+category:"අදාළ කාණ්ඩය",
+customerIssue:"මගීන් සම්බන්ධ ගැටලු",
+paymentIssue:"ගෙවීම් ගැටලු",
+commissionIssue:"කොමිස් ගැටලු",
+bookingIssue:"හයර් ලබාගැනීමේ ගැටලු",
+technicalIssue:"තාක්ෂණික ගැටලු",
+gpsIssue:"GPS සහ සිතියම් ගැටලු",
+fareIssue:"හයර් ගාස්තු ගැටලු",
+safetyIssue:"ආරක්ෂාව සම්බන්ධ ගැටලු",
+accountIssue:"ගිණුම සම්බන්ධ ගැටලු",
+other:"වෙනත්",
+bookingId:"අදාළ Booking ID",
+bookingNote:"හයර් එකකට අදාළ නම් Booking ID ඇතුළත් කරන්න.",
+subject:"මාතෘකාව",
+message:"සම්පූර්ණ විස්තරය",
+privacyNote:"Password, OTP, බැංකු PIN හෝ අනවශ්‍ය පෞද්ගලික තොරතුරු ඇතුළත් නොකරන්න.",
+declaration:"මා ලබාදෙන තොරතුරු සත්‍ය බවත් මෙම ඉල්ලීම Admin වෙත යොමු කිරීමට එකඟ බවත් තහවුරු කරමි.",
+submit:"Admin වෙත යොමු කරන්න",
+submitted:"ඔබගේ ඉල්ලීම සාර්ථකව ලැබී ඇත.",
+referenceId:"පැමිණිලි අංකය",
+ticketStatus:"පැමිණිල්ලේ තත්ත්වය",
+copyReference:"පැමිණිලි අංකය Copy කරන්න",
+copied:"අංකය Copy කර ඇත.",
+copyFailed:"අංකය Copy කළ නොහැක.",
+myTickets:"මගේ පෙර පැමිණිලි",
+filterStatus:"තත්ත්වය අනුව සොයන්න",
+all:"සියල්ල",
+new:"අලුතින් ලැබී ඇත",
+in_progress:"පරීක්ෂා කරමින් පවතී",
+resolved:"විසඳා ඇත",
+closed:"අවසන් කර ඇත",
+refresh:"නැවත පරීක්ෂා කරන්න",
+loadMore:"තවත් වාර්තා බලන්න",
+help:"Admin සහාය ලබාගන්න",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+invalid:"නිවැරදි තොරතුරු ඇතුළත් කරන්න.",
+invalidBooking:"නිවැරදි Booking ID එක ඇතුළත් කරන්න.",
+sending:"Admin වෙත යොමු කරමින්...",
+sendFailed:"ඉල්ලීම ලැබුණු බව තහවුරු කළ නොහැක. නැවත උත්සාහ කරන්න.",
+loading:"පැමිණිලි වාර්තා ලබාගනිමින්...",
+historyError:"පැමිණිලි වාර්තා ලබාගත නොහැක.",
+noRecords:"පැමිණිලි වාර්තා නොමැත.",
+createdAt:"යොමු කළ දිනය සහ වේලාව",
+updatedAt:"අවසන් යාවත්කාලීන කිරීම",
+adminReply:"Admin පිළිතුර",
+waitingReply:"Admin පිළිතුර තවම ලැබී නැත.",
+confirmSubmit:"මෙම ඉල්ලීම Admin වෙත යොමු කරන්නද?",
+emergencyNote:"හදිසි අනතුරක් හෝ ජීවිත අවදානමක් තිබේ නම් පැමිණිල්ලකට පිළිතුරක් ලැබෙන තුරු රැඳී නොසිටින්න. හදිසි සේවා අමතන්න.",
+emergencyHelp:"හදිසි සහාය / SOS",
+records:"ලබාගත් වාර්තා"
+
+},
+
+en:{
+
+heading:"Driver Feedback & Complaints",
+driverName:"Driver Name",
+accountStatus:"Account Status",
+approved:"Approved Driver",
+newFeedback:"New Feedback or Complaint",
+type:"Request Type",
+select:"Select",
+complaint:"Complaint",
+feedback:"Feedback",
+suggestion:"Suggestion",
+question:"Question",
+category:"Category",
+customerIssue:"Customer Issues",
+paymentIssue:"Payment Issues",
+commissionIssue:"Commission Issues",
+bookingIssue:"Booking Issues",
+technicalIssue:"Technical Issues",
+gpsIssue:"GPS and Map Issues",
+fareIssue:"Fare Issues",
+safetyIssue:"Safety Issues",
+accountIssue:"Account Issues",
+other:"Other",
+bookingId:"Related Booking ID",
+bookingNote:"Enter the Booking ID if this request relates to a ride.",
+subject:"Subject",
+message:"Full Description",
+privacyNote:"Do not include passwords, OTPs, bank PINs or unnecessary personal information.",
+declaration:"I confirm that the information is accurate and agree to submit this request to Admin.",
+submit:"Submit to Admin",
+submitted:"Your request has been successfully received.",
+referenceId:"Complaint Reference ID",
+ticketStatus:"Request Status",
+copyReference:"Copy Reference ID",
+copied:"Reference ID copied.",
+copyFailed:"Unable to copy the reference ID.",
+myTickets:"My Previous Requests",
+filterStatus:"Filter by Status",
+all:"All",
+new:"New",
+in_progress:"In Progress",
+resolved:"Resolved",
+closed:"Closed",
+refresh:"Refresh",
+loadMore:"Load More Records",
+help:"Contact Admin Support",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"Verifying account...",
+denied:"Access to this page is not authorized.",
+offline:"No internet connection.",
+invalid:"Enter valid information.",
+invalidBooking:"Enter a valid Booking ID.",
+sending:"Submitting to Admin...",
+sendFailed:"Submission could not be confirmed. Please retry.",
+loading:"Loading request history...",
+historyError:"Unable to load request history.",
+noRecords:"No requests found.",
+createdAt:"Submitted Date and Time",
+updatedAt:"Last Updated",
+adminReply:"Admin Reply",
+waitingReply:"No Admin reply yet.",
+confirmSubmit:"Submit this request to Admin?",
+emergencyNote:"For an accident or immediate danger, do not wait for a complaint response. Contact emergency services.",
+emergencyHelp:"Emergency Help / SOS",
+records:"Records Loaded"
+
+},
+
+ta:{
+
+heading:"சாரதி கருத்துகள் மற்றும் புகார்கள்",
+driverName:"சாரதியின் பெயர்",
+accountStatus:"கணக்கு நிலை",
+approved:"அங்கீகரிக்கப்பட்ட சாரதி",
+newFeedback:"புதிய கருத்து அல்லது புகார்",
+type:"கோரிக்கை வகை",
+select:"தேர்ந்தெடுக்கவும்",
+complaint:"புகார்",
+feedback:"கருத்து",
+suggestion:"பரிந்துரை",
+question:"கேள்வி",
+category:"பிரிவு",
+customerIssue:"பயணிகள் தொடர்பான பிரச்சினைகள்",
+paymentIssue:"கொடுப்பனவு பிரச்சினைகள்",
+commissionIssue:"கமிஷன் பிரச்சினைகள்",
+bookingIssue:"முன்பதிவு பிரச்சினைகள்",
+technicalIssue:"தொழில்நுட்ப பிரச்சினைகள்",
+gpsIssue:"GPS மற்றும் வரைபட பிரச்சினைகள்",
+fareIssue:"பயண கட்டண பிரச்சினைகள்",
+safetyIssue:"பாதுகாப்பு பிரச்சினைகள்",
+accountIssue:"கணக்கு பிரச்சினைகள்",
+other:"மற்றவை",
+bookingId:"தொடர்புடைய முன்பதிவு இலக்கம்",
+bookingNote:"பயணம் தொடர்பான கோரிக்கை எனில் முன்பதிவு இலக்கத்தை உள்ளிடவும்.",
+subject:"தலைப்பு",
+message:"முழு விவரம்",
+privacyNote:"கடவுச்சொல், OTP, வங்கி PIN அல்லது தேவையற்ற தனிப்பட்ட தகவல்களை உள்ளிட வேண்டாம்.",
+declaration:"வழங்கிய தகவல்கள் உண்மையானவை என்றும் நிர்வாகிக்கு அனுப்ப ஒப்புக்கொள்கிறேன் என்றும் உறுதிப்படுத்துகிறேன்.",
+submit:"நிர்வாகிக்கு அனுப்பவும்",
+submitted:"உங்கள் கோரிக்கை வெற்றிகரமாக பெறப்பட்டது.",
+referenceId:"புகார் குறிப்பு இலக்கம்",
+ticketStatus:"கோரிக்கை நிலை",
+copyReference:"குறிப்பு இலக்கத்தை நகலெடுக்கவும்",
+copied:"குறிப்பு இலக்கம் நகலெடுக்கப்பட்டது.",
+copyFailed:"குறிப்பு இலக்கத்தை நகலெடுக்க முடியவில்லை.",
+myTickets:"எனது முந்தைய கோரிக்கைகள்",
+filterStatus:"நிலையின் அடிப்படையில் தேடவும்",
+all:"அனைத்தும்",
+new:"புதியது",
+in_progress:"பரிசீலனையில் உள்ளது",
+resolved:"தீர்க்கப்பட்டது",
+closed:"முடிக்கப்பட்டது",
+refresh:"புதுப்பிக்கவும்",
+loadMore:"மேலும் பதிவுகள்",
+help:"நிர்வாக உதவியை பெறவும்",
+back:"← சாரதி முதன்மைப் பக்கம்",
+login:"சாரதி உள்நுழைவு",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+invalid:"சரியான தகவல்களை உள்ளிடவும்.",
+invalidBooking:"சரியான முன்பதிவு இலக்கத்தை உள்ளிடவும்.",
+sending:"நிர்வாகிக்கு அனுப்பப்படுகிறது...",
+sendFailed:"கோரிக்கை பெறப்பட்டதை உறுதிப்படுத்த முடியவில்லை. மீண்டும் முயற்சிக்கவும்.",
+loading:"கோரிக்கை பதிவுகள் பெறப்படுகின்றன...",
+historyError:"கோரிக்கை பதிவுகளை பெற முடியவில்லை.",
+noRecords:"கோரிக்கை பதிவுகள் இல்லை.",
+createdAt:"அனுப்பிய தேதி மற்றும் நேரம்",
+updatedAt:"இறுதியாக புதுப்பிக்கப்பட்ட நேரம்",
+adminReply:"நிர்வாகியின் பதில்",
+waitingReply:"நிர்வாகியின் பதில் இன்னும் கிடைக்கவில்லை.",
+confirmSubmit:"இந்த கோரிக்கையை நிர்வாகிக்கு அனுப்பவா?",
+emergencyNote:"விபத்து அல்லது உடனடி ஆபத்து ஏற்பட்டால் புகார் பதிலுக்காக காத்திருக்க வேண்டாம். அவசர சேவைகளை தொடர்புகொள்ளவும்.",
+emergencyHelp:"அவசர உதவி / SOS",
+records:"பெறப்பட்ட பதிவுகள்"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+const links={
+
+backButton:"driver-dashboard.html",
+loginLink:"driver-login.html",
+helpLink:"driver-help.html",
+sosLink:"driver-sos.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+
+let generation=0;
+let historyGeneration=0;
+
+let driverUnsubscribe=null;
+
+let submitting=false;
+let historyLoading=false;
+
+let pendingRequest=null;
+
+let records=new Map();
+
+let cursor=null;
+let selectedStatus="";
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+const PAGE_SIZE=20;
+
+const TYPES=[
+
+"complaint",
+"feedback",
+"suggestion",
+"question"
+
+];
+
+const CATEGORIES={
+
+customer:"customerIssue",
+payment:"paymentIssue",
+commission:"commissionIssue",
+booking:"bookingIssue",
+technical:"technicalIssue",
+gps:"gpsIssue",
+fare:"fareIssue",
+safety:"safetyIssue",
+account:"accountIssue",
+other:"other"
+
+};
+
+const STATUSES=[
+
+"new",
+"in_progress",
+"resolved",
+"closed"
+
+];
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.historyError);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,min,max){
+
+return typeof value==="string"
+
+&&value.trim().length>=min
+
+&&value.length<=max;
+
+}
+
+function validCategory(value){
+
+return typeof value==="string"
+
+&&Object.prototype.hasOwnProperty.call(
+
+CATEGORIES,value
+
+);
+
+}
+
+function formatDate(ms){
+
+if(!Number.isFinite(ms)
+
+||ms<=0
+
+||ms>8640000000000000){
+
+return "—";
+
+}
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(ms));
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(
+
+driver.availability
+
+)
+
+||!Number.isFinite(c.latitude)
+
+||!Number.isFinite(c.longitude)
+
+||!Number.isFinite(c.accuracy)
+
+||c.accuracy<0
+
+||c.accuracy>100
+
+||c.latitude<5.85
+
+||c.latitude>9.9
+
+||c.longitude<79.5
+
+||c.longitude>82
+
+||Date.now()-position.timestamp>30000
+
+||position.timestamp>Date.now()+5000
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:c.latitude,
+
+lon:c.longitude,
+
+accuracy:c.accuracy,
+
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+}catch(e){
+
+// Backend must expire stale GPS records.
+
+}finally{
+
+gpsSending=false;
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// CLEAR PRIVATE INFORMATION
+
+function clearHistory(){
+
+historyGeneration++;
+
+records.clear();
+
+cursor=null;
+
+historyLoading=false;
+
+$("ticketList").replaceChildren();
+
+$("historyStatus").textContent="";
+
+$("loadMoreButton").hidden=true;
+
+$("loadMoreButton").disabled=false;
+
+}
+
+function clearSuccess(){
+
+$("successPanel").hidden=true;
+
+$("referenceId").textContent="—";
+
+$("copyStatus").textContent="";
+
+}
+
+function clearForm(){
+
+$("feedbackForm").reset();
+
+$("name").value="";
+
+$("driverIdInput").value="";
+
+$("characterCount").textContent="0 / 2000";
+
+$("submitStatus").textContent="";
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+submitting=false;
+
+pendingRequest=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+stopGps();
+
+clearHistory();
+
+clearSuccess();
+
+clearForm();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("statusFilter").value="";
+
+selectedStatus="";
+
+$("content").hidden=true;
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// SAFE DISPLAY
+
+function addRow(parent,label,value,color=""){
+
+const row=document.createElement("div");
+
+row.className="row";
+
+const name=document.createElement("span");
+
+name.textContent=label;
+
+const result=document.createElement("strong");
+
+result.textContent=
+
+typeof value==="string"
+
+?value:"—";
+
+if(color){
+
+result.className=color;
+
+}
+
+row.append(name,result);
+
+parent.append(row);
+
+}
+
+function addMessage(parent,label,message,admin=false){
+
+const heading=document.createElement("h4");
+
+heading.textContent=label;
+
+const box=document.createElement("div");
+
+box.className=
+
+admin
+
+?"messageBox adminReply"
+
+:"messageBox";
+
+box.textContent=message;
+
+parent.append(heading,box);
+
+}
+
+// CHARACTER COUNT
+
+$("message").addEventListener("input",()=>{
+
+$("characterCount").textContent=
+
+$("message").value.length+" / 2000";
+
+});
+
+// FORM CONTROLS
+
+function updateControls(){
+
+const enabled=
+
+validSession()
+
+&&driver!==null
+
+&&!submitting;
+
+[
+
+"type",
+
+"category",
+
+"bookingId",
+
+"subject",
+
+"message",
+
+"declaration",
+
+"submitButton"
+
+].forEach(id=>{
+
+$(id).disabled=!enabled;
+
+});
+
+}
+
+// SUBMIT DRIVER FEEDBACK
+
+$("feedbackForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(!validSession()
+
+||!driver
+
+||submitting)return;
+
+const type=$("type").value;
+
+const category=$("category").value;
+
+const bookingId=
+
+$("bookingId").value.trim();
+
+const subject=
+
+$("subject").value.trim();
+
+const message=
+
+$("message").value.trim();
+
+if(!TYPES.includes(type)
+
+||!validCategory(category)
+
+||!validText(subject,3,100)
+
+||!validText(message,10,2000)
+
+||!$("declaration").checked){
+
+$("submitStatus").textContent=t.invalid;
+
+return;
+
+}
+
+if(bookingId&&!validId(bookingId)){
+
+$("submitStatus").textContent=
+
+t.invalidBooking;
+
+return;
+
+}
+
+if(!confirm(t.confirmSubmit))return;
+
+const fingerprint=JSON.stringify([
+
+type,
+
+category,
+
+bookingId,
+
+subject,
+
+message,
+
+lang
+
+]);
+
+if(!pendingRequest
+
+||pendingRequest.fingerprint!==fingerprint){
+
+pendingRequest={
+
+fingerprint,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const currentGeneration=generation;
+
+submitting=true;
+
+updateControls();
+
+clearSuccess();
+
+$("submitStatus").textContent=t.sending;
+
+try{
+
+const result=await serverCall(
+
+"submitDriverFeedback",
+
+{
+
+requestId:pendingRequest.requestId,
+
+type,
+
+category,
+
+bookingId:bookingId||null,
+
+subject,
+
+message,
+
+declarationAccepted:true,
+
+language:lang
+
+}
+
+);
+
+if(currentGeneration!==generation
+
+||!driver)return;
+
+if(result?.accepted!==true
+
+||!validId(result.referenceId)
+
+||result.status!=="new"){
+
+throw new Error("Submission not confirmed");
+
+}
+
+pendingRequest=null;
+
+$("feedbackForm").reset();
+
+$("name").value=driver.fullName;
+
+$("driverIdInput").value=driver.driverId;
+
+$("characterCount").textContent="0 / 2000";
+
+$("referenceId").textContent=
+
+result.referenceId;
+
+$("successPanel").hidden=false;
+
+$("submitStatus").textContent=t.submitted;
+
+$("statusFilter").value="";
+
+selectedStatus="";
+
+refreshHistory();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("submitStatus").textContent=t.sendFailed;
+
+}finally{
+
+if(currentGeneration===generation){
+
+submitting=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// COPY COMPLAINT REFERENCE
+
+$("copyReference").onclick=async()=>{
+
+if(!validSession()
+
+||$("successPanel").hidden)return;
+
+const referenceId=
+
+$("referenceId").textContent;
+
+if(!validId(referenceId))return;
+
+try{
+
+await navigator.clipboard.writeText(
+
+referenceId
+
+);
+
+$("copyStatus").textContent=t.copied;
+
+}catch(e){
+
+$("copyStatus").textContent=t.copyFailed;
+
+}
+
+};
+
+// VALIDATE SERVER TICKET RECORD
+
+function validTicket(data){
+
+if(!data
+
+||data.driverUid!==uid
+
+||!validId(data.referenceId)
+
+||!TYPES.includes(data.type)
+
+||!validCategory(data.category)
+
+||!STATUSES.includes(data.status)
+
+||!validText(data.subject,3,100)
+
+||!validText(data.message,10,2000)){
+
+return false;
+
+}
+
+if(data.bookingId!==null
+
+&&data.bookingId!==undefined
+
+&&!validId(data.bookingId)){
+
+return false;
+
+}
+
+if(!Number.isFinite(data.createdAtMs)
+
+||data.createdAtMs<=0
+
+||data.createdAtMs>8640000000000000){
+
+return false;
+
+}
+
+if(!Number.isFinite(data.updatedAtMs)
+
+||data.updatedAtMs<data.createdAtMs
+
+||data.updatedAtMs>8640000000000000){
+
+return false;
+
+}
+
+if(data.adminReply!==null
+
+&&data.adminReply!==undefined
+
+&&(
+
+typeof data.adminReply!=="string"
+
+||data.adminReply.length>4000
+
+)){
+
+return false;
+
+}
+
+return true;
+
+}
+
+// CREATE COMPLAINT CARD
+
+function createTicketCard(ticket){
+
+const card=document.createElement("details");
+
+card.className="ticket";
+
+const summary=document.createElement("summary");
+
+const reference=document.createElement("strong");
+
+reference.className="yellow";
+
+reference.textContent=ticket.referenceId;
+
+const subject=document.createElement("div");
+
+subject.textContent=ticket.subject;
+
+const date=document.createElement("div");
+
+date.className="note";
+
+date.textContent=
+
+formatDate(ticket.createdAtMs);
+
+const badge=document.createElement("div");
+
+badge.className="badge "+ticket.status;
+
+badge.textContent=t[ticket.status];
+
+summary.append(
+
+reference,
+
+subject,
+
+date,
+
+badge
+
+);
+
+const content=document.createElement("div");
+
+content.className="ticketContent";
+
+addRow(
+
+content,
+
+t.referenceId,
+
+ticket.referenceId
+
+);
+
+addRow(
+
+content,
+
+t.type,
+
+t[ticket.type]
+
+);
+
+addRow(
+
+content,
+
+t.category,
+
+t[CATEGORIES[ticket.category]]
+
+);
+
+addRow(
+
+content,
+
+t.bookingId,
+
+ticket.bookingId||"—"
+
+);
+
+addRow(
+
+content,
+
+t.createdAt,
+
+formatDate(ticket.createdAtMs)
+
+);
+
+addRow(
+
+content,
+
+t.updatedAt,
+
+formatDate(ticket.updatedAtMs)
+
+);
+
+addRow(
+
+content,
+
+t.ticketStatus,
+
+t[ticket.status],
+
+ticket.status==="resolved"
+
+?"green":"yellow"
+
+);
+
+addMessage(
+
+content,
+
+t.message,
+
+ticket.message
+
+);
+
+addMessage(
+
+content,
+
+t.adminReply,
+
+ticket.adminReply?.trim()
+
+?ticket.adminReply
+
+:t.waitingReply,
+
+true
+
+);
+
+card.append(summary,content);
+
+return card;
+
+}
+
+// DISPLAY COMPLAINT HISTORY
+
+function renderHistory(){
+
+const container=$("ticketList");
+
+container.replaceChildren();
+
+const sorted=Array.from(
+
+records.values()
+
+).sort(
+
+(a,b)=>b.createdAtMs-a.createdAtMs
+
+);
+
+if(sorted.length===0){
+
+$("historyStatus").textContent=
+
+t.noRecords;
+
+return;
+
+}
+
+sorted.forEach(ticket=>{
+
+container.append(
+
+createTicketCard(ticket)
+
+);
+
+});
+
+$("historyStatus").textContent=
+
+t.records+": "+sorted.length;
+
+}
+
+// LOAD PRIVATE COMPLAINT HISTORY
+
+async function loadHistory(){
+
+if(!validSession()
+
+||!driver
+
+||historyLoading)return;
+
+historyLoading=true;
+
+$("loadMoreButton").disabled=true;
+
+$("refreshButton").disabled=true;
+
+$("historyStatus").textContent=t.loading;
+
+const currentGeneration=generation;
+
+const currentHistoryGeneration=
+
+historyGeneration;
+
+const requestedCursor=cursor;
+
+try{
+
+const result=await serverCall(
+
+"getDriverFeedbackHistory",
+
+{
+
+status:selectedStatus||null,
+
+limit:PAGE_SIZE,
+
+cursor:requestedCursor
+
+}
+
+);
+
+if(currentGeneration!==generation
+
+||currentHistoryGeneration!==historyGeneration
+
+||!driver)return;
+
+if(result?.success!==true
+
+||result.driverUid!==uid
+
+||!Array.isArray(result.records)
+
+||result.records.length>PAGE_SIZE
+
+||!result.records.every(validTicket)){
+
+throw new Error("Invalid records");
+
+}
+
+const next=result.nextCursor;
+
+if(next!==null
+
+&&(
+
+typeof next!=="string"
+
+||next.length===0
+
+||next.length>2048
+
+||next===requestedCursor
+
+)){
+
+throw new Error("Invalid cursor");
+
+}
+
+result.records.forEach(ticket=>{
+
+if(!selectedStatus
+
+||ticket.status===selectedStatus){
+
+records.set(
+
+ticket.referenceId,
+
+ticket
+
+);
+
+}
+
+});
+
+cursor=next;
+
+renderHistory();
+
+$("loadMoreButton").hidden=
+
+cursor===null;
+
+}catch(e){
+
+if(currentGeneration!==generation
+
+||currentHistoryGeneration!==historyGeneration){
+
+return;
+
+}
+
+$("historyStatus").textContent=
+
+t.historyError;
+
+$("loadMoreButton").hidden=
+
+requestedCursor===null;
+
+}finally{
+
+if(currentGeneration===generation
+
+&&currentHistoryGeneration===historyGeneration){
+
+historyLoading=false;
+
+$("loadMoreButton").disabled=false;
+
+$("refreshButton").disabled=false;
+
+}
+
+}
+
+}
+
+function refreshHistory(){
+
+if(!validSession()||!driver)return;
+
+clearHistory();
+
+loadHistory();
+
+}
+
+$("refreshButton").onclick=refreshHistory;
+
+$("loadMoreButton").onclick=loadHistory;
+
+$("statusFilter").onchange=()=>{
+
+const value=$("statusFilter").value;
+
+if(value&&!STATUSES.includes(value)){
+
+return;
+
+}
+
+selectedStatus=value;
+
+refreshHistory();
+
+};
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps();
+
+clearHistory();
+
+clearSuccess();
+
+clearForm();
+
+pendingRequest=null;
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true
+
+||!validText(data.fullName,1,150)
+
+||!validId(data.driverId)){
+
+denyAccess();
+
+return;
+
+}
+
+const firstLoad=driver===null;
+
+driver=data;
+
+$("driverName").textContent=
+
+data.fullName;
+
+$("driverId").textContent=
+
+data.driverId;
+
+$("name").value=data.fullName;
+
+$("driverIdInput").value=data.driverId;
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(
+
+data.availability
+
+)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(firstLoad){
+
+refreshHistory();
+
+}
+
+updateControls();
+
+status("");
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC SESSION VERIFICATION
+// AND COMPLAINT STATUS REFRESH
+
+let checkingSession=false;
+
+setInterval(async()=>{
+
+if(!validSession()
+
+||!driver
+
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyDriverSession"
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+
+||result.uid!==uid
+
+||result.status!=="approved"
+
+||result.activationComplete!==true
+
+||result.documentsValid!==true){
+
+denyAccess();
+
+return;
+
+}
+
+if(!historyLoading
+
+&&!submitting
+
+&&records.size<=PAGE_SIZE
+
+&&document.visibilityState==="visible"
+
+&&!$("ticketList").querySelector("details[open]")){
+
+refreshHistory();
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+checkingSession=false;
+
+}
+
+},60000);
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
