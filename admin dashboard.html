@@ -1,0 +1,3270 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Owner Admin Dashboard</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111111;
+color:#ffffff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+header{
+text-align:center;
+padding:15px 0;
+}
+
+h1{
+color:#FFD600;
+font-size:38px;
+margin:8px 0;
+}
+
+.country{
+color:#FFD600;
+letter-spacing:5px;
+font-size:13px;
+}
+
+h2{
+font-size:22px;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.ownerIcon{
+width:80px;
+height:80px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+
+.statsGrid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border:1px solid #444;
+border-radius:10px;
+padding:15px 10px;
+min-height:110px;
+}
+
+.stat span{
+display:block;
+color:#CCC;
+font-size:13px;
+line-height:1.7;
+}
+
+.stat strong{
+display:block;
+color:#FFD600;
+font-size:23px;
+margin-top:10px;
+overflow-wrap:anywhere;
+}
+
+.menuGrid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:12px;
+}
+
+.menuButton{
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+min-height:115px;
+background:#FFD600;
+color:#111;
+border-radius:12px;
+padding:14px 8px;
+text-decoration:none;
+font-weight:bold;
+font-size:14px;
+line-height:1.7;
+}
+
+.menuButton:hover{
+background:#FFE44D;
+}
+
+.menuIcon{
+font-size:29px;
+margin-bottom:8px;
+}
+
+.menuNumber{
+font-size:11px;
+opacity:.7;
+}
+
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-weight:bold;
+font-size:14px;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.danger{
+background:#A51D2D;
+color:#fff;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+border-bottom:1px solid #444;
+padding:12px 0;
+font-size:14px;
+line-height:1.8;
+}
+
+.row strong{
+max-width:60%;
+text-align:right;
+overflow-wrap:anywhere;
+}
+
+.green{
+color:#4ADE80!important;
+}
+
+.red{
+color:#FF6464!important;
+}
+
+.yellow{
+color:#FFD600!important;
+}
+
+.notice{
+background:#302C17;
+border:1px solid #FFD600;
+border-radius:10px;
+padding:14px;
+margin:12px 0;
+line-height:1.8;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:14px;
+margin:12px 0;
+line-height:1.8;
+}
+
+.note{
+color:#BBB;
+font-size:13px;
+line-height:1.8;
+}
+
+.languageGrid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+.languageButton{
+background:#292929;
+color:#FFD600;
+border:1px solid #FFD600;
+border-radius:7px;
+padding:12px 4px;
+cursor:pointer;
+}
+
+.languageButton.selected{
+background:#FFD600;
+color:#111;
+}
+
+textarea,input{
+width:100%;
+background:#292929;
+color:#fff;
+border:1px solid #666;
+border-radius:8px;
+padding:12px;
+font-size:16px;
+margin:8px 0;
+font-family:inherit;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+.alertItem{
+background:#292929;
+border:1px solid #555;
+border-radius:9px;
+padding:13px;
+margin:10px 0;
+overflow-wrap:anywhere;
+white-space:pre-wrap;
+line-height:1.8;
+}
+
+.alertItem.urgent{
+border-color:#FF6464;
+}
+
+#status,#actionStatus{
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#999;
+font-size:12px;
+padding:25px 0;
+}
+
+[hidden]{
+display:none!important;
+}
+
+@media(min-width:700px){
+
+.statsGrid{
+grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+.menuGrid{
+grid-template-columns:repeat(4,minmax(0,1fr));
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<header>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<div class="ownerIcon">
+
+<svg width="48" height="48"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.7"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11"/>
+
+<path d="m9 12 2 2 4-4"/>
+
+</svg>
+
+</div>
+
+<h2 data-t="heading">
+Owner Admin Dashboard
+</h2>
+
+</header>
+
+<div class="languageGrid">
+
+<button class="languageButton"
+data-lang="si">සිංහල</button>
+
+<button class="languageButton"
+data-lang="en">English</button>
+
+<button class="languageButton"
+data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+class="yellow"
+role="status"
+aria-live="polite">
+Checking owner authorization...
+</p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<div class="warning"
+data-t="accessDenied"></div>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+<button id="retryButton"
+class="action secondary"
+data-t="refresh"></button>
+
+</section>
+
+<div id="dashboard" hidden>
+
+<section class="panel">
+
+<h3 data-t="ownerAccount"></h3>
+
+<div class="row">
+
+<span data-t="ownerName"></span>
+
+<strong id="ownerName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="ownerEmail"></span>
+
+<strong id="ownerEmail">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="authorization"></span>
+
+<strong id="ownerAuthorization"
+class="green">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="serverTime"></span>
+
+<strong id="serverTime">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="systemStatus"></span>
+
+<strong id="systemStatus">—</strong>
+
+</div>
+
+</section>
+
+<div id="systemWarning"
+class="warning" hidden></div>
+
+<section class="panel">
+
+<h3 data-t="todayOverview"></h3>
+
+<p id="reportDate"
+class="note">—</p>
+
+<div id="statsGrid"
+class="statsGrid"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="driverOverview"></h3>
+
+<div id="driverStats"
+class="statsGrid"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="financialOverview"></h3>
+
+<div id="financialStats"
+class="statsGrid"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="pendingOverview"></h3>
+
+<div id="pendingStats"
+class="statsGrid"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="mainMenus"></h3>
+
+<div id="menuGrid"
+class="menuGrid"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="securityAlerts"></h3>
+
+<div id="securityAlerts"></div>
+
+<a id="securityLink"
+class="action secondary"
+data-t="openSecurity"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="emergencyControl"></h3>
+
+<p class="note"
+data-t="emergencyNote"></p>
+
+<div class="row">
+
+<span data-t="emergencyLock"></span>
+
+<strong id="lockStatus">—</strong>
+
+</div>
+
+<button id="lockButton"
+class="action danger"
+data-t="enableLock"
+disabled></button>
+
+<button id="unlockButton"
+class="action"
+data-t="disableLock"
+disabled></button>
+
+<form id="emergencyForm" hidden>
+
+<label for="lockReason"
+data-t="reason"></label>
+
+<textarea id="lockReason"
+minlength="10"
+maxlength="500"
+required></textarea>
+
+<p id="confirmationInstruction"
+class="note"></p>
+
+<input id="confirmationText"
+autocomplete="off"
+maxlength="20"
+required>
+
+<button id="confirmEmergency"
+type="submit"
+class="action danger"
+data-t="confirm"></button>
+
+<button id="cancelEmergency"
+type="button"
+class="action secondary"
+data-t="cancel"></button>
+
+</form>
+
+<p id="actionStatus"
+role="status"
+aria-live="polite"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="connectionDetails"></h3>
+
+<div class="row">
+
+<span data-t="authentication"></span>
+
+<strong id="authStatus">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>Firebase App Check</span>
+
+<strong id="appCheckStatus">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="database"></span>
+
+<strong id="databaseStatus">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="lastUpdated"></span>
+
+<strong id="lastUpdated">—</strong>
+
+</div>
+
+<button id="refreshButton"
+class="action"
+data-t="refresh"></button>
+
+</section>
+
+<button id="logoutButton"
+class="action secondary"
+data-t="logout"></button>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+signOut,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const LANGUAGES=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_admin_language")
+||"si";
+
+}catch(e){}
+
+const params=
+new URLSearchParams(location.search);
+
+let lang=
+
+LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+// LANGUAGE TRANSLATIONS
+
+const translations={
+
+si:{
+
+heading:"හිමිකරුගේ පරිපාලන පද්ධතිය",
+ownerAccount:"හිමිකරුගේ ගිණුම",
+ownerName:"හිමිකරුගේ නම",
+ownerEmail:"Google ගිණුම",
+authorization:"ප්‍රවේශ අවසරය",
+serverTime:"ශ්‍රී ලංකාවේ වේලාව",
+systemStatus:"පද්ධතියේ තත්ත්වය",
+todayOverview:"අද දින සේවා වාර්තාව",
+driverOverview:"රියදුරු වාර්තාව",
+financialOverview:"අද දින මූල්‍ය වාර්තාව",
+pendingOverview:"අවධානය යොමු කළ යුතු කාර්යයන්",
+mainMenus:"ප්‍රධාන පරිපාලන මෙනූ 20",
+securityAlerts:"ආරක්ෂක අනතුරු ඇඟවීම්",
+openSecurity:"ආරක්ෂක පාලන පද්ධතිය",
+emergencyControl:"හදිසි පද්ධති පාලනය",
+emergencyNote:"හදිසි අවහිර කිරීමෙන් නව ලියාපදිංචි කිරීම්, නව සේවා Login, නව හයර් සහ ගිණුම් සක්‍රිය කිරීම් නතර කළ යුතුය. දැනට ක්‍රියාත්මක ගමන්වල ආරක්ෂිත සේවා දිගටම පවත්වාගත යුතුය.",
+emergencyLock:"හදිසි පද්ධති අවහිරය",
+enableLock:"හදිසි පද්ධති අවහිරය සක්‍රිය කරන්න",
+disableLock:"පද්ධති අවහිරය ඉවත් කරන්න",
+reason:"තීරණයට හේතුව",
+confirm:"තහවුරු කරන්න",
+cancel:"අවලංගු කරන්න",
+connectionDetails:"පද්ධති සම්බන්ධතා",
+authentication:"හිමිකරුගේ අවසර පරීක්ෂාව",
+database:"Database සම්බන්ධතාව",
+lastUpdated:"අවසන් යාවත්කාලීන කිරීම",
+refresh:"නැවත පරීක්ෂා කරන්න",
+logout:"Admin ගිණුමෙන් ඉවත් වන්න",
+login:"Owner Admin Login",
+accessDenied:"හිමිකරුගේ ප්‍රවේශ අවසරය තහවුරු කර නොමැත.",
+checking:"ආරක්ෂක අවසර පරීක්ෂා කරමින්...",
+loading:"Server දත්ත ලබාගනිමින්...",
+verified:"තහවුරු කර ඇත",
+connected:"සම්බන්ධයි",
+normal:"සාමාන්‍ය ක්‍රියාකාරීත්වය",
+maintenance:"නඩත්තු කටයුතු",
+locked:"හදිසි අවහිරය සක්‍රියයි",
+unlocked:"අවහිරය අක්‍රියයි",
+lockWarning:"හදිසි පද්ධති අවහිරය ක්‍රියාත්මකයි.",
+maintenanceWarning:"පද්ධතිය නඩත්තු තත්ත්වයේ පවතී.",
+noAlerts:"දැනට වාර්තා වූ අනතුරු ඇඟවීම් නොමැත.",
+error:"Server දත්ත තහවුරු කළ නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+confirmLogout:"Admin ගිණුමෙන් ඉවත් වීමට අවශ්‍යද?",
+reauth:"Google ගිණුම නැවත තහවුරු කරන්න.",
+actionSuccess:"Server විසින් වෙනස් කිරීම පිළිගෙන ඇත.",
+actionError:"වෙනස් කිරීම තහවුරු කළ නොහැක. නැවත පරීක්ෂා කරන්න.",
+typeLock:"තහවුරු කිරීමට LOCK ලෙස ඇතුළත් කරන්න.",
+typeUnlock:"තහවුරු කිරීමට UNLOCK ලෙස ඇතුළත් කරන්න.",
+totalBookings:"මුළු හයර් ඉල්ලීම්",
+completedRides:"අවසන් කළ හයර්",
+activeRides:"දැනට ක්‍රියාත්මක හයර්",
+scheduledRides:"වෙන්කර ඇති හයර්",
+searchingRides:"රියදුරන් සොයන හයර්",
+failedRides:"අසාර්ථක හයර්",
+cancelledRides:"අවලංගු කළ හයර්",
+totalCustomers:"මුළු පාරිභෝගිකයන්",
+totalDrivers:"මුළු රියදුරන්",
+approvedDrivers:"අනුමත රියදුරන්",
+onlineDrivers:"Online රියදුරන්",
+offlineDrivers:"Offline රියදුරන්",
+busyDrivers:"හයර්වල සිටින රියදුරන්",
+pendingDrivers:"අනුමැතිය බලාපොරොත්තු වන රියදුරන්",
+rejectedDrivers:"ප්‍රතික්ෂේප කළ රියදුරන්",
+suspendedDrivers:"අත්හිටුවූ රියදුරන්",
+blockedDrivers:"අවහිර කළ රියදුරන්",
+grossIncome:"මුළු හයර් ආදායම",
+driverIncome:"රියදුරන්ගේ ශුද්ධ ආදායම",
+commissionEarned:"MY RIDE කොමිස් ආදායම",
+commissionReceived:"ලැබුණු කොමිස් මුදල්",
+outstandingCommission:"ලැබීමට ඉතිරි මුළු කොමිස්",
+overdueCommission:"කල් ඉකුත් වූ මුළු කොමිස්",
+pendingPayments:"තහවුරු කළ යුතු ගෙවීම්",
+pendingCommissionPayments:"කොමිස් ගෙවීම් පරීක්ෂාව",
+openComplaints:"විසඳීමට ඇති පැමිණිලි",
+openSOS:"හදිසි ආධාර ඉල්ලීම්",
+pendingRenewals:"බලපත්‍ර අලුත් කිරීමේ ඉල්ලීම්",
+pendingProfileChanges:"රියදුරු විස්තර වෙනස් කිරීමේ ඉල්ලීම්",
+pendingAccountReviews:"ගිණුම් සමාලෝචන ඉල්ලීම්",
+unreadSecurityAlerts:"නොකියවූ ආරක්ෂක නිවේදන",
+whatsappFailures:"අසාර්ථක WhatsApp පණිවිඩ",
+gmailFailures:"අසාර්ථක Gmail නිවේදන"
+
+},
+
+en:{
+
+heading:"Owner Admin Dashboard",
+ownerAccount:"Owner Account",
+ownerName:"Owner Name",
+ownerEmail:"Google Account",
+authorization:"Authorization",
+serverTime:"Sri Lanka Time",
+systemStatus:"System Status",
+todayOverview:"Today's Service Overview",
+driverOverview:"Driver Overview",
+financialOverview:"Today's Financial Overview",
+pendingOverview:"Items Requiring Attention",
+mainMenus:"20 Administration Menus",
+securityAlerts:"Security Alerts",
+openSecurity:"Open Security Management",
+emergencyControl:"Emergency System Control",
+emergencyNote:"Emergency lock must stop new registrations, service logins, bookings and account activations while preserving essential safety functions for active trips.",
+emergencyLock:"Emergency System Lock",
+enableLock:"Enable Emergency Lock",
+disableLock:"Disable Emergency Lock",
+reason:"Reason for this decision",
+confirm:"Confirm",
+cancel:"Cancel",
+connectionDetails:"System Connections",
+authentication:"Owner Authorization",
+database:"Database Connection",
+lastUpdated:"Last Updated",
+refresh:"Refresh",
+logout:"Owner Logout",
+login:"Owner Admin Login",
+accessDenied:"Owner authorization has not been verified.",
+checking:"Verifying security permissions...",
+loading:"Loading server data...",
+verified:"Verified",
+connected:"Connected",
+normal:"Operational",
+maintenance:"Maintenance",
+locked:"Emergency Lock Enabled",
+unlocked:"Emergency Lock Disabled",
+lockWarning:"Emergency system lock is active.",
+maintenanceWarning:"The system is under maintenance.",
+noAlerts:"No reported security alerts.",
+error:"Unable to verify server data.",
+offline:"No internet connection.",
+confirmLogout:"Do you want to log out?",
+reauth:"Verify your Google account again.",
+actionSuccess:"The server accepted the change.",
+actionError:"Unable to confirm the change. Refresh and check.",
+typeLock:"Type LOCK to confirm.",
+typeUnlock:"Type UNLOCK to confirm.",
+totalBookings:"Total Booking Requests",
+completedRides:"Completed Rides",
+activeRides:"Active Rides",
+scheduledRides:"Scheduled Rides",
+searchingRides:"Searching for Drivers",
+failedRides:"Failed Rides",
+cancelledRides:"Cancelled Rides",
+totalCustomers:"Total Customers",
+totalDrivers:"Total Drivers",
+approvedDrivers:"Approved Drivers",
+onlineDrivers:"Online Drivers",
+offlineDrivers:"Offline Drivers",
+busyDrivers:"Busy Drivers",
+pendingDrivers:"Pending Drivers",
+rejectedDrivers:"Rejected Drivers",
+suspendedDrivers:"Suspended Drivers",
+blockedDrivers:"Blocked Drivers",
+grossIncome:"Gross Ride Income",
+driverIncome:"Net Driver Income",
+commissionEarned:"MY RIDE Commission Earned",
+commissionReceived:"Commission Received",
+outstandingCommission:"Total Outstanding Commission",
+overdueCommission:"Total Overdue Commission",
+pendingPayments:"Payments Awaiting Verification",
+pendingCommissionPayments:"Commission Payments to Review",
+openComplaints:"Unresolved Complaints",
+openSOS:"Open SOS Requests",
+pendingRenewals:"Pending Document Renewals",
+pendingProfileChanges:"Pending Profile Changes",
+pendingAccountReviews:"Pending Account Reviews",
+unreadSecurityAlerts:"Unread Security Alerts",
+whatsappFailures:"Failed WhatsApp Messages",
+gmailFailures:"Failed Gmail Notifications"
+
+},
+
+ta:{
+
+heading:"உரிமையாளர் நிர்வாக முதன்மைப் பக்கம்",
+ownerAccount:"உரிமையாளர் கணக்கு",
+ownerName:"உரிமையாளர் பெயர்",
+ownerEmail:"Google கணக்கு",
+authorization:"அணுகல் அனுமதி",
+serverTime:"இலங்கை நேரம்",
+systemStatus:"அமைப்பு நிலை",
+todayOverview:"இன்றைய சேவை அறிக்கை",
+driverOverview:"சாரதி அறிக்கை",
+financialOverview:"இன்றைய நிதி அறிக்கை",
+pendingOverview:"கவனம் தேவைப்படும் பணிகள்",
+mainMenus:"20 நிர்வாக பட்டியல்கள்",
+securityAlerts:"பாதுகாப்பு எச்சரிக்கைகள்",
+openSecurity:"பாதுகாப்பு நிர்வாகம்",
+emergencyControl:"அவசர அமைப்பு கட்டுப்பாடு",
+emergencyNote:"அவசர பூட்டு புதிய பதிவுகள், சேவை உள்நுழைவுகள், பயண முன்பதிவுகள் மற்றும் கணக்கு செயல்படுத்தல்களை நிறுத்த வேண்டும். தற்போதைய பயணங்களின் பாதுகாப்பு சேவைகள் தொடர வேண்டும்.",
+emergencyLock:"அவசர அமைப்பு பூட்டு",
+enableLock:"அவசர பூட்டை செயல்படுத்தவும்",
+disableLock:"அவசர பூட்டை நீக்கவும்",
+reason:"முடிவுக்கான காரணம்",
+confirm:"உறுதிப்படுத்தவும்",
+cancel:"ரத்து செய்யவும்",
+connectionDetails:"அமைப்பு இணைப்புகள்",
+authentication:"உரிமையாளர் அனுமதி",
+database:"தரவுத்தள இணைப்பு",
+lastUpdated:"கடைசி புதுப்பிப்பு",
+refresh:"புதுப்பிக்கவும்",
+logout:"நிர்வாக கணக்கிலிருந்து வெளியேறு",
+login:"உரிமையாளர் உள்நுழைவு",
+accessDenied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+checking:"பாதுகாப்பு அனுமதி சரிபார்க்கப்படுகிறது...",
+loading:"சேவையக தரவு பெறப்படுகிறது...",
+verified:"உறுதிப்படுத்தப்பட்டது",
+connected:"இணைக்கப்பட்டுள்ளது",
+normal:"செயல்பாட்டில்",
+maintenance:"பராமரிப்பு",
+locked:"அவசர பூட்டு செயல்பாட்டில்",
+unlocked:"அவசர பூட்டு நீக்கப்பட்டது",
+lockWarning:"அவசர அமைப்பு பூட்டு செயல்பாட்டில் உள்ளது.",
+maintenanceWarning:"அமைப்பு பராமரிப்பில் உள்ளது.",
+noAlerts:"பாதுகாப்பு எச்சரிக்கைகள் இல்லை.",
+error:"சேவையக தரவை உறுதிப்படுத்த முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+confirmLogout:"வெளியேற விரும்புகிறீர்களா?",
+reauth:"Google கணக்கை மீண்டும் உறுதிப்படுத்தவும்.",
+actionSuccess:"மாற்றம் சேவையகத்தால் ஏற்கப்பட்டது.",
+actionError:"மாற்றத்தை உறுதிப்படுத்த முடியவில்லை. மீண்டும் சரிபார்க்கவும்.",
+typeLock:"உறுதிப்படுத்த LOCK என உள்ளிடவும்.",
+typeUnlock:"உறுதிப்படுத்த UNLOCK என உள்ளிடவும்.",
+totalBookings:"மொத்த முன்பதிவுகள்",
+completedRides:"முடிக்கப்பட்ட பயணங்கள்",
+activeRides:"தற்போதைய பயணங்கள்",
+scheduledRides:"திட்டமிடப்பட்ட பயணங்கள்",
+searchingRides:"சாரதிகளை தேடும் பயணங்கள்",
+failedRides:"தோல்வியடைந்த பயணங்கள்",
+cancelledRides:"ரத்து செய்யப்பட்ட பயணங்கள்",
+totalCustomers:"மொத்த வாடிக்கையாளர்கள்",
+totalDrivers:"மொத்த சாரதிகள்",
+approvedDrivers:"அங்கீகரிக்கப்பட்ட சாரதிகள்",
+onlineDrivers:"இணைப்பிலுள்ள சாரதிகள்",
+offlineDrivers:"இணைப்பில்லாத சாரதிகள்",
+busyDrivers:"பயணத்திலுள்ள சாரதிகள்",
+pendingDrivers:"நிலுவையிலுள்ள சாரதிகள்",
+rejectedDrivers:"நிராகரிக்கப்பட்ட சாரதிகள்",
+suspendedDrivers:"இடைநிறுத்தப்பட்ட சாரதிகள்",
+blockedDrivers:"தடுக்கப்பட்ட சாரதிகள்",
+grossIncome:"மொத்த பயண வருமானம்",
+driverIncome:"சாரதிகளின் நிகர வருமானம்",
+commissionEarned:"MY RIDE கமிஷன் வருமானம்",
+commissionReceived:"பெறப்பட்ட கமிஷன்",
+outstandingCommission:"பெற வேண்டிய மொத்த கமிஷன்",
+overdueCommission:"காலதாமதமான மொத்த கமிஷன்",
+pendingPayments:"சரிபார்க்க வேண்டிய கட்டணங்கள்",
+pendingCommissionPayments:"சரிபார்க்க வேண்டிய கமிஷன் கட்டணங்கள்",
+openComplaints:"தீர்க்கப்படாத முறைப்பாடுகள்",
+openSOS:"அவசர உதவி கோரிக்கைகள்",
+pendingRenewals:"நிலுவையிலுள்ள ஆவண புதுப்பிப்புகள்",
+pendingProfileChanges:"சாரதி விவர மாற்ற கோரிக்கைகள்",
+pendingAccountReviews:"கணக்கு மறுபரிசீலனை கோரிக்கைகள்",
+unreadSecurityAlerts:"படிக்காத பாதுகாப்பு எச்சரிக்கைகள்",
+whatsappFailures:"தோல்வியடைந்த WhatsApp செய்திகள்",
+gmailFailures:"தோல்வியடைந்த Gmail அறிவிப்புகள்"
+
+}
+
+};
+
+let t=translations[lang];
+
+// ADMIN MENU CONFIGURATION
+
+const menus=[
+
+{
+icon:"👥",
+page:"admin-customers.html",
+si:"පාරිභෝගික කළමනාකරණය",
+en:"Customer Management",
+ta:"வாடிக்கையாளர் நிர்வாகம்"
+},
+
+{
+icon:"🚘",
+page:"admin-drivers.html",
+si:"රියදුරු කළමනාකරණය",
+en:"Driver Management",
+ta:"சாரதி நிர்வாகம்"
+},
+
+{
+icon:"💬",
+page:"admin-whatsapp.html",
+si:"WhatsApp කළමනාකරණය",
+en:"WhatsApp Management",
+ta:"WhatsApp நிர்வாகம்"
+},
+
+{
+icon:"✉️",
+page:"admin-gmail.html",
+si:"Gmail කළමනාකරණය",
+en:"Gmail Management",
+ta:"Gmail நிர்வாகம்"
+},
+
+{
+icon:"📍",
+page:"admin-live-drivers.html",
+si:"සජීවී රියදුරු නිරීක්ෂණය",
+en:"Live Driver Monitoring",
+ta:"நேரடி சாரதி கண்காணிப்பு"
+},
+
+{
+icon:"📋",
+page:"admin-bookings.html",
+si:"හයර් කළමනාකරණය",
+en:"Booking Management",
+ta:"முன்பதிவு நிர்வாகம்"
+},
+
+{
+icon:"🗺️",
+page:"admin-live-trips.html",
+si:"සජීවී ගමන් නිරීක්ෂණය",
+en:"Live Trip Monitoring",
+ta:"நேரடி பயண கண்காணிப்பு"
+},
+
+{
+icon:"💵",
+page:"admin-fares.html",
+si:"හයර් ගාස්තු කළමනාකරණය",
+en:"Fare Management",
+ta:"பயண கட்டண நிர்வாகம்"
+},
+
+{
+icon:"🌦️",
+page:"admin-weather-road.html",
+si:"කාලගුණ සහ මාර්ග පාලනය",
+en:"Weather & Road Management",
+ta:"வானிலை மற்றும் சாலை நிர்வாகம்"
+},
+
+{
+icon:"%",
+page:"admin-commission.html",
+si:"කොමිස් කළමනාකරණය",
+en:"Commission Management",
+ta:"கமிஷன் நிர்வாகம்"
+},
+
+{
+icon:"💳",
+page:"admin-payments.html",
+si:"ගෙවීම් කළමනාකරණය",
+en:"Payment Management",
+ta:"கட்டண நிர்வாகம்"
+},
+
+{
+icon:"📊",
+page:"admin-reports.html",
+si:"ආදායම් සහ වාර්තා",
+en:"Income & Reports",
+ta:"வருமானம் மற்றும் அறிக்கைகள்"
+},
+
+{
+icon:"📝",
+page:"admin-complaints.html",
+si:"අදහස් සහ පැමිණිලි",
+en:"Complaints & Feedback",
+ta:"கருத்துகள் மற்றும் முறைப்பாடுகள்"
+},
+
+{
+icon:"🔔",
+page:"admin-notifications.html",
+si:"නිවේදන කළමනාකරණය",
+en:"Notifications",
+ta:"அறிவிப்புகள்"
+},
+
+{
+icon:"🚨",
+page:"admin-emergency.html",
+si:"හදිසි සේවා කළමනාකරණය",
+en:"Emergency Management",
+ta:"அவசர சேவை நிர்வாகம்"
+},
+
+{
+icon:"🛡️",
+page:"admin-security.html",
+si:"ආරක්ෂක කළමනාකරණය",
+en:"Security Management",
+ta:"பாதுகாப்பு நிர்வாகம்"
+},
+
+{
+icon:"🗄️",
+page:"admin-database.html",
+si:"Database කළමනාකරණය",
+en:"Database Management",
+ta:"தரவுத்தள நிர்வாகம்"
+},
+
+{
+icon:"📜",
+page:"admin-terms.html",
+si:"නීති සහ කොන්දේසි",
+en:"Terms & Conditions",
+ta:"விதிமுறைகள் மற்றும் நிபந்தனைகள்"
+},
+
+{
+icon:"⚙️",
+page:"admin-settings.html",
+si:"පද්ධති සැකසුම්",
+en:"System Settings",
+ta:"அமைப்பு அமைப்புகள்"
+},
+
+{
+icon:"🔐",
+page:"admin-account.html",
+si:"හිමිකරුගේ Admin ගිණුම",
+en:"Owner Admin Account",
+ta:"உரிமையாளர் நிர்வாக கணக்கு"
+}
+
+];
+
+// DASHBOARD STATISTICS
+
+const rideKeys=[
+
+"totalBookings",
+"completedRides",
+"activeRides",
+"scheduledRides",
+"searchingRides",
+"failedRides",
+"cancelledRides",
+"totalCustomers"
+
+];
+
+const driverKeys=[
+
+"totalDrivers",
+"approvedDrivers",
+"onlineDrivers",
+"offlineDrivers",
+"busyDrivers",
+"pendingDrivers",
+"rejectedDrivers",
+"suspendedDrivers",
+"blockedDrivers"
+
+];
+
+const moneyKeys=[
+
+"grossIncome",
+"driverIncome",
+"commissionEarned",
+"commissionReceived",
+"outstandingCommission",
+"overdueCommission"
+
+];
+
+const pendingKeys=[
+
+"pendingPayments",
+"pendingCommissionPayments",
+"openComplaints",
+"openSOS",
+"pendingRenewals",
+"pendingProfileChanges",
+"pendingAccountReviews",
+"unreadSecurityAlerts",
+"whatsappFailures",
+"gmailFailures"
+
+];
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+const APP_CHECK_SITE_KEY=
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa";
+
+let app=null;
+let auth=null;
+let db=null;
+let functions=null;
+let appCheck=null;
+
+let uid=null;
+let authorized=false;
+let appCheckReady=false;
+
+let dashboardData=null;
+let systemData=null;
+let alertsData=null;
+
+let generation=0;
+let verifying=false;
+let busy=false;
+let loggingOut=false;
+
+let serverOffset=null;
+let serverSyncAt=0;
+
+let dashboardUnsubscribe=null;
+let systemUnsubscribe=null;
+let alertsUnsubscribe=null;
+
+let emergencyAction=null;
+let pendingEmergency=null;
+
+let statusKey="checking";
+
+function showStatus(key){
+
+statusKey=key;
+
+$("status").textContent=t[key]||"";
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+
+encodeURIComponent(lang);
+
+}
+
+function setValue(id,value,color=""){
+
+const el=$(id);
+
+el.textContent=value??"—";
+
+el.classList.remove(
+"green","red","yellow"
+);
+
+if(color){
+
+el.classList.add(color);
+
+}
+
+}
+
+function renderLanguage(){
+
+t=translations[lang];
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t]||"";
+
+});
+
+document.querySelectorAll("[data-lang]")
+.forEach(button=>{
+
+const selected=
+button.dataset.lang===lang;
+
+button.classList.toggle(
+"selected",selected
+);
+
+button.setAttribute(
+"aria-pressed",String(selected)
+);
+
+});
+
+$("loginLink").href=
+pageLink("admin-login.html");
+
+$("securityLink").href=
+pageLink("admin-security.html");
+
+showStatus(statusKey);
+
+renderMenus();
+
+renderStats();
+
+renderSystem();
+
+renderAlerts();
+
+renderOwner();
+
+renderClock();
+
+}
+
+document.querySelectorAll("[data-lang]")
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!LANGUAGES.includes(
+button.dataset.lang
+))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+"myride_admin_language",lang
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+// SAFE MENU CREATION
+
+function renderMenus(){
+
+const grid=$("menuGrid");
+
+grid.replaceChildren();
+
+menus.forEach((menu,index)=>{
+
+const link=document.createElement("a");
+
+link.className="menuButton";
+
+link.href=pageLink(menu.page);
+
+const icon=document.createElement("span");
+
+icon.className="menuIcon";
+
+icon.textContent=menu.icon;
+
+icon.setAttribute("aria-hidden","true");
+
+const title=document.createElement("span");
+
+title.textContent=menu[lang];
+
+const number=document.createElement("span");
+
+number.className="menuNumber";
+
+number.textContent=String(index+1)
+.padStart(2,"0");
+
+link.append(icon,title,number);
+
+grid.appendChild(link);
+
+});
+
+}
+
+// VALIDATION HELPERS
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&appCheckReady
+
+&&navigator.onLine;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+
+&&value>=0;
+
+}
+
+function validMoney(value){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=0
+
+&&value<=1000000000000
+
+&&Math.abs(
+
+value*100-Math.round(value*100)
+
+)<0.01;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function timestampMs(value){
+
+if(!value
+||typeof value.toMillis!=="function"){
+
+return null;
+
+}
+
+const ms=value.toMillis();
+
+return Number.isFinite(ms)
+
+&&ms>0
+
+&&ms<=8640000000000000
+
+?ms:null;
+
+}
+
+function validDate(value){
+
+if(typeof value!=="string"
+
+||!/^\d{4}-\d{2}-\d{2}$/.test(value)){
+
+return false;
+
+}
+
+const date=new Date(value+"T00:00:00Z");
+
+return Number.isFinite(date.getTime())
+
+&&date.toISOString().slice(0,10)===value;
+
+}
+
+function validTranslations(value){
+
+return value
+
+&&LANGUAGES.every(language=>
+
+typeof value[language]==="string"
+
+&&value[language].length<=2000
+
+);
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+
+name,
+
+{timeout:20000}
+
+)(data);
+
+if(!validSession()
+
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// SERVER TIME
+
+async function syncServerTime(){
+
+const start=Date.now();
+
+const result=await serverCall(
+"getOwnerServerTime"
+);
+
+const end=Date.now();
+
+if(
+
+typeof result?.serverTimeMs!=="number"
+
+||!Number.isFinite(result.serverTimeMs)
+
+||result.serverTimeMs<=0
+
+||result.serverTimeMs>8640000000000000
+
+||end-start>10000
+
+){
+
+throw new Error("Invalid server time");
+
+}
+
+serverOffset=
+
+result.serverTimeMs-(start+end)/2;
+
+serverSyncAt=end;
+
+renderClock();
+
+}
+
+function serverNow(){
+
+if(serverOffset===null
+
+||Date.now()-serverSyncAt>120000){
+
+return null;
+
+}
+
+return Date.now()+serverOffset;
+
+}
+
+function sriLankaToday(){
+
+const now=serverNow();
+
+if(now===null)return null;
+
+return new Date(now+330*60000)
+
+.toISOString().slice(0,10);
+
+}
+
+function formatDate(ms){
+
+if(typeof ms!=="number"
+
+||!Number.isFinite(ms))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"medium"
+
+}
+
+).format(new Date(ms));
+
+}
+
+function renderClock(){
+
+setValue(
+
+"serverTime",
+
+formatDate(serverNow())
+
+);
+
+}
+
+function formatMoney(value){
+
+if(!validMoney(value))return "—";
+
+return "LKR "+
+
+new Intl.NumberFormat("en-LK",{
+
+minimumFractionDigits:2,
+
+maximumFractionDigits:2
+
+}).format(value);
+
+}
+
+// VALIDATE SERVER DASHBOARD DATA
+
+function validDashboard(data){
+
+if(!data
+
+||!validDate(data.reportDate)
+
+||timestampMs(data.updatedAt)===null
+
+||!validCount(data.revision)){
+
+return false;
+
+}
+
+const countKeys=[
+
+...rideKeys,
+
+...driverKeys,
+
+...pendingKeys
+
+];
+
+if(!countKeys.every(
+key=>validCount(data[key])
+)){
+
+return false;
+
+}
+
+if(!moneyKeys.every(
+key=>validMoney(data[key])
+)){
+
+return false;
+
+}
+
+if(
+
+data.overdueCommission>
+
+data.outstandingCommission
+
+||data.approvedDrivers>data.totalDrivers
+
+||data.onlineDrivers+
+
+data.offlineDrivers+
+
+data.busyDrivers>
+
+data.approvedDrivers
+
+||Math.abs(
+
+data.grossIncome-
+
+data.driverIncome-
+
+data.commissionEarned
+
+)>0.02
+
+){
+
+return false;
+
+}
+
+return true;
+
+}
+
+// RENDER STATISTICS
+
+function renderStatGroup(
+elementId,keys,isMoney=false
+){
+
+const grid=$(elementId);
+
+grid.replaceChildren();
+
+keys.forEach(key=>{
+
+const card=document.createElement("div");
+
+card.className="stat";
+
+const label=document.createElement("span");
+
+label.textContent=t[key];
+
+const value=document.createElement("strong");
+
+const data=dashboardData;
+
+if(!data){
+
+value.textContent="—";
+
+}else{
+
+value.textContent=
+
+isMoney
+
+?formatMoney(data[key])
+
+:new Intl.NumberFormat("en-LK")
+.format(data[key]);
+
+if(
+
+["openSOS",
+
+"unreadSecurityAlerts",
+
+"overdueCommission"].includes(key)
+
+&&data[key]>0
+
+){
+
+value.classList.add("red");
+
+}
+
+}
+
+card.append(label,value);
+
+grid.appendChild(card);
+
+});
+
+}
+
+function renderStats(){
+
+renderStatGroup("statsGrid",rideKeys);
+
+renderStatGroup("driverStats",driverKeys);
+
+renderStatGroup(
+
+"financialStats",moneyKeys,true
+
+);
+
+renderStatGroup("pendingStats",pendingKeys);
+
+$("reportDate").textContent=
+
+dashboardData?.reportDate||"—";
+
+setValue(
+
+"lastUpdated",
+
+dashboardData
+
+?formatDate(
+
+timestampMs(dashboardData.updatedAt)
+
+)
+
+:"—"
+
+);
+
+setValue(
+
+"databaseStatus",
+
+dashboardData&&systemData&&alertsData
+
+?t.connected:"—",
+
+dashboardData&&systemData&&alertsData
+
+?"green":"yellow"
+
+);
+
+}
+
+// OWNER DETAILS
+
+function renderOwner(){
+
+const user=auth?.currentUser;
+
+setValue(
+
+"ownerName",
+
+validSession()
+
+?user?.displayName||"—"
+
+:"—"
+
+);
+
+setValue(
+
+"ownerEmail",
+
+validSession()
+
+?user?.email||"—"
+
+:"—"
+
+);
+
+setValue(
+
+"ownerAuthorization",
+
+validSession()?t.verified:"—",
+
+validSession()?"green":"yellow"
+
+);
+
+setValue(
+
+"authStatus",
+
+validSession()?t.verified:"—",
+
+validSession()?"green":"yellow"
+
+);
+
+setValue(
+
+"appCheckStatus",
+
+appCheckReady?t.verified:"—",
+
+appCheckReady?"green":"yellow"
+
+);
+
+}
+
+// SYSTEM STATUS
+
+function validSystem(data){
+
+return data
+
+&&typeof data.emergencyLocked==="boolean"
+
+&&typeof data.maintenanceMode==="boolean"
+
+&&validCount(data.revision)
+
+&&timestampMs(data.updatedAt)!==null;
+
+}
+
+function renderSystem(){
+
+const data=systemData;
+
+$("systemWarning").hidden=true;
+
+if(!data){
+
+setValue("systemStatus","—");
+
+setValue("lockStatus","—");
+
+updateControls();
+
+return;
+
+}
+
+if(data.emergencyLocked){
+
+setValue("systemStatus",t.locked,"red");
+
+setValue("lockStatus",t.locked,"red");
+
+$("systemWarning").textContent=
+
+t.lockWarning;
+
+$("systemWarning").hidden=false;
+
+}else{
+
+setValue(
+
+"lockStatus",
+
+t.unlocked,
+
+"green"
+
+);
+
+if(data.maintenanceMode){
+
+setValue(
+
+"systemStatus",
+
+t.maintenance,
+
+"yellow"
+
+);
+
+$("systemWarning").textContent=
+
+t.maintenanceWarning;
+
+$("systemWarning").hidden=false;
+
+}else{
+
+setValue(
+
+"systemStatus",
+
+t.normal,
+
+"green"
+
+);
+
+}
+
+}
+
+updateControls();
+
+}
+
+// SECURITY ALERTS
+
+function validAlerts(data){
+
+return data
+
+&&Array.isArray(data.records)
+
+&&data.records.length<=20
+
+&&timestampMs(data.updatedAt)!==null
+
+&&data.records.every(item=>
+
+validId(item.alertId)
+
+&&["normal","urgent"]
+.includes(item.priority)
+
+&&validTranslations(item.title)
+
+&&validTranslations(item.message)
+
+&&timestampMs(item.createdAt)!==null
+
+);
+
+}
+
+function renderAlerts(){
+
+const container=$("securityAlerts");
+
+container.replaceChildren();
+
+if(!alertsData){
+
+container.textContent="—";
+
+return;
+
+}
+
+if(alertsData.records.length===0){
+
+container.textContent=t.noAlerts;
+
+return;
+
+}
+
+const records=[...alertsData.records]
+
+.sort((a,b)=>
+
+timestampMs(b.createdAt)-
+
+timestampMs(a.createdAt)
+
+);
+
+records.forEach(item=>{
+
+const card=document.createElement("div");
+
+card.className="alertItem";
+
+if(item.priority==="urgent"){
+
+card.classList.add("urgent");
+
+}
+
+const title=document.createElement("strong");
+
+title.textContent=item.title[lang];
+
+const message=document.createElement("p");
+
+message.textContent=item.message[lang];
+
+const date=document.createElement("small");
+
+date.className="note";
+
+date.textContent=
+
+formatDate(timestampMs(item.createdAt));
+
+card.append(title,message,date);
+
+container.appendChild(card);
+
+});
+
+}
+
+// REALTIME FIRESTORE LISTENERS
+
+function stopListeners(){
+
+if(dashboardUnsubscribe){
+
+dashboardUnsubscribe();
+
+dashboardUnsubscribe=null;
+
+}
+
+if(systemUnsubscribe){
+
+systemUnsubscribe();
+
+systemUnsubscribe=null;
+
+}
+
+if(alertsUnsubscribe){
+
+alertsUnsubscribe();
+
+alertsUnsubscribe=null;
+
+}
+
+}
+
+function checkDashboardReady(){
+
+if(!validSession())return;
+
+if(
+
+dashboardData
+
+&&systemData
+
+&&alertsData
+
+){
+
+$("dashboard").hidden=false;
+
+$("accessPanel").hidden=true;
+
+showStatus("");
+
+}else{
+
+$("dashboard").hidden=true;
+
+showStatus("loading");
+
+}
+
+updateControls();
+
+}
+
+function subscribeDashboard(){
+
+stopListeners();
+
+dashboardData=null;
+
+systemData=null;
+
+alertsData=null;
+
+$("dashboard").hidden=true;
+
+const currentGeneration=generation;
+
+dashboardUnsubscribe=onSnapshot(
+
+doc(db,"adminDashboard","overview"),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(
+
+snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+){
+
+dashboardData=null;
+
+}else if(
+
+snapshot.exists()
+
+&&validDashboard(snapshot.data())
+
+){
+
+dashboardData=snapshot.data();
+
+}else{
+
+dashboardData=null;
+
+}
+
+renderStats();
+
+checkDashboardReady();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+dashboardData=null;
+
+renderStats();
+
+checkDashboardReady();
+
+showStatus("error");
+
+}
+
+);
+
+systemUnsubscribe=onSnapshot(
+
+doc(db,"adminSystem","control"),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(
+
+snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+){
+
+systemData=null;
+
+}else if(
+
+snapshot.exists()
+
+&&validSystem(snapshot.data())
+
+){
+
+systemData=snapshot.data();
+
+}else{
+
+systemData=null;
+
+}
+
+renderSystem();
+
+renderStats();
+
+checkDashboardReady();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+systemData=null;
+
+renderSystem();
+
+checkDashboardReady();
+
+showStatus("error");
+
+}
+
+);
+
+alertsUnsubscribe=onSnapshot(
+
+doc(db,"adminDashboard","securityAlerts"),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(
+
+snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+){
+
+alertsData=null;
+
+}else if(
+
+snapshot.exists()
+
+&&validAlerts(snapshot.data())
+
+){
+
+alertsData=snapshot.data();
+
+}else{
+
+alertsData=null;
+
+}
+
+renderAlerts();
+
+renderStats();
+
+checkDashboardReady();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+alertsData=null;
+
+renderAlerts();
+
+checkDashboardReady();
+
+showStatus("error");
+
+}
+
+);
+
+}
+
+// CLEAR PRIVATE DATA
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+appCheckReady=false;
+
+uid=null;
+
+dashboardData=null;
+
+systemData=null;
+
+alertsData=null;
+
+serverOffset=null;
+
+serverSyncAt=0;
+
+busy=false;
+
+verifying=false;
+
+loggingOut=false;
+
+pendingEmergency=null;
+
+stopListeners();
+
+$("dashboard").hidden=true;
+
+$("accessPanel").hidden=true;
+
+closeEmergencyForm();
+
+$("actionStatus").textContent="";
+
+renderStats();
+
+renderSystem();
+
+renderAlerts();
+
+renderOwner();
+
+renderClock();
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+showStatus("accessDenied");
+
+}
+
+// OWNER AUTHORIZATION
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user||!auth||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+showStatus("offline");
+
+return;
+
+}
+
+showStatus("checking");
+
+try{
+
+const appToken=await getToken(
+
+appCheck,false
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(
+
+typeof appToken?.token!=="string"
+
+||appToken.token.length===0
+
+){
+
+throw new Error("App Check failed");
+
+}
+
+appCheckReady=true;
+
+const token=await user.getIdTokenResult(true);
+
+if(currentGeneration!==generation)return;
+
+if(
+
+token.signInProvider!=="google.com"
+
+||token.claims.email_verified!==true
+
+||token.claims.ownerAdmin!==true
+
+){
+
+throw new Error("Owner claim missing");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(
+
+currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid
+
+){
+
+return;
+
+}
+
+const result=response.data;
+
+if(
+
+result?.authorized!==true
+
+||result.uid!==user.uid
+
+||result.role!=="owner"
+
+||result.ownerUidVerified!==true
+
+||result.sessionValid!==true
+
+){
+
+throw new Error("Owner denied");
+
+}
+
+uid=user.uid;
+
+authorized=true;
+
+renderOwner();
+
+showStatus("loading");
+
+subscribeDashboard();
+
+try{
+
+await syncServerTime();
+
+}catch(e){
+
+serverOffset=null;
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+// EMERGENCY SYSTEM CONTROL
+
+function updateControls(){
+
+const enabled=
+
+validSession()
+
+&&systemData!==null
+
+&&dashboardData!==null
+
+&&alertsData!==null
+
+&&!busy
+
+&&!loggingOut;
+
+$("lockButton").disabled=
+
+!enabled
+
+||systemData?.emergencyLocked===true;
+
+$("unlockButton").disabled=
+
+!enabled
+
+||systemData?.emergencyLocked!==true;
+
+$("confirmEmergency").disabled=!enabled;
+
+$("lockReason").disabled=busy;
+
+$("confirmationText").disabled=busy;
+
+$("cancelEmergency").disabled=busy;
+
+$("refreshButton").disabled=
+
+!validSession()||busy||loggingOut;
+
+$("logoutButton").disabled=
+
+!validSession()||busy||loggingOut;
+
+}
+
+function openEmergencyForm(action){
+
+if(!validSession()
+
+||!systemData
+
+||busy)return;
+
+if(
+
+action==="lock"
+
+&&systemData.emergencyLocked
+
+)return;
+
+if(
+
+action==="unlock"
+
+&&!systemData.emergencyLocked
+
+)return;
+
+emergencyAction=action;
+
+pendingEmergency=null;
+
+$("emergencyForm").reset();
+
+$("confirmationInstruction").textContent=
+
+action==="lock"
+
+?t.typeLock:t.typeUnlock;
+
+$("emergencyForm").hidden=false;
+
+$("lockReason").focus();
+
+}
+
+function closeEmergencyForm(){
+
+emergencyAction=null;
+
+$("emergencyForm").reset();
+
+$("emergencyForm").hidden=true;
+
+}
+
+$("lockButton").onclick=()=>
+
+openEmergencyForm("lock");
+
+$("unlockButton").onclick=()=>
+
+openEmergencyForm("unlock");
+
+$("cancelEmergency").onclick=()=>{
+
+if(!busy){
+
+pendingEmergency=null;
+
+closeEmergencyForm();
+
+}
+
+};
+
+$("emergencyForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(
+
+!validSession()
+
+||!systemData
+
+||busy
+
+||!["lock","unlock"]
+.includes(emergencyAction)
+
+){
+
+return;
+
+}
+
+const reason=
+
+$("lockReason").value.trim();
+
+const expected=
+
+emergencyAction==="lock"
+
+?"LOCK":"UNLOCK";
+
+if(
+
+reason.length<10
+
+||reason.length>500
+
+||$("confirmationText").value.trim()
+
+!==expected
+
+){
+
+$("actionStatus").textContent=
+
+emergencyAction==="lock"
+
+?t.typeLock:t.typeUnlock;
+
+return;
+
+}
+
+const action=emergencyAction;
+
+const expectedRevision=systemData.revision;
+
+const signature=JSON.stringify([
+
+action,reason,expectedRevision
+
+]);
+
+if(
+
+!pendingEmergency
+
+||pendingEmergency.signature!==signature
+
+){
+
+pendingEmergency={
+
+signature,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const currentGeneration=generation;
+
+const user=auth.currentUser;
+
+busy=true;
+
+updateControls();
+
+$("actionStatus").textContent=t.reauth;
+
+try{
+
+// Fresh Google verification is required.
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=
+
+await reauthenticateWithPopup(
+
+user,provider
+
+);
+
+if(
+
+currentGeneration!==generation
+
+||credential.user.uid!==uid
+
+||!validSession()
+
+){
+
+throw new Error("Owner changed");
+
+}
+
+const token=
+
+await user.getIdTokenResult(true);
+
+if(
+
+currentGeneration!==generation
+
+||!validSession()
+
+||token.claims.ownerAdmin!==true
+
+||token.signInProvider!=="google.com"
+
+){
+
+throw new Error("Invalid owner");
+
+}
+
+// Backend must independently check fresh auth,
+// owner UID, App Check, revision and permissions.
+
+const result=await serverCall(
+
+"setOwnerEmergencyLock",
+
+{
+
+enabled:action==="lock",
+
+reason,
+
+expectedRevision,
+
+requestId:pendingEmergency.requestId
+
+}
+
+);
+
+if(
+
+result?.accepted!==true
+
+||result.ownerUid!==uid
+
+||result.emergencyLocked!==(action==="lock")
+
+||!validCount(result.revision)
+
+||result.revision<=expectedRevision
+
+){
+
+throw new Error("Change not confirmed");
+
+}
+
+pendingEmergency=null;
+
+closeEmergencyForm();
+
+$("actionStatus").textContent=
+
+t.actionSuccess;
+
+// The live server document is authoritative.
+// Do not manually change systemData here.
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+$("actionStatus").textContent=
+
+t.actionError;
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+// REFRESH DASHBOARD
+
+$("refreshButton").onclick=async()=>{
+
+if(!validSession()||busy)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+try{
+
+const result=await serverCall(
+
+"refreshOwnerDashboard"
+
+);
+
+if(
+
+result?.success!==true
+
+||result.ownerUid!==uid
+
+){
+
+throw new Error("Refresh failed");
+
+}
+
+await syncServerTime();
+
+if(currentGeneration!==generation)return;
+
+subscribeDashboard();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+showStatus("error");
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+$("retryButton").onclick=()=>{
+
+if(auth?.currentUser){
+
+verifyOwner(auth.currentUser);
+
+}else{
+
+location.replace(
+
+pageLink("admin-login.html")
+
+);
+
+}
+
+};
+
+// OWNER LOGOUT
+
+$("logoutButton").onclick=async()=>{
+
+if(!validSession()
+
+||busy
+
+||loggingOut)return;
+
+if(!window.confirm(t.confirmLogout)){
+
+return;
+
+}
+
+loggingOut=true;
+
+updateControls();
+
+try{
+
+const result=await serverCall(
+
+"endOwnerAdminSession"
+
+);
+
+if(result?.accepted!==true){
+
+throw new Error("Server logout failed");
+
+}
+
+await signOut(auth);
+
+clearSession();
+
+location.replace(
+
+pageLink("admin-login.html")
+
+);
+
+}catch(e){
+
+// Local logout remains possible even if
+// the server session revocation fails.
+
+try{
+
+await signOut(auth);
+
+clearSession();
+
+location.replace(
+
+pageLink("admin-login.html")
+
+);
+
+}catch(signOutError){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+showStatus("error");
+
+}
+
+}
+
+};
+
+// INITIALIZE OWNER FIREBASE SESSION
+
+async function initializeSecurity(){
+
+try{
+
+// Must match admin-login.html app name.
+
+app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+APP_CHECK_SITE_KEY
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+// PERIODIC OWNER VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+
+||verifying
+
+||busy
+
+||loggingOut)return;
+
+const currentGeneration=generation;
+
+verifying=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(
+
+result?.authorized!==true
+
+||result.uid!==uid
+
+||result.role!=="owner"
+
+||result.ownerUidVerified!==true
+
+||result.sessionValid!==true
+
+){
+
+throw new Error("Owner access revoked");
+
+}
+
+try{
+
+await syncServerTime();
+
+}catch(e){
+
+serverOffset=null;
+
+}
+
+if(currentGeneration!==generation)return;
+
+const today=sriLankaToday();
+
+if(
+
+today
+
+&&dashboardData
+
+&&dashboardData.reportDate!==today
+
+){
+
+dashboardData=null;
+
+renderStats();
+
+checkDashboardReady();
+
+const refresh=await serverCall(
+
+"refreshOwnerDashboard"
+
+);
+
+if(
+
+refresh?.success!==true
+
+||refresh.ownerUid!==uid
+
+){
+
+throw new Error("Date refresh failed");
+
+}
+
+subscribeDashboard();
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+if(currentGeneration===generation){
+
+verifying=false;
+
+}
+
+}
+
+},60000);
+
+setInterval(renderClock,1000);
+
+// CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+showStatus("offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("pagehide",()=>{
+
+clearSession();
+
+});
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+document.addEventListener(
+
+"visibilitychange",
+
+()=>{
+
+if(
+
+!document.hidden
+
+&&auth?.currentUser
+
+&&!busy
+
+&&!loggingOut
+
+){
+
+verifyOwner(auth.currentUser);
+
+}
+
+}
+
+);
+
+renderLanguage();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
