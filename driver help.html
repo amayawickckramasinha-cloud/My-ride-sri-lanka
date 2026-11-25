@@ -1,0 +1,2135 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Help</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.supportIcon{
+width:85px;
+height:85px;
+border-radius:50%;
+background:#FFD600;
+color:#111;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:15px auto;
+}
+
+.center{
+text-align:center;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.7;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+
+.yellow{
+color:#FFD600;
+}
+
+.green{
+color:#4ADE80;
+}
+
+.red{
+color:#FF6464;
+}
+
+.action{
+display:block;
+width:100%;
+padding:16px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.whatsapp{
+background:#25D366;
+color:#111;
+}
+
+.emergency{
+background:#A91D1D;
+color:#fff;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.8;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+margin:15px 0;
+}
+
+label{
+display:block;
+margin-top:16px;
+margin-bottom:8px;
+font-size:14px;
+font-weight:bold;
+}
+
+input,select,textarea{
+width:100%;
+padding:14px;
+background:#292929;
+color:#fff;
+border:1px solid #555;
+border-radius:9px;
+font-size:16px;
+}
+
+textarea{
+min-height:130px;
+resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+outline:2px solid #FFD600;
+}
+
+details{
+background:#292929;
+border:1px solid #444;
+border-radius:9px;
+margin:10px 0;
+}
+
+summary{
+padding:15px;
+cursor:pointer;
+color:#FFD600;
+font-weight:bold;
+line-height:1.8;
+}
+
+.answer{
+padding:0 15px 15px;
+font-size:14px;
+line-height:1.9;
+color:#DDD;
+}
+
+#status,
+#contactStatus,
+#messageStatus{
+text-align:center;
+color:#FFD600;
+line-height:1.8;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<div class="supportIcon">
+
+<svg width="48" height="48"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="2"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<path d="M3 14v-3a9 9 0 0 1 18 0v3"/>
+
+<rect x="3" y="12" width="4"
+height="7" rx="2"/>
+
+<rect x="17" y="12" width="4"
+height="7" rx="2"/>
+
+<path d="M19 19c0 3-3 3-7 3"/>
+
+</svg>
+
+</div>
+
+<h3 class="center"
+data-t="supportCenter"></h3>
+
+<p class="center note"
+data-t="supportWelcome"></p>
+
+<div class="row">
+
+<span data-t="driverName"></span>
+
+<strong id="driverName">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>Driver ID</span>
+
+<strong id="driverId"
+class="yellow">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="accountStatus"></span>
+
+<strong class="green"
+data-t="approved"></strong>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="contactAdmin"></h3>
+
+<div class="row">
+
+<span data-t="supportPhone"></span>
+
+<strong id="supportPhone">—</strong>
+
+</div>
+
+<div class="row">
+
+<span>WhatsApp</span>
+
+<strong id="supportWhatsApp">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="workingHours"></span>
+
+<strong id="workingHours">—</strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="supportStatus"></span>
+
+<strong id="supportStatus">—</strong>
+
+</div>
+
+<p id="contactStatus"
+role="status"></p>
+
+<a id="callButton"
+class="action"
+data-t="callAdmin"
+hidden></a>
+
+<a id="whatsappButton"
+class="action whatsapp"
+target="_blank"
+rel="noopener noreferrer"
+data-t="whatsappAdmin"
+hidden></a>
+
+<button id="refreshButton"
+class="action secondary"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="sendMessage"></h3>
+
+<form id="helpForm">
+
+<label for="category"
+data-t="category"></label>
+
+<select id="category" required>
+
+<option value=""
+data-t="select"></option>
+
+<option value="booking"
+data-t="bookingIssue"></option>
+
+<option value="gps"
+data-t="gpsIssue"></option>
+
+<option value="payment"
+data-t="paymentIssue"></option>
+
+<option value="commission"
+data-t="commissionIssue"></option>
+
+<option value="fare"
+data-t="fareIssue"></option>
+
+<option value="account"
+data-t="accountIssue"></option>
+
+<option value="technical"
+data-t="technicalIssue"></option>
+
+<option value="other"
+data-t="other"></option>
+
+</select>
+
+<label for="bookingId"
+data-t="bookingId"></label>
+
+<input
+id="bookingId"
+type="text"
+maxlength="128"
+autocomplete="off">
+
+<label for="message"
+data-t="message"></label>
+
+<textarea
+id="message"
+minlength="5"
+maxlength="1000"
+required></textarea>
+
+<p class="note"
+data-t="privacyNote"></p>
+
+<button id="sendButton"
+class="action whatsapp"
+type="submit"
+data-t="sendWhatsApp"
+disabled></button>
+
+</form>
+
+<p id="messageStatus"
+role="status"
+aria-live="polite"></p>
+
+<p class="note"
+data-t="whatsappNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="faq"></h3>
+
+<details>
+
+<summary data-t="q1"></summary>
+
+<div class="answer"
+data-t="a1"></div>
+
+</details>
+
+<details>
+
+<summary data-t="q2"></summary>
+
+<div class="answer"
+data-t="a2"></div>
+
+</details>
+
+<details>
+
+<summary data-t="q3"></summary>
+
+<div class="answer"
+data-t="a3"></div>
+
+</details>
+
+<details>
+
+<summary data-t="q4"></summary>
+
+<div class="answer"
+data-t="a4"></div>
+
+</details>
+
+<details>
+
+<summary data-t="q5"></summary>
+
+<div class="answer"
+data-t="a5"></div>
+
+</details>
+
+<details>
+
+<summary data-t="q6"></summary>
+
+<div class="answer"
+data-t="a6"></div>
+
+</details>
+
+<details>
+
+<summary data-t="q7"></summary>
+
+<div class="answer"
+data-t="a7"></div>
+
+</details>
+
+<details>
+
+<summary data-t="q8"></summary>
+
+<div class="answer"
+data-t="a8"></div>
+
+</details>
+
+<details>
+
+<summary data-t="q9"></summary>
+
+<div class="answer"
+data-t="a9"></div>
+
+</details>
+
+<details>
+
+<summary data-t="q10"></summary>
+
+<div class="answer"
+data-t="a10"></div>
+
+</details>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="otherServices"></h3>
+
+<a id="feedbackLink"
+class="action"
+data-t="feedback"></a>
+
+<a id="gpsLink"
+class="action secondary"
+data-t="gpsStatus"></a>
+
+<a id="commissionLink"
+class="action secondary"
+data-t="commission"></a>
+
+<a id="profileLink"
+class="action secondary"
+data-t="profile"></a>
+
+<a id="termsLink"
+class="action secondary"
+data-t="terms"></a>
+
+<a id="accountLink"
+class="action secondary"
+data-t="accountStatus"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="emergencyHelp"></h3>
+
+<div class="warning"
+data-t="emergencyNote"></div>
+
+<a href="tel:119"
+class="action emergency"
+data-t="police"></a>
+
+<a href="tel:1990"
+class="action emergency"
+data-t="ambulance"></a>
+
+<a id="sosLink"
+class="action secondary"
+data-t="sos"></a>
+
+</section>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const params=new URLSearchParams(location.search);
+
+const languages=["si","en","ta"];
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+
+languages.includes(params.get("lang"))
+
+?params.get("lang")
+
+:languages.includes(savedLanguage)
+
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+
+heading:"රියදුරු සහාය සේවාව",
+supportCenter:"MY RIDE සහාය මධ්‍යස්ථානය",
+supportWelcome:"ඔබගේ සේවා ගැටලු සඳහා Admin සහාය ලබාගන්න.",
+driverName:"රියදුරුගේ නම",
+accountStatus:"ගිණුමේ තත්ත්වය",
+approved:"අනුමත රියදුරෙකි",
+contactAdmin:"Admin සම්බන්ධ කරගන්න",
+supportPhone:"සහාය දුරකථන අංකය",
+workingHours:"සහාය ලබාදෙන වේලාව",
+supportStatus:"සහාය සේවාවේ තත්ත්වය",
+available:"සහාය සේවාව විවෘතයි",
+unavailable:"දැනට සහාය සේවාව වසා ඇත",
+unknown:"තහවුරු කර නැත",
+callAdmin:"Admin අමතන්න",
+whatsappAdmin:"WhatsApp මඟින් සම්බන්ධ වන්න",
+refresh:"නැවත පරීක්ෂා කරන්න",
+sendMessage:"WhatsApp සහාය පණිවිඩය",
+category:"ගැටලුවේ වර්ගය",
+select:"තෝරන්න",
+bookingIssue:"හයර් ගැටලු",
+gpsIssue:"GPS ගැටලු",
+paymentIssue:"ගෙවීම් ගැටලු",
+commissionIssue:"කොමිස් ගැටලු",
+fareIssue:"ගාස්තු ගැටලු",
+accountIssue:"ගිණුම් ගැටලු",
+technicalIssue:"තාක්ෂණික ගැටලු",
+other:"වෙනත්",
+bookingId:"අදාළ Booking ID (අවශ්‍ය නම්)",
+message:"ඔබගේ ගැටලුව",
+privacyNote:"Password, OTP, බැංකු PIN හෝ අනවශ්‍ය පෞද්ගලික දත්ත ඇතුළත් නොකරන්න.",
+sendWhatsApp:"WhatsApp පණිවිඩය විවෘත කරන්න",
+whatsappNote:"WhatsApp විවෘත වූ පසු Send බොත්තම ඔබන්න. මෙම පිටුවෙන් පණිවිඩය ස්වයංක්‍රීයව යවන්නේ නැත.",
+messageOpened:"WhatsApp විවෘත කිරීමට ඉල්ලීම යොමු කර ඇත. පණිවිඩය යැවීමට Send ඔබන්න.",
+faq:"නිතර අසන ප්‍රශ්න",
+q1:"මට අලුත් හයර් ලැබෙන්නේ නැත්තේ ඇයි?",
+a1:"ඔබ Online තත්ත්වයේ සිටින බවත් GPS ක්‍රියාත්මක බවත් බලන්න. ඔබගේ ගිණුම, බලපත්‍ර සහ වාහන තොරතුරු වලංගු විය යුතුය.",
+q2:"GPS ක්‍රියා නොකරන්නේ නම්?",
+a2:"දුරකථනයේ Location සහ Browser Location Permission ක්‍රියාත්මක කරන්න. අන්තර්ජාල සම්බන්ධතාව පරීක්ෂා කරන්න.",
+q3:"හයර් එක ආරම්භ කරන්නේ කොහොමද?",
+a3:"මගියා ලබාගන්නා ස්ථානයට පැමිණ ARRIVED ඔබන්න. මගියා වාහනයට නැගුණු පසු START TRIP ඔබන්න.",
+q4:"හයර් එක අවසන් කරන්නේ කොහොමද?",
+a4:"ගමනාන්තයට පැමිණ ගමන අවසන් වූ පසු END TRIP ඔබා තහවුරු කරන්න.",
+q5:"MY RIDE කොමිස් ගණනය කරන්නේ කොහොමද?",
+a5:"දැනට හයර් ආදායමෙන් 5% කොමිස් අය කිරීමට සැලසුම් කර ඇත. Highway සහ Parking ගාස්තු කොමිස් ගණනයට ඇතුළත් නොවේ. ඔබගේ අවසාන කොමිස් වාර්තාව බලන්න.",
+q6:"කොමිස් ගෙවන්නේ කොහොමද?",
+a6:"Pay Commission පිටුවට ගොස් Admin ලබාදී ඇති බැංකු විස්තර සහ ගෙවිය යුතු මුදල පරීක්ෂා කරන්න. ගෙවීමෙන් පසු අවශ්‍ය තහවුරු කිරීම යොමු කරන්න.",
+q7:"Password අමතක වුණොත්?",
+a7:"Driver Login පිටුවේ Forgot Password භාවිතා කරන්න. ලියාපදිංචි දුරකථන අංකය තහවුරු කර අලුත් Password එකක් සකස් කරන්න.",
+q8:"බලපත්‍රය හෝ රක්ෂණය කල් ඉකුත් වුණොත්?",
+a8:"Licence Renewal පිටුව භාවිතා කර අලුත් තොරතුරු Admin වෙත යොමු කරන්න. නැවත හයර් ලබාගැනීමට Admin අනුමැතිය අවශ්‍ය විය හැක.",
+q9:"මගියෙකු සම්බන්ධ ගැටලුවක් තිබේ නම්?",
+a9:"අදාළ Booking ID සමඟ Feedback & Complaints පිටුවෙන් Admin වෙත පැමිණිල්ලක් යොමු කරන්න.",
+q10:"මගේ ගිණුම අත්හිටුවා තිබේ නම්?",
+a10:"ගිණුමේ තත්ත්වය සහ Admin දැනුම්දීම් පරීක්ෂා කරන්න. අවසර නොලැබේ නම් නිල සහාය මාර්ගයෙන් Admin සම්බන්ධ කරගන්න.",
+otherServices:"වෙනත් සහාය සේවා",
+feedback:"අදහස් සහ පැමිණිලි",
+gpsStatus:"GPS තත්ත්වය",
+commission:"මගේ කොමිස් වාර්තාව",
+profile:"මගේ රියදුරු ගිණුම",
+terms:"රියදුරු නීති සහ කොන්දේසි",
+emergencyHelp:"හදිසි සහාය",
+emergencyNote:"හදිසි අනතුරක් හෝ ජීවිත අවදානමක් තිබේ නම් Admin පිළිතුරක් ලැබෙන තුරු රැඳී නොසිටින්න. ශ්‍රී ලංකාවේ අදාළ හදිසි සේවාව අමතන්න.",
+police:"පොලිස් හදිසි සේවාව - 119",
+ambulance:"සුවසැරිය ගිලන් රථ - 1990",
+sos:"SOS පිටුව විවෘත කරන්න",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"ගිණුම පරීක්ෂා කරමින්...",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+loading:"සහාය විස්තර ලබාගනිමින්...",
+error:"සහාය විස්තර ලබාගත නොහැක.",
+notConfigured:"Admin සහාය අංක තවම සකස් කර නැත.",
+invalid:"නිවැරදි තොරතුරු ඇතුළත් කරන්න.",
+invalidBooking:"නිවැරදි Booking ID එක ඇතුළත් කරන්න.",
+notReady:"WhatsApp සහාය දැනට ලබාගත නොහැක.",
+supportRequest:"රියදුරු සහාය ඉල්ලීම"
+
+},
+
+en:{
+
+heading:"Driver Help & Support",
+supportCenter:"MY RIDE Support Center",
+supportWelcome:"Contact Admin for assistance with your driver services.",
+driverName:"Driver Name",
+accountStatus:"Account Status",
+approved:"Approved Driver",
+contactAdmin:"Contact Admin",
+supportPhone:"Support Phone Number",
+workingHours:"Support Working Hours",
+supportStatus:"Support Status",
+available:"Support is Open",
+unavailable:"Support is Currently Closed",
+unknown:"Not Confirmed",
+callAdmin:"Call Admin",
+whatsappAdmin:"Contact Admin on WhatsApp",
+refresh:"Refresh",
+sendMessage:"WhatsApp Support Message",
+category:"Issue Category",
+select:"Select",
+bookingIssue:"Booking Issues",
+gpsIssue:"GPS Issues",
+paymentIssue:"Payment Issues",
+commissionIssue:"Commission Issues",
+fareIssue:"Fare Issues",
+accountIssue:"Account Issues",
+technicalIssue:"Technical Issues",
+other:"Other",
+bookingId:"Related Booking ID (Optional)",
+message:"Describe Your Issue",
+privacyNote:"Do not include passwords, OTPs, bank PINs or unnecessary personal information.",
+sendWhatsApp:"Open WhatsApp Message",
+whatsappNote:"Press Send after WhatsApp opens. This page does not send messages automatically.",
+messageOpened:"WhatsApp opening requested. Press Send to deliver your message.",
+faq:"Frequently Asked Questions",
+q1:"Why am I not receiving new hires?",
+a1:"Check that you are Online, GPS is active, and your account, vehicle and documents are valid.",
+q2:"What if GPS is not working?",
+a2:"Enable phone location and browser location permission. Check your internet connection.",
+q3:"How do I start a ride?",
+a3:"Press ARRIVED at the pickup location. Press START TRIP after the passenger enters the vehicle.",
+q4:"How do I finish a ride?",
+a4:"After reaching the destination and completing the ride, press END TRIP and confirm.",
+q5:"How is MY RIDE commission calculated?",
+a5:"The current planned commission is 5% of hire income, excluding highway and parking charges. Check your final commission report.",
+q6:"How do I pay commission?",
+a6:"Open Pay Commission, check the bank details and amount due, then submit the required payment confirmation.",
+q7:"What if I forget my password?",
+a7:"Use Forgot Password on Driver Login. Verify your registered phone number and create a new password.",
+q8:"What if my licence or insurance expires?",
+a8:"Submit renewed details through Licence Renewal. Admin approval may be required before receiving hires again.",
+q9:"How do I report a customer issue?",
+a9:"Submit a complaint through Feedback & Complaints with the relevant Booking ID.",
+q10:"What if my account is suspended?",
+a10:"Check your account status and Admin notifications. If access is denied, contact Admin through the official support channel.",
+otherServices:"Other Support Services",
+feedback:"Feedback & Complaints",
+gpsStatus:"GPS Status",
+commission:"My Commission Report",
+profile:"My Driver Profile",
+terms:"Driver Terms & Conditions",
+emergencyHelp:"Emergency Help",
+emergencyNote:"For accidents or immediate danger, do not wait for an Admin response. Contact the appropriate emergency service in Sri Lanka.",
+police:"Police Emergency - 119",
+ambulance:"Suwa Seriya Ambulance - 1990",
+sos:"Open SOS Page",
+back:"← Driver Dashboard",
+login:"Driver Login",
+checking:"Verifying account...",
+denied:"Access to this page is not authorized.",
+offline:"No internet connection.",
+loading:"Loading support details...",
+error:"Unable to load support details.",
+notConfigured:"Admin support numbers have not been configured.",
+invalid:"Enter valid information.",
+invalidBooking:"Enter a valid Booking ID.",
+notReady:"WhatsApp support is currently unavailable.",
+supportRequest:"Driver Support Request"
+
+},
+
+ta:{
+
+heading:"சாரதி உதவி சேவை",
+supportCenter:"MY RIDE உதவி மையம்",
+supportWelcome:"சாரதி சேவை பிரச்சினைகளுக்கு நிர்வாக உதவியை பெறவும்.",
+driverName:"சாரதியின் பெயர்",
+accountStatus:"கணக்கு நிலை",
+approved:"அங்கீகரிக்கப்பட்ட சாரதி",
+contactAdmin:"நிர்வாகியை தொடர்புகொள்ளவும்",
+supportPhone:"உதவி தொலைபேசி எண்",
+workingHours:"உதவி சேவை நேரம்",
+supportStatus:"உதவி சேவை நிலை",
+available:"உதவி சேவை திறந்துள்ளது",
+unavailable:"உதவி சேவை தற்போது மூடப்பட்டுள்ளது",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+callAdmin:"நிர்வாகியை அழைக்கவும்",
+whatsappAdmin:"WhatsApp மூலம் தொடர்புகொள்ளவும்",
+refresh:"புதுப்பிக்கவும்",
+sendMessage:"WhatsApp உதவி செய்தி",
+category:"பிரச்சினை வகை",
+select:"தேர்ந்தெடுக்கவும்",
+bookingIssue:"முன்பதிவு பிரச்சினைகள்",
+gpsIssue:"GPS பிரச்சினைகள்",
+paymentIssue:"கொடுப்பனவு பிரச்சினைகள்",
+commissionIssue:"கமிஷன் பிரச்சினைகள்",
+fareIssue:"கட்டண பிரச்சினைகள்",
+accountIssue:"கணக்கு பிரச்சினைகள்",
+technicalIssue:"தொழில்நுட்ப பிரச்சினைகள்",
+other:"மற்றவை",
+bookingId:"தொடர்புடைய முன்பதிவு இலக்கம் (விருப்பம்)",
+message:"உங்கள் பிரச்சினை",
+privacyNote:"கடவுச்சொல், OTP, வங்கி PIN அல்லது தேவையற்ற தனிப்பட்ட தகவல்களை உள்ளிட வேண்டாம்.",
+sendWhatsApp:"WhatsApp செய்தியை திறக்கவும்",
+whatsappNote:"WhatsApp திறந்த பிறகு Send அழுத்தவும். இந்த பக்கம் தானாக செய்தியை அனுப்பாது.",
+messageOpened:"WhatsApp திறக்க கோரப்பட்டுள்ளது. செய்தியை அனுப்ப Send அழுத்தவும்.",
+faq:"அடிக்கடி கேட்கப்படும் கேள்விகள்",
+q1:"புதிய பயணங்கள் ஏன் கிடைக்கவில்லை?",
+a1:"Online நிலை, GPS, கணக்கு மற்றும் வாகன ஆவணங்களின் செல்லுபடியாகும் நிலையை சரிபார்க்கவும்.",
+q2:"GPS வேலை செய்யவில்லை என்றால்?",
+a2:"தொலைபேசி Location மற்றும் Browser Location அனுமதியை இயக்கவும். இணைய இணைப்பை சரிபார்க்கவும்.",
+q3:"பயணத்தை எவ்வாறு ஆரம்பிப்பது?",
+a3:"பயணியை ஏற்றும் இடத்தில் ARRIVED அழுத்தவும். பயணி வாகனத்தில் ஏறிய பிறகு START TRIP அழுத்தவும்.",
+q4:"பயணத்தை எவ்வாறு முடிப்பது?",
+a4:"செல்லும் இடத்தை அடைந்து பயணம் முடிந்த பிறகு END TRIP அழுத்தி உறுதிப்படுத்தவும்.",
+q5:"MY RIDE கமிஷன் எவ்வாறு கணக்கிடப்படுகிறது?",
+a5:"தற்போதைய திட்டப்படி பயண வருமானத்தில் 5% கமிஷன் வசூலிக்கப்படும். சுங்கம் மற்றும் வாகன நிறுத்த கட்டணங்கள் சேர்க்கப்படாது. இறுதி கமிஷன் அறிக்கையை பார்க்கவும்.",
+q6:"கமிஷனை எவ்வாறு செலுத்துவது?",
+a6:"Pay Commission பக்கத்தில் வங்கி விவரங்களையும் செலுத்த வேண்டிய தொகையையும் சரிபார்த்து கொடுப்பனவு உறுதிப்படுத்தலை அனுப்பவும்.",
+q7:"கடவுச்சொல் மறந்துவிட்டால்?",
+a7:"Driver Login பக்கத்தில் Forgot Password பயன்படுத்தவும். பதிவு செய்த தொலைபேசி எண்ணை உறுதிப்படுத்தி புதிய கடவுச்சொல்லை உருவாக்கவும்.",
+q8:"உரிமம் அல்லது காப்புறுதி காலாவதியானால்?",
+a8:"Licence Renewal பக்கத்தில் புதுப்பிக்கப்பட்ட விவரங்களை அனுப்பவும். மீண்டும் பயணங்களை பெற நிர்வாக அனுமதி தேவைப்படலாம்.",
+q9:"பயணி தொடர்பான பிரச்சினையை எவ்வாறு தெரிவிப்பது?",
+a9:"தொடர்புடைய முன்பதிவு இலக்கத்துடன் Feedback & Complaints பக்கத்தில் புகாரை அனுப்பவும்.",
+q10:"எனது கணக்கு இடைநிறுத்தப்பட்டால்?",
+a10:"கணக்கு நிலை மற்றும் நிர்வாக அறிவிப்புகளை சரிபார்க்கவும். அணுகல் மறுக்கப்பட்டால் அதிகாரப்பூர்வ உதவி வழியாக நிர்வாகியை தொடர்புகொள்ளவும்.",
+otherServices:"மற்ற உதவி சேவைகள்",
+feedback:"கருத்துகள் மற்றும் புகார்கள்",
+gpsStatus:"GPS நிலை",
+commission:"எனது கமிஷன் அறிக்கை",
+profile:"எனது சாரதி சுயவிவரம்",
+terms:"சாரதி விதிமுறைகள்",
+emergencyHelp:"அவசர உதவி",
+emergencyNote:"விபத்து அல்லது உடனடி ஆபத்து ஏற்பட்டால் நிர்வாகியின் பதிலுக்காக காத்திருக்க வேண்டாம். இலங்கையின் பொருத்தமான அவசர சேவையை தொடர்புகொள்ளவும்.",
+police:"பொலிஸ் அவசர சேவை - 119",
+ambulance:"சுவசெரிய ஆம்புலன்ஸ் - 1990",
+sos:"SOS பக்கத்தை திறக்கவும்",
+back:"← சாரதி முதன்மைப் பக்கம்",
+login:"சாரதி உள்நுழைவு",
+checking:"கணக்கு சரிபார்க்கப்படுகிறது...",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+loading:"உதவி விவரங்கள் பெறப்படுகின்றன...",
+error:"உதவி விவரங்களை பெற முடியவில்லை.",
+notConfigured:"நிர்வாக உதவி எண்கள் இன்னும் அமைக்கப்படவில்லை.",
+invalid:"சரியான தகவல்களை உள்ளிடவும்.",
+invalidBooking:"சரியான முன்பதிவு இலக்கத்தை உள்ளிடவும்.",
+notReady:"WhatsApp உதவி தற்போது கிடைக்கவில்லை.",
+supportRequest:"சாரதி உதவி கோரிக்கை"
+
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+// PAGE LINKS
+
+const links={
+
+backButton:"driver-dashboard.html",
+loginLink:"driver-login.html",
+feedbackLink:"driver-feedback.html",
+gpsLink:"driver-gps.html",
+commissionLink:"driver-commission.html",
+profileLink:"driver-profile.html",
+termsLink:"driver-terms.html",
+accountLink:"driver-account-status.html",
+sosLink:"driver-sos.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+
+let generation=0;
+
+let driverUnsubscribe=null;
+let settingsUnsubscribe=null;
+
+let supportSettings=null;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+let checkingSession=false;
+
+const CATEGORIES={
+
+booking:"bookingIssue",
+gps:"gpsIssue",
+payment:"paymentIssue",
+commission:"commissionIssue",
+fare:"fareIssue",
+account:"accountIssue",
+technical:"technicalIssue",
+other:"other"
+
+};
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+
+&&uid!==null
+
+&&auth?.currentUser?.uid===uid
+
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,min,max){
+
+return typeof value==="string"
+
+&&value.trim().length>=min
+
+&&value.length<=max;
+
+}
+
+function normalizePhone(value){
+
+if(typeof value!=="string"){
+
+return null;
+
+}
+
+const phone=value.replace(/[\s()-]/g,"");
+
+if(!/^\+[1-9]\d{7,14}$/.test(phone)){
+
+return null;
+
+}
+
+return phone;
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,name
+
+)(data);
+
+if(!validSession()
+
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+
+||!navigator.geolocation
+
+||!validSession())return;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(!validSession()
+
+||!driver
+
+||!["online","busy"].includes(
+
+driver.availability
+
+)
+
+||!Number.isFinite(c.latitude)
+
+||!Number.isFinite(c.longitude)
+
+||!Number.isFinite(c.accuracy)
+
+||c.accuracy<0
+
+||c.accuracy>100
+
+||c.latitude<5.85
+
+||c.latitude>9.9
+
+||c.longitude<79.5
+
+||c.longitude>82
+
+||Date.now()-position.timestamp>30000
+
+||position.timestamp>Date.now()+5000
+
+||gpsSending
+
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+
+"updateDriverLocation",
+
+{
+
+lat:c.latitude,
+
+lon:c.longitude,
+
+accuracy:c.accuracy,
+
+capturedAtMs:position.timestamp
+
+}
+
+);
+
+}catch(e){
+
+// Backend must expire stale GPS records.
+
+}finally{
+
+gpsSending=false;
+
+}
+
+},
+
+()=>{},
+
+{
+
+enableHighAccuracy:true,
+
+maximumAge:5000,
+
+timeout:15000
+
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// CLEAR SUPPORT CONTACTS
+
+function clearContacts(){
+
+supportSettings=null;
+
+$("supportPhone").textContent="—";
+
+$("supportWhatsApp").textContent="—";
+
+$("workingHours").textContent="—";
+
+$("supportStatus").textContent=t.unknown;
+
+$("supportStatus").className="";
+
+$("callButton").hidden=true;
+
+$("callButton").removeAttribute("href");
+
+$("whatsappButton").hidden=true;
+
+$("whatsappButton").removeAttribute("href");
+
+$("sendButton").disabled=true;
+
+$("contactStatus").textContent="";
+
+}
+
+function stopSettingsListener(){
+
+if(settingsUnsubscribe){
+
+settingsUnsubscribe();
+
+settingsUnsubscribe=null;
+
+}
+
+clearContacts();
+
+}
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+stopSettingsListener();
+
+stopGps();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("helpForm").reset();
+
+$("messageStatus").textContent="";
+
+$("content").hidden=true;
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// SUPPORT SETTINGS VALIDATION
+
+function validSettings(data){
+
+if(!data
+
+||typeof data.enabled!=="boolean"
+
+||typeof data.callEnabled!=="boolean"
+
+||typeof data.whatsappEnabled!=="boolean"){
+
+return false;
+
+}
+
+if(data.callEnabled
+
+&&!normalizePhone(data.phone)){
+
+return false;
+
+}
+
+if(data.whatsappEnabled
+
+&&!normalizePhone(data.whatsapp)){
+
+return false;
+
+}
+
+if(data.workingHours!==undefined
+
+&&(
+
+typeof data.workingHours!=="object"
+
+||data.workingHours===null
+
+||Array.isArray(data.workingHours)
+
+)){
+
+return false;
+
+}
+
+if(data.supportAvailable!==undefined
+
+&&typeof data.supportAvailable!=="boolean"){
+
+return false;
+
+}
+
+return true;
+
+}
+
+// WHATSAPP MESSAGE BUILDER
+
+function whatsappUrl(phone,message){
+
+const normalized=normalizePhone(phone);
+
+if(!normalized){
+
+throw new Error("Invalid phone number");
+
+}
+
+return "https://wa.me/"
+
++normalized.slice(1)
+
++"?text="
+
++encodeURIComponent(message);
+
+}
+
+function basicMessage(){
+
+if(!driver)return "";
+
+return [
+
+"MY RIDE SRI LANKA",
+
+t.supportRequest,
+
+"",
+
+t.driverName+": "+driver.fullName,
+
+"Driver ID: "+driver.driverId
+
+].join("\n");
+
+}
+
+// DISPLAY SUPPORT SETTINGS
+
+function displaySettings(data){
+
+clearContacts();
+
+if(!validSettings(data)
+
+||data.enabled!==true){
+
+$("contactStatus").textContent=
+
+t.notConfigured;
+
+return;
+
+}
+
+supportSettings=data;
+
+const phone=normalizePhone(data.phone);
+
+const whatsapp=normalizePhone(data.whatsapp);
+
+if(data.callEnabled&&phone){
+
+$("supportPhone").textContent=phone;
+
+$("callButton").href="tel:"+phone;
+
+$("callButton").hidden=false;
+
+}
+
+if(data.whatsappEnabled&&whatsapp){
+
+$("supportWhatsApp").textContent=whatsapp;
+
+$("whatsappButton").href=
+
+whatsappUrl(
+
+whatsapp,
+
+basicMessage()
+
+);
+
+$("whatsappButton").hidden=false;
+
+$("sendButton").disabled=false;
+
+}
+
+const hours=
+
+data.workingHours?.[lang]
+
+||data.workingHours?.en;
+
+$("workingHours").textContent=
+
+validText(hours,1,200)
+
+?hours:"—";
+
+if(data.supportAvailable===true){
+
+$("supportStatus").textContent=
+
+t.available;
+
+$("supportStatus").className="green";
+
+}else if(data.supportAvailable===false){
+
+$("supportStatus").textContent=
+
+t.unavailable;
+
+$("supportStatus").className="red";
+
+}else{
+
+$("supportStatus").textContent=
+
+t.unknown;
+
+}
+
+if(!data.callEnabled
+
+&&!data.whatsappEnabled){
+
+$("contactStatus").textContent=
+
+t.notConfigured;
+
+}
+
+}
+
+// LIVE SUPPORT SETTINGS
+
+function subscribeSettings(){
+
+stopSettingsListener();
+
+if(!validSession()||!driver)return;
+
+const currentGeneration=generation;
+
+$("contactStatus").textContent=t.loading;
+
+settingsUnsubscribe=onSnapshot(
+
+doc(
+
+db,
+
+"publicSettings",
+
+"driverSupport"
+
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession()
+
+||!driver)return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+clearContacts();
+
+$("contactStatus").textContent=
+
+t.loading;
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+clearContacts();
+
+$("contactStatus").textContent=
+
+t.notConfigured;
+
+return;
+
+}
+
+displaySettings(snapshot.data());
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+clearContacts();
+
+$("contactStatus").textContent=
+
+t.error;
+
+}
+
+);
+
+}
+
+// WHATSAPP SUPPORT FORM
+
+$("helpForm").onsubmit=event=>{
+
+event.preventDefault();
+
+if(!validSession()
+
+||!driver
+
+||!supportSettings
+
+||supportSettings.enabled!==true
+
+||supportSettings.whatsappEnabled!==true){
+
+$("messageStatus").textContent=
+
+t.notReady;
+
+return;
+
+}
+
+const category=$("category").value;
+
+const bookingId=
+
+$("bookingId").value.trim();
+
+const message=
+
+$("message").value.trim();
+
+if(!Object.prototype.hasOwnProperty.call(
+
+CATEGORIES,
+
+category
+
+)
+
+||!validText(message,5,1000)){
+
+$("messageStatus").textContent=
+
+t.invalid;
+
+return;
+
+}
+
+if(bookingId&&!validId(bookingId)){
+
+$("messageStatus").textContent=
+
+t.invalidBooking;
+
+return;
+
+}
+
+const whatsapp=
+
+normalizePhone(supportSettings.whatsapp);
+
+if(!whatsapp){
+
+$("messageStatus").textContent=
+
+t.notReady;
+
+return;
+
+}
+
+const lines=[
+
+"MY RIDE SRI LANKA",
+
+t.supportRequest,
+
+"",
+
+t.driverName+": "+driver.fullName,
+
+"Driver ID: "+driver.driverId,
+
+t.category+": "+t[CATEGORIES[category]]
+
+];
+
+if(bookingId){
+
+lines.push(
+
+"Booking ID: "+bookingId
+
+);
+
+}
+
+lines.push(
+
+"",
+
+t.message+":",
+
+message
+
+);
+
+const fullMessage=lines.join("\n");
+
+const url=whatsappUrl(
+
+whatsapp,
+
+fullMessage
+
+);
+
+$("messageStatus").textContent=
+
+t.messageOpened;
+
+window.location.assign(url);
+
+};
+
+// CONTACT BUTTON SECURITY
+
+$("callButton").addEventListener(
+
+"click",
+
+event=>{
+
+if(!validSession()
+
+||!driver
+
+||supportSettings?.enabled!==true
+
+||supportSettings?.callEnabled!==true
+
+||!normalizePhone(supportSettings.phone)){
+
+event.preventDefault();
+
+}
+
+}
+
+);
+
+$("whatsappButton").addEventListener(
+
+"click",
+
+event=>{
+
+if(!validSession()
+
+||!driver
+
+||supportSettings?.enabled!==true
+
+||supportSettings?.whatsappEnabled!==true
+
+||!normalizePhone(supportSettings.whatsapp)){
+
+event.preventDefault();
+
+}
+
+}
+
+);
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps();
+
+stopSettingsListener();
+
+$("helpForm").reset();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+
+||data.uid!==uid
+
+||data.status!=="approved"
+
+||data.activationComplete!==true
+
+||data.documentsValid!==true
+
+||!validText(data.fullName,1,150)
+
+||!validId(data.driverId)){
+
+denyAccess();
+
+return;
+
+}
+
+const firstLoad=driver===null;
+
+driver=data;
+
+$("driverName").textContent=
+
+data.fullName;
+
+$("driverId").textContent=
+
+data.driverId;
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(
+
+data.availability
+
+)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(firstLoad||!settingsUnsubscribe){
+
+subscribeSettings();
+
+}else if(supportSettings){
+
+displaySettings(supportSettings);
+
+}
+
+status("");
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.offline);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyDriverSession"
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+
+||account.uid!==user.uid
+
+||account.status!=="approved"
+
+||account.activationComplete!==true
+
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+
+||!driver
+
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+
+"verifyDriverSession"
+
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+
+||result.uid!==uid
+
+||result.status!=="approved"
+
+||result.activationComplete!==true
+
+||result.documentsValid!==true){
+
+denyAccess();
+
+return;
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+checkingSession=false;
+
+}
+
+},60000);
+
+// REFRESH SUPPORT SETTINGS
+
+$("refreshButton").onclick=()=>{
+
+if(validSession()&&driver){
+
+subscribeSettings();
+
+}else if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+};
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.offline);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+
+"pagehide",
+
+disconnect
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+
+);
+
+</script>
+
+</body>
+</html>
