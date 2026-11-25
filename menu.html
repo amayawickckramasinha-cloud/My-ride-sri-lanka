@@ -1,0 +1,520 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="robots"
+content="noindex, nofollow">
+
+<meta name="google" content="notranslate">
+
+<title>MY RIDE - Main Menu</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #111111;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 25px;
+}
+
+.logo {
+    width: 95px;
+    height: 95px;
+    margin-bottom: 18px;
+}
+
+h1 {
+    color: #FFD600;
+    font-size: 42px;
+    margin: 0;
+}
+
+.country {
+    color: #FFD600;
+    letter-spacing: 5px;
+    margin: 10px 0 30px;
+}
+
+h2 {
+    font-size: 23px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.menu-button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 350px;
+    min-height: 68px;
+    padding: 18px;
+    margin: 8px 0;
+    background: #FFD600;
+    color: #111111;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: left;
+    touch-action: manipulation;
+}
+
+.menu-button:hover {
+    background: #E6C200;
+}
+
+.menu-button:focus-visible,
+.language-button:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 4px;
+}
+
+.menu-icon {
+    font-size: 25px;
+    flex-shrink: 0;
+}
+
+.button-text {
+    flex: 1;
+    overflow-wrap: anywhere;
+}
+
+.arrow {
+    font-size: 22px;
+}
+
+.language-button {
+    display: block;
+    width: 100%;
+    max-width: 350px;
+    padding: 15px;
+    margin-top: 22px;
+    border: 1px solid #FFD600;
+    border-radius: 10px;
+    color: #FFD600;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+footer {
+    margin-top: 35px;
+    color: #AAAAAA;
+    font-size: 12px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main class="container">
+
+<svg class="logo"
+viewBox="0 0 100 100"
+aria-hidden="true">
+
+<rect width="100" height="100"
+rx="24" fill="#FFD600"/>
+
+<path d="M22 47 L30 28 H70 L78 47
+V70 H22 Z" fill="#111111"/>
+
+<path d="M34 34 H66 L72 47 H28 Z"
+fill="#FFD600"/>
+
+<circle cx="34" cy="58" r="6"
+fill="#FFD600"/>
+
+<circle cx="66" cy="58" r="6"
+fill="#FFD600"/>
+
+<rect x="25" y="66" width="12"
+height="12" rx="3" fill="#111111"/>
+
+<rect x="63" y="66" width="12"
+height="12" rx="3" fill="#111111"/>
+
+</svg>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 id="pageHeading">
+ඔබට අවශ්‍ය සේවාව තෝරන්න
+</h2>
+
+
+<!-- CUSTOMER BUTTON -->
+
+<a class="menu-button"
+id="customerButton"
+href="./customer.html">
+
+<span class="menu-icon"
+aria-hidden="true">🚕</span>
+
+<span class="button-text"
+id="customerText">
+හයර් එකක් ලබා ගැනීම
+</span>
+
+<span class="arrow"
+aria-hidden="true">›</span>
+
+</a>
+
+
+<!-- DRIVER REGISTRATION BUTTON -->
+
+<a class="menu-button"
+id="registrationButton"
+href="./driver-register.html">
+
+<span class="menu-icon"
+aria-hidden="true">👤</span>
+
+<span class="button-text"
+id="registrationText">
+රියදුරු ලියාපදිංචිය
+</span>
+
+<span class="arrow"
+aria-hidden="true">›</span>
+
+</a>
+
+
+<!-- DRIVER LOGIN BUTTON -->
+
+<a class="menu-button"
+id="loginButton"
+href="./driver-login.html">
+
+<span class="menu-icon"
+aria-hidden="true">🔐</span>
+
+<span class="button-text"
+id="loginText">
+රියදුරු පිවිසුම
+</span>
+
+<span class="arrow"
+aria-hidden="true">›</span>
+
+</a>
+
+
+<!-- CHANGE LANGUAGE BUTTON -->
+
+<a class="language-button"
+id="languageButton"
+href="./language.html">
+
+🌐 <span id="languageText">
+භාෂාව වෙනස් කිරීම
+</span>
+
+</a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script>
+
+"use strict";
+
+const LANGUAGE_KEY = "myride_language";
+
+const allowedLanguages = [
+    "si",
+    "en",
+    "ta"
+];
+
+
+// COMPLETE MAIN MENU TRANSLATIONS
+
+const translations = {
+
+    si: {
+
+        title: "MY RIDE - ප්‍රධාන මෙනුව",
+
+        heading:
+        "ඔබට අවශ්‍ය සේවාව තෝරන්න",
+
+        customer:
+        "හයර් එකක් ලබා ගැනීම",
+
+        registration:
+        "රියදුරු ලියාපදිංචිය",
+
+        login:
+        "රියදුරු පිවිසුම",
+
+        language:
+        "භාෂාව වෙනස් කිරීම"
+
+    },
+
+    en: {
+
+        title: "MY RIDE - Main Menu",
+
+        heading:
+        "Select your service",
+
+        customer:
+        "Ride Booking",
+
+        registration:
+        "Driver Registration",
+
+        login:
+        "Driver Login",
+
+        language:
+        "Change Language"
+
+    },
+
+    ta: {
+
+        title: "MY RIDE - முதன்மை பட்டியல்",
+
+        heading:
+        "உங்கள் சேவையைத் தேர்ந்தெடுக்கவும்",
+
+        customer:
+        "பயண முன்பதிவு",
+
+        registration:
+        "ஓட்டுநர் பதிவு",
+
+        login:
+        "ஓட்டுநர் உள்நுழைவு",
+
+        language:
+        "மொழியை மாற்றவும்"
+
+    }
+
+};
+
+
+// AUTO DETECT SELECTED LANGUAGE
+
+function getLanguage() {
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    const urlLanguage =
+        params.get("lang");
+
+    if (
+        allowedLanguages.includes(urlLanguage)
+    ) {
+
+        return urlLanguage;
+
+    }
+
+    try {
+
+        const savedLanguage =
+            localStorage.getItem(LANGUAGE_KEY);
+
+        if (
+            allowedLanguages.includes(
+                savedLanguage
+            )
+        ) {
+
+            return savedLanguage;
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Language storage unavailable."
+        );
+
+    }
+
+    return null;
+
+}
+
+
+// AUTO SAVE LANGUAGE
+
+function saveLanguage(language) {
+
+    try {
+
+        localStorage.setItem(
+            LANGUAGE_KEY,
+            language
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Language will be passed through URL."
+        );
+
+    }
+
+}
+
+
+// AUTO TRANSLATE PAGE
+
+function applyLanguage(language) {
+
+    const text = translations[language];
+
+    document.documentElement.lang =
+        language;
+
+    document.title =
+        text.title;
+
+    document.getElementById(
+        "pageHeading"
+    ).textContent = text.heading;
+
+    document.getElementById(
+        "customerText"
+    ).textContent = text.customer;
+
+    document.getElementById(
+        "registrationText"
+    ).textContent = text.registration;
+
+    document.getElementById(
+        "loginText"
+    ).textContent = text.login;
+
+    document.getElementById(
+        "languageText"
+    ).textContent = text.language;
+
+}
+
+
+// AUTO CONNECT NEXT PAGES
+
+function connectPage(
+    buttonId,
+    fileName,
+    language
+) {
+
+    const nextPage = new URL(
+        fileName,
+        window.location.href
+    );
+
+    nextPage.searchParams.set(
+        "lang",
+        language
+    );
+
+    document.getElementById(
+        buttonId
+    ).href = nextPage.href;
+
+}
+
+
+// AUTO INITIALIZE MAIN MENU
+
+function initializeMenu() {
+
+    const language = getLanguage();
+
+    if (!language) {
+
+        window.location.replace(
+            "./language.html"
+        );
+
+        return;
+
+    }
+
+    saveLanguage(language);
+
+    applyLanguage(language);
+
+    connectPage(
+        "customerButton",
+        "./customer.html",
+        language
+    );
+
+    connectPage(
+        "registrationButton",
+        "./driver-register.html",
+        language
+    );
+
+    connectPage(
+        "loginButton",
+        "./driver-login.html",
+        language
+    );
+
+    connectPage(
+        "languageButton",
+        "./language.html",
+        language
+    );
+
+}
+
+initializeMenu();
+
+window.addEventListener(
+    "pageshow",
+    initializeMenu
+);
+
+</script>
+
+</body>
+</html>
