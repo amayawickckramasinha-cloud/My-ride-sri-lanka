@@ -1,0 +1,1760 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+<title>MY RIDE - Gmail Management</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+main{
+max-width:850px;
+margin:auto;
+padding:16px;
+}
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+h2{text-align:center}
+h3{color:#FFD600}
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:12px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-weight:bold;
+font-size:15px;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+button:disabled{opacity:.45}
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+.languages button{padding:12px 4px}
+.check{
+display:flex;
+align-items:center;
+gap:12px;
+background:#292929;
+padding:14px;
+margin:10px 0;
+border-radius:8px;
+line-height:1.7;
+}
+.check input{
+width:22px;
+height:22px;
+flex-shrink:0;
+accent-color:#FFD600;
+}
+select{
+width:100%;
+padding:13px;
+background:#292929;
+color:#fff;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+.note{
+color:#CCC;
+font-size:14px;
+line-height:1.8;
+}
+#status,#result{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+#email{
+overflow-wrap:anywhere;
+background:#292929;
+padding:15px;
+border-radius:8px;
+}
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+.stat{
+background:#292929;
+padding:15px;
+border-radius:9px;
+}
+.stat strong{
+display:block;
+font-size:26px;
+color:#FFD600;
+margin-top:10px;
+}
+.record{
+background:#292929;
+border:1px solid #555;
+border-radius:9px;
+padding:15px;
+margin:12px 0;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+footer{
+text-align:center;
+color:#AAA;
+padding:20px;
+font-size:12px;
+}
+[hidden]{display:none!important}
+</style>
+</head>
+
+<body>
+<main>
+
+<h1>MY RIDE</h1>
+<div class="country">SRI LANKA</div>
+
+<h2 data-t="heading">Gmail Management</h2>
+
+<div class="languages">
+<button data-lang="si">සිංහල</button>
+<button data-lang="en">English</button>
+<button data-lang="ta">தமிழ்</button>
+</div>
+
+<p id="status" role="status" aria-live="polite">
+Checking security...
+</p>
+
+<section id="accessPanel" class="panel" hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink" class="action">
+Admin Login
+</a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="account"></h3>
+
+<p data-t="recipient"></p>
+
+<div id="email">—</div>
+
+<p id="providerStatus" class="note"></p>
+
+<p class="note" data-t="privacy"></p>
+
+<label class="check">
+<input id="autoEnabled" type="checkbox">
+<span data-t="automatic"></span>
+</label>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="statistics"></h3>
+
+<div id="statistics" class="grid"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="notifications"></h3>
+
+<div id="notificationOptions"></div>
+
+<button id="saveSettings"
+data-t="save"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="testHeading"></h3>
+
+<p class="note" data-t="testNote"></p>
+
+<button id="testEmail"
+data-t="test"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="history"></h3>
+
+<select id="historyFilter">
+<option value="all" data-t="all"></option>
+<option value="queued" data-t="queued"></option>
+<option value="sent" data-t="sent"></option>
+<option value="failed" data-t="failed"></option>
+</select>
+
+<button id="refreshHistory"
+data-t="refresh"></button>
+
+<div id="history"></div>
+
+<button id="loadMore"
+data-t="more" hidden></button>
+
+</section>
+
+<p id="result"
+role="status"
+aria-live="polite"></p>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>© MY RIDE SRI LANKA</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const notificationTypes=[
+"newDriver",
+"pendingDriver",
+"approvedDriver",
+"rejectedDriver",
+"suspendedDriver",
+"blockedDriver",
+"newBooking",
+"completedRide",
+"customerComplaint",
+"driverComplaint",
+"commissionPayment",
+"dailyIncome",
+"whatsappFailure",
+"securityAlert"
+];
+
+const deliveryStatuses=[
+"queued","sent","failed"
+];
+
+const words={
+
+si:{
+heading:"Gmail කළමනාකරණය",
+account:"01. Admin Gmail ගිණුම",
+recipient:"දැනුම්දීම් ලැබෙන Gmail ලිපිනය",
+automatic:"ස්වයංක්‍රීය Email දැනුම්දීම් සක්‍රිය කරන්න",
+statistics:"02. Email සංඛ්‍යාලේඛන",
+notifications:"03. ස්වයංක්‍රීය දැනුම්දීම්",
+newDriver:"අලුත් රියදුරු ලියාපදිංචි කිරීම්",
+pendingDriver:"පරීක්ෂා කිරීමට ඇති රියදුරන්",
+approvedDriver:"අනුමත කළ රියදුරන්",
+rejectedDriver:"ප්‍රතික්ෂේප කළ රියදුරන්",
+suspendedDriver:"අත්හිටවූ රියදුරු ගිණුම්",
+blockedDriver:"අවහිර කළ රියදුරු ගිණුම්",
+newBooking:"අලුත් හයර්",
+completedRide:"අවසන් කළ හයර්",
+customerComplaint:"පාරිභෝගික පැමිණිලි",
+driverComplaint:"රියදුරු පැමිණිලි",
+commissionPayment:"Commission ගෙවීම්",
+dailyIncome:"දෛනික ආදායම් වාර්තා",
+whatsappFailure:"WhatsApp පණිවිඩ අසාර්ථක වීම්",
+securityAlert:"ආරක්ෂක අනතුරු ඇඟවීම්",
+save:"සැකසුම් සුරකින්න",
+testHeading:"04. Gmail පරීක්ෂාව",
+test:"Test Email යැවීමට ඉල්ලන්න",
+testNote:"තහවුරු කළ හිමිකරුගේ Email ලිපිනයට පමණක් පරීක්ෂණ පණිවිඩයක් යවයි.",
+history:"05. Email පණිවිඩ ඉතිහාසය",
+totalMessages:"මුළු පණිවිඩ",
+queued:"යැවීමට නියමිත",
+sent:"යවා ඇත",
+failed:"අසාර්ථකයි",
+all:"සියල්ල",
+refresh:"යාවත්කාලීන කරන්න",
+more:"තවත් පණිවිඩ බලන්න",
+back:"Admin Dashboard වෙත",
+checking:"ආරක්ෂාව පරීක්ෂා කරමින්...",
+denied:"Owner Admin අවසරය තහවුරු කර නොමැත.",
+verified:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+connected:"Email සේවාව සම්බන්ධ කර ඇත.",
+disconnected:"Email සේවාව සම්බන්ධ කර නැත.",
+privacy:"Email තුළ මුරපද, OTP, NIC අංක, පෞද්ගලික GPS දත්ත හෝ Activation Token ඇතුළත් නොකළ යුතුයි.",
+loading:"දත්ත ලබාගනිමින්...",
+error:"Server ක්‍රියාව තහවුරු කළ නොහැක.",
+saved:"සැකසුම් සුරැකීම තහවුරු කර ඇත.",
+reauth:"Google ගිණුම නැවත තහවුරු කරන්න.",
+providerRequired:"පළමුව Email සේවාව සම්බන්ධ කරන්න.",
+testConfirm:"පරීක්ෂණ Email එකක් යැවීමට අවශ්‍යද?",
+testAccepted:"පරීක්ෂණ Email ඉල්ලීම පිළිගෙන ඇත.",
+retry:"නැවත යැවීමට ඉල්ලන්න",
+retryConfirm:"මෙම Email එක නැවත යැවීමට අවශ්‍යද?",
+retryAccepted:"නැවත යැවීමේ ඉල්ලීම පිළිගෙන ඇත.",
+noRecords:"Email වාර්තා නොමැත.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+date:"දිනය",
+status:"තත්ත්වය",
+reason:"හේතුව",
+messageId:"පණිවිඩ ID",
+testMessage:"පරීක්ෂණ Email"
+},
+
+en:{
+heading:"Gmail Management",
+account:"01. Admin Gmail Account",
+recipient:"Notification Email Address",
+automatic:"Enable Automatic Email Notifications",
+statistics:"02. Email Statistics",
+notifications:"03. Automatic Notifications",
+newDriver:"New Driver Registrations",
+pendingDriver:"Pending Driver Applications",
+approvedDriver:"Approved Drivers",
+rejectedDriver:"Rejected Drivers",
+suspendedDriver:"Suspended Driver Accounts",
+blockedDriver:"Blocked Driver Accounts",
+newBooking:"New Bookings",
+completedRide:"Completed Rides",
+customerComplaint:"Customer Complaints",
+driverComplaint:"Driver Complaints",
+commissionPayment:"Commission Payments",
+dailyIncome:"Daily Income Reports",
+whatsappFailure:"WhatsApp Delivery Failures",
+securityAlert:"Security Alerts",
+save:"Save Settings",
+testHeading:"04. Gmail Test",
+test:"Request Test Email",
+testNote:"A test message is requested only for the verified owner's email address.",
+history:"05. Email History",
+totalMessages:"Total Messages",
+queued:"Queued",
+sent:"Sent",
+failed:"Failed",
+all:"All",
+refresh:"Refresh",
+more:"Load More",
+back:"Back to Admin Dashboard",
+checking:"Checking security...",
+denied:"Owner Admin authorization is not verified.",
+verified:"Owner authorization verified.",
+connected:"Email Service Connected.",
+disconnected:"Email Service Not Connected.",
+privacy:"Emails must not contain passwords, OTPs, NIC numbers, private GPS data or activation tokens.",
+loading:"Loading server data...",
+error:"Unable to confirm the server operation.",
+saved:"Settings saved by the server.",
+reauth:"Verify your Google account again.",
+providerRequired:"Connect the email service first.",
+testConfirm:"Request a test email?",
+testAccepted:"Test email request accepted.",
+retry:"Request Retry",
+retryConfirm:"Request this email again?",
+retryAccepted:"Retry request accepted.",
+noRecords:"No email records.",
+offline:"No internet connection.",
+date:"Date",
+status:"Status",
+reason:"Reason",
+messageId:"Message ID",
+testMessage:"Test Email"
+},
+
+ta:{
+heading:"Gmail நிர்வாகம்",
+account:"01. நிர்வாக Gmail கணக்கு",
+recipient:"அறிவிப்பு மின்னஞ்சல் முகவரி",
+automatic:"தானியங்கி மின்னஞ்சல் அறிவிப்புகளை இயக்கவும்",
+statistics:"02. மின்னஞ்சல் புள்ளிவிவரங்கள்",
+notifications:"03. தானியங்கி அறிவிப்புகள்",
+newDriver:"புதிய சாரதி பதிவுகள்",
+pendingDriver:"நிலுவையில் உள்ள சாரதி விண்ணப்பங்கள்",
+approvedDriver:"அங்கீகரிக்கப்பட்ட சாரதிகள்",
+rejectedDriver:"நிராகரிக்கப்பட்ட சாரதிகள்",
+suspendedDriver:"இடைநிறுத்தப்பட்ட சாரதி கணக்குகள்",
+blockedDriver:"தடுக்கப்பட்ட சாரதி கணக்குகள்",
+newBooking:"புதிய பயண முன்பதிவுகள்",
+completedRide:"நிறைவடைந்த பயணங்கள்",
+customerComplaint:"வாடிக்கையாளர் புகார்கள்",
+driverComplaint:"சாரதி புகார்கள்",
+commissionPayment:"தரகு கட்டணங்கள்",
+dailyIncome:"தினசரி வருமான அறிக்கைகள்",
+whatsappFailure:"WhatsApp செய்தி தோல்விகள்",
+securityAlert:"பாதுகாப்பு எச்சரிக்கைகள்",
+save:"அமைப்புகளை சேமிக்கவும்",
+testHeading:"04. Gmail சோதனை",
+test:"சோதனை மின்னஞ்சல் கோரவும்",
+testNote:"உறுதிப்படுத்தப்பட்ட உரிமையாளரின் மின்னஞ்சலுக்கு மட்டும் சோதனை செய்தி அனுப்பப்படும்.",
+history:"05. மின்னஞ்சல் வரலாறு",
+totalMessages:"மொத்த செய்திகள்",
+queued:"வரிசையில் உள்ளது",
+sent:"அனுப்பப்பட்டது",
+failed:"தோல்வி",
+all:"அனைத்தும்",
+refresh:"புதுப்பிக்கவும்",
+more:"மேலும் பார்க்கவும்",
+back:"நிர்வாக முதன்மைப் பக்கத்திற்கு",
+checking:"பாதுகாப்பு சரிபார்க்கப்படுகிறது...",
+denied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+verified:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+connected:"மின்னஞ்சல் சேவை இணைக்கப்பட்டுள்ளது.",
+disconnected:"மின்னஞ்சல் சேவை இணைக்கப்படவில்லை.",
+privacy:"கடவுச்சொல், OTP, NIC, தனிப்பட்ட GPS தகவல் மற்றும் செயல்படுத்தும் குறியீடுகளை மின்னஞ்சலில் சேர்க்க வேண்டாம்.",
+loading:"தரவு பெறப்படுகிறது...",
+error:"சேவையக செயல்பாட்டை உறுதிப்படுத்த முடியவில்லை.",
+saved:"அமைப்புகள் சேமிக்கப்பட்டன.",
+reauth:"Google கணக்கை மீண்டும் உறுதிப்படுத்தவும்.",
+providerRequired:"மின்னஞ்சல் சேவையை முதலில் இணைக்கவும்.",
+testConfirm:"சோதனை மின்னஞ்சல் அனுப்ப வேண்டுமா?",
+testAccepted:"சோதனை கோரிக்கை ஏற்கப்பட்டது.",
+retry:"மீண்டும் அனுப்ப கோரவும்",
+retryConfirm:"மீண்டும் அனுப்ப வேண்டுமா?",
+retryAccepted:"கோரிக்கை ஏற்கப்பட்டது.",
+noRecords:"மின்னஞ்சல் பதிவுகள் இல்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+date:"தேதி",
+status:"நிலை",
+reason:"காரணம்",
+messageId:"செய்தி ID",
+testMessage:"சோதனை மின்னஞ்சல்"
+}
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+new URLSearchParams(location.search).get("lang")
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected))lang=selected;
+
+}catch(e){}
+
+const t=key=>words[lang][key]||key;
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+let busy=false;
+let settings=null;
+let statistics=null;
+let records=[];
+let cursor=null;
+let filter="all";
+let unsubscribe=null;
+let pendingRequest=null;
+let statusKey="checking";
+let resultKey="";
+
+function status(key){
+
+statusKey=key;
+$("status").textContent=t(key);
+
+}
+
+function result(key){
+
+resultKey=key;
+$("result").textContent=key?t(key):"";
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+encodeURIComponent(lang);
+
+}
+
+function isOwner(){
+
+return authorized
+&&ownerUid!==null
+&&auth?.currentUser?.uid===ownerUid
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+&&data.uid===uid
+&&data.role==="owner"
+&&data.ownerUidVerified===true
+&&data.sessionValid===true;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)&&value>=0;
+
+}
+
+notificationTypes.forEach(type=>{
+
+const label=document.createElement("label");
+
+label.className="check";
+
+const checkbox=document.createElement("input");
+
+checkbox.type="checkbox";
+checkbox.id="notify_"+type;
+
+const span=document.createElement("span");
+
+span.dataset.notification=type;
+
+label.append(checkbox,span);
+
+$("notificationOptions").appendChild(label);
+
+});
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+document.querySelectorAll("[data-notification]")
+.forEach(element=>{
+
+element.textContent=t(element.dataset.notification);
+
+});
+
+$("loginLink").href=pageLink("admin-login.html");
+
+$("dashboardLink").href=
+pageLink("admin-dashboard.html");
+
+$("backLink").href=
+pageLink("admin-dashboard.html");
+
+status(statusKey);
+result(resultKey);
+
+renderProvider();
+renderStatistics();
+renderHistory();
+
+}
+
+document.querySelectorAll("[data-lang]")
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem("myride_admin_language",lang);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+function setBusy(value){
+
+busy=value;
+
+const enabled=isOwner()&&!busy&&settings!==null;
+
+$("autoEnabled").disabled=!enabled;
+$("saveSettings").disabled=!enabled;
+
+$("testEmail").disabled=
+!enabled||!settings?.providerConnected;
+
+notificationTypes.forEach(type=>{
+
+$("notify_"+type).disabled=!enabled;
+
+});
+
+[
+"refreshButton",
+"refreshHistory",
+"historyFilter",
+"loadMore"
+].forEach(id=>{
+
+$(id).disabled=busy||!isOwner();
+
+});
+
+renderHistory();
+
+}
+
+async function serverCall(name,data={}){
+
+if(!isOwner())throw new Error("Unauthorized");
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+functions,
+name,
+{timeout:25000}
+)(data);
+
+if(currentGeneration!==generation||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+function requestId(name,payload){
+
+const signature=JSON.stringify([name,payload]);
+
+if(pendingRequest?.signature!==signature){
+
+pendingRequest={
+signature,
+id:crypto.randomUUID()
+};
+
+}
+
+return pendingRequest.id;
+
+}
+
+async function reauthenticate(){
+
+if(!isOwner())throw new Error("Unauthorized");
+
+const currentGeneration=generation;
+
+const user=auth.currentUser;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+prompt:"select_account"
+});
+
+const credential=await reauthenticateWithPopup(
+user,
+provider
+);
+
+if(credential.user.uid!==ownerUid
+||currentGeneration!==generation
+||!isOwner()){
+
+throw new Error("Owner mismatch");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+||token.claims.email_verified!==true
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await serverCall("verifyOwnerAdmin");
+
+if(!validOwner(response,ownerUid)){
+
+throw new Error("Access denied");
+
+}
+
+}
+
+function renderProvider(){
+
+$("providerStatus").textContent=settings
+
+?t(settings.providerConnected?"connected":"disconnected")
+
+:"—";
+
+}
+
+function renderStatistics(){
+
+const container=$("statistics");
+
+container.replaceChildren();
+
+["totalMessages",...deliveryStatuses]
+.forEach(key=>{
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const label=document.createElement("span");
+
+label.textContent=t(key);
+
+const value=document.createElement("strong");
+
+value.textContent=statistics
+
+?String(statistics[key])
+
+:"—";
+
+box.append(label,value);
+
+container.appendChild(box);
+
+});
+
+}
+
+function subscribeStatistics(){
+
+if(unsubscribe)unsubscribe();
+
+const currentGeneration=generation;
+
+unsubscribe=onSnapshot(
+
+doc(db,"adminDashboard","gmail"),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation||!isOwner())return;
+
+const data=snapshot.data();
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites
+||!snapshot.exists()
+||!["totalMessages",...deliveryStatuses]
+.every(key=>validCount(data[key]))
+||deliveryStatuses.reduce(
+(sum,key)=>sum+data[key],0
+)!==data.totalMessages){
+
+statistics=null;
+
+}else{
+
+statistics=data;
+
+}
+
+renderStatistics();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+statistics=null;
+
+renderStatistics();
+
+});
+
+}
+
+function validSettings(data){
+
+return data
+&&Number.isSafeInteger(data.version)
+&&data.version>0
+&&typeof data.recipientEmail==="string"
+&&data.recipientEmail.length<=254
+&&data.recipientEmail.toLowerCase()
+===auth.currentUser.email?.toLowerCase()
+&&typeof data.autoEnabled==="boolean"
+&&typeof data.providerConnected==="boolean"
+&&data.notifications
+&&notificationTypes.every(type=>
+typeof data.notifications[type]==="boolean"
+);
+
+}
+
+async function loadSettings(){
+
+const response=await serverCall(
+"getAdminGmailSettings"
+);
+
+if(response?.success!==true
+||response.ownerUid!==ownerUid
+||!validSettings(response.settings)){
+
+throw new Error("Invalid settings");
+
+}
+
+settings=response.settings;
+
+$("email").textContent=settings.recipientEmail;
+
+$("autoEnabled").checked=settings.autoEnabled;
+
+notificationTypes.forEach(type=>{
+
+$("notify_"+type).checked=
+settings.notifications[type];
+
+});
+
+renderProvider();
+
+}
+
+$("saveSettings").onclick=async()=>{
+
+if(!isOwner()||busy||!settings)return;
+
+const autoEnabled=$("autoEnabled").checked;
+
+if(autoEnabled&&!settings.providerConnected){
+
+result("providerRequired");
+return;
+
+}
+
+const notifications={};
+
+notificationTypes.forEach(type=>{
+
+notifications[type]=$("notify_"+type).checked;
+
+});
+
+const payload={
+
+autoEnabled,
+notifications,
+expectedVersion:settings.version
+
+};
+
+const id=requestId(
+"saveAdminGmailSettings",
+payload
+);
+
+const currentGeneration=generation;
+
+setBusy(true);
+
+result("reauth");
+
+try{
+
+await reauthenticate();
+
+const response=await serverCall(
+
+"saveAdminGmailSettings",
+
+{
+...payload,
+requestId:id
+}
+
+);
+
+if(response?.saved!==true
+||response.ownerUid!==ownerUid){
+
+throw new Error("Save failed");
+
+}
+
+pendingRequest=null;
+
+await loadSettings();
+
+result("saved");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+setBusy(false);
+
+}
+
+}
+
+};
+
+$("testEmail").onclick=async()=>{
+
+if(!isOwner()
+||busy
+||!settings?.providerConnected)return;
+
+if(!confirm(t("testConfirm")))return;
+
+const currentGeneration=generation;
+
+const payload={
+language:lang,
+expectedVersion:settings.version
+};
+
+const id=requestId(
+"sendAdminTestEmail",
+payload
+);
+
+setBusy(true);
+
+result("reauth");
+
+try{
+
+await reauthenticate();
+
+const response=await serverCall(
+
+"sendAdminTestEmail",
+
+{
+...payload,
+requestId:id
+}
+
+);
+
+if(response?.accepted!==true
+||response.ownerUid!==ownerUid
+||!validId(response.messageId)){
+
+throw new Error("Test request failed");
+
+}
+
+pendingRequest=null;
+
+result("testAccepted");
+
+try{
+
+await loadHistory(true);
+
+}catch(e){
+
+$("history").textContent=t("error");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+setBusy(false);
+
+}
+
+}
+
+};
+
+function validRecord(item){
+
+return item
+&&validId(item.messageId)
+&&[...notificationTypes,"testMessage"]
+.includes(item.type)
+&&deliveryStatuses.includes(item.status)
+&&typeof item.recipientMasked==="string"
+&&item.recipientMasked.length<=254
+&&Number.isFinite(item.createdAtMs)
+&&item.createdAtMs>0
+&&item.createdAtMs<=8640000000000000
+&&typeof item.retryAllowed==="boolean"
+&&(item.failureReason===null
+||typeof item.failureReason==="string");
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function renderHistory(){
+
+const container=$("history");
+
+container.replaceChildren();
+
+records.forEach(item=>{
+
+const panel=document.createElement("div");
+
+panel.className="record";
+
+const title=document.createElement("strong");
+
+title.textContent=t(item.type);
+
+panel.appendChild(title);
+
+addLine(panel,"messageId",item.messageId);
+
+addLine(panel,"recipient",item.recipientMasked);
+
+addLine(panel,"status",t(item.status));
+
+const formattedDate=new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":lang==="ta"?"ta-LK":"en-LK",
+
+{
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"short"
+}
+
+).format(new Date(item.createdAtMs));
+
+addLine(panel,"date",formattedDate);
+
+if(item.status==="failed"){
+
+addLine(panel,"reason",item.failureReason);
+
+if(item.retryAllowed){
+
+const button=document.createElement("button");
+
+button.textContent=t("retry");
+
+button.disabled=busy
+||!isOwner()
+||!settings?.providerConnected;
+
+button.onclick=()=>retryEmail(item);
+
+panel.appendChild(button);
+
+}
+
+}
+
+container.appendChild(panel);
+
+});
+
+$("loadMore").hidden=cursor===null;
+
+}
+
+async function loadHistory(reset=true){
+
+const response=await serverCall(
+
+"getAdminGmailHistory",
+
+{
+status:filter,
+limit:30,
+cursor:reset?null:cursor
+}
+
+);
+
+if(response?.success!==true
+||response.ownerUid!==ownerUid
+||!Array.isArray(response.records)
+||response.records.length>30
+||!response.records.every(validRecord)
+||!(response.nextCursor===null
+||typeof response.nextCursor==="string")
+||(filter!=="all"
+&&response.records.some(item=>item.status!==filter))){
+
+throw new Error("Invalid history");
+
+}
+
+const unique=new Map(
+
+(reset?[]:records)
+.map(item=>[item.messageId,item])
+
+);
+
+response.records.forEach(item=>{
+
+unique.set(item.messageId,item);
+
+});
+
+records=[...unique.values()];
+
+cursor=response.nextCursor;
+
+renderHistory();
+
+if(!records.length){
+
+$("history").textContent=t("noRecords");
+
+}
+
+}
+
+async function refreshHistory(reset){
+
+if(!isOwner()||busy)return;
+
+const currentGeneration=generation;
+
+setBusy(true);
+
+result("loading");
+
+try{
+
+if(reset){
+
+filter=$("historyFilter").value;
+
+if(!["all",...deliveryStatuses].includes(filter)){
+
+throw new Error("Invalid filter");
+
+}
+
+records=[];
+cursor=null;
+
+renderHistory();
+
+}
+
+await loadHistory(reset);
+
+result("");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+setBusy(false);
+
+}
+
+}
+
+}
+
+$("refreshHistory").onclick=()=>refreshHistory(true);
+
+$("loadMore").onclick=()=>{
+
+if(cursor!==null)refreshHistory(false);
+
+};
+
+async function retryEmail(item){
+
+if(!isOwner()
+||busy
+||!validRecord(item)
+||item.status!=="failed"
+||!item.retryAllowed
+||!settings?.providerConnected)return;
+
+if(!confirm(t("retryConfirm")))return;
+
+const currentGeneration=generation;
+
+const payload={
+messageId:item.messageId
+};
+
+const id=requestId(
+"retryAdminGmailMessage",
+payload
+);
+
+setBusy(true);
+
+result("reauth");
+
+try{
+
+await reauthenticate();
+
+const response=await serverCall(
+
+"retryAdminGmailMessage",
+
+{
+...payload,
+requestId:id
+}
+
+);
+
+if(response?.accepted!==true
+||response.ownerUid!==ownerUid){
+
+throw new Error("Retry failed");
+
+}
+
+pendingRequest=null;
+
+result("retryAccepted");
+
+try{
+
+await loadHistory(true);
+
+}catch(e){
+
+$("history").textContent=t("error");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+setBusy(false);
+
+}
+
+}
+
+}
+
+function clearSettings(){
+
+settings=null;
+
+$("email").textContent="—";
+
+$("autoEnabled").checked=false;
+
+notificationTypes.forEach(type=>{
+
+$("notify_"+type).checked=false;
+
+});
+
+renderProvider();
+
+}
+
+$("refreshButton").onclick=async()=>{
+
+if(!isOwner()||busy)return;
+
+const currentGeneration=generation;
+
+setBusy(true);
+
+result("loading");
+
+try{
+
+await loadSettings();
+
+await loadHistory(true);
+
+result("");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+clearSettings();
+
+records=[];
+cursor=null;
+
+renderHistory();
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+setBusy(false);
+
+}
+
+}
+
+};
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+ownerUid=null;
+statistics=null;
+records=[];
+cursor=null;
+filter="all";
+pendingRequest=null;
+
+if(unsubscribe){
+
+unsubscribe();
+unsubscribe=null;
+
+}
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("historyFilter").value="all";
+
+clearSettings();
+
+result("");
+
+renderStatistics();
+
+renderHistory();
+
+setBusy(false);
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+status("denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status("offline");
+
+return;
+
+}
+
+status("checking");
+
+try{
+
+const appToken=await getToken(appCheck,false);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+||token.claims.email_verified!==true
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+"verifyOwnerAdmin",
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Access denied");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+status("verified");
+
+subscribeStatistics();
+
+setBusy(true);
+
+try{
+
+await loadSettings();
+
+await loadHistory(true);
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+setBusy(false);
+
+}
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+let checking=false;
+
+setInterval(async()=>{
+
+if(!isOwner()||busy||checking)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await serverCall(
+"verifyOwnerAdmin"
+);
+
+if(!validOwner(response,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+status("offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth)verifyOwner(auth.currentUser);
+
+});
+
+window.addEventListener("pagehide",clearSession);
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+renderLanguage();
+
+setBusy(false);
+
+initializeSecurity();
+
+</script>
+</body>
+</html>
