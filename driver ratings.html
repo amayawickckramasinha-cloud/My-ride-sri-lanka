@@ -1,0 +1,2201 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver GPS</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+line-height:1.7;
+}
+
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+
+.gpsIcon{
+width:90px;
+height:90px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+
+.gpsIndicator{
+text-align:center;
+font-size:28px;
+font-weight:bold;
+padding:20px;
+border:1px solid #555;
+border-radius:12px;
+background:#292929;
+margin:15px 0;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:14px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.8;
+}
+
+.row span{
+color:#CCC;
+}
+
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+
+#map{
+width:100%;
+height:340px;
+border-radius:12px;
+background:#333;
+margin:15px 0;
+z-index:1;
+}
+
+.action{
+display:block;
+width:100%;
+padding:16px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.danger{
+background:#B91C1C;
+color:#fff;
+}
+
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.9;
+}
+
+.warning{
+background:#351919;
+border:1px solid #FF6464;
+border-radius:10px;
+padding:15px;
+color:#FFB4B4;
+line-height:1.8;
+margin:15px 0;
+}
+
+.green{
+color:#4ADE80;
+}
+
+.red{
+color:#FF6464;
+}
+
+.yellow{
+color:#FFD600;
+}
+
+#status,
+#gpsMessage,
+#serverMessage{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+overflow-wrap:anywhere;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+
+[hidden]{
+display:none!important;
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+<div class="country">SRI LANKA</div>
+
+<div class="gpsIcon">
+
+<svg width="52" height="52"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+
+<circle cx="12" cy="12" r="8"/>
+<circle cx="12" cy="12" r="3"/>
+<path d="M12 2v2"/>
+<path d="M12 20v2"/>
+<path d="M2 12h2"/>
+<path d="M20 12h2"/>
+
+</svg>
+
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="driverDetails"></h3>
+
+<div class="row">
+<span data-t="driverName"></span>
+<strong id="driverName">—</strong>
+</div>
+
+<div class="row">
+<span>Driver ID</span>
+<strong id="driverId" class="yellow">—</strong>
+</div>
+
+<div class="row">
+<span data-t="accountStatus"></span>
+<strong id="accountStatus">—</strong>
+</div>
+
+<div class="row">
+<span data-t="availability"></span>
+<strong id="availability">—</strong>
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="gpsStatus"></h3>
+
+<div id="gpsIndicator"
+class="gpsIndicator red">
+GPS OFF
+</div>
+
+<div class="row">
+<span data-t="permission"></span>
+<strong id="permissionState">—</strong>
+</div>
+
+<div class="row">
+<span data-t="internet"></span>
+<strong id="internetState">—</strong>
+</div>
+
+<div class="row">
+<span data-t="locationStatus"></span>
+<strong id="locationStatus">—</strong>
+</div>
+
+<div class="row">
+<span data-t="accuracy"></span>
+<strong id="accuracy">—</strong>
+</div>
+
+<div class="row">
+<span data-t="signalQuality"></span>
+<strong id="signalQuality">—</strong>
+</div>
+
+<div class="row">
+<span data-t="lastUpdate"></span>
+<strong id="lastUpdate">—</strong>
+</div>
+
+<div class="row">
+<span data-t="serverUpdate"></span>
+<strong id="serverUpdate">—</strong>
+</div>
+
+<div class="row">
+<span data-t="serverStatus"></span>
+<strong id="serverStatus">—</strong>
+</div>
+
+<button id="startButton"
+class="action"
+data-t="startGps"></button>
+
+<button id="refreshButton"
+class="action secondary"
+data-t="refreshGps"></button>
+
+<button id="stopButton"
+class="action danger"
+data-t="stopGps"></button>
+
+<p id="gpsMessage"
+role="status"
+aria-live="polite"></p>
+
+<p id="serverMessage"
+role="status"></p>
+
+<div id="busyWarning"
+class="warning" hidden>
+
+<span data-t="busyWarning"></span>
+
+</div>
+
+<p class="note"
+data-t="permissionNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="liveMap"></h3>
+
+<div id="map"></div>
+
+<button id="centerButton"
+class="action secondary"
+data-t="centerMap"
+disabled></button>
+
+<p class="note"
+data-t="mapNote"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="locationDetails"></h3>
+
+<div class="row">
+<span>Latitude</span>
+<strong id="latitude">—</strong>
+</div>
+
+<div class="row">
+<span>Longitude</span>
+<strong id="longitude">—</strong>
+</div>
+
+<div class="row">
+<span data-t="speed"></span>
+<strong id="speed">—</strong>
+</div>
+
+<div class="row">
+<span data-t="direction"></span>
+<strong id="direction">—</strong>
+</div>
+
+<div class="row">
+<span data-t="altitude"></span>
+<strong id="altitude">—</strong>
+</div>
+
+<div class="row">
+<span data-t="locationAge"></span>
+<strong id="locationAge">—</strong>
+</div>
+
+<div class="row">
+<span data-t="serviceArea"></span>
+<strong id="serviceArea">—</strong>
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="gpsRequirements"></h3>
+
+<p data-t="rule1"></p>
+<p data-t="rule2"></p>
+<p data-t="rule3"></p>
+<p data-t="rule4"></p>
+<p data-t="rule5"></p>
+<p data-t="rule6"></p>
+
+<p class="note"
+data-t="backgroundNote"></p>
+
+</section>
+
+<a id="helpLink"
+class="action secondary"
+data-t="help"></a>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const LANGUAGES=["si","en","ta"];
+
+const params=new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+}catch(e){}
+
+const lang=
+LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+heading:"රියදුරු GPS තත්ත්වය",
+driverDetails:"රියදුරු ගිණුමේ විස්තර",
+driverName:"රියදුරුගේ නම",
+accountStatus:"ගිණුමේ තත්ත්වය",
+approved:"අනුමත කර ඇත",
+availability:"සේවා තත්ත්වය",
+online:"Online",
+offline:"Offline",
+busy:"හයර් එකක සිටී",
+gpsStatus:"GPS තත්ත්වය",
+permission:"Location අවසරය",
+internet:"අන්තර්ජාල සම්බන්ධතාව",
+connected:"සම්බන්ධ වී ඇත",
+disconnected:"සම්බන්ධ වී නැත",
+locationStatus:"ස්ථානයේ තත්ත්වය",
+accuracy:"GPS නිරවද්‍යතාව",
+signalQuality:"GPS සංඥාවේ ගුණාත්මකභාවය",
+lastUpdate:"අවසන් GPS යාවත්කාලීන කිරීම",
+serverUpdate:"අවසන් Server තහවුරු කිරීම",
+serverStatus:"Firebase GPS තත්ත්වය",
+startGps:"GPS ස්ථාන නිරීක්ෂණය ආරම්භ කරන්න",
+refreshGps:"දැනට සිටින ස්ථානය යාවත්කාලීන කරන්න",
+stopGps:"GPS ස්ථාන නිරීක්ෂණය නවත්වන්න",
+liveMap:"මගේ සජීවී ස්ථානය",
+centerMap:"මගේ ස්ථානය සිතියමේ පෙන්වන්න",
+locationDetails:"GPS ස්ථාන විස්තර",
+speed:"වාහනයේ වේගය",
+direction:"ගමන් දිශාව",
+altitude:"මුහුදු මට්ටමේ සිට උස",
+locationAge:"GPS දත්තවල වයස",
+serviceArea:"GPS සේවා ප්‍රදේශය",
+inside:"ශ්‍රී ලංකා සේවා සීමාව තුළ",
+outside:"ශ්‍රී ලංකා සේවා සීමාවෙන් පිටත",
+granted:"අවසර ලබාදී ඇත",
+deniedPermission:"අවසර ලබාදී නැත",
+prompt:"අවසර අවශ්‍යයි",
+unknown:"තහවුරු කර නැත",
+unsupported:"මෙම Browser එක සහාය නොදක්වයි",
+waiting:"GPS ස්ථානය ලබාගනිමින්...",
+valid:"වලංගු GPS ස්ථානය",
+stale:"GPS දත්ත පැරණියි",
+excellent:"ඉතා හොඳයි",
+good:"හොඳයි",
+fair:"සාමාන්‍යයි",
+poor:"දුර්වලයි",
+sending:"Firebase වෙත යවමින්...",
+sent:"Server තහවුරු කර ඇත",
+notSent:"Server වෙත යවා නැත",
+sendFailed:"GPS දත්ත යැවීම තහවුරු කළ නොහැක.",
+offlineLocal:"Offline නිසා ස්ථානය දුරකථනයේ පමණක් පෙන්වයි.",
+permissionError:"Location අවසරය ලබාදෙන්න.",
+unavailable:"GPS ස්ථානය ලබාගත නොහැක.",
+timeout:"GPS ලබාගැනීමට වැඩි කාලයක් ගතවිය. නැවත උත්සාහ කරන්න.",
+weakGps:"GPS නිරවද්‍යතාව ප්‍රමාණවත් නැත.",
+outsideError:"මෙම GPS ස්ථානය සේවා සීමාවෙන් පිටතයි.",
+invalidFix:"වලංගු GPS දත්ත ලබාගත නොහැක.",
+busyWarning:"Online හෝ Busy තත්ත්වයේදී GPS නිරීක්ෂණය මෙම පිටුවෙන් නැවැත්විය නොහැක.",
+permissionNote:"GPS භාවිතයට දුරකථනයේ Location සේවාව සහ Browser අවසරය අවශ්‍යයි.",
+mapNote:"සිතියමේ වටය GPS ස්ථානයේ ඇස්තමේන්තුගත නිරවද්‍යතාව පෙන්වයි.",
+gpsRequirements:"GPS භාවිතයේ කොන්දේසි",
+rule1:"✓ හයර් ලබාගැනීමේදී GPS ක්‍රියාත්මකව තිබිය යුතුය.",
+rule2:"✓ සක්‍රිය හයර් අතරතුර GPS අවශ්‍ය වේ.",
+rule3:"✓ ව්‍යාජ GPS ස්ථාන භාවිතා කිරීම තහනම් වේ.",
+rule4:"✓ දුර්වල GPS දත්ත හයර් ගැළපීම සඳහා භාවිතා නොකළ යුතුය.",
+rule5:"✓ Offline තත්ත්වයේදී GPS ස්ථානය Server වෙත යවන්නේ නැත.",
+rule6:"✓ GPS දත්ත ආරක්ෂිතව සහ අවශ්‍ය කාර්යයන් සඳහා පමණක් භාවිතා කළ යුතුය.",
+backgroundNote:"Browser එක වසා ඇති විට හෝ දුරකථනය Lock කළ විට GPS යාවත්කාලීන වීම නතර විය හැක.",
+seconds:"තත්පර",
+checking:"රියදුරු ගිණුම පරීක්ෂා කරමින්...",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+noInternet:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+error:"පද්ධතිය සම්බන්ධ කරගත නොහැක.",
+mapError:"සිතියම ලබාගත නොහැක.",
+login:"Driver Login",
+help:"රියදුරු සහාය",
+back:"← Driver Dashboard"
+},
+
+en:{
+heading:"Driver GPS Status",
+driverDetails:"Driver Account Details",
+driverName:"Driver Name",
+accountStatus:"Account Status",
+approved:"Approved",
+availability:"Service Availability",
+online:"Online",
+offline:"Offline",
+busy:"Busy",
+gpsStatus:"GPS Status",
+permission:"Location Permission",
+internet:"Internet Connection",
+connected:"Connected",
+disconnected:"Disconnected",
+locationStatus:"Location Status",
+accuracy:"GPS Accuracy",
+signalQuality:"GPS Signal Quality",
+lastUpdate:"Last GPS Update",
+serverUpdate:"Last Server Confirmation",
+serverStatus:"Firebase GPS Status",
+startGps:"Start GPS Tracking",
+refreshGps:"Refresh Current Location",
+stopGps:"Stop GPS Tracking",
+liveMap:"My Live Location",
+centerMap:"Center Map on My Location",
+locationDetails:"GPS Location Details",
+speed:"Vehicle Speed",
+direction:"Travel Direction",
+altitude:"Altitude",
+locationAge:"GPS Data Age",
+serviceArea:"GPS Service Area",
+inside:"Within Sri Lanka Service Bounds",
+outside:"Outside Sri Lanka Service Bounds",
+granted:"Granted",
+deniedPermission:"Denied",
+prompt:"Permission Required",
+unknown:"Not Confirmed",
+unsupported:"Browser Not Supported",
+waiting:"Obtaining GPS location...",
+valid:"Valid GPS Location",
+stale:"GPS Data Is Stale",
+excellent:"Excellent",
+good:"Good",
+fair:"Fair",
+poor:"Poor",
+sending:"Sending to Firebase...",
+sent:"Confirmed by Server",
+notSent:"Not Sent to Server",
+sendFailed:"Unable to confirm GPS update.",
+offlineLocal:"Location is displayed locally because the driver is offline.",
+permissionError:"Please allow location access.",
+unavailable:"GPS location is unavailable.",
+timeout:"GPS request timed out. Please retry.",
+weakGps:"GPS accuracy is insufficient.",
+outsideError:"GPS location is outside service bounds.",
+invalidFix:"Unable to obtain valid GPS data.",
+busyWarning:"GPS tracking cannot be stopped from this page while Online or Busy.",
+permissionNote:"GPS requires device location services and browser permission.",
+mapNote:"The circle represents estimated location accuracy.",
+gpsRequirements:"GPS Requirements",
+rule1:"✓ Keep GPS active when receiving hires.",
+rule2:"✓ GPS is required during active rides.",
+rule3:"✓ Fake GPS locations are prohibited.",
+rule4:"✓ Poor-quality GPS data must not be used for ride matching.",
+rule5:"✓ GPS location is not uploaded while Offline.",
+rule6:"✓ GPS data must be protected and used only for necessary purposes.",
+backgroundNote:"GPS updates may stop when the browser is closed or the phone is locked.",
+seconds:"seconds",
+checking:"Verifying driver account...",
+denied:"Access to this page is not authorized.",
+noInternet:"No internet connection.",
+error:"Unable to connect to the system.",
+mapError:"Unable to load the map.",
+login:"Driver Login",
+help:"Driver Help",
+back:"← Driver Dashboard"
+},
+
+ta:{
+heading:"சாரதி GPS நிலை",
+driverDetails:"சாரதி கணக்கு விவரங்கள்",
+driverName:"சாரதியின் பெயர்",
+accountStatus:"கணக்கு நிலை",
+approved:"அங்கீகரிக்கப்பட்டது",
+availability:"சேவை நிலை",
+online:"Online",
+offline:"Offline",
+busy:"பயணத்தில் உள்ளார்",
+gpsStatus:"GPS நிலை",
+permission:"இருப்பிட அனுமதி",
+internet:"இணைய இணைப்பு",
+connected:"இணைக்கப்பட்டுள்ளது",
+disconnected:"இணைக்கப்படவில்லை",
+locationStatus:"இருப்பிட நிலை",
+accuracy:"GPS துல்லியம்",
+signalQuality:"GPS சமிக்ஞை தரம்",
+lastUpdate:"கடைசி GPS புதுப்பிப்பு",
+serverUpdate:"கடைசி சேவையக உறுதிப்படுத்தல்",
+serverStatus:"Firebase GPS நிலை",
+startGps:"GPS கண்காணிப்பை ஆரம்பிக்கவும்",
+refreshGps:"தற்போதைய இருப்பிடத்தை புதுப்பிக்கவும்",
+stopGps:"GPS கண்காணிப்பை நிறுத்தவும்",
+liveMap:"எனது நேரடி இருப்பிடம்",
+centerMap:"எனது இருப்பிடத்தை வரைபடத்தில் காட்டவும்",
+locationDetails:"GPS இருப்பிட விவரங்கள்",
+speed:"வாகன வேகம்",
+direction:"பயண திசை",
+altitude:"கடல் மட்டத்திலிருந்து உயரம்",
+locationAge:"GPS தரவின் வயது",
+serviceArea:"GPS சேவை பகுதி",
+inside:"இலங்கை சேவை எல்லைக்குள்",
+outside:"இலங்கை சேவை எல்லைக்கு வெளியே",
+granted:"அனுமதி வழங்கப்பட்டது",
+deniedPermission:"அனுமதி மறுக்கப்பட்டது",
+prompt:"அனுமதி தேவை",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+unsupported:"உலாவி ஆதரவு இல்லை",
+waiting:"GPS இருப்பிடம் பெறப்படுகிறது...",
+valid:"செல்லுபடியாகும் GPS இருப்பிடம்",
+stale:"GPS தரவு பழையது",
+excellent:"மிகவும் சிறப்பு",
+good:"நல்லது",
+fair:"சாதாரணம்",
+poor:"பலவீனம்",
+sending:"Firebase க்கு அனுப்பப்படுகிறது...",
+sent:"சேவையகம் உறுதிப்படுத்தியது",
+notSent:"சேவையகத்திற்கு அனுப்பப்படவில்லை",
+sendFailed:"GPS புதுப்பிப்பை உறுதிப்படுத்த முடியவில்லை.",
+offlineLocal:"Offline நிலையில் இருப்பிடம் சாதனத்தில் மட்டும் காட்டப்படும்.",
+permissionError:"இருப்பிட அனுமதியை வழங்கவும்.",
+unavailable:"GPS இருப்பிடம் கிடைக்கவில்லை.",
+timeout:"GPS கோரிக்கை நேரம் முடிந்தது. மீண்டும் முயற்சிக்கவும்.",
+weakGps:"GPS துல்லியம் போதுமானதாக இல்லை.",
+outsideError:"GPS இருப்பிடம் சேவை எல்லைக்கு வெளியே உள்ளது.",
+invalidFix:"செல்லுபடியாகும் GPS தரவை பெற முடியவில்லை.",
+busyWarning:"Online அல்லது Busy நிலையில் இந்த பக்கத்திலிருந்து GPS கண்காணிப்பை நிறுத்த முடியாது.",
+permissionNote:"GPS பயன்பாட்டிற்கு சாதன இருப்பிட சேவையும் உலாவி அனுமதியும் தேவை.",
+mapNote:"வட்டம் மதிப்பிடப்பட்ட இருப்பிட துல்லியத்தை காட்டுகிறது.",
+gpsRequirements:"GPS பயன்பாட்டு நிபந்தனைகள்",
+rule1:"✓ பயணங்களை பெறும்போது GPS இயக்கத்தில் இருக்க வேண்டும்.",
+rule2:"✓ செயலில் உள்ள பயணங்களுக்கு GPS அவசியம்.",
+rule3:"✓ போலியான GPS இருப்பிடங்கள் தடைசெய்யப்பட்டுள்ளன.",
+rule4:"✓ தரமற்ற GPS தரவை பயண பொருத்தத்திற்கு பயன்படுத்தக்கூடாது.",
+rule5:"✓ Offline நிலையில் GPS இருப்பிடம் சேவையகத்திற்கு அனுப்பப்படாது.",
+rule6:"✓ GPS தரவு பாதுகாக்கப்பட்டு தேவையான நோக்கங்களுக்கு மட்டும் பயன்படுத்தப்பட வேண்டும்.",
+backgroundNote:"உலாவி மூடப்பட்டால் அல்லது தொலைபேசி பூட்டப்பட்டால் GPS புதுப்பிப்புகள் நிறுத்தப்படலாம்.",
+seconds:"விநாடிகள்",
+checking:"சாரதி கணக்கு சரிபார்க்கப்படுகிறது...",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+noInternet:"இணைய இணைப்பு இல்லை.",
+error:"அமைப்புடன் இணைக்க முடியவில்லை.",
+mapError:"வரைபடத்தை பெற முடியவில்லை.",
+login:"சாரதி உள்நுழைவு",
+help:"சாரதி உதவி",
+back:"← சாரதி முதன்மைப் பக்கம்"
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+el.textContent=t[el.dataset.t];
+});
+
+document.title="MY RIDE - "+t.heading;
+
+// PAGE LINKS
+
+const links={
+loginLink:"driver-login.html",
+backButton:"driver-dashboard.html",
+helpLink:"driver-help.html"
+};
+
+Object.entries(links).forEach(([id,page])=>{
+$(id).href="./"+page+"?lang="+lang;
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+projectId:"my-ride-sri-lanka",
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+messagingSenderId:"88909447786",
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+let generation=0;
+
+let driverUnsubscribe=null;
+let checkingSession=false;
+
+let gpsWatch=null;
+let gpsGeneration=0;
+let gpsSending=false;
+let lastGpsSent=0;
+let lastServerConfirmed=0;
+let lastPosition=null;
+let permissionObject=null;
+
+let map=null;
+let marker=null;
+let accuracyCircle=null;
+
+const GPS_MAX_ACCURACY=100;
+const GPS_MAX_AGE=30000;
+const GPS_UPLOAD_INTERVAL=10000;
+
+function status(message){
+$("status").textContent=message;
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+provider:new ReCaptchaEnterpriseProvider(
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+),
+isTokenAutoRefreshEnabled:true
+});
+
+auth=getAuth(app);
+db=getFirestore(app);
+functions=getFunctions(app);
+
+}catch(e){
+status(t.error);
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+return authorized
+&&uid!==null
+&&auth?.currentUser?.uid===uid
+&&navigator.onLine;
+}
+
+function validId(value){
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+}
+
+function requiredGps(){
+return driver!==null
+&&["online","busy"].includes(driver.availability);
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+throw new Error("Unauthorized");
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+functions,name
+)(data);
+
+if(!validSession()
+||currentGeneration!==generation){
+throw new Error("Session changed");
+}
+
+return response.data;
+}
+
+// DATE AND TIME
+
+function formatDate(ms){
+
+if(!Number.isFinite(ms)||ms<=0){
+return "—";
+}
+
+return new Intl.DateTimeFormat(
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+{
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"medium"
+}
+).format(new Date(ms));
+
+}
+
+// STATUS DISPLAY
+
+function setValue(id,value,color=""){
+
+$(id).textContent=value;
+$(id).className=color;
+
+}
+
+function setGpsIndicator(text,color){
+
+$("gpsIndicator").textContent=text;
+$("gpsIndicator").className=
+"gpsIndicator "+color;
+
+}
+
+function updateInternet(){
+
+setValue(
+"internetState",
+navigator.onLine?t.connected:t.disconnected,
+navigator.onLine?"green":"red"
+);
+
+}
+
+function updateControls(){
+
+const enabled=
+validSession()&&driver!==null;
+
+const supported=
+Boolean(navigator.geolocation);
+
+$("startButton").disabled=
+!enabled||!supported||gpsWatch!==null;
+
+$("refreshButton").disabled=
+!enabled||!supported;
+
+$("stopButton").disabled=
+!enabled||gpsWatch===null||requiredGps();
+
+$("centerButton").disabled=
+!enabled||!map||!lastPosition;
+
+$("busyWarning").hidden=
+!requiredGps();
+
+updateInternet();
+
+}
+
+// LOCATION PERMISSION
+
+function displayPermission(state){
+
+const labels={
+granted:t.granted,
+denied:t.deniedPermission,
+prompt:t.prompt
+};
+
+setValue(
+"permissionState",
+labels[state]||t.unknown,
+state==="granted"?"green":
+state==="denied"?"red":"yellow"
+);
+
+}
+
+async function checkPermission(){
+
+if(!navigator.geolocation){
+
+setValue(
+"permissionState",
+t.unsupported,
+"red"
+);
+
+return;
+
+}
+
+if(!navigator.permissions?.query){
+
+displayPermission("unknown");
+return;
+
+}
+
+try{
+
+if(permissionObject){
+permissionObject.onchange=null;
+}
+
+permissionObject=
+await navigator.permissions.query({
+name:"geolocation"
+});
+
+displayPermission(permissionObject.state);
+
+permissionObject.onchange=()=>{
+
+displayPermission(permissionObject.state);
+
+if(permissionObject.state==="denied"){
+
+stopGps(true);
+
+clearPosition();
+
+setGpsIndicator("GPS OFF","red");
+
+$("gpsMessage").textContent=
+t.permissionError;
+
+}
+
+if(permissionObject.state==="granted"
+&&validSession()
+&&requiredGps()){
+
+startGps();
+
+}
+
+};
+
+}catch(e){
+
+displayPermission("unknown");
+
+}
+
+}
+
+// MAP SYSTEM
+
+function initializeMap(){
+
+if(map)return;
+
+if(!window.L){
+
+$("map").textContent=t.mapError;
+return;
+
+}
+
+map=L.map("map",{
+zoomControl:true
+}).setView([7.8731,80.7718],7);
+
+L.tileLayer(
+"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+maxZoom:19,
+attribution:"&copy; OpenStreetMap contributors"
+}
+).addTo(map);
+
+}
+
+function updateMap(position){
+
+initializeMap();
+
+if(!map)return;
+
+const coordinates=[
+position.lat,
+position.lon
+];
+
+const firstLocation=marker===null;
+
+if(!marker){
+
+marker=L.circleMarker(
+coordinates,
+{
+radius:10,
+color:"#111111",
+weight:3,
+fillColor:"#FFD600",
+fillOpacity:1
+}
+).addTo(map);
+
+}else{
+
+marker.setLatLng(coordinates);
+
+}
+
+if(!accuracyCircle){
+
+accuracyCircle=L.circle(
+coordinates,
+{
+radius:position.accuracy,
+color:"#FFD600",
+weight:1,
+fillColor:"#FFD600",
+fillOpacity:0.15
+}
+).addTo(map);
+
+}else{
+
+accuracyCircle.setLatLng(coordinates);
+accuracyCircle.setRadius(position.accuracy);
+
+}
+
+if(firstLocation){
+
+map.setView(coordinates,16);
+
+}
+
+map.invalidateSize();
+
+}
+
+function clearMap(){
+
+if(map&&marker){
+
+map.removeLayer(marker);
+marker=null;
+
+}
+
+if(map&&accuracyCircle){
+
+map.removeLayer(accuracyCircle);
+accuracyCircle=null;
+
+}
+
+}
+
+$("centerButton").onclick=()=>{
+
+if(!validSession()
+||!map
+||!lastPosition)return;
+
+map.setView(
+[lastPosition.lat,lastPosition.lon],
+16
+);
+
+};
+
+// GPS VALIDATION
+
+function insideServiceBounds(lat,lon){
+
+return lat>=5.85
+&&lat<=9.9
+&&lon>=79.5
+&&lon<=82;
+
+}
+
+function validCoordinates(lat,lon){
+
+return Number.isFinite(lat)
+&&Number.isFinite(lon)
+&&lat>=-90
+&&lat<=90
+&&lon>=-180
+&&lon<=180;
+
+}
+
+function freshPosition(position){
+
+return position!==null
+&&Date.now()-position.capturedAtMs<=GPS_MAX_AGE
+&&position.capturedAtMs<=Date.now()+5000;
+
+}
+
+function quality(accuracy){
+
+if(accuracy<=10){
+return [t.excellent,"green"];
+}
+
+if(accuracy<=25){
+return [t.good,"green"];
+}
+
+if(accuracy<=50){
+return [t.fair,"yellow"];
+}
+
+return [t.poor,"red"];
+
+}
+
+// GPS DISPLAY
+
+function displayPosition(position){
+
+lastPosition=position;
+
+setValue(
+"latitude",
+position.lat.toFixed(6)
+);
+
+setValue(
+"longitude",
+position.lon.toFixed(6)
+);
+
+setValue(
+"accuracy",
+Math.round(position.accuracy)+" m"
+);
+
+const signal=quality(position.accuracy);
+
+setValue(
+"signalQuality",
+signal[0],
+signal[1]
+);
+
+setValue(
+"speed",
+Number.isFinite(position.speed)
+&&position.speed>=0
+?(position.speed*3.6).toFixed(1)+" km/h"
+:"—"
+);
+
+setValue(
+"direction",
+Number.isFinite(position.heading)
+&&position.heading>=0
+&&position.heading<360
+?Math.round(position.heading)+"°"
+:"—"
+);
+
+setValue(
+"altitude",
+Number.isFinite(position.altitude)
+?Math.round(position.altitude)+" m"
+:"—"
+);
+
+setValue(
+"lastUpdate",
+formatDate(position.capturedAtMs)
+);
+
+const inside=insideServiceBounds(
+position.lat,
+position.lon
+);
+
+setValue(
+"serviceArea",
+inside?t.inside:t.outside,
+inside?"green":"red"
+);
+
+updateMap(position);
+
+updateLocationAge();
+
+updateControls();
+
+}
+
+function clearPosition(){
+
+lastPosition=null;
+
+const ids=[
+"latitude",
+"longitude",
+"accuracy",
+"signalQuality",
+"speed",
+"direction",
+"altitude",
+"lastUpdate",
+"locationAge",
+"serviceArea",
+"locationStatus"
+];
+
+ids.forEach(id=>{
+setValue(id,"—");
+});
+
+clearMap();
+
+updateControls();
+
+}
+
+function updateLocationAge(){
+
+if(!lastPosition)return;
+
+const age=Math.max(
+0,
+Math.floor(
+(Date.now()-lastPosition.capturedAtMs)/1000
+)
+);
+
+setValue(
+"locationAge",
+age+" "+t.seconds,
+age<=30?"green":"red"
+);
+
+if(!freshPosition(lastPosition)){
+
+setValue(
+"locationStatus",
+t.stale,
+"red"
+);
+
+setGpsIndicator(
+gpsWatch!==null
+?"GPS WAITING"
+:"GPS OFF",
+"yellow"
+);
+
+}
+
+}
+
+// FIREBASE GPS UPLOAD
+
+async function uploadPosition(position){
+
+if(!validSession()
+||!driver
+||driver.documentsValid!==true
+||!requiredGps()){
+
+setValue(
+"serverStatus",
+t.notSent,
+"yellow"
+);
+
+$("serverMessage").textContent=
+t.offlineLocal;
+
+return;
+
+}
+
+if(!freshPosition(position)
+||position.accuracy>GPS_MAX_ACCURACY
+||!insideServiceBounds(
+position.lat,
+position.lon
+)){
+return;
+}
+
+if(gpsSending
+||Date.now()-lastGpsSent<GPS_UPLOAD_INTERVAL){
+return;
+}
+
+const currentGeneration=generation;
+const currentGpsGeneration=gpsGeneration;
+
+gpsSending=true;
+lastGpsSent=Date.now();
+
+setValue(
+"serverStatus",
+t.sending,
+"yellow"
+);
+
+$("serverMessage").textContent="";
+
+try{
+
+const result=await serverCall(
+"updateDriverLocation",
+{
+lat:position.lat,
+lon:position.lon,
+accuracy:position.accuracy,
+capturedAtMs:position.capturedAtMs
+}
+);
+
+if(currentGeneration!==generation
+||currentGpsGeneration!==gpsGeneration
+||!requiredGps())return;
+
+if(result?.accepted!==true){
+
+throw new Error("GPS update rejected");
+
+}
+
+lastServerConfirmed=Date.now();
+
+setValue(
+"serverStatus",
+t.sent,
+"green"
+);
+
+setValue(
+"serverUpdate",
+formatDate(lastServerConfirmed),
+"green"
+);
+
+}catch(e){
+
+if(currentGeneration!==generation
+||currentGpsGeneration!==gpsGeneration)return;
+
+setValue(
+"serverStatus",
+t.sendFailed,
+"red"
+);
+
+$("serverMessage").textContent=
+t.sendFailed;
+
+}finally{
+
+if(currentGeneration===generation){
+
+gpsSending=false;
+
+}
+
+}
+
+}
+
+// PROCESS GPS POSITION
+
+async function processPosition(raw){
+
+if(!validSession()||!driver)return;
+
+const c=raw.coords;
+
+if(!validCoordinates(
+c.latitude,
+c.longitude
+)
+||!Number.isFinite(c.accuracy)
+||c.accuracy<0
+||!Number.isFinite(raw.timestamp)){
+
+$("gpsMessage").textContent=
+t.invalidFix;
+
+return;
+
+}
+
+const position={
+lat:c.latitude,
+lon:c.longitude,
+accuracy:c.accuracy,
+speed:c.speed,
+heading:c.heading,
+altitude:c.altitude,
+capturedAtMs:raw.timestamp
+};
+
+if(!freshPosition(position)){
+
+setValue(
+"locationStatus",
+t.stale,
+"red"
+);
+
+return;
+
+}
+
+if(lastPosition
+&&position.capturedAtMs<lastPosition.capturedAtMs){
+
+return;
+
+}
+
+displayPermission("granted");
+
+displayPosition(position);
+
+if(!insideServiceBounds(
+position.lat,
+position.lon
+)){
+
+setGpsIndicator(
+"GPS OUTSIDE",
+"red"
+);
+
+setValue(
+"locationStatus",
+t.outside,
+"red"
+);
+
+$("gpsMessage").textContent=
+t.outsideError;
+
+return;
+
+}
+
+if(position.accuracy>GPS_MAX_ACCURACY){
+
+setGpsIndicator(
+"GPS WEAK",
+"yellow"
+);
+
+setValue(
+"locationStatus",
+t.weakGps,
+"red"
+);
+
+$("gpsMessage").textContent=
+t.weakGps;
+
+return;
+
+}
+
+setGpsIndicator(
+gpsWatch!==null
+?"GPS ON"
+:"GPS FIX",
+"green"
+);
+
+setValue(
+"locationStatus",
+t.valid,
+"green"
+);
+
+$("gpsMessage").textContent="";
+
+await uploadPosition(position);
+
+}
+
+// GPS ERRORS
+
+function handleGpsError(error){
+
+if(!validSession())return;
+
+let message=t.unavailable;
+
+if(error.code===1){
+
+message=t.permissionError;
+
+displayPermission("denied");
+
+stopGps(true);
+
+clearPosition();
+
+}else if(error.code===2){
+
+message=t.unavailable;
+
+}else if(error.code===3){
+
+message=t.timeout;
+
+}
+
+setGpsIndicator(
+"GPS ERROR",
+"red"
+);
+
+setValue(
+"locationStatus",
+message,
+"red"
+);
+
+$("gpsMessage").textContent=message;
+
+updateControls();
+
+}
+
+// START GPS WATCH
+
+function startGps(){
+
+if(!validSession()
+||!driver
+||gpsWatch!==null)return;
+
+if(!navigator.geolocation){
+
+$("gpsMessage").textContent=
+t.unsupported;
+
+return;
+
+}
+
+const currentGeneration=generation;
+const currentGpsGeneration=++gpsGeneration;
+
+setGpsIndicator(
+"GPS WAITING",
+"yellow"
+);
+
+$("gpsMessage").textContent=t.waiting;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+position=>{
+
+if(currentGeneration!==generation
+||currentGpsGeneration!==gpsGeneration)return;
+
+processPosition(position);
+
+},
+
+error=>{
+
+if(currentGeneration!==generation
+||currentGpsGeneration!==gpsGeneration)return;
+
+handleGpsError(error);
+
+},
+
+{
+enableHighAccuracy:true,
+maximumAge:5000,
+timeout:15000
+}
+
+);
+
+updateControls();
+
+}
+
+// STOP GPS WATCH
+
+function stopGps(force=false){
+
+if(!force&&requiredGps()){
+
+$("gpsMessage").textContent=
+t.busyWarning;
+
+return;
+
+}
+
+gpsGeneration++;
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+setGpsIndicator(
+"GPS OFF",
+"red"
+);
+
+updateControls();
+
+}
+
+$("startButton").onclick=()=>{
+
+startGps();
+
+};
+
+$("stopButton").onclick=()=>{
+
+stopGps();
+
+if(!requiredGps()){
+
+clearPosition();
+
+$("gpsMessage").textContent="";
+
+setValue(
+"serverStatus",
+t.notSent,
+"yellow"
+);
+
+}
+
+};
+
+// MANUAL GPS REFRESH
+
+$("refreshButton").onclick=()=>{
+
+if(!validSession()
+||!driver
+||!navigator.geolocation)return;
+
+const currentGeneration=generation;
+const currentGpsGeneration=gpsGeneration;
+
+$("gpsMessage").textContent=t.waiting;
+
+navigator.geolocation.getCurrentPosition(
+
+position=>{
+
+if(currentGeneration!==generation
+||currentGpsGeneration!==gpsGeneration)return;
+
+processPosition(position);
+
+},
+
+error=>{
+
+if(currentGeneration!==generation
+||currentGpsGeneration!==gpsGeneration)return;
+
+handleGpsError(error);
+
+},
+
+{
+enableHighAccuracy:true,
+maximumAge:0,
+timeout:15000
+}
+
+);
+
+};
+
+// GPS HEALTH MONITORING
+
+setInterval(()=>{
+
+if(!validSession()||!driver)return;
+
+updateLocationAge();
+
+if(requiredGps()
+&&lastServerConfirmed>0
+&&Date.now()-lastServerConfirmed>GPS_MAX_AGE){
+
+setValue(
+"serverStatus",
+t.stale,
+"red"
+);
+
+}
+
+if(requiredGps()
+&&gpsWatch!==null
+&&freshPosition(lastPosition)
+&&lastPosition.accuracy<=GPS_MAX_ACCURACY){
+
+uploadPosition(lastPosition);
+
+}
+
+},5000);
+
+// CLEAR PRIVATE INFORMATION
+
+function disconnect(){
+
+generation++;
+
+authorized=false;
+uid=null;
+driver=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+driverUnsubscribe=null;
+
+}
+
+stopGps(true);
+
+clearPosition();
+
+gpsSending=false;
+lastGpsSent=0;
+lastServerConfirmed=0;
+
+$("driverName").textContent="—";
+$("driverId").textContent="—";
+$("accountStatus").textContent="—";
+$("availability").textContent="—";
+
+$("gpsMessage").textContent="";
+$("serverMessage").textContent="";
+
+setValue("serverUpdate","—");
+setValue("serverStatus","—");
+
+$("content").hidden=true;
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+stopGps(true);
+
+clearPosition();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+||data.uid!==uid
+||data.status!=="approved"
+||data.activationComplete!==true
+||data.documentsValid!==true
+||typeof data.fullName!=="string"
+||!data.fullName.trim()
+||!validId(data.driverId)
+||!["online","offline","busy"].includes(
+data.availability
+)){
+
+denyAccess();
+
+return;
+
+}
+
+const previousAvailability=
+driver?.availability;
+
+driver=data;
+
+$("driverName").textContent=
+data.fullName;
+
+$("driverId").textContent=
+data.driverId;
+
+setValue(
+"accountStatus",
+t.approved,
+"green"
+);
+
+setValue(
+"availability",
+t[data.availability],
+data.availability==="online"
+?"green"
+:data.availability==="busy"
+?"yellow":"red"
+);
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+initializeMap();
+
+if(map){
+
+map.invalidateSize();
+
+}
+
+if(requiredGps()){
+
+startGps();
+
+}else if(
+previousAvailability==="online"
+||previousAvailability==="busy"
+){
+
+stopGps(true);
+
+clearPosition();
+
+setValue(
+"serverStatus",
+t.notSent,
+"yellow"
+);
+
+}
+
+checkPermission();
+
+updateControls();
+
+status("");
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.noInternet);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=
+await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+functions,
+"verifyDriverSession"
+)({});
+
+if(currentGeneration!==generation
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+||account.uid!==user.uid
+||account.status!=="approved"
+||account.activationComplete!==true
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC SESSION VERIFICATION
+
+setInterval(async()=>{
+
+if(!validSession()
+||!driver
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+"verifyDriverSession"
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+||result.uid!==uid
+||result.status!=="approved"
+||result.activationComplete!==true
+||result.documentsValid!==true){
+
+denyAccess();
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+checkingSession=false;
+
+}
+
+},60000);
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+updateInternet();
+
+status(t.noInternet);
+
+});
+
+window.addEventListener("online",()=>{
+
+updateInternet();
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+"pagehide",
+()=>{
+
+disconnect();
+
+if(permissionObject){
+
+permissionObject.onchange=null;
+
+}
+
+}
+);
+
+window.addEventListener(
+"pageshow",
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+);
+
+document.addEventListener(
+"visibilitychange",
+()=>{
+
+if(document.visibilityState==="visible"
+&&validSession()
+&&driver){
+
+checkPermission();
+
+updateLocationAge();
+
+if(requiredGps()){
+
+startGps();
+
+}
+
+if(map){
+
+map.invalidateSize();
+
+}
+
+}
+
+}
+);
+
+updateControls();
+
+</script>
+
+</body>
+</html>
