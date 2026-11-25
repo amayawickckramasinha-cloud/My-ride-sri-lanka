@@ -1,0 +1,2349 @@
+
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Driver Service Report</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+h1{
+color:#FFD600;
+font-size:36px;
+text-align:center;
+margin-bottom:5px;
+}
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+h2{
+text-align:center;
+line-height:1.7;
+}
+h3{
+color:#FFD600;
+line-height:1.7;
+}
+.reportIcon{
+width:90px;
+height:90px;
+background:#FFD600;
+color:#111;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px auto;
+}
+.panel{
+background:#202020;
+border:1px solid #444;
+border-radius:14px;
+padding:16px;
+margin:15px 0;
+}
+.row{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+padding:13px 0;
+border-bottom:1px solid #444;
+font-size:14px;
+line-height:1.8;
+}
+.row span{
+color:#CCC;
+}
+.row strong{
+text-align:right;
+max-width:60%;
+overflow-wrap:anywhere;
+}
+.stats{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+margin:15px 0;
+}
+.stat{
+background:#292929;
+border:1px solid #555;
+border-radius:12px;
+padding:18px 8px;
+text-align:center;
+}
+.stat strong{
+display:block;
+font-size:26px;
+color:#FFD600;
+margin-bottom:10px;
+overflow-wrap:anywhere;
+}
+.stat span{
+font-size:13px;
+line-height:1.7;
+}
+.green{
+color:#4ADE80!important;
+}
+.red{
+color:#FF6464!important;
+}
+.yellow{
+color:#FFD600!important;
+}
+.bar{
+height:14px;
+background:#444;
+border-radius:20px;
+overflow:hidden;
+margin:10px 0 20px;
+}
+.barFill{
+height:100%;
+width:0;
+background:#FFD600;
+border-radius:20px;
+transition:width .3s;
+}
+.action{
+display:block;
+width:100%;
+padding:15px;
+margin:12px 0;
+border:0;
+border-radius:9px;
+background:#FFD600;
+color:#111;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+.secondary{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+label{
+font-size:14px;
+font-weight:bold;
+}
+select{
+width:100%;
+padding:14px;
+background:#292929;
+color:#fff;
+border:1px solid #555;
+border-radius:9px;
+font-size:16px;
+margin:10px 0 15px;
+}
+.note{
+font-size:13px;
+color:#BBB;
+line-height:1.9;
+}
+#status,
+#reportStatus{
+text-align:center;
+line-height:1.8;
+color:#FFD600;
+overflow-wrap:anywhere;
+}
+button:disabled,
+select:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:25px;
+}
+[hidden]{
+display:none!important;
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<h1>MY RIDE</h1>
+<div class="country">SRI LANKA</div>
+
+<div class="reportIcon">
+<svg width="52" height="52"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linecap="round"
+stroke-linejoin="round">
+<path d="M3 3v18h18"/>
+<rect x="6" y="12" width="3" height="6"/>
+<rect x="11" y="8" width="3" height="10"/>
+<rect x="16" y="4" width="3" height="14"/>
+</svg>
+</div>
+
+<h2 data-t="heading"></h2>
+
+<p id="status"
+role="status"
+aria-live="polite"></p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="content" hidden>
+
+<section class="panel">
+
+<h3 data-t="driverDetails"></h3>
+
+<div class="row">
+<span data-t="driverName"></span>
+<strong id="driverName">—</strong>
+</div>
+
+<div class="row">
+<span>Driver ID</span>
+<strong id="driverId" class="yellow">—</strong>
+</div>
+
+<div class="row">
+<span data-t="vehicleType"></span>
+<strong id="vehicleType">—</strong>
+</div>
+
+<div class="row">
+<span data-t="accountStatus"></span>
+<strong class="green"
+data-t="approved"></strong>
+</div>
+
+<div class="row">
+<span data-t="availability"></span>
+<strong id="availability">—</strong>
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="serviceReport"></h3>
+
+<label for="period"
+data-t="selectPeriod"></label>
+
+<select id="period">
+<option value="day" data-t="day"></option>
+<option value="week" data-t="week"></option>
+<option value="month" data-t="month"></option>
+<option value="all" data-t="all"></option>
+</select>
+
+<div class="row">
+<span data-t="reportPeriod"></span>
+<strong id="reportPeriod">—</strong>
+</div>
+
+<p id="reportStatus"
+role="status"
+aria-live="polite"></p>
+
+<div class="stats">
+
+<div class="stat">
+<strong id="receivedRides">—</strong>
+<span data-t="receivedRides"></span>
+</div>
+
+<div class="stat">
+<strong id="acceptedRides"
+class="green">—</strong>
+<span data-t="acceptedRides"></span>
+</div>
+
+<div class="stat">
+<strong id="rejectedRides"
+class="red">—</strong>
+<span data-t="rejectedRides"></span>
+</div>
+
+<div class="stat">
+<strong id="missedRides">—</strong>
+<span data-t="missedRides"></span>
+</div>
+
+<div class="stat">
+<strong id="completedRides"
+class="green">—</strong>
+<span data-t="completedRides"></span>
+</div>
+
+<div class="stat">
+<strong id="cancelledRides"
+class="red">—</strong>
+<span data-t="cancelledRides"></span>
+</div>
+
+<div class="stat">
+<strong id="pendingOffers">—</strong>
+<span data-t="pendingOffers"></span>
+</div>
+
+<div class="stat">
+<strong id="unfinishedRides">—</strong>
+<span data-t="unfinishedRides"></span>
+</div>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="performance"></h3>
+
+<div class="row">
+<span data-t="acceptanceRate"></span>
+<strong id="acceptanceRate"
+class="green">—</strong>
+</div>
+
+<div id="acceptanceProgress"
+class="bar"
+role="progressbar"
+aria-valuemin="0"
+aria-valuemax="100">
+<div id="acceptanceBar"
+class="barFill"></div>
+</div>
+
+<div class="row">
+<span data-t="completionRate"></span>
+<strong id="completionRate"
+class="green">—</strong>
+</div>
+
+<div id="completionProgress"
+class="bar"
+role="progressbar"
+aria-valuemin="0"
+aria-valuemax="100">
+<div id="completionBar"
+class="barFill"></div>
+</div>
+
+<div class="row">
+<span data-t="rejectionRate"></span>
+<strong id="rejectionRate"
+class="red">—</strong>
+</div>
+
+<div class="row">
+<span data-t="missedRate"></span>
+<strong id="missedRate">—</strong>
+</div>
+
+<p class="note"
+data-t="rateExplanation"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="distanceAndTime"></h3>
+
+<div class="row">
+<span data-t="totalDistance"></span>
+<strong id="totalDistance">—</strong>
+</div>
+
+<div class="row">
+<span data-t="pickupDistance"></span>
+<strong id="pickupDistance">—</strong>
+</div>
+
+<div class="row">
+<span data-t="passengerDistance"></span>
+<strong id="passengerDistance">—</strong>
+</div>
+
+<div class="row">
+<span data-t="onlineTime"></span>
+<strong id="onlineTime">—</strong>
+</div>
+
+<div class="row">
+<span data-t="tripTime"></span>
+<strong id="tripTime">—</strong>
+</div>
+
+<div class="row">
+<span data-t="averageDistance"></span>
+<strong id="averageDistance">—</strong>
+</div>
+
+<div class="row">
+<span data-t="averageTime"></span>
+<strong id="averageTime">—</strong>
+</div>
+
+<div class="row">
+<span data-t="lastUpdate"></span>
+<strong id="lastUpdate">—</strong>
+</div>
+
+<p class="note"
+data-t="distanceExplanation"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="reportActions"></h3>
+
+<button id="refreshButton"
+class="action"
+data-t="refresh"
+disabled></button>
+
+<button id="downloadButton"
+class="action secondary"
+data-t="download"
+disabled></button>
+
+<a id="historyLink"
+class="action secondary"
+data-t="history"></a>
+
+<a id="incomeLink"
+class="action secondary"
+data-t="income"></a>
+
+<a id="commissionLink"
+class="action secondary"
+data-t="commission"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="reportRules"></h3>
+
+<p data-t="rule1"></p>
+<p data-t="rule2"></p>
+<p data-t="rule3"></p>
+<p data-t="rule4"></p>
+<p data-t="rule5"></p>
+
+</section>
+
+<a id="feedbackLink"
+class="action secondary"
+data-t="feedback"></a>
+
+</div>
+
+<a id="backButton"
+class="action secondary"
+data-t="back"></a>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+// LANGUAGE SYSTEM
+
+const LANGUAGES=["si","en","ta"];
+
+const params=new URLSearchParams(location.search);
+
+let savedLanguage="si";
+
+try{
+
+savedLanguage=
+localStorage.getItem("myride_language")||"si";
+
+}catch(e){}
+
+const lang=
+LANGUAGES.includes(params.get("lang"))
+?params.get("lang")
+:LANGUAGES.includes(savedLanguage)
+?savedLanguage:"si";
+
+document.documentElement.lang=lang;
+
+const translations={
+
+si:{
+heading:"රියදුරු සේවා වාර්තාව",
+driverDetails:"රියදුරු ගිණුමේ විස්තර",
+driverName:"රියදුරුගේ නම",
+vehicleType:"වාහන වර්ගය",
+accountStatus:"ගිණුමේ තත්ත්වය",
+approved:"අනුමත කර ඇත",
+availability:"සේවා තත්ත්වය",
+online:"Online",
+offline:"Offline",
+busy:"හයර් එකක සිටී",
+bike:"Scooter / Bike",
+tuk:"ත්‍රීරෝද රථය",
+car:"මෝටර් රථය",
+van:"වෑන් රථය",
+serviceReport:"මගේ සේවා වාර්තාව",
+selectPeriod:"කාලසීමාව තෝරන්න",
+reportPeriod:"වාර්තාවේ කාලසීමාව",
+day:"අද දිනය",
+week:"මෙම සතිය",
+month:"මෙම මාසය",
+all:"සමස්ත කාලය",
+receivedRides:"ලැබුණු හයර්",
+acceptedRides:"පිළිගත් හයර්",
+rejectedRides:"ප්‍රතික්ෂේප කළ හයර්",
+missedRides:"පිළිතුරු නොදුන් හයර්",
+completedRides:"සම්පූර්ණ කළ හයර්",
+cancelledRides:"අවලංගු වූ හයර්",
+pendingOffers:"පිළිතුරු බලාපොරොත්තු වන හයර්",
+unfinishedRides:"අවසන් නොකළ පිළිගත් හයර්",
+performance:"සේවා කාර්යසාධනය",
+acceptanceRate:"හයර් පිළිගැනීමේ ප්‍රතිශතය",
+completionRate:"හයර් සම්පූර්ණ කිරීමේ ප්‍රතිශතය",
+rejectionRate:"ප්‍රතික්ෂේප කිරීමේ ප්‍රතිශතය",
+missedRate:"පිළිතුරු නොදුන් ප්‍රතිශතය",
+rateExplanation:"පිළිතුරු ලබාදීමට ඉතිරි ඉල්ලීම් පිළිගැනීමේ ප්‍රතිශතයට ඇතුළත් නොවේ. සම්පූර්ණ කිරීමේ ප්‍රතිශතය පිළිගත් හයර් අනුව ගණනය වේ.",
+distanceAndTime:"ගමන් දුර සහ සේවා කාලය",
+totalDistance:"වාර්තා වූ මුළු සේවා දුර",
+pickupDistance:"මගීන් ලබාගැනීමට ගමන් කළ දුර",
+passengerDistance:"මගීන් සමඟ ගමන් කළ දුර",
+onlineTime:"Online සිටි මුළු කාලය",
+tripTime:"මගීන් සමඟ ගමන් කළ කාලය",
+averageDistance:"හයර් එකක සාමාන්‍ය දුර",
+averageTime:"හයර් එකක සාමාන්‍ය කාලය",
+lastUpdate:"අවසන් යාවත්කාලීන කිරීම",
+distanceExplanation:"මගියා ලබාගැනීමට ගමන් කළ දුර සහ මගියා සමඟ ගමන් කළ දුර වෙන වෙනම වාර්තා කරයි. මෙම වාර්තාව හයර් ගාස්තුවක් නොවේ.",
+reportActions:"වාර්තා පහසුකම්",
+refresh:"වාර්තාව යාවත්කාලීන කරන්න",
+download:"වාර්තාව Download කරන්න (CSV)",
+history:"හයර් ඉතිහාසය",
+income:"මගේ ආදායම",
+commission:"MY RIDE කොමිස් වාර්තාව",
+reportRules:"සේවා වාර්තා කොන්දේසි",
+rule1:"✓ වාර්තා සකස් කරන්නේ පද්ධතියේ තහවුරු කළ දත්ත අනුවයි.",
+rule2:"✓ රියදුරුට වාර්තා වෙනස් කිරීමට හෝ මකා දැමීමට නොහැක.",
+rule3:"✓ GPS දත්ත සහ සේවා කාලය Backend පද්ධතියෙන් ගණනය කළ යුතුය.",
+rule4:"✓ වාර්තාවල දෝෂ තිබේ නම් Admin වෙත දැනුම් දෙන්න.",
+rule5:"✓ වෙනත් රියදුරන්ගේ සේවා වාර්තා බැලීමට අවසර නැත.",
+checking:"රියදුරු ගිණුම පරීක්ෂා කරමින්...",
+loading:"සේවා වාර්තාව ලබාගනිමින්...",
+empty:"මෙම කාලසීමාව සඳහා වාර්තාවක් තවම නොමැත.",
+error:"සේවා වාර්තාව ලබාගත නොහැක.",
+denied:"මෙම පිටුවට ප්‍රවේශ වීමට අවසර නැත.",
+connectionLost:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+login:"Driver Login",
+feedback:"අදහස් සහ පැමිණිලි",
+back:"← Driver Dashboard",
+hours:"පැය",
+minutes:"මිනිත්තු",
+seconds:"තත්පර",
+downloadFailed:"වාර්තාව Download කළ නොහැක."
+},
+
+en:{
+heading:"Driver Service Report",
+driverDetails:"Driver Account Details",
+driverName:"Driver Name",
+vehicleType:"Vehicle Type",
+accountStatus:"Account Status",
+approved:"Approved",
+availability:"Service Status",
+online:"Online",
+offline:"Offline",
+busy:"On a Ride",
+bike:"Scooter / Bike",
+tuk:"Three Wheeler",
+car:"Car",
+van:"Van",
+serviceReport:"My Service Report",
+selectPeriod:"Select Period",
+reportPeriod:"Report Period",
+day:"Today",
+week:"This Week",
+month:"This Month",
+all:"All Time",
+receivedRides:"Received Offers",
+acceptedRides:"Accepted Rides",
+rejectedRides:"Rejected Offers",
+missedRides:"Missed Offers",
+completedRides:"Completed Rides",
+cancelledRides:"Cancelled Rides",
+pendingOffers:"Pending Offers",
+unfinishedRides:"Unfinished Accepted Rides",
+performance:"Service Performance",
+acceptanceRate:"Acceptance Rate",
+completionRate:"Completion Rate",
+rejectionRate:"Rejection Rate",
+missedRate:"Missed Offer Rate",
+rateExplanation:"Pending offers are excluded from acceptance calculations. Completion rate is calculated against accepted rides.",
+distanceAndTime:"Distance and Service Time",
+totalDistance:"Total Recorded Service Distance",
+pickupDistance:"Pickup Travel Distance",
+passengerDistance:"Passenger Travel Distance",
+onlineTime:"Total Online Time",
+tripTime:"Passenger Trip Time",
+averageDistance:"Average Completed Ride Distance",
+averageTime:"Average Completed Ride Time",
+lastUpdate:"Last Updated",
+distanceExplanation:"Pickup travel and passenger travel are recorded separately. This report is not a fare calculation.",
+reportActions:"Report Actions",
+refresh:"Refresh Report",
+download:"Download Report (CSV)",
+history:"Ride History",
+income:"My Income",
+commission:"MY RIDE Commission Report",
+reportRules:"Service Report Conditions",
+rule1:"✓ Reports use verified system records.",
+rule2:"✓ Drivers cannot edit or delete reports.",
+rule3:"✓ GPS data and service time must be calculated by the backend.",
+rule4:"✓ Report incorrect information to Admin.",
+rule5:"✓ Drivers cannot access other drivers' reports.",
+checking:"Verifying driver account...",
+loading:"Loading service report...",
+empty:"No report is available for this period yet.",
+error:"Unable to load service report.",
+denied:"Access to this page is not authorized.",
+connectionLost:"No internet connection.",
+login:"Driver Login",
+feedback:"Feedback and Complaints",
+back:"← Driver Dashboard",
+hours:"hours",
+minutes:"minutes",
+seconds:"seconds",
+downloadFailed:"Unable to download report."
+},
+
+ta:{
+heading:"சாரதி சேவை அறிக்கை",
+driverDetails:"சாரதி கணக்கு விவரங்கள்",
+driverName:"சாரதியின் பெயர்",
+vehicleType:"வாகன வகை",
+accountStatus:"கணக்கு நிலை",
+approved:"அங்கீகரிக்கப்பட்டது",
+availability:"சேவை நிலை",
+online:"இணைப்பில்",
+offline:"இணைப்பில் இல்லை",
+busy:"பயணத்தில்",
+bike:"ஸ்கூட்டர் / மோட்டார் சைக்கிள்",
+tuk:"முச்சக்கர வண்டி",
+car:"கார்",
+van:"வேன்",
+serviceReport:"எனது சேவை அறிக்கை",
+selectPeriod:"காலத்தை தேர்ந்தெடுக்கவும்",
+reportPeriod:"அறிக்கை காலம்",
+day:"இன்று",
+week:"இந்த வாரம்",
+month:"இந்த மாதம்",
+all:"மொத்த காலம்",
+receivedRides:"பெறப்பட்ட கோரிக்கைகள்",
+acceptedRides:"ஏற்றுக்கொண்ட பயணங்கள்",
+rejectedRides:"நிராகரிக்கப்பட்ட கோரிக்கைகள்",
+missedRides:"பதிலளிக்காத கோரிக்கைகள்",
+completedRides:"நிறைவடைந்த பயணங்கள்",
+cancelledRides:"ரத்து செய்யப்பட்ட பயணங்கள்",
+pendingOffers:"நிலுவையில் உள்ள கோரிக்கைகள்",
+unfinishedRides:"முடிவடையாத ஏற்றுக்கொண்ட பயணங்கள்",
+performance:"சேவை செயல்திறன்",
+acceptanceRate:"ஏற்றுக்கொள்ளும் சதவீதம்",
+completionRate:"நிறைவு சதவீதம்",
+rejectionRate:"நிராகரிப்பு சதவீதம்",
+missedRate:"பதிலளிக்காத சதவீதம்",
+rateExplanation:"நிலுவையில் உள்ள கோரிக்கைகள் ஏற்றுக்கொள்ளும் சதவீதத்தில் சேர்க்கப்படாது. நிறைவு சதவீதம் ஏற்றுக்கொண்ட பயணங்களின் அடிப்படையில் கணக்கிடப்படும்.",
+distanceAndTime:"பயண தூரம் மற்றும் சேவை நேரம்",
+totalDistance:"பதிவு செய்யப்பட்ட மொத்த சேவை தூரம்",
+pickupDistance:"பயணியை அழைத்துவர சென்ற தூரம்",
+passengerDistance:"பயணியுடன் சென்ற தூரம்",
+onlineTime:"மொத்த இணைப்பு நேரம்",
+tripTime:"பயணியுடன் பயணித்த நேரம்",
+averageDistance:"நிறைவடைந்த பயணத்தின் சராசரி தூரம்",
+averageTime:"நிறைவடைந்த பயணத்தின் சராசரி நேரம்",
+lastUpdate:"கடைசி புதுப்பிப்பு",
+distanceExplanation:"பயணியை அழைத்துவர சென்ற தூரமும் பயணியுடன் சென்ற தூரமும் தனித்தனியாக பதிவு செய்யப்படும். இது கட்டண கணக்கீடு அல்ல.",
+reportActions:"அறிக்கை வசதிகள்",
+refresh:"அறிக்கையை புதுப்பிக்கவும்",
+download:"அறிக்கையை பதிவிறக்கவும் (CSV)",
+history:"பயண வரலாறு",
+income:"எனது வருமானம்",
+commission:"MY RIDE கமிஷன் அறிக்கை",
+reportRules:"சேவை அறிக்கை விதிமுறைகள்",
+rule1:"✓ சரிபார்க்கப்பட்ட கணினி பதிவுகளின் அடிப்படையில் அறிக்கைகள் தயாரிக்கப்படும்.",
+rule2:"✓ சாரதிகள் அறிக்கைகளை மாற்றவோ நீக்கவோ முடியாது.",
+rule3:"✓ GPS தரவு மற்றும் சேவை நேரம் சேவையகத்தால் கணக்கிடப்பட வேண்டும்.",
+rule4:"✓ தவறான தகவல்களை நிர்வாகத்திற்கு தெரிவிக்கவும்.",
+rule5:"✓ மற்ற சாரதிகளின் அறிக்கைகளை பார்க்க அனுமதி இல்லை.",
+checking:"சாரதி கணக்கு சரிபார்க்கப்படுகிறது...",
+loading:"சேவை அறிக்கை பெறப்படுகிறது...",
+empty:"இந்த காலத்திற்கு இன்னும் அறிக்கை இல்லை.",
+error:"சேவை அறிக்கையை பெற முடியவில்லை.",
+denied:"இந்த பக்கத்தை அணுக அனுமதி இல்லை.",
+connectionLost:"இணைய இணைப்பு இல்லை.",
+login:"சாரதி உள்நுழைவு",
+feedback:"கருத்துகள் மற்றும் முறைப்பாடுகள்",
+back:"← சாரதி முதன்மைப் பக்கம்",
+hours:"மணிநேரம்",
+minutes:"நிமிடங்கள்",
+seconds:"விநாடிகள்",
+downloadFailed:"அறிக்கையை பதிவிறக்க முடியவில்லை."
+}
+
+};
+
+const t=translations[lang];
+
+document.querySelectorAll("[data-t]")
+.forEach(el=>{
+
+el.textContent=t[el.dataset.t];
+
+});
+
+document.title="MY RIDE - "+t.heading;
+
+$("acceptanceProgress").setAttribute(
+"aria-label",t.acceptanceRate
+);
+
+$("completionProgress").setAttribute(
+"aria-label",t.completionRate
+);
+
+// PAGE LINKS
+
+const links={
+loginLink:"driver-login.html",
+backButton:"driver-dashboard.html",
+historyLink:"driver-history.html",
+incomeLink:"driver-income.html",
+commissionLink:"driver-commission.html",
+feedbackLink:"driver-feedback.html"
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href="./"+page+"?lang="+lang;
+
+});
+
+// FIREBASE CONFIGURATION
+
+const firebaseConfig={
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+projectId:"my-ride-sri-lanka",
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+messagingSenderId:"88909447786",
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+
+let uid=null;
+let driver=null;
+let authorized=false;
+let generation=0;
+
+let driverUnsubscribe=null;
+let reportUnsubscribe=null;
+
+let report=null;
+let currentPeriodKey=null;
+let reportGeneration=0;
+
+let serverOffset=null;
+let serverSyncAt=0;
+
+let checkingSession=false;
+let refreshing=false;
+
+let gpsWatch=null;
+let gpsSending=false;
+let lastGpsSent=0;
+
+function status(message){
+
+$("status").textContent=message;
+
+}
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+initializeAppCheck(app,{
+provider:new ReCaptchaEnterpriseProvider(
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+),
+isTokenAutoRefreshEnabled:true
+});
+
+auth=getAuth(app);
+db=getFirestore(app);
+functions=getFunctions(app);
+
+}catch(e){
+
+status(t.error);
+
+}
+
+// SECURITY VALIDATION
+
+function validSession(){
+
+return authorized
+&&uid!==null
+&&auth?.currentUser?.uid===uid
+&&navigator.onLine;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,min,max){
+
+return typeof value==="string"
+&&value.trim().length>=min
+&&value.length<=max;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+&&value>=0;
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+&&value>0
+&&value<=8640000000000000;
+
+}
+
+async function serverCall(name,data={}){
+
+if(!validSession()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+functions,name
+)(data);
+
+if(!validSession()
+||currentGeneration!==generation){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+// SERVER TIME
+
+async function syncServerTime(){
+
+const currentGeneration=generation;
+
+const start=Date.now();
+
+const result=await serverCall(
+"getDriverServerTime"
+);
+
+const end=Date.now();
+
+if(currentGeneration!==generation)return;
+
+if(!validTime(result?.serverTimeMs)
+||end-start>10000){
+
+throw new Error("Invalid server time");
+
+}
+
+serverOffset=
+result.serverTimeMs-(start+end)/2;
+
+serverSyncAt=end;
+
+}
+
+function serverNow(){
+
+if(serverOffset===null
+||Date.now()-serverSyncAt>120000){
+
+return null;
+
+}
+
+return Date.now()+serverOffset;
+
+}
+
+// SRI LANKA REPORT PERIOD
+
+function periodKey(){
+
+const period=$("period").value;
+
+if(period==="all")return "all";
+
+const now=serverNow();
+
+if(now===null)return null;
+
+const sriLankaDate=new Date(
+now+330*60000
+);
+
+const date=sriLankaDate
+.toISOString().slice(0,10);
+
+if(period==="day"){
+
+return "day_"+date;
+
+}
+
+if(period==="month"){
+
+return "month_"+date.slice(0,7);
+
+}
+
+if(period==="week"){
+
+const weekday=sriLankaDate.getUTCDay();
+
+const difference=(weekday+6)%7;
+
+sriLankaDate.setUTCDate(
+sriLankaDate.getUTCDate()-difference
+);
+
+return "week_"+
+sriLankaDate.toISOString().slice(0,10);
+
+}
+
+return null;
+
+}
+
+function periodLabel(key){
+
+if(key==="all")return t.all;
+
+if(key.startsWith("day_")){
+
+return key.slice(4);
+
+}
+
+if(key.startsWith("month_")){
+
+return key.slice(6);
+
+}
+
+if(key.startsWith("week_")){
+
+const start=key.slice(5);
+
+const end=new Date(
+start+"T00:00:00Z"
+);
+
+end.setUTCDate(end.getUTCDate()+6);
+
+return start+" — "+
+end.toISOString().slice(0,10);
+
+}
+
+return "—";
+
+}
+
+function formatDate(ms){
+
+if(!validTime(ms))return "—";
+
+return new Intl.DateTimeFormat(
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+{
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"short"
+}
+).format(new Date(ms));
+
+}
+
+function formatNumber(value){
+
+return new Intl.NumberFormat(
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK"
+).format(value);
+
+}
+
+function formatDuration(seconds){
+
+if(!validCount(seconds))return "—";
+
+const hours=Math.floor(seconds/3600);
+
+const minutes=Math.floor(
+(seconds%3600)/60
+);
+
+const remaining=seconds%60;
+
+return hours+" "+t.hours+" "+
+minutes+" "+t.minutes+" "+
+remaining+" "+t.seconds;
+
+}
+
+function formatDistance(meters){
+
+if(!validCount(meters))return "—";
+
+return (meters/1000).toFixed(2)+" KM";
+
+}
+
+function percentage(numerator,denominator){
+
+if(denominator===0)return null;
+
+return numerator/denominator*100;
+
+}
+
+function formatPercentage(value){
+
+return value===null
+?"—"
+:value.toFixed(1)+"%";
+
+}
+
+// GPS CONTINUITY
+
+function startGps(){
+
+if(gpsWatch!==null
+||!navigator.geolocation
+||!validSession())return;
+
+const currentGeneration=generation;
+
+gpsWatch=navigator.geolocation.watchPosition(
+
+async position=>{
+
+const c=position.coords;
+
+if(currentGeneration!==generation
+||!validSession()
+||!driver
+||driver.documentsValid!==true
+||!["online","busy"].includes(
+driver.availability
+)
+||!Number.isFinite(c.latitude)
+||!Number.isFinite(c.longitude)
+||!Number.isFinite(c.accuracy)
+||c.accuracy<0
+||c.accuracy>100
+||c.latitude<5.85
+||c.latitude>9.9
+||c.longitude<79.5
+||c.longitude>82
+||Date.now()-position.timestamp>30000
+||position.timestamp>Date.now()+5000
+||gpsSending
+||Date.now()-lastGpsSent<10000){
+
+return;
+
+}
+
+gpsSending=true;
+
+lastGpsSent=Date.now();
+
+try{
+
+await serverCall(
+"updateDriverLocation",
+{
+lat:c.latitude,
+lon:c.longitude,
+accuracy:c.accuracy,
+capturedAtMs:position.timestamp
+}
+);
+
+}catch(e){
+
+// Backend must expire stale GPS records.
+
+}finally{
+
+if(currentGeneration===generation){
+
+gpsSending=false;
+
+}
+
+}
+
+},
+
+()=>{},
+
+{
+enableHighAccuracy:true,
+maximumAge:5000,
+timeout:15000
+}
+
+);
+
+}
+
+function stopGps(){
+
+if(gpsWatch!==null){
+
+navigator.geolocation.clearWatch(gpsWatch);
+
+gpsWatch=null;
+
+}
+
+}
+
+// SERVICE REPORT VALIDATION
+
+const COUNT_FIELDS=[
+"receivedRides",
+"acceptedRides",
+"rejectedRides",
+"missedRides",
+"completedRides",
+"cancelledRides",
+"pendingOffers",
+"unfinishedRides"
+];
+
+const MEASUREMENT_FIELDS=[
+"pickupDistanceMeters",
+"passengerDistanceMeters",
+"completedRideDistanceMeters",
+"onlineSeconds",
+"tripSeconds",
+"completedRideDurationSeconds"
+];
+
+function validReport(data,key){
+
+if(!data
+||data.driverUid!==uid
+||data.periodKey!==key
+||!data.updatedAt
+||typeof data.updatedAt.toMillis!=="function"
+||!validTime(data.updatedAt.toMillis())
+||!validCount(data.revision)){
+
+return false;
+
+}
+
+if(!COUNT_FIELDS.every(
+field=>validCount(data[field])
+)){
+
+return false;
+
+}
+
+if(!MEASUREMENT_FIELDS.every(
+field=>validCount(data[field])
+)){
+
+return false;
+
+}
+
+const offerTotal=
+data.acceptedRides
++data.rejectedRides
++data.missedRides
++data.pendingOffers;
+
+if(!Number.isSafeInteger(offerTotal)
+||offerTotal!==data.receivedRides){
+
+return false;
+
+}
+
+const acceptedTotal=
+data.completedRides
++data.cancelledRides
++data.unfinishedRides;
+
+if(!Number.isSafeInteger(acceptedTotal)
+||acceptedTotal!==data.acceptedRides){
+
+return false;
+
+}
+
+if(data.completedRides===0
+&&(
+data.completedRideDistanceMeters!==0
+||data.completedRideDurationSeconds!==0
+)){
+
+return false;
+
+}
+
+if(!Number.isSafeInteger(
+data.pickupDistanceMeters
++data.passengerDistanceMeters
+)){
+
+return false;
+
+}
+
+return true;
+
+}
+
+// PERFORMANCE CALCULATION
+
+function calculatePerformance(data){
+
+const answeredOffers=
+data.acceptedRides
++data.rejectedRides
++data.missedRides;
+
+return {
+
+acceptanceRate:percentage(
+data.acceptedRides,
+answeredOffers
+),
+
+completionRate:percentage(
+data.completedRides,
+data.acceptedRides
+),
+
+rejectionRate:percentage(
+data.rejectedRides,
+answeredOffers
+),
+
+missedRate:percentage(
+data.missedRides,
+answeredOffers
+),
+
+totalDistanceMeters:
+data.pickupDistanceMeters
++data.passengerDistanceMeters,
+
+averageDistanceMeters:
+data.completedRides>0
+?Math.round(
+data.completedRideDistanceMeters
+/data.completedRides
+)
+:null,
+
+averageDurationSeconds:
+data.completedRides>0
+?Math.round(
+data.completedRideDurationSeconds
+/data.completedRides
+)
+:null
+
+};
+
+}
+
+// PROGRESS BARS
+
+function setProgress(barId,progressId,value){
+
+const width=value===null
+?0
+:Math.max(0,Math.min(100,value));
+
+$(barId).style.width=width+"%";
+
+if(value===null){
+
+$(progressId).removeAttribute(
+"aria-valuenow"
+);
+
+}else{
+
+$(progressId).setAttribute(
+"aria-valuenow",
+width.toFixed(1)
+);
+
+}
+
+}
+
+// DISPLAY SERVICE REPORT
+
+function renderReport(data){
+
+const performance=
+calculatePerformance(data);
+
+COUNT_FIELDS.forEach(field=>{
+
+$(field).textContent=
+formatNumber(data[field]);
+
+});
+
+$("reportPeriod").textContent=
+periodLabel(data.periodKey);
+
+$("acceptanceRate").textContent=
+formatPercentage(
+performance.acceptanceRate
+);
+
+$("completionRate").textContent=
+formatPercentage(
+performance.completionRate
+);
+
+$("rejectionRate").textContent=
+formatPercentage(
+performance.rejectionRate
+);
+
+$("missedRate").textContent=
+formatPercentage(
+performance.missedRate
+);
+
+setProgress(
+"acceptanceBar",
+"acceptanceProgress",
+performance.acceptanceRate
+);
+
+setProgress(
+"completionBar",
+"completionProgress",
+performance.completionRate
+);
+
+$("totalDistance").textContent=
+formatDistance(
+performance.totalDistanceMeters
+);
+
+$("pickupDistance").textContent=
+formatDistance(
+data.pickupDistanceMeters
+);
+
+$("passengerDistance").textContent=
+formatDistance(
+data.passengerDistanceMeters
+);
+
+$("onlineTime").textContent=
+formatDuration(
+data.onlineSeconds
+);
+
+$("tripTime").textContent=
+formatDuration(
+data.tripSeconds
+);
+
+$("averageDistance").textContent=
+performance.averageDistanceMeters===null
+?"—"
+:formatDistance(
+performance.averageDistanceMeters
+);
+
+$("averageTime").textContent=
+performance.averageDurationSeconds===null
+?"—"
+:formatDuration(
+performance.averageDurationSeconds
+);
+
+$("lastUpdate").textContent=
+formatDate(data.updatedAt.toMillis());
+
+$("reportStatus").textContent="";
+
+updateControls();
+
+}
+
+// CLEAR REPORT
+
+function clearReport(){
+
+report=null;
+
+const fields=[
+...COUNT_FIELDS,
+"acceptanceRate",
+"completionRate",
+"rejectionRate",
+"missedRate",
+"totalDistance",
+"pickupDistance",
+"passengerDistance",
+"onlineTime",
+"tripTime",
+"averageDistance",
+"averageTime",
+"lastUpdate"
+];
+
+fields.forEach(field=>{
+
+$(field).textContent="—";
+
+});
+
+setProgress(
+"acceptanceBar",
+"acceptanceProgress",
+null
+);
+
+setProgress(
+"completionBar",
+"completionProgress",
+null
+);
+
+updateControls();
+
+}
+
+// LIVE FIRESTORE REPORT
+
+function subscribeReport(){
+
+reportGeneration++;
+
+if(reportUnsubscribe){
+
+reportUnsubscribe();
+
+reportUnsubscribe=null;
+
+}
+
+clearReport();
+
+if(!validSession()||!driver)return;
+
+const key=periodKey();
+
+if(!key){
+
+currentPeriodKey=null;
+
+$("reportPeriod").textContent="—";
+
+$("reportStatus").textContent=t.error;
+
+return;
+
+}
+
+currentPeriodKey=key;
+
+const currentGeneration=generation;
+
+const requestGeneration=reportGeneration;
+
+$("reportPeriod").textContent=
+periodLabel(key);
+
+$("reportStatus").textContent=
+t.loading;
+
+reportUnsubscribe=onSnapshot(
+
+doc(
+db,
+"drivers",
+uid,
+"serviceReports",
+key
+),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||requestGeneration!==reportGeneration
+||!validSession()
+||!driver
+||currentPeriodKey!==key){
+
+return;
+
+}
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+clearReport();
+
+$("reportStatus").textContent=t.loading;
+
+return;
+
+}
+
+if(!snapshot.exists()){
+
+clearReport();
+
+$("reportStatus").textContent=t.empty;
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!validReport(data,key)){
+
+clearReport();
+
+$("reportStatus").textContent=t.error;
+
+return;
+
+}
+
+report=data;
+
+renderReport(data);
+
+},
+
+()=>{
+
+if(currentGeneration!==generation
+||requestGeneration!==reportGeneration){
+
+return;
+
+}
+
+clearReport();
+
+$("reportStatus").textContent=t.error;
+
+}
+
+);
+
+}
+
+// REFRESH REPORT
+
+async function refreshReport(){
+
+if(!validSession()
+||!driver
+||refreshing)return;
+
+const currentGeneration=generation;
+
+refreshing=true;
+
+updateControls();
+
+reportGeneration++;
+
+if(reportUnsubscribe){
+
+reportUnsubscribe();
+
+reportUnsubscribe=null;
+
+}
+
+clearReport();
+
+$("reportStatus").textContent=t.loading;
+
+try{
+
+await syncServerTime();
+
+if(currentGeneration!==generation)return;
+
+subscribeReport();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+currentPeriodKey=null;
+
+$("reportPeriod").textContent="—";
+
+$("reportStatus").textContent=t.error;
+
+}finally{
+
+if(currentGeneration===generation){
+
+refreshing=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("refreshButton").onclick=refreshReport;
+
+$("period").onchange=refreshReport;
+
+// CSV DOWNLOAD SECURITY
+
+function csvCell(value){
+
+let text=String(value??"");
+
+text=text.replace(
+/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g,
+""
+);
+
+// Prevent spreadsheet formula injection.
+
+if(/^\s*[=+\-@]/.test(text)
+||/^[\t\r\n]/.test(text)){
+
+text="'"+text;
+
+}
+
+return '"'+text.replace(/"/g,'""')+'"';
+
+}
+
+// DOWNLOAD SERVICE REPORT
+
+$("downloadButton").onclick=()=>{
+
+if(!validSession()
+||!driver
+||!report
+||!validReport(
+report,currentPeriodKey
+)){
+
+return;
+
+}
+
+try{
+
+const p=calculatePerformance(report);
+
+const rows=[
+
+["MY RIDE SRI LANKA",t.heading],
+
+[t.driverName,driver.fullName],
+
+["Driver ID",driver.driverId],
+
+[t.vehicleType,t[driver.vehicleType]],
+
+[t.reportPeriod,periodLabel(report.periodKey)],
+
+[t.lastUpdate,
+formatDate(report.updatedAt.toMillis())],
+
+["",""],
+
+[t.receivedRides,report.receivedRides],
+
+[t.acceptedRides,report.acceptedRides],
+
+[t.rejectedRides,report.rejectedRides],
+
+[t.missedRides,report.missedRides],
+
+[t.completedRides,report.completedRides],
+
+[t.cancelledRides,report.cancelledRides],
+
+[t.pendingOffers,report.pendingOffers],
+
+[t.unfinishedRides,report.unfinishedRides],
+
+[t.acceptanceRate,
+formatPercentage(p.acceptanceRate)],
+
+[t.completionRate,
+formatPercentage(p.completionRate)],
+
+[t.rejectionRate,
+formatPercentage(p.rejectionRate)],
+
+[t.missedRate,
+formatPercentage(p.missedRate)],
+
+[t.totalDistance,
+formatDistance(p.totalDistanceMeters)],
+
+[t.pickupDistance,
+formatDistance(report.pickupDistanceMeters)],
+
+[t.passengerDistance,
+formatDistance(report.passengerDistanceMeters)],
+
+[t.onlineTime,
+formatDuration(report.onlineSeconds)],
+
+[t.tripTime,
+formatDuration(report.tripSeconds)],
+
+[t.averageDistance,
+p.averageDistanceMeters===null
+?"—"
+:formatDistance(p.averageDistanceMeters)],
+
+[t.averageTime,
+p.averageDurationSeconds===null
+?"—"
+:formatDuration(p.averageDurationSeconds)]
+
+];
+
+const csv="\uFEFF"+
+rows.map(row=>
+row.map(csvCell).join(",")
+).join("\r\n");
+
+const blob=new Blob(
+[csv],
+{
+type:"text/csv;charset=utf-8"
+}
+);
+
+const url=URL.createObjectURL(blob);
+
+const link=document.createElement("a");
+
+link.href=url;
+
+link.download=
+"MY-RIDE-Service-Report-"+
+driver.driverId+"-"+
+report.periodKey+".csv";
+
+document.body.appendChild(link);
+
+link.click();
+
+link.remove();
+
+setTimeout(()=>{
+
+URL.revokeObjectURL(url);
+
+},30000);
+
+}catch(e){
+
+$("reportStatus").textContent=
+t.downloadFailed;
+
+}
+
+};
+
+// CONTROL SECURITY
+
+function updateControls(){
+
+const enabled=
+validSession()&&driver!==null;
+
+$("period").disabled=
+!enabled||refreshing;
+
+$("refreshButton").disabled=
+!enabled||refreshing;
+
+$("downloadButton").disabled=
+!enabled
+||refreshing
+||report===null
+||report.periodKey!==currentPeriodKey;
+
+}
+
+// CLEAR PRIVATE INFORMATION
+
+function disconnect(){
+
+generation++;
+
+reportGeneration++;
+
+authorized=false;
+
+uid=null;
+
+driver=null;
+
+if(driverUnsubscribe){
+
+driverUnsubscribe();
+
+driverUnsubscribe=null;
+
+}
+
+if(reportUnsubscribe){
+
+reportUnsubscribe();
+
+reportUnsubscribe=null;
+
+}
+
+stopGps();
+
+gpsSending=false;
+
+lastGpsSent=0;
+
+serverOffset=null;
+
+serverSyncAt=0;
+
+currentPeriodKey=null;
+
+refreshing=false;
+
+checkingSession=false;
+
+clearReport();
+
+$("driverName").textContent="—";
+
+$("driverId").textContent="—";
+
+$("vehicleType").textContent="—";
+
+$("availability").textContent="—";
+
+$("reportPeriod").textContent="—";
+
+$("reportStatus").textContent="";
+
+$("content").hidden=true;
+
+$("accessPanel").hidden=true;
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+disconnect();
+
+$("accessPanel").hidden=false;
+
+status(t.denied);
+
+}
+
+// DRIVER ACCOUNT MONITORING
+
+function subscribeDriver(){
+
+const currentGeneration=generation;
+
+driverUnsubscribe=onSnapshot(
+
+doc(db,"drivers",uid),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!validSession())return;
+
+if(snapshot.metadata.fromCache
+||snapshot.metadata.hasPendingWrites){
+
+driver=null;
+
+reportGeneration++;
+
+if(reportUnsubscribe){
+
+reportUnsubscribe();
+
+reportUnsubscribe=null;
+
+}
+
+stopGps();
+
+clearReport();
+
+$("content").hidden=true;
+
+status(t.checking);
+
+return;
+
+}
+
+const data=snapshot.data();
+
+if(!snapshot.exists()
+||data.uid!==uid
+||data.status!=="approved"
+||data.activationComplete!==true
+||data.documentsValid!==true
+||!validText(data.fullName,1,150)
+||!validId(data.driverId)
+||!["bike","tuk","car","van"].includes(
+data.vehicleType
+)
+||!["online","offline","busy"].includes(
+data.availability
+)){
+
+denyAccess();
+
+return;
+
+}
+
+const firstLoad=driver===null;
+
+driver=data;
+
+$("driverName").textContent=
+data.fullName;
+
+$("driverId").textContent=
+data.driverId;
+
+$("vehicleType").textContent=
+t[data.vehicleType];
+
+$("availability").textContent=
+t[data.availability];
+
+$("availability").className=
+data.availability==="online"
+?"green"
+:data.availability==="busy"
+?"yellow":"red";
+
+$("content").hidden=false;
+
+$("accessPanel").hidden=true;
+
+if(["online","busy"].includes(
+data.availability
+)){
+
+startGps();
+
+}else{
+
+stopGps();
+
+}
+
+if(firstLoad){
+
+refreshReport();
+
+}
+
+status("");
+
+updateControls();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+);
+
+}
+
+// APPROVED DRIVER AUTHORIZATION
+
+async function verifyDriver(user){
+
+disconnect();
+
+const currentGeneration=generation;
+
+if(!user||!db||!functions){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status(t.connectionLost);
+
+return;
+
+}
+
+status(t.checking);
+
+try{
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.driver!==true
+||token.signInProvider!=="custom"){
+
+throw new Error("Driver login required");
+
+}
+
+const response=await httpsCallable(
+functions,
+"verifyDriverSession"
+)({});
+
+if(currentGeneration!==generation
+||auth.currentUser?.uid!==user.uid){
+
+return;
+
+}
+
+const account=response.data;
+
+if(account?.authorized!==true
+||account.uid!==user.uid
+||account.status!=="approved"
+||account.activationComplete!==true
+||account.documentsValid!==true){
+
+throw new Error("Access denied");
+
+}
+
+authorized=true;
+
+uid=user.uid;
+
+$("accessPanel").hidden=true;
+
+subscribeDriver();
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}
+
+}
+
+if(auth){
+
+onAuthStateChanged(auth,verifyDriver);
+
+}
+
+// AUTOMATIC SESSION AND PERIOD CHECK
+
+setInterval(async()=>{
+
+if(!validSession()
+||!driver
+||checkingSession)return;
+
+const currentGeneration=generation;
+
+checkingSession=true;
+
+try{
+
+const result=await serverCall(
+"verifyDriverSession"
+);
+
+if(currentGeneration!==generation)return;
+
+if(result?.authorized!==true
+||result.uid!==uid
+||result.status!=="approved"
+||result.activationComplete!==true
+||result.documentsValid!==true){
+
+denyAccess();
+
+return;
+
+}
+
+try{
+
+await syncServerTime();
+
+if(currentGeneration!==generation)return;
+
+const key=periodKey();
+
+if(key
+&&key!==currentPeriodKey
+&&!refreshing){
+
+subscribeReport();
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation
+&&$("period").value!=="all"){
+
+reportGeneration++;
+
+if(reportUnsubscribe){
+
+reportUnsubscribe();
+
+reportUnsubscribe=null;
+
+}
+
+currentPeriodKey=null;
+
+clearReport();
+
+$("reportStatus").textContent=t.error;
+
+}
+
+}
+
+}catch(e){
+
+if(currentGeneration!==generation)return;
+
+denyAccess();
+
+}finally{
+
+if(currentGeneration===generation){
+
+checkingSession=false;
+
+}
+
+}
+
+},60000);
+
+// INTERNET CONNECTION MONITORING
+
+window.addEventListener("offline",()=>{
+
+disconnect();
+
+status(t.connectionLost);
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+});
+
+// PAGE LIFECYCLE
+
+window.addEventListener(
+"pagehide",
+disconnect
+);
+
+window.addEventListener(
+"pageshow",
+event=>{
+
+if(event.persisted&&auth){
+
+verifyDriver(auth.currentUser);
+
+}
+
+}
+);
+
+updateControls();
+
+</script>
+
+</body>
+</html>
