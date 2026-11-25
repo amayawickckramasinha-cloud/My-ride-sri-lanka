@@ -50,10 +50,7 @@ input,select,textarea{
 width:100%;
 padding:14px;
 background:#292929;
-color:white;
-border:1px solid #666;
-border-radius:8px;
-font-size:16px;
+color:w
 font-family:inherit;
 }
 textarea{
@@ -1120,82 +1117,12 @@ const result=await adminCall(
 
 "retryAdminWhatsAppMessage",
 
-{messageId}
+{messageI
 
-);
 
-if(result?.accepted!==true){
 
-throw new Error("Retry failed");
 
-}
 
-status("පණිවිඩය නැවත යැවීමට භාරගෙන ඇත.");
 
-}catch(e){
 
-status("පණිවිඩය නැවත යැවිය නොහැක.");
 
-}finally{
-
-busy=false;
-
-button.disabled=false;
-
-}
-
-await loadHistory(true);
-
-}
-
-// LOGOUT
-
-$("logoutButton").onclick=async()=>{
-
-clearAdmin();
-
-try{
-
-await signOut(auth);
-
-location.replace("./admin-login.html");
-
-}catch(e){
-
-status("Logout අසාර්ථකයි. නැවත උත්සාහ කරන්න.");
-
-}
-
-};
-
-// INTERNET AND SESSION SECURITY
-
-window.addEventListener("offline",()=>{
-
-clearAdmin();
-
-status("අන්තර්ජාල සම්බන්ධතාව නොමැත.");
-
-});
-
-window.addEventListener("online",()=>{
-
-if(auth)verifyOwner(auth.currentUser);
-
-});
-
-window.addEventListener("pagehide",clearAdmin);
-
-window.addEventListener("pageshow",event=>{
-
-if(event.persisted&&auth){
-
-verifyOwner(auth.currentUser);
-
-}
-
-});
-
-</script>
-</body>
-</html>
