@@ -1,0 +1,3296 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Owner Admin Account</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3,h4{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+input,textarea{
+width:100%;
+padding:13px;
+margin:8px 0;
+background:#292929;
+color:#fff;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+label{
+display:block;
+margin-top:12px;
+line-height:1.7;
+}
+
+.checkRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+}
+
+.checkRow input{
+width:22px;
+height:22px;
+flex-shrink:0;
+accent-color:#FFD600;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+padding:15px;
+border-radius:9px;
+overflow-wrap:anywhere;
+}
+
+.stat strong{
+display:block;
+margin-top:10px;
+font-size:19px;
+color:#FFD600;
+}
+
+.record{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+line-height:1.9;
+overflow-wrap:anywhere;
+}
+
+.profile{
+text-align:center;
+padding:15px;
+}
+
+.avatar{
+width:85px;
+height:85px;
+border-radius:50%;
+background:#FFD600;
+color:#111;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:42px;
+margin:10px auto;
+}
+
+.good{
+color:#55E68A!important;
+}
+
+.bad{
+color:#FF7777!important;
+}
+
+.warning{
+color:#FFB347;
+line-height:1.8;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+.message{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.danger{
+background:#A71919;
+color:#fff;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+@media(max-width:450px){
+.grid{
+grid-template-columns:1fr;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading">
+Owner Admin Account
+</h2>
+
+<div class="languages">
+
+<button data-lang="si">සිංහල</button>
+
+<button data-lang="en">English</button>
+
+<button data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+class="message"
+role="status"
+aria-live="polite">
+Checking security...
+</p>
+
+<section id="accessPanel"
+class="panel"
+hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+<a class="action back"
+href="https://accounts.google.com/signin/recovery"
+target="_blank"
+rel="noopener noreferrer"
+data-t="recovery"></a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="profileHeading"></h3>
+
+<div class="profile">
+
+<div class="avatar">👤</div>
+
+<h2 id="ownerName"></h2>
+
+<p id="ownerEmail"></p>
+
+<p id="ownerBadge"
+class="good"></p>
+
+</div>
+
+<div id="profileDetails"
+class="record"></div>
+
+<button id="refreshAccount"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="securityOverview"></h3>
+
+<div id="securityStats"
+class="grid"></div>
+
+<p id="lastUpdate"
+class="note"></p>
+
+<p class="note"
+data-t="securityNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="googleSecurity"></h3>
+
+<a class="action"
+href="https://myaccount.google.com/security"
+target="_blank"
+rel="noopener noreferrer"
+data-t="googleSettings"></a>
+
+<a class="action"
+href="https://myaccount.google.com/signinoptions/two-step-verification"
+target="_blank"
+rel="noopener noreferrer"
+data-t="twoStepSettings"></a>
+
+<a class="action"
+href="https://myaccount.google.com/device-activity"
+target="_blank"
+rel="noopener noreferrer"
+data-t="googleDevices"></a>
+
+<a class="action"
+href="https://myaccount.google.com/security-checkup"
+target="_blank"
+rel="noopener noreferrer"
+data-t="securityCheckup"></a>
+
+<p class="note"
+data-t="googleNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="sessionHeading"></h3>
+
+<p class="note"
+data-t="sessionNotice"></p>
+
+<button id="loadSessions"
+data-t="refresh"></button>
+
+<div id="sessionList"></div>
+
+<button id="moreSessions"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section id="revokePanel"
+class="panel"
+hidden>
+
+<h3 data-t="revokeHeading"></h3>
+
+<div id="selectedSession"
+class="record"></div>
+
+<label for="revokeReason"
+data-t="reason"></label>
+
+<textarea id="revokeReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="confirmRevoke"
+type="checkbox">
+
+<span data-t="confirmAction"></span>
+
+</label>
+
+<button id="revokeSession"
+class="danger"
+data-t="revokeSession"></button>
+
+<button id="closeRevoke"
+class="back"
+data-t="close"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="loginHistory"></h3>
+
+<button id="loadLoginHistory"
+data-t="viewHistory"></button>
+
+<div id="loginHistoryList"></div>
+
+<button id="moreLoginHistory"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="securityAlerts"></h3>
+
+<button id="loadAlerts"
+data-t="refresh"></button>
+
+<div id="alertList"></div>
+
+<button id="moreAlerts"
+data-t="more"
+hidden></button>
+
+<a id="securityLink"
+class="action"
+data-t="securityManagement"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="lostDevice"></h3>
+
+<p class="warning"
+data-t="lostDeviceNotice"></p>
+
+<a class="action"
+href="https://myaccount.google.com/device-activity"
+target="_blank"
+rel="noopener noreferrer"
+data-t="googleDevices"></a>
+
+<a class="action"
+href="https://accounts.google.com/signin/recovery"
+target="_blank"
+rel="noopener noreferrer"
+data-t="recovery"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="sessionControl"></h3>
+
+<label for="allReason"
+data-t="reason"></label>
+
+<textarea id="allReason"
+maxlength="500"></textarea>
+
+<label for="confirmationText"
+data-t="confirmationText"></label>
+
+<input id="confirmationText"
+maxlength="20"
+autocomplete="off">
+
+<label class="checkRow">
+
+<input id="confirmAll"
+type="checkbox">
+
+<span data-t="confirmAction"></span>
+
+</label>
+
+<button id="revokeOthers"
+class="danger"
+data-t="revokeOthers"></button>
+
+<button id="revokeAll"
+class="danger"
+data-t="revokeAll"></button>
+
+<p class="warning"
+data-t="revokeNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="ownerProtection"></h3>
+
+<p data-t="ownerProtectionNotice"
+class="note"></p>
+
+<a id="settingsLink"
+class="action"
+data-t="systemSettings"></a>
+
+<a id="databaseLink"
+class="action"
+data-t="databaseManagement"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="auditHistory"></h3>
+
+<button id="loadAudit"
+data-t="viewHistory"></button>
+
+<div id="auditList"></div>
+
+<button id="moreAudit"
+data-t="more"
+hidden></button>
+
+</section>
+
+<p id="result"
+class="message"
+role="status"
+aria-live="polite"></p>
+
+<button id="logoutButton"
+class="danger"
+data-t="logout"></button>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const dictionary={
+
+heading:[
+"හිමිකරුගේ Admin ගිණුම",
+"Owner Admin Account",
+"உரிமையாளர் நிர்வாக கணக்கு"
+],
+
+profileHeading:[
+"01. හිමිකරුගේ ගිණුම් විස්තර",
+"01. Owner Account Profile",
+"01. உரிமையாளர் கணக்கு விவரங்கள்"
+],
+
+ownerVerified:[
+"තහවුරු කළ Owner Admin",
+"Verified Owner Admin",
+"உறுதிப்படுத்தப்பட்ட உரிமையாளர்"
+],
+
+ownerUid:[
+"හිමිකරුගේ UID",
+"Owner UID",
+"உரிமையாளர் UID"
+],
+
+email:[
+"Gmail ලිපිනය",
+"Gmail Address",
+"Gmail முகவரி"
+],
+
+provider:[
+"Login ක්‍රමය",
+"Sign-in Provider",
+"உள்நுழைவு முறை"
+],
+
+created:[
+"නිර්මාණය කළ වේලාව",
+"Created At",
+"உருவாக்கிய நேரம்"
+],
+
+lastLogin:[
+"අවසන් Login වේලාව",
+"Last Sign-in",
+"கடைசி உள்நுழைவு"
+],
+
+securityOverview:[
+"02. ගිණුමේ ආරක්ෂක තත්ත්වය",
+"02. Account Security Overview",
+"02. கணக்கு பாதுகாப்பு நிலை"
+],
+
+emailVerified:[
+"Gmail තහවුරු කිරීම",
+"Email Verification",
+"மின்னஞ்சல் சரிபார்ப்பு"
+],
+
+twoStep:[
+"Two-Step Verification",
+"Two-Step Verification",
+"இரண்டு படி சரிபார்ப்பு"
+],
+
+appCheck:[
+"Firebase App Check",
+"Firebase App Check",
+"Firebase App Check"
+],
+
+activeSessions:[
+"සක්‍රීය Sessions",
+"Active Sessions",
+"செயலில் உள்ள அமர்வுகள்"
+],
+
+failedLogins:[
+"අසාර්ථක Login - පැය 24",
+"Failed Logins - 24 Hours",
+"தோல்வியுற்ற உள்நுழைவுகள் - 24 மணி"
+],
+
+openAlerts:[
+"විවෘත ආරක්ෂක අනතුරු ඇඟවීම්",
+"Open Security Alerts",
+"திறந்த பாதுகாப்பு எச்சரிக்கைகள்"
+],
+
+securityNotice:[
+"Google ගිණුමේ Two-Step Verification තත්ත්වය මෙම පිටුවෙන් ස්වයංක්‍රීයව තහවුරු කළ නොහැක.",
+"Google Account Two-Step Verification cannot be automatically verified by this page.",
+"Google கணக்கின் இரண்டு படி சரிபார்ப்பை இப்பக்கம் தானாக உறுதிப்படுத்த முடியாது."
+],
+
+googleSecurity:[
+"03. Google ගිණුමේ ආරක්ෂාව",
+"03. Google Account Security",
+"03. Google கணக்கு பாதுகாப்பு"
+],
+
+googleSettings:[
+"Google Security Settings",
+"Google Security Settings",
+"Google பாதுகாப்பு அமைப்புகள்"
+],
+
+twoStepSettings:[
+"Two-Step Verification සකස් කරන්න",
+"Manage Two-Step Verification",
+"இரண்டு படி சரிபார்ப்பை நிர்வகிக்கவும்"
+],
+
+googleDevices:[
+"Google ගිණුමට සම්බන්ධ උපාංග",
+"Manage Google Devices",
+"Google சாதனங்களை நிர்வகிக்கவும்"
+],
+
+securityCheckup:[
+"Google Security Checkup",
+"Google Security Checkup",
+"Google பாதுகாப்பு பரிசோதனை"
+],
+
+googleNotice:[
+"Google මුරපදය, OTP සහ Recovery Codes මෙම MY RIDE පිටුවට ඇතුළත් නොකරන්න.",
+"Never enter your Google password, OTP or recovery codes into this MY RIDE page.",
+"Google கடவுச்சொல், OTP அல்லது மீட்பு குறியீடுகளை இப்பக்கத்தில் உள்ளிட வேண்டாம்."
+],
+
+sessionHeading:[
+"04. MY RIDE Admin Sessions",
+"04. MY RIDE Admin Sessions",
+"04. MY RIDE நிர்வாக அமர்வுகள்"
+],
+
+sessionNotice:[
+"මෙහි පෙන්වන්නේ MY RIDE Server එකේ ලියාපදිංචි Admin Sessions පමණි.",
+"Only admin sessions registered by the MY RIDE server are displayed.",
+"MY RIDE சேவையகத்தில் பதிவு செய்யப்பட்ட நிர்வாக அமர்வுகள் மட்டும் காட்டப்படும்."
+],
+
+sessionId:[
+"Session ID",
+"Session ID",
+"அமர்வு ID"
+],
+
+device:[
+"උපාංගය",
+"Device",
+"சாதனம்"
+],
+
+browser:[
+"Browser",
+"Browser",
+"உலாவி"
+],
+
+lastSeen:[
+"අවසන් සක්‍රීය වේලාව",
+"Last Active",
+"கடைசி செயல்பாடு"
+],
+
+currentDevice:[
+"දැනට භාවිත කරන Session එක",
+"Current Session",
+"தற்போதைய அமர்வு"
+],
+
+active:[
+"සක්‍රීයයි",
+"Active",
+"செயலில் உள்ளது"
+],
+
+revoked:[
+"අවලංගු කර ඇත",
+"Revoked",
+"ரத்து செய்யப்பட்டது"
+],
+
+expired:[
+"කාලය අවසන්",
+"Expired",
+"காலாவதியானது"
+],
+
+revokeHeading:[
+"Session එක අවලංගු කිරීම",
+"Revoke Selected Session",
+"தேர்ந்தெடுத்த அமர்வை ரத்து செய்யவும்"
+],
+
+revokeSession:[
+"මෙම Session එක අවලංගු කරන්න",
+"Revoke This Session",
+"இந்த அமர்வை ரத்து செய்யவும்"
+],
+
+loginHistory:[
+"05. Login ඉතිහාසය",
+"05. Login History",
+"05. உள்நுழைவு வரலாறு"
+],
+
+securityAlerts:[
+"06. ආරක්ෂක අනතුරු ඇඟවීම්",
+"06. Security Alerts",
+"06. பாதுகாப்பு எச்சரிக்கைகள்"
+],
+
+securityManagement:[
+"Security Management වෙත",
+"Open Security Management",
+"பாதுகாப்பு மேலாண்மையை திறக்கவும்"
+],
+
+lostDevice:[
+"07. දුරකථනය හෝ උපාංගය නැතිවීම",
+"07. Lost Phone or Device",
+"07. தொலைந்த தொலைபேசி அல்லது சாதனம்"
+],
+
+lostDeviceNotice:[
+"විශ්වාසදායක උපාංගයකින් Google ගිණුමට ඇතුළු වී නැතිවූ උපාංගය Sign Out කරන්න. MY RIDE Sessions ද අවලංගු කරන්න. ගිණුමට ඇතුළු විය නොහැකි නම් Google Account Recovery භාවිත කරන්න.",
+"Use a trusted device to sign out the lost device from Google and revoke MY RIDE sessions. If you cannot sign in, use Google Account Recovery.",
+"நம்பகமான சாதனத்தில் Google கணக்கை திறந்து தொலைந்த சாதனத்திலிருந்து வெளியேறவும். MY RIDE அமர்வுகளையும் ரத்து செய்யவும்."
+],
+
+recovery:[
+"Google Account Recovery",
+"Google Account Recovery",
+"Google கணக்கு மீட்பு"
+],
+
+sessionControl:[
+"08. Admin Sessions පාලනය",
+"08. Admin Session Control",
+"08. நிர்வாக அமர்வு கட்டுப்பாடு"
+],
+
+confirmationText:[
+"තහවුරු කිරීමට REVOKE ලෙස ටයිප් කරන්න.",
+"Type REVOKE to confirm.",
+"உறுதிப்படுத்த REVOKE என உள்ளிடவும்."
+],
+
+revokeOthers:[
+"අනෙකුත් Admin Sessions අවලංගු කරන්න",
+"Revoke All Other Admin Sessions",
+"மற்ற நிர்வாக அமர்வுகளை ரத்து செய்யவும்"
+],
+
+revokeAll:[
+"සියලු Admin Sessions අවලංගු කරන්න",
+"Revoke All Admin Sessions",
+"அனைத்து நிர்வாக அமர்வுகளையும் ரத்து செய்யவும்"
+],
+
+revokeNotice:[
+"සියලු Sessions අවලංගු කළ විට මෙම ගිණුමෙන්ද Logout වේ. මෙය Google ගිණුමේ Sessions අවලංගු කිරීමක් නොවේ.",
+"Revoking all admin sessions also signs out this session. It does not revoke Google Account sessions.",
+"அனைத்து நிர்வாக அமர்வுகளையும் ரத்து செய்தால் தற்போதைய அமர்வும் வெளியேறும். இது Google அமர்வுகளை ரத்து செய்யாது."
+],
+
+ownerProtection:[
+"09. හිමිකරුගේ ගිණුම් ආරක්ෂාව",
+"09. Owner Account Protection",
+"09. உரிமையாளர் கணக்கு பாதுகாப்பு"
+],
+
+ownerProtectionNotice:[
+"Owner UID සහ Owner Admin අවසරය මෙම පිටුවෙන් වෙනස් කළ නොහැක. අලුත් Admin ගිණුම් නිර්මාණය කිරීමටද අවසර නැත.",
+"The owner UID and owner privileges cannot be changed through this page. Creating additional admin accounts is not permitted.",
+"உரிமையாளர் UID மற்றும் அனுமதிகளை இப்பக்கத்தில் மாற்ற முடியாது. புதிய நிர்வாக கணக்குகளை உருவாக்க அனுமதி இல்லை."
+],
+
+systemSettings:[
+"පද්ධති සැකසුම්",
+"System Settings",
+"அமைப்பு அமைப்புகள்"
+],
+
+databaseManagement:[
+"Database Management",
+"Database Management",
+"தரவுத்தள மேலாண்மை"
+],
+
+auditHistory:[
+"10. Owner Admin Audit History",
+"10. Owner Admin Audit History",
+"10. உரிமையாளர் தணிக்கை வரலாறு"
+],
+
+reason:[
+"ක්‍රියාමාර්ගයට හේතුව",
+"Reason for Action",
+"நடவடிக்கைக்கான காரணம்"
+],
+
+confirmAction:[
+"මෙම ක්‍රියාමාර්ගය තහවුරු කරමි.",
+"I confirm this action.",
+"இந்த நடவடிக்கையை உறுதிப்படுத்துகிறேன்."
+],
+
+action:[
+"ක්‍රියාමාර්ගය",
+"Action",
+"நடவடிக்கை"
+],
+
+severity:[
+"අවදානම් මට්ටම",
+"Severity",
+"ஆபத்து நிலை"
+],
+
+normal:[
+"සාමාන්‍ය",
+"Normal",
+"சாதாரணம்"
+],
+
+high:[
+"ඉහළ",
+"High",
+"உயர்"
+],
+
+critical:[
+"බරපතළ",
+"Critical",
+"முக்கியமான"
+],
+
+success:[
+"සාර්ථකයි",
+"Successful",
+"வெற்றிகரமானது"
+],
+
+failed:[
+"අසාර්ථකයි",
+"Failed",
+"தோல்வி"
+],
+
+blocked:[
+"අවහිර කර ඇත",
+"Blocked",
+"தடுக்கப்பட்டது"
+],
+
+resolved:[
+"විසඳා ඇත",
+"Resolved",
+"தீர்க்கப்பட்டது"
+],
+
+open:[
+"විවෘතයි",
+"Open",
+"திறந்துள்ளது"
+],
+
+currentStatus:[
+"වත්මන් තත්ත්වය",
+"Current Status",
+"தற்போதைய நிலை"
+],
+
+updated:[
+"අවසන් යාවත්කාලීනය",
+"Last Updated",
+"கடைசி புதுப்பிப்பு"
+],
+
+verified:[
+"තහවුරු කර ඇත",
+"Verified",
+"உறுதிப்படுத்தப்பட்டது"
+],
+
+unknown:[
+"තහවුරු කර නැත",
+"Not Verified",
+"உறுதிப்படுத்தப்படவில்லை"
+],
+
+yes:["ඔව්","Yes","ஆம்"],
+
+no:["නැහැ","No","இல்லை"],
+
+refresh:[
+"යාවත්කාලීන කරන්න",
+"Refresh",
+"புதுப்பிக்கவும்"
+],
+
+viewHistory:[
+"ඉතිහාසය බලන්න",
+"View History",
+"வரலாற்றை பார்க்கவும்"
+],
+
+more:[
+"තවත් වාර්තා",
+"Load More",
+"மேலும் பதிவுகள்"
+],
+
+close:[
+"වසන්න",
+"Close",
+"மூடவும்"
+],
+
+back:[
+"Admin Dashboard වෙත",
+"Back to Admin Dashboard",
+"நிர்வாக முதன்மைப் பக்கத்திற்கு"
+],
+
+login:[
+"Admin Login",
+"Admin Login",
+"நிர்வாக உள்நுழைவு"
+],
+
+logout:[
+"Owner Admin Logout",
+"Owner Admin Logout",
+"நிர்வாக கணக்கிலிருந்து வெளியேறு"
+],
+
+confirmLogout:[
+"Admin ගිණුමෙන් Logout වීමට අවශ්‍යද?",
+"Sign out of the admin account?",
+"நிர்வாக கணக்கிலிருந்து வெளியேறவா?"
+],
+
+checking:[
+"ආරක්ෂාව පරීක්ෂා කරමින්...",
+"Checking security...",
+"பாதுகாப்பு சரிபார்க்கப்படுகிறது..."
+],
+
+denied:[
+"Owner Admin අවසරය තහවුරු කර නොමැත.",
+"Owner Admin authorization is not verified.",
+"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை."
+],
+
+offline:[
+"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+"No internet connection.",
+"இணைய இணைப்பு இல்லை."
+],
+
+loading:[
+"Server දත්ත ලබාගනිමින්...",
+"Loading server data...",
+"சேவையக தரவு பெறப்படுகிறது..."
+],
+
+error:[
+"Server දත්ත තහවුරු කළ නොහැක.",
+"Unable to verify server data.",
+"சேவையக தரவை உறுதிப்படுத்த முடியவில்லை."
+],
+
+invalid:[
+"ඇතුළත් කළ තොරතුරු පරීක්ෂා කරන්න.",
+"Check the entered information.",
+"உள்ளிட்ட தகவலை சரிபார்க்கவும்."
+],
+
+saving:[
+"Server වෙත යොමු කරමින්...",
+"Submitting to server...",
+"சேவையகத்திற்கு அனுப்பப்படுகிறது..."
+],
+
+revokeSuccess:[
+"Session අවලංගු කිරීම Server මගින් තහවුරු කර ඇත.",
+"Session revocation confirmed by server.",
+"அமர்வு ரத்து சேவையகத்தால் உறுதிப்படுத்தப்பட்டது."
+],
+
+saveError:[
+"ක්‍රියාමාර්ගය තහවුරු කළ නොහැක. Server වාර්තා පරීක්ෂා කරන්න.",
+"Action not confirmed. Check server records.",
+"நடவடிக்கை உறுதிப்படுத்தப்படவில்லை. பதிவுகளை சரிபார்க்கவும்."
+],
+
+noRecords:[
+"වාර්තා නොමැත.",
+"No records found.",
+"பதிவுகள் இல்லை."
+],
+
+logoutError:[
+"Server Logout තහවුරු කළ නොහැක. මෙම උපාංගයේ ගිණුමෙන් ඉවත් වීමට උත්සාහ කරමින් පවතී.",
+"Server logout was not confirmed. Attempting local sign-out.",
+"சேவையக வெளியேற்றம் உறுதிப்படுத்தப்படவில்லை."
+]
+
+};
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+
+new URLSearchParams(location.search).get("lang")
+
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected)){
+
+lang=selected;
+
+}
+
+}catch(e){}
+
+const t=key=>
+
+dictionary[key]?.[languages.indexOf(lang)]
+
+||key;
+
+let auth=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+
+let busy=false;
+let mutationBusy=false;
+let checking=false;
+
+let account=null;
+let selectedSession=null;
+
+let pendingMutation=null;
+
+const lists={
+
+sessions:{
+
+records:[],
+cursor:null
+
+},
+
+logins:{
+
+records:[],
+cursor:null
+
+},
+
+alerts:{
+
+records:[],
+cursor:null
+
+},
+
+audit:{
+
+records:[],
+cursor:null
+
+}
+
+};
+
+const messages={
+
+status:"checking",
+result:""
+
+};
+
+function message(id,key){
+
+messages[id]=key;
+
+$(id).textContent=key?t(key):"";
+
+}
+
+function validText(value,max){
+
+return typeof value==="string"
+
+&&value.length<=max;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+
+&&value>=0;
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+
+&&value>0
+
+&&value<=8640000000000000;
+
+}
+
+function nullableTime(value){
+
+return value===null||validTime(value);
+
+}
+
+function validCursor(value){
+
+return value===null
+
+||(
+
+validText(value,4000)
+
+&&value.length>0
+
+);
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(value));
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+encodeURIComponent(lang);
+
+}
+
+function isOwner(){
+
+return authorized
+
+&&ownerUid!==null
+
+&&auth?.currentUser?.uid===ownerUid
+
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+
+&&data.uid===uid
+
+&&data.role==="owner"
+
+&&data.ownerUidVerified===true
+
+&&data.sessionValid===true;
+
+}
+
+async function serverCall(name,data={}){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+
+name,
+
+{timeout:30000}
+
+)(data);
+
+if(currentGeneration!==generation
+
+||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+if(response.data?.success!==true
+
+||response.data.ownerUid!==ownerUid){
+
+throw new Error("Invalid server response");
+
+}
+
+return response.data;
+
+}
+
+async function freshOwnerAuthentication(){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const user=auth.currentUser;
+
+const uid=user.uid;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=await reauthenticateWithPopup(
+
+user,
+
+provider
+
+);
+
+if(credential.user.uid!==uid
+
+||auth.currentUser?.uid!==uid
+
+||!isOwner()){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Invalid owner");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(!validOwner(response.data,uid)
+
+||!isOwner()){
+
+throw new Error("Owner verification failed");
+
+}
+
+}
+
+function makeRecord(){
+
+const box=document.createElement("div");
+
+box.className="record";
+
+return box;
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=
+
+t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function addStat(container,label,value,color=""){
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const name=document.createElement("span");
+
+name.textContent=t(label);
+
+const content=document.createElement("strong");
+
+content.textContent=String(value);
+
+if(color){
+
+content.classList.add(color);
+
+}
+
+box.append(name,content);
+
+container.appendChild(box);
+
+}
+
+function makeButton(label,callback){
+
+const button=document.createElement("button");
+
+button.textContent=t(label);
+
+button.dataset.dynamic="true";
+
+button.onclick=callback;
+
+button.disabled=
+
+busy||mutationBusy||!isOwner()
+
+||!!pendingMutation;
+
+return button;
+
+}
+
+function validAccount(data){
+
+return data
+
+&&data.uid===ownerUid
+
+&&validText(data.displayName,200)
+
+&&validText(data.email,254)
+
+&&data.email===auth.currentUser.email
+
+&&data.emailVerified===true
+
+&&data.provider==="google.com"
+
+&&validTime(data.createdAtMs)
+
+&&nullableTime(data.lastLoginAtMs)
+
+&&validTime(data.serverTimeMs)
+
+&&validCount(data.activeSessions)
+
+&&validCount(data.failedLogins24h)
+
+&&validCount(data.openAlerts)
+
+&&validId(data.currentSessionId);
+
+}
+
+function renderAccount(){
+
+$("ownerName").textContent=
+
+account?.displayName||"";
+
+$("ownerEmail").textContent=
+
+account?.email||"";
+
+$("ownerBadge").textContent=
+
+account?t("ownerVerified"):"";
+
+const details=$("profileDetails");
+
+details.replaceChildren();
+
+const stats=$("securityStats");
+
+stats.replaceChildren();
+
+if(!account){
+
+$("lastUpdate").textContent="";
+
+return;
+
+}
+
+addLine(details,"ownerUid",account.uid);
+
+addLine(details,"email",account.email);
+
+addLine(details,"provider","Google");
+
+addLine(
+
+details,
+
+"created",
+
+formatDate(account.createdAtMs)
+
+);
+
+addLine(
+
+details,
+
+"lastLogin",
+
+formatDate(account.lastLoginAtMs)
+
+);
+
+addStat(
+
+stats,
+
+"emailVerified",
+
+t("verified"),
+
+"good"
+
+);
+
+addStat(
+
+stats,
+
+"twoStep",
+
+t("unknown")
+
+);
+
+addStat(
+
+stats,
+
+"appCheck",
+
+t("verified"),
+
+"good"
+
+);
+
+addStat(
+
+stats,
+
+"activeSessions",
+
+account.activeSessions
+
+);
+
+addStat(
+
+stats,
+
+"failedLogins",
+
+account.failedLogins24h,
+
+account.failedLogins24h>0?"bad":""
+
+);
+
+addStat(
+
+stats,
+
+"openAlerts",
+
+account.openAlerts,
+
+account.openAlerts>0?"bad":""
+
+);
+
+$("lastUpdate").textContent=
+
+t("updated")+": "
+
++formatDate(account.serverTimeMs);
+
+}
+
+async function loadAccount(){
+
+try{
+
+const response=await serverCall(
+
+"getAdminOwnerAccount"
+
+);
+
+if(!validAccount(response.account)){
+
+throw new Error("Invalid account");
+
+}
+
+account=response.account;
+
+renderAccount();
+
+}catch(e){
+
+account=null;
+
+renderAccount();
+
+throw e;
+
+}
+
+}
+
+function validSession(record){
+
+return record
+
+&&validId(record.sessionId)
+
+&&validText(record.device,200)
+
+&&validText(record.browser,200)
+
+&&validTime(record.createdAtMs)
+
+&&validTime(record.lastSeenAtMs)
+
+&&["active","revoked","expired"]
+
+.includes(record.status)
+
+&&typeof record.current==="boolean"
+
+&&validCount(record.revision)
+
+&&account
+
+&&record.current===
+
+(record.sessionId===account.currentSessionId);
+
+}
+
+function validLogin(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&validText(record.device,200)
+
+&&validText(record.browser,200)
+
+&&validTime(record.createdAtMs)
+
+&&["success","failed","blocked"]
+
+.includes(record.status);
+
+}
+
+function validAlert(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&validText(record.title,200)
+
+&&validText(record.description,1000)
+
+&&["normal","high","critical"]
+
+.includes(record.severity)
+
+&&["open","resolved"]
+
+.includes(record.status)
+
+&&validTime(record.createdAtMs);
+
+}
+
+function validAudit(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&validText(record.action,150)
+
+&&validText(record.reason,500)
+
+&&validTime(record.createdAtMs)
+
+&&(
+
+record.sessionId===null
+
+||validId(record.sessionId)
+
+)
+
+&&["success","failed","blocked"]
+
+.includes(record.status);
+
+}
+
+const listConfig={
+
+sessions:{
+
+functionName:"getAdminOwnerSessions",
+
+container:"sessionList",
+
+more:"moreSessions",
+
+key:"sessionId",
+
+validator:validSession
+
+},
+
+logins:{
+
+functionName:"getAdminOwnerLoginHistory",
+
+container:"loginHistoryList",
+
+more:"moreLoginHistory",
+
+key:"recordId",
+
+validator:validLogin
+
+},
+
+alerts:{
+
+functionName:"getAdminOwnerSecurityAlerts",
+
+container:"alertList",
+
+more:"moreAlerts",
+
+key:"recordId",
+
+validator:validAlert
+
+},
+
+audit:{
+
+functionName:"getAdminOwnerAuditHistory",
+
+container:"auditList",
+
+more:"moreAudit",
+
+key:"recordId",
+
+validator:validAudit
+
+}
+
+};
+
+function sessionLines(box,record){
+
+addLine(box,"sessionId",record.sessionId);
+
+addLine(box,"device",record.device);
+
+addLine(box,"browser",record.browser);
+
+addLine(
+
+box,
+
+"created",
+
+formatDate(record.createdAtMs)
+
+);
+
+addLine(
+
+box,
+
+"lastSeen",
+
+formatDate(record.lastSeenAtMs)
+
+);
+
+addLine(
+
+box,
+
+"currentStatus",
+
+t(record.status)
+
+);
+
+addLine(
+
+box,
+
+"currentDevice",
+
+t(record.current?"yes":"no")
+
+);
+
+}
+
+function renderList(type){
+
+const config=listConfig[type];
+
+const data=lists[type];
+
+const container=$(config.container);
+
+container.replaceChildren();
+
+$(config.more).hidden=
+
+data.cursor===null;
+
+if(!isOwner())return;
+
+if(!data.records.length){
+
+container.textContent=t("noRecords");
+
+return;
+
+}
+
+data.records.forEach(record=>{
+
+const box=makeRecord();
+
+if(type==="sessions"){
+
+sessionLines(box,record);
+
+if(record.status==="active"
+
+&&!record.current){
+
+const button=makeButton(
+
+"revokeSession",
+
+()=>openRevoke(record.sessionId)
+
+);
+
+button.classList.add("danger");
+
+box.appendChild(button);
+
+}
+
+}
+
+if(type==="logins"){
+
+addLine(box,"device",record.device);
+
+addLine(box,"browser",record.browser);
+
+addLine(
+
+box,
+
+"currentStatus",
+
+t(record.status)
+
+);
+
+addLine(
+
+box,
+
+"created",
+
+formatDate(record.createdAtMs)
+
+);
+
+}
+
+if(type==="alerts"){
+
+const title=document.createElement("h4");
+
+title.textContent=record.title;
+
+const description=document.createElement("p");
+
+description.textContent=record.description;
+
+box.append(title,description);
+
+addLine(
+
+box,
+
+"severity",
+
+t(record.severity)
+
+);
+
+addLine(
+
+box,
+
+"currentStatus",
+
+t(record.status)
+
+);
+
+addLine(
+
+box,
+
+"created",
+
+formatDate(record.createdAtMs)
+
+);
+
+}
+
+if(type==="audit"){
+
+addLine(box,"action",record.action);
+
+addLine(box,"reason",record.reason);
+
+addLine(box,"sessionId",record.sessionId);
+
+addLine(
+
+box,
+
+"currentStatus",
+
+t(record.status)
+
+);
+
+addLine(
+
+box,
+
+"created",
+
+formatDate(record.createdAtMs)
+
+);
+
+}
+
+container.appendChild(box);
+
+});
+
+}
+
+async function loadList(type,reset=true){
+
+const config=listConfig[type];
+
+const data=lists[type];
+
+const response=await serverCall(
+
+config.functionName,
+
+{
+
+limit:30,
+
+cursor:reset?null:data.cursor
+
+}
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(config.validator)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid records");
+
+}
+
+const map=new Map(
+
+(reset?[]:data.records)
+
+.map(record=>[record[config.key],record])
+
+);
+
+response.records.forEach(record=>{
+
+map.set(record[config.key],record);
+
+});
+
+data.records=[...map.values()];
+
+data.cursor=response.nextCursor;
+
+renderList(type);
+
+}
+
+async function runRead(callback){
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+message("result","loading");
+
+try{
+
+await callback();
+
+if(currentGeneration===generation){
+
+message("result","");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message("result","error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("refreshAccount").onclick=()=>{
+
+runRead(async()=>{
+
+await loadAccount();
+
+await loadList("sessions",true);
+
+});
+
+};
+
+$("loadSessions").onclick=()=>{
+
+runRead(()=>loadList("sessions",true));
+
+};
+
+$("moreSessions").onclick=()=>{
+
+if(lists.sessions.cursor!==null){
+
+runRead(()=>loadList("sessions",false));
+
+}
+
+};
+
+$("loadLoginHistory").onclick=()=>{
+
+runRead(()=>loadList("logins",true));
+
+};
+
+$("moreLoginHistory").onclick=()=>{
+
+if(lists.logins.cursor!==null){
+
+runRead(()=>loadList("logins",false));
+
+}
+
+};
+
+$("loadAlerts").onclick=()=>{
+
+runRead(()=>loadList("alerts",true));
+
+};
+
+$("moreAlerts").onclick=()=>{
+
+if(lists.alerts.cursor!==null){
+
+runRead(()=>loadList("alerts",false));
+
+}
+
+};
+
+$("loadAudit").onclick=()=>{
+
+runRead(()=>loadList("audit",true));
+
+};
+
+$("moreAudit").onclick=()=>{
+
+if(lists.audit.cursor!==null){
+
+runRead(()=>loadList("audit",false));
+
+}
+
+};
+
+function renderSelectedSession(){
+
+$("revokePanel").hidden=
+
+!selectedSession||!isOwner();
+
+const box=$("selectedSession");
+
+box.replaceChildren();
+
+if(selectedSession){
+
+sessionLines(box,selectedSession);
+
+}
+
+}
+
+function openRevoke(sessionId){
+
+runRead(async()=>{
+
+const response=await serverCall(
+
+"getAdminOwnerSessionDetails",
+
+{sessionId}
+
+);
+
+if(!validSession(response.session)
+
+||response.session.sessionId!==sessionId
+
+||response.session.current
+
+||response.session.status!=="active"){
+
+throw new Error("Invalid session");
+
+}
+
+selectedSession=response.session;
+
+$("revokeReason").value="";
+
+$("confirmRevoke").checked=false;
+
+renderSelectedSession();
+
+$("revokePanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+});
+
+}
+
+function closeRevoke(){
+
+selectedSession=null;
+
+$("revokeReason").value="";
+
+$("confirmRevoke").checked=false;
+
+renderSelectedSession();
+
+updateControls();
+
+}
+
+$("closeRevoke").onclick=()=>{
+
+if(!mutationBusy&&!pendingMutation){
+
+closeRevoke();
+
+}
+
+};
+
+function readSingleRevoke(){
+
+if(!selectedSession
+
+||selectedSession.current
+
+||selectedSession.status!=="active"
+
+||!$("confirmRevoke").checked){
+
+return null;
+
+}
+
+const reason=$("revokeReason").value.trim();
+
+if(reason.length<10||reason.length>500){
+
+return null;
+
+}
+
+return {
+
+sessionId:selectedSession.sessionId,
+
+expectedRevision:selectedSession.revision,
+
+reason
+
+};
+
+}
+
+function readBulkRevoke(scope){
+
+if(!["others","all"].includes(scope)
+
+||!account
+
+||$("confirmationText").value.trim()!=="REVOKE"
+
+||!$("confirmAll").checked){
+
+return null;
+
+}
+
+const reason=$("allReason").value.trim();
+
+if(reason.length<10||reason.length>500){
+
+return null;
+
+}
+
+return {
+
+scope,
+
+currentSessionId:account.currentSessionId,
+
+reason
+
+};
+
+}
+
+async function runMutation(
+
+name,
+
+payload,
+
+validate,
+
+onSuccess
+
+){
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy)return;
+
+const fingerprint=JSON.stringify({
+
+name,payload
+
+});
+
+if(pendingMutation
+
+&&pendingMutation.fingerprint!==fingerprint){
+
+message("result","saveError");
+
+return;
+
+}
+
+if(!pendingMutation){
+
+pendingMutation={
+
+name,
+
+payload,
+
+fingerprint,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const currentGeneration=generation;
+
+mutationBusy=true;
+
+updateControls();
+
+message("result","saving");
+
+try{
+
+await freshOwnerAuthentication();
+
+if(currentGeneration!==generation
+
+||!isOwner())return;
+
+const response=await serverCall(
+
+name,
+
+{
+
+...pendingMutation.payload,
+
+requestId:pendingMutation.requestId
+
+}
+
+);
+
+if(!validate(response)){
+
+throw new Error("Action not confirmed");
+
+}
+
+pendingMutation=null;
+
+await onSuccess(response);
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message("result","saveError");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("revokeSession").onclick=()=>{
+
+const name="revokeAdminOwnerSession";
+
+const payload=
+
+pendingMutation?.name===name
+
+?pendingMutation.payload
+
+:readSingleRevoke();
+
+if(!payload){
+
+message("result","invalid");
+
+return;
+
+}
+
+runMutation(
+
+name,
+
+payload,
+
+response=>
+
+validSession(response.session)
+
+&&response.session.sessionId===payload.sessionId
+
+&&response.session.status==="revoked"
+
+&&response.session.revision>payload.expectedRevision,
+
+async()=>{
+
+closeRevoke();
+
+message("result","revokeSuccess");
+
+try{
+
+await loadAccount();
+
+await loadList("sessions",true);
+
+}catch(e){
+
+message("result","error");
+
+}
+
+}
+
+);
+
+};
+
+async function localLogout(){
+
+clearSession();
+
+try{
+
+await signOut(auth);
+
+location.replace(pageLink("admin-login.html"));
+
+}catch(e){
+
+denyAccess();
+
+message("result","error");
+
+}
+
+}
+
+function bulkRevoke(scope){
+
+const name="revokeAdminOwnerSessions";
+
+const payload=
+
+pendingMutation?.name===name
+
+?pendingMutation.payload
+
+:readBulkRevoke(scope);
+
+if(!payload||payload.scope!==scope){
+
+message("result","invalid");
+
+return;
+
+}
+
+runMutation(
+
+name,
+
+payload,
+
+response=>
+
+response.revoked===true
+
+&&response.scope===payload.scope
+
+&&validCount(response.revokedCount)
+
+&&response.currentSessionRevoked===
+
+(payload.scope==="all"),
+
+async()=>{
+
+if(scope==="all"){
+
+await localLogout();
+
+return;
+
+}
+
+$("allReason").value="";
+
+$("confirmationText").value="";
+
+$("confirmAll").checked=false;
+
+closeRevoke();
+
+message("result","revokeSuccess");
+
+try{
+
+await loadAccount();
+
+await loadList("sessions",true);
+
+}catch(e){
+
+message("result","error");
+
+}
+
+}
+
+);
+
+}
+
+$("revokeOthers").onclick=()=>{
+
+bulkRevoke("others");
+
+};
+
+$("revokeAll").onclick=()=>{
+
+bulkRevoke("all");
+
+};
+
+$("logoutButton").onclick=async()=>{
+
+if(!window.confirm(t("confirmLogout")))return;
+
+if(busy||mutationBusy)return;
+
+mutationBusy=true;
+
+updateControls();
+
+try{
+
+if(isOwner()){
+
+const response=await serverCall(
+
+"endOwnerAdminSession",
+
+{
+
+requestId:crypto.randomUUID()
+
+}
+
+);
+
+if(response.ended!==true){
+
+throw new Error("Logout not confirmed");
+
+}
+
+}
+
+}catch(e){
+
+window.alert(t("logoutError"));
+
+}finally{
+
+await localLogout();
+
+}
+
+};
+
+[
+
+["revokeReason","confirmRevoke"],
+
+["allReason","confirmAll"],
+
+["confirmationText","confirmAll"]
+
+].forEach(([id,confirmId])=>{
+
+$(id).addEventListener("input",()=>{
+
+$(confirmId).checked=false;
+
+updateControls();
+
+});
+
+});
+
+["confirmRevoke","confirmAll"]
+
+.forEach(id=>{
+
+$(id).addEventListener(
+
+"change",
+
+updateControls
+
+);
+
+});
+
+function updateControls(){
+
+const locked=
+
+!isOwner()
+
+||busy
+
+||mutationBusy;
+
+const pending=!!pendingMutation;
+
+[
+
+"refreshAccount",
+
+"loadSessions",
+
+"moreSessions",
+
+"loadLoginHistory",
+
+"moreLoginHistory",
+
+"loadAlerts",
+
+"moreAlerts",
+
+"loadAudit",
+
+"moreAudit",
+
+"closeRevoke",
+
+"revokeReason",
+
+"confirmRevoke",
+
+"allReason",
+
+"confirmationText",
+
+"confirmAll"
+
+].forEach(id=>{
+
+$(id).disabled=locked||pending;
+
+});
+
+document.querySelectorAll("[data-dynamic]")
+
+.forEach(button=>{
+
+button.disabled=locked||pending;
+
+});
+
+$("revokeSession").disabled=
+
+locked
+
+||(
+
+pending
+
+?pendingMutation.name!=="revokeAdminOwnerSession"
+
+:!readSingleRevoke()
+
+);
+
+$("revokeOthers").disabled=
+
+locked
+
+||(
+
+pending
+
+?(
+
+pendingMutation.name!=="revokeAdminOwnerSessions"
+
+||pendingMutation.payload.scope!=="others"
+
+)
+
+:!readBulkRevoke("others")
+
+);
+
+$("revokeAll").disabled=
+
+locked
+
+||(
+
+pending
+
+?(
+
+pendingMutation.name!=="revokeAdminOwnerSessions"
+
+||pendingMutation.payload.scope!=="all"
+
+)
+
+:!readBulkRevoke("all")
+
+);
+
+$("logoutButton").disabled=
+
+busy||mutationBusy;
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+const links={
+
+loginLink:"admin-login.html",
+
+dashboardLink:"admin-dashboard.html",
+
+backLink:"admin-dashboard.html",
+
+securityLink:"admin-security.html",
+
+settingsLink:"admin-settings.html",
+
+databaseLink:"admin-database.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href=pageLink(page);
+
+});
+
+Object.keys(messages).forEach(id=>{
+
+message(id,messages[id]);
+
+});
+
+renderAccount();
+
+Object.keys(lists).forEach(renderList);
+
+renderSelectedSession();
+
+updateControls();
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+
+"myride_admin_language",
+
+lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+ownerUid=null;
+
+busy=false;
+
+mutationBusy=false;
+
+account=null;
+
+selectedSession=null;
+
+pendingMutation=null;
+
+Object.values(lists).forEach(list=>{
+
+list.records=[];
+
+list.cursor=null;
+
+});
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("revokePanel").hidden=true;
+
+$("revokeReason").value="";
+
+$("confirmRevoke").checked=false;
+
+$("allReason").value="";
+
+$("confirmationText").value="";
+
+$("confirmAll").checked=false;
+
+message("result","");
+
+renderLanguage();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+message("status","denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+message("status","offline");
+
+return;
+
+}
+
+message("status","checking");
+
+try{
+
+const appToken=await getToken(
+
+appCheck,
+
+false
+
+);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+message("status","ownerVerified");
+
+updateControls();
+
+await runRead(async()=>{
+
+await loadAccount();
+
+await loadList("sessions",true);
+
+});
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+setInterval(async()=>{
+
+if(!isOwner()
+
+||checking
+
+||mutationBusy)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation)return;
+
+if(!validOwner(response.data,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+setInterval(()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation
+
+||document.hidden)return;
+
+runRead(async()=>{
+
+await loadAccount();
+
+if(!selectedSession){
+
+await loadList("sessions",true);
+
+}
+
+});
+
+},60000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+message("status","offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("beforeunload",event=>{
+
+if(mutationBusy||pendingMutation){
+
+event.preventDefault();
+
+event.returnValue="";
+
+}
+
+});
+
+window.addEventListener(
+
+"pagehide",
+
+clearSession
+
+);
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+renderLanguage();
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
