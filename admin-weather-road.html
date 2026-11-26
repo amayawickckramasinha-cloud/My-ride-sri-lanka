@@ -1,0 +1,3856 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Weather & Road Management</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+crossorigin="anonymous">
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3,h4{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+input,select,textarea{
+width:100%;
+padding:13px;
+margin:8px 0;
+background:#292929;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+label{
+display:block;
+margin-top:12px;
+line-height:1.7;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border-radius:9px;
+padding:15px;
+overflow-wrap:anywhere;
+}
+
+.stat strong{
+display:block;
+font-size:22px;
+margin-top:10px;
+color:#FFD600;
+}
+
+.record{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+#map{
+height:420px;
+width:100%;
+border-radius:10px;
+background:#292929;
+}
+
+.good{
+color:#55E68A;
+}
+
+.warning{
+color:#FFB347;
+}
+
+.bad{
+color:#FF7777;
+}
+
+.danger{
+background:#C62828;
+color:white;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.checkRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+margin:15px 0;
+}
+
+.checkRow input{
+width:20px;
+height:20px;
+flex-shrink:0;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+.legend{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+font-size:13px;
+margin-top:12px;
+}
+
+.dot{
+display:inline-block;
+width:12px;
+height:12px;
+border-radius:50%;
+margin-right:5px;
+}
+
+#status,#result,#saveResult,#reviewResult{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+@media(max-width:450px){
+
+#map{
+height:350px;
+}
+
+.stat strong{
+font-size:19px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading">
+Weather & Road Management
+</h2>
+
+<div class="languages">
+
+<button data-lang="si">සිංහල</button>
+<button data-lang="en">English</button>
+<button data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+role="status"
+aria-live="polite">
+Checking security...
+</p>
+
+<section id="accessPanel"
+class="panel"
+hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="overview"></h3>
+
+<div id="overview"
+class="grid"></div>
+
+<p id="lastUpdate"
+class="note"></p>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="liveMap"></h3>
+
+<div id="map"></div>
+
+<div class="legend">
+
+<span>
+<i class="dot"
+style="background:#25D366"></i>
+<span data-t="normal"></span>
+</span>
+
+<span>
+<i class="dot"
+style="background:#3388FF"></i>
+<span data-t="rain"></span>
+</span>
+
+<span>
+<i class="dot"
+style="background:#FF9800"></i>
+<span data-t="difficult"></span>
+</span>
+
+<span>
+<i class="dot"
+style="background:#888888"></i>
+<span data-t="unknown"></span>
+</span>
+
+</div>
+
+<p class="note"
+data-t="mapNotice"></p>
+
+<button id="fitMap"
+data-t="showAll"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="districtWeather"></h3>
+
+<label for="districtFilter"
+data-t="district"></label>
+
+<select id="districtFilter">
+
+<option value="all"
+data-t="all"></option>
+
+</select>
+
+<button id="checkDistrict"
+data-t="check"></button>
+
+<div id="weatherList"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="surcharges"></h3>
+
+<div id="fareSummary"
+class="grid"></div>
+
+<p class="note"
+data-t="fareNotice"></p>
+
+<a id="fareLink"
+class="action"
+data-t="fareManagement"></a>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="automaticSettings"></h3>
+
+<label class="checkRow">
+
+<input id="weatherEnabled"
+type="checkbox">
+
+<span data-t="autoWeather"></span>
+
+</label>
+
+<label class="checkRow">
+
+<input id="roadEnabled"
+type="checkbox">
+
+<span data-t="autoRoad"></span>
+
+</label>
+
+<label class="checkRow">
+
+<input id="weatherChargeEnabled"
+type="checkbox">
+
+<span data-t="autoRainCharge"></span>
+
+</label>
+
+<label class="checkRow">
+
+<input id="roadChargeEnabled"
+type="checkbox">
+
+<span data-t="autoRoadCharge"></span>
+
+</label>
+
+<label for="rainThreshold"
+data-t="rainThreshold"></label>
+
+<input id="rainThreshold"
+type="number"
+min="0.1"
+max="100"
+step="0.1">
+
+<label for="weatherInterval"
+data-t="weatherInterval"></label>
+
+<select id="weatherInterval">
+
+<option value="5">5 MIN</option>
+<option value="10">10 MIN</option>
+<option value="15">15 MIN</option>
+<option value="30">30 MIN</option>
+<option value="60">60 MIN</option>
+
+</select>
+
+<label for="weatherMaxAge"
+data-t="weatherMaxAge"></label>
+
+<select id="weatherMaxAge">
+
+<option value="10">10 MIN</option>
+<option value="15">15 MIN</option>
+<option value="30">30 MIN</option>
+<option value="60">60 MIN</option>
+
+</select>
+
+<label for="roadMaxAge"
+data-t="roadMaxAge"></label>
+
+<select id="roadMaxAge">
+
+<option value="1">1 DAY</option>
+<option value="3">3 DAYS</option>
+<option value="7">7 DAYS</option>
+<option value="14">14 DAYS</option>
+<option value="30">30 DAYS</option>
+
+</select>
+
+<p class="note"
+data-t="unknownNotice"></p>
+
+<label for="settingsReason"
+data-t="reason"></label>
+
+<textarea id="settingsReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="settingsConsent"
+type="checkbox">
+
+<span data-t="confirmSettings"></span>
+
+</label>
+
+<button id="saveSettings"
+data-t="save"
+disabled></button>
+
+<p id="saveResult"
+role="status"
+aria-live="polite"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="roadReports"></h3>
+
+<label for="reportStatus"
+data-t="reportStatus"></label>
+
+<select id="reportStatus">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="pending"
+data-t="pending"></option>
+
+<option value="approved"
+data-t="approved"></option>
+
+<option value="rejected"
+data-t="rejected"></option>
+
+<option value="expired"
+data-t="expired"></option>
+
+</select>
+
+<button id="loadReports"
+data-t="loadReports"></button>
+
+<div id="reportList"></div>
+
+<button id="moreReports"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section id="reviewPanel"
+class="panel"
+hidden>
+
+<h3 data-t="reviewReport"></h3>
+
+<div id="reviewDetails"></div>
+
+<label for="reviewDecision"
+data-t="decision"></label>
+
+<select id="reviewDecision">
+
+<option value="approved"
+data-t="approved"></option>
+
+<option value="rejected"
+data-t="rejected"></option>
+
+</select>
+
+<label for="evidence"
+data-t="evidence"></label>
+
+<textarea id="evidence"
+maxlength="1000"></textarea>
+
+<label for="reviewReason"
+data-t="reason"></label>
+
+<textarea id="reviewReason"
+maxlength="500"></textarea>
+
+<p class="warning"
+data-t="reviewNotice"></p>
+
+<label class="checkRow">
+
+<input id="reviewConsent"
+type="checkbox">
+
+<span data-t="confirmReview"></span>
+
+</label>
+
+<button id="submitReview"
+data-t="confirm"
+disabled></button>
+
+<button id="closeReview"
+class="back"
+data-t="close"></button>
+
+<p id="reviewResult"
+role="status"
+aria-live="polite"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="history"></h3>
+
+<div id="historyList"></div>
+
+<button id="loadHistory"
+data-t="loadHistory"></button>
+
+<button id="moreHistory"
+data-t="more"
+hidden></button>
+
+</section>
+
+<p id="result"
+role="status"
+aria-live="polite"></p>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+crossorigin="anonymous">
+</script>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const districts=[
+
+"Ampara",
+"Anuradhapura",
+"Badulla",
+"Batticaloa",
+"Colombo",
+"Galle",
+"Gampaha",
+"Hambantota",
+"Jaffna",
+"Kalutara",
+"Kandy",
+"Kegalle",
+"Kilinochchi",
+"Kurunegala",
+"Mannar",
+"Matale",
+"Matara",
+"Monaragala",
+"Mullaitivu",
+"Nuwara Eliya",
+"Polonnaruwa",
+"Puttalam",
+"Ratnapura",
+"Trincomalee",
+"Vavuniya"
+
+];
+
+const reportStatuses=[
+
+"pending",
+"approved",
+"rejected",
+"expired"
+
+];
+
+const roadTypes=[
+
+"unpaved",
+"gravel",
+"mud",
+"damaged",
+"flooded",
+"landslide",
+"other"
+
+];
+
+const words={
+
+si:{
+
+heading:"කාලගුණ සහ මාර්ග කළමනාකරණය",
+overview:"01. පද්ධති තත්ත්වය",
+weatherAPI:"කාලගුණ API",
+roadAPI:"මාර්ග API",
+connected:"සම්බන්ධයි",
+disconnected:"සම්බන්ධ නැත",
+rainDistricts:"වැසි වාර්තා වන දිස්ත්‍රික්ක",
+normalDistricts:"සාමාන්‍ය කාලගුණය",
+unknownDistricts:"තහවුරු නොකළ දිස්ත්‍රික්ක",
+pendingReports:"පරීක්ෂා කිරීමට ඇති වාර්තා",
+liveMap:"02. කාලගුණ සහ මාර්ග සිතියම",
+normal:"සාමාන්‍ය",
+rain:"වැසි සහිත",
+difficult:"දුෂ්කර මාර්ග",
+unknown:"තහවුරු කර නොමැත",
+mapNotice:"සිතියමේ පෙන්වන්නේ Server දත්තයි. දිස්ත්‍රික්කයක එක් ස්ථානයක කාලගුණය මුළු දිස්ත්‍රික්කයටම අදාළ නොවේ.",
+showAll:"සියලු ස්ථාන බලන්න",
+districtWeather:"03. දිස්ත්‍රික් කාලගුණ තත්ත්වය",
+district:"දිස්ත්‍රික්කය",
+all:"සියල්ල",
+check:"පරීක්ෂා කරන්න",
+temperature:"උෂ්ණත්වය",
+rainfall:"වැසි තීව්‍රතාව",
+humidity:"වායු ආර්ද්‍රතාව",
+wind:"සුළං වේගය",
+source:"දත්ත මූලාශ්‍රය",
+weather:"කාලගුණය",
+road:"මාර්ග තත්ත්වය",
+surcharges:"04. අමතර ගාස්තු",
+rainRate:"වැසි ගාස්තුව",
+roadRate:"දුෂ්කර මාර්ග ගාස්තුව",
+combinedRate:"දෙකම අදාළ ගාස්තුව",
+fareVersion:"ගාස්තු සංස්කරණය",
+fareNotice:"අමතර ගාස්තු වෙනස් කිරීම 50 වැනි Fare Management පිටුවෙන් සිදු කළ යුතුය.",
+fareManagement:"Fare Management වෙත",
+automaticSettings:"05. ස්වයංක්‍රීය පද්ධති සැකසුම්",
+autoWeather:"ස්වයංක්‍රීය කාලගුණ පරීක්ෂාව",
+autoRoad:"ස්වයංක්‍රීය මාර්ග පරීක්ෂාව",
+autoRainCharge:"තහවුරු කළ වැසි දුරට අමතර ගාස්තු",
+autoRoadCharge:"තහවුරු කළ දුෂ්කර මාර්ග දුරට අමතර ගාස්තු",
+rainThreshold:"වැසි හඳුනාගැනීමේ අවම තීව්‍රතාව (mm/h)",
+weatherInterval:"කාලගුණ දත්ත ලබාගැනීමේ කාල පරතරය",
+weatherMaxAge:"කාලගුණ දත්ත වලංගු උපරිම කාලය",
+roadMaxAge:"මාර්ග දත්ත වලංගු උපරිම කාලය",
+unknownNotice:"තහවුරු නොකළ හෝ පැරණි දත්ත සඳහා අමතර ගාස්තු අය නොකළ යුතුය. අනාරක්ෂිත මාර්ග ගාස්තු සඳහා අනුමත නොකළ යුතුය.",
+reason:"හේතුව",
+confirmSettings:"මෙම සැකසුම් වෙනස් කිරීමට මම එකඟ වෙමි.",
+save:"සැකසුම් සුරකින්න",
+roadReports:"06. රියදුරන්ගේ මාර්ග වාර්තා",
+reportStatus:"වාර්තා තත්ත්වය",
+pending:"පරීක්ෂා කිරීමට ඇත",
+approved:"අනුමත කළ",
+rejected:"ප්‍රතික්ෂේප කළ",
+expired:"කල් ඉකුත් වූ",
+loadReports:"මාර්ග වාර්තා බලන්න",
+more:"තවත් වාර්තා",
+reviewReport:"07. මාර්ග වාර්තාව පරීක්ෂා කිරීම",
+decision:"තීරණය",
+evidence:"තහවුරු කිරීමේ සාක්ෂි / මූලාශ්‍ර",
+reviewNotice:"රියදුරු වාර්තාවක් පමණක් ගාස්තු අය කිරීමට ප්‍රමාණවත් නොවේ. මාර්ග කොටස සහ ආරක්ෂාව තහවුරු කළ යුතුය.",
+confirmReview:"මෙම වාර්තාව පරීක්ෂා කර තීරණය තහවුරු කරමි.",
+confirm:"තහවුරු කරන්න",
+close:"වසන්න",
+history:"08. වෙනස්කම් ඉතිහාසය",
+loadHistory:"ඉතිහාසය බලන්න",
+back:"Admin Dashboard වෙත",
+login:"Admin Login",
+checking:"ආරක්ෂාව පරීක්ෂා කරමින්...",
+denied:"Owner Admin අවසරය තහවුරු කර නොමැත.",
+verified:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+loading:"Server දත්ත ලබාගනිමින්...",
+error:"Server දත්ත ලබාගත නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+refresh:"යාවත්කාලීන කරන්න",
+updated:"අවසන් යාවත්කාලීනය",
+version:"සංස්කරණ අංකය",
+invalid:"ඇතුළත් කළ දත්ත පරීක්ෂා කරන්න.",
+saving:"Server වෙත යොමු කරමින්...",
+saved:"Server මගින් තහවුරු කර ඇත.",
+saveError:"ක්‍රියාමාර්ගය තහවුරු කළ නොහැක. නැවත දත්ත පරීක්ෂා කරන්න.",
+noRecords:"වාර්තා නොමැත.",
+driverId:"රියදුරු ID",
+reportId:"වාර්තා ID",
+bookingId:"හයර් ID",
+location:"ස්ථානය",
+roadType:"මාර්ග වර්ගය",
+description:"විස්තරය",
+reported:"වාර්තා කළ වේලාව",
+review:"පරීක්ෂා කරන්න",
+viewMap:"සිතියමේ බලන්න",
+unpaved:"තාර නොදැමූ මාර්ග",
+gravel:"බොරළු මාර්ග",
+mud:"මඩ සහිත මාර්ග",
+damaged:"හානි වූ මාර්ග",
+flooded:"ජලයෙන් යටවූ මාර්ග",
+landslide:"නායයෑම්",
+other:"වෙනත්",
+unsafe:"අනාරක්ෂිත මාර්ගය",
+mapError:"සිතියම ලබාගත නොහැක.",
+settingsChange:"සැකසුම් වෙනස් කිරීම",
+reportReview:"වාර්තා පරීක්ෂාව",
+action:"ක්‍රියාමාර්ගය",
+on:"ON",
+off:"OFF",
+unsaved:"සුරැකී නැති වෙනස්කම් ඇත.",
+discard:"සුරැකී නැති වෙනස්කම් ඉවත් කරන්නද?"
+
+},
+
+en:{
+
+heading:"Weather & Road Management",
+overview:"01. System Overview",
+weatherAPI:"Weather API",
+roadAPI:"Road API",
+connected:"Connected",
+disconnected:"Disconnected",
+rainDistricts:"Districts Reporting Rain",
+normalDistricts:"Normal Weather",
+unknownDistricts:"Unverified Districts",
+pendingReports:"Pending Reports",
+liveMap:"02. Weather and Road Map",
+normal:"Normal",
+rain:"Rainy",
+difficult:"Difficult Road",
+unknown:"Not Verified",
+mapNotice:"Displays server data. A district observation does not represent weather across the entire district.",
+showAll:"Show All Locations",
+districtWeather:"03. District Weather",
+district:"District",
+all:"All",
+check:"Check",
+temperature:"Temperature",
+rainfall:"Rain Intensity",
+humidity:"Humidity",
+wind:"Wind Speed",
+source:"Data Source",
+weather:"Weather",
+road:"Road Condition",
+surcharges:"04. Surcharges",
+rainRate:"Rain Surcharge",
+roadRate:"Difficult Road Surcharge",
+combinedRate:"Combined Surcharge",
+fareVersion:"Fare Version",
+fareNotice:"Change surcharge amounts through page 50, Fare Management.",
+fareManagement:"Open Fare Management",
+automaticSettings:"05. Automatic System Settings",
+autoWeather:"Automatic Weather Detection",
+autoRoad:"Automatic Road Detection",
+autoRainCharge:"Charge for Verified Rain Distance",
+autoRoadCharge:"Charge for Verified Difficult Road Distance",
+rainThreshold:"Minimum Rain Intensity (mm/h)",
+weatherInterval:"Weather Refresh Interval",
+weatherMaxAge:"Maximum Weather Data Age",
+roadMaxAge:"Maximum Road Data Age",
+unknownNotice:"No surcharge for stale or unverified data. Unsafe roads must not be approved for surcharge eligibility.",
+reason:"Reason",
+confirmSettings:"I authorize these settings changes.",
+save:"Save Settings",
+roadReports:"06. Driver Road Reports",
+reportStatus:"Report Status",
+pending:"Pending",
+approved:"Approved",
+rejected:"Rejected",
+expired:"Expired",
+loadReports:"View Road Reports",
+more:"Load More",
+reviewReport:"07. Review Road Report",
+decision:"Decision",
+evidence:"Verification Evidence / Source",
+reviewNotice:"A driver report alone is insufficient for charging. Road segment and safety must be verified.",
+confirmReview:"I have reviewed and confirm this decision.",
+confirm:"Confirm",
+close:"Close",
+history:"08. Change History",
+loadHistory:"View History",
+back:"Back to Admin Dashboard",
+login:"Admin Login",
+checking:"Checking security...",
+denied:"Owner Admin authorization is not verified.",
+verified:"Owner authorization verified.",
+loading:"Loading server data...",
+error:"Unable to retrieve server data.",
+offline:"No internet connection.",
+refresh:"Refresh",
+updated:"Last Updated",
+version:"Version",
+invalid:"Check the entered information.",
+saving:"Submitting to server...",
+saved:"Confirmed by server.",
+saveError:"Action could not be confirmed. Refresh server data.",
+noRecords:"No records found.",
+driverId:"Driver ID",
+reportId:"Report ID",
+bookingId:"Booking ID",
+location:"Location",
+roadType:"Road Type",
+description:"Description",
+reported:"Reported At",
+review:"Review",
+viewMap:"View on Map",
+unpaved:"Unpaved Road",
+gravel:"Gravel Road",
+mud:"Muddy Road",
+damaged:"Damaged Road",
+flooded:"Flooded Road",
+landslide:"Landslide",
+other:"Other",
+unsafe:"Unsafe Road",
+mapError:"Map unavailable.",
+settingsChange:"Settings Change",
+reportReview:"Report Review",
+action:"Action",
+on:"ON",
+off:"OFF",
+unsaved:"Unpublished changes.",
+discard:"Discard unsaved changes?"
+
+},
+
+ta:{
+
+heading:"வானிலை மற்றும் சாலை மேலாண்மை",
+overview:"01. அமைப்பு நிலை",
+weatherAPI:"வானிலை API",
+roadAPI:"சாலை API",
+connected:"இணைக்கப்பட்டுள்ளது",
+disconnected:"இணைக்கப்படவில்லை",
+rainDistricts:"மழை பதிவான மாவட்டங்கள்",
+normalDistricts:"சாதாரண வானிலை",
+unknownDistricts:"உறுதிப்படுத்தாத மாவட்டங்கள்",
+pendingReports:"நிலுவை அறிக்கைகள்",
+liveMap:"02. வானிலை மற்றும் சாலை வரைபடம்",
+normal:"சாதாரணம்",
+rain:"மழை",
+difficult:"கடினமான சாலை",
+unknown:"உறுதிப்படுத்தப்படவில்லை",
+mapNotice:"சேவையக தரவு மட்டும் காட்டப்படும். ஒரு இடத்தின் வானிலை முழு மாவட்டத்தையும் குறிக்காது.",
+showAll:"அனைத்து இடங்களையும் பார்க்கவும்",
+districtWeather:"03. மாவட்ட வானிலை",
+district:"மாவட்டம்",
+all:"அனைத்தும்",
+check:"சரிபார்க்கவும்",
+temperature:"வெப்பநிலை",
+rainfall:"மழை தீவிரம்",
+humidity:"ஈரப்பதம்",
+wind:"காற்றின் வேகம்",
+source:"தரவு மூலம்",
+weather:"வானிலை",
+road:"சாலை நிலை",
+surcharges:"04. கூடுதல் கட்டணங்கள்",
+rainRate:"மழை கூடுதல் கட்டணம்",
+roadRate:"கடின சாலை கட்டணம்",
+combinedRate:"இரண்டும் சேர்ந்த கட்டணம்",
+fareVersion:"கட்டண பதிப்பு",
+fareNotice:"கூடுதல் கட்டணங்களை 50வது கட்டண மேலாண்மை பக்கத்தில் மாற்றவும்.",
+fareManagement:"கட்டண மேலாண்மை",
+automaticSettings:"05. தானியங்கி அமைப்புகள்",
+autoWeather:"தானியங்கி வானிலை கண்டறிதல்",
+autoRoad:"தானியங்கி சாலை கண்டறிதல்",
+autoRainCharge:"உறுதிப்படுத்திய மழை தூரத்திற்கு கட்டணம்",
+autoRoadCharge:"உறுதிப்படுத்திய கடின சாலை தூரத்திற்கு கட்டணம்",
+rainThreshold:"குறைந்தபட்ச மழை தீவிரம் (mm/h)",
+weatherInterval:"வானிலை புதுப்பிப்பு இடைவெளி",
+weatherMaxAge:"வானிலை தரவு செல்லுபடியாகும் காலம்",
+roadMaxAge:"சாலை தரவு செல்லுபடியாகும் காலம்",
+unknownNotice:"பழைய அல்லது உறுதிப்படுத்தாத தரவுக்கு கூடுதல் கட்டணம் இல்லை. பாதுகாப்பற்ற சாலைகளை கட்டணத்திற்கு அங்கீகரிக்க வேண்டாம்.",
+reason:"காரணம்",
+confirmSettings:"அமைப்பு மாற்றங்களை அங்கீகரிக்கிறேன்.",
+save:"அமைப்புகளை சேமிக்கவும்",
+roadReports:"06. சாரதி சாலை அறிக்கைகள்",
+reportStatus:"அறிக்கை நிலை",
+pending:"நிலுவையில்",
+approved:"அங்கீகரிக்கப்பட்டது",
+rejected:"நிராகரிக்கப்பட்டது",
+expired:"காலாவதியானது",
+loadReports:"சாலை அறிக்கைகளை பார்க்கவும்",
+more:"மேலும் பதிவுகள்",
+reviewReport:"07. சாலை அறிக்கை சரிபார்ப்பு",
+decision:"தீர்மானம்",
+evidence:"சரிபார்ப்பு ஆதாரம்",
+reviewNotice:"சாரதி அறிக்கை மட்டும் போதாது. சாலை பகுதி மற்றும் பாதுகாப்பை சரிபார்க்க வேண்டும்.",
+confirmReview:"சரிபார்த்து தீர்மானத்தை உறுதிப்படுத்துகிறேன்.",
+confirm:"உறுதிப்படுத்தவும்",
+close:"மூடவும்",
+history:"08. மாற்ற வரலாறு",
+loadHistory:"வரலாற்றை பார்க்கவும்",
+back:"நிர்வாக முதன்மைப் பக்கத்திற்கு",
+login:"நிர்வாக உள்நுழைவு",
+checking:"பாதுகாப்பு சரிபார்க்கப்படுகிறது...",
+denied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+verified:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+loading:"சேவையக தரவு பெறப்படுகிறது...",
+error:"சேவையக தரவை பெற முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+refresh:"புதுப்பிக்கவும்",
+updated:"கடைசி புதுப்பிப்பு",
+version:"பதிப்பு",
+invalid:"உள்ளிட்ட தகவல்களை சரிபார்க்கவும்.",
+saving:"சேவையகத்திற்கு அனுப்பப்படுகிறது...",
+saved:"சேவையகம் உறுதிப்படுத்தியது.",
+saveError:"நடவடிக்கையை உறுதிப்படுத்த முடியவில்லை.",
+noRecords:"பதிவுகள் இல்லை.",
+driverId:"சாரதி ID",
+reportId:"அறிக்கை ID",
+bookingId:"பயண ID",
+location:"இடம்",
+roadType:"சாலை வகை",
+description:"விவரம்",
+reported:"அறிக்கை நேரம்",
+review:"சரிபார்க்கவும்",
+viewMap:"வரைபடத்தில் பார்க்கவும்",
+unpaved:"தார் இல்லாத சாலை",
+gravel:"சரளை சாலை",
+mud:"சேறு சாலை",
+damaged:"சேதமடைந்த சாலை",
+flooded:"வெள்ளம் சூழ்ந்த சாலை",
+landslide:"மண்சரிவு",
+other:"மற்றவை",
+unsafe:"பாதுகாப்பற்ற சாலை",
+mapError:"வரைபடம் கிடைக்கவில்லை.",
+settingsChange:"அமைப்பு மாற்றம்",
+reportReview:"அறிக்கை சரிபார்ப்பு",
+action:"நடவடிக்கை",
+on:"ON",
+off:"OFF",
+unsaved:"சேமிக்காத மாற்றங்கள் உள்ளன.",
+discard:"சேமிக்காத மாற்றங்களை நீக்கவா?"
+
+}
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+new URLSearchParams(location.search).get("lang")
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected)){
+lang=selected;
+}
+
+}catch(e){}
+
+const t=key=>words[lang][key]||key;
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+let busy=false;
+let mutationBusy=false;
+
+let settings=null;
+let summary=null;
+let fares=null;
+
+let weatherRecords=[];
+let roadSegments=[];
+let reports=[];
+let historyRecords=[];
+
+let reportCursor=null;
+let historyCursor=null;
+let reportFilter="all";
+
+let reportsLoaded=false;
+let historyLoaded=false;
+let selectedReport=null;
+
+let dirty=false;
+let lastSync=null;
+let serverOffset=0;
+
+let map=null;
+let mapLayer=null;
+let refreshTimer=null;
+
+let statusKey="checking";
+let resultKey="";
+let saveResultKey="";
+let reviewResultKey="";
+
+let pendingMutation=null;
+
+districts.forEach(district=>{
+
+const option=document.createElement("option");
+
+option.value=district;
+option.textContent=district;
+
+$("districtFilter").appendChild(option);
+
+});
+
+function status(key){
+
+statusKey=key;
+$("status").textContent=t(key);
+
+}
+
+function result(key){
+
+resultKey=key;
+$("result").textContent=key?t(key):"";
+
+}
+
+function saveResult(key){
+
+saveResultKey=key;
+$("saveResult").textContent=key?t(key):"";
+
+}
+
+function reviewResult(key){
+
+reviewResultKey=key;
+$("reviewResult").textContent=key?t(key):"";
+
+}
+
+function isOwner(){
+
+return authorized
+&&ownerUid!==null
+&&auth?.currentUser?.uid===ownerUid
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+&&data.uid===uid
+&&data.role==="owner"
+&&data.ownerUidVerified===true
+&&data.sessionValid===true;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,max){
+
+return typeof value==="string"
+&&value.length<=max;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+&&value>=0;
+
+}
+
+function validNumber(value,min,max){
+
+return typeof value==="number"
+&&Number.isFinite(value)
+&&value>=min
+&&value<=max;
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+&&value>0
+&&value<=8640000000000000;
+
+}
+
+function validPoint(point){
+
+return point
+&&validNumber(point.lat,5.85,9.9)
+&&validNumber(point.lon,79.5,82);
+
+}
+
+function validCursor(value){
+
+return value===null
+||validText(value,4000);
+
+}
+
+function serverNow(){
+
+return Date.now()+serverOffset;
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"medium"
+
+}
+
+).format(new Date(value));
+
+}
+
+function money(value){
+
+if(!validNumber(value,0,10000000)){
+
+return "—";
+
+}
+
+return new Intl.NumberFormat("en-LK",{
+
+style:"currency",
+currency:"LKR",
+minimumFractionDigits:2
+
+}).format(value);
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+encodeURIComponent(lang);
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function createStat(label,value){
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const name=document.createElement("span");
+
+name.textContent=t(label);
+
+const number=document.createElement("strong");
+
+number.textContent=String(value??"—");
+
+box.append(name,number);
+
+return box;
+
+}
+
+function createButton(label,callback){
+
+const button=document.createElement("button");
+
+button.textContent=t(label);
+button.onclick=callback;
+button.disabled=busy||mutationBusy||!isOwner();
+
+return button;
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+$("loginLink").href=pageLink("admin-login.html");
+
+$("dashboardLink").href=
+pageLink("admin-dashboard.html");
+
+$("backLink").href=
+pageLink("admin-dashboard.html");
+
+$("fareLink").href=
+pageLink("admin-fares.html");
+
+$("settingsReason").placeholder=t("reason");
+
+$("reviewReason").placeholder=t("reason");
+
+$("evidence").placeholder=t("evidence");
+
+status(statusKey);
+result(resultKey);
+saveResult(saveResultKey);
+reviewResult(reviewResultKey);
+
+renderOverview();
+renderWeather();
+renderFares();
+renderReports();
+renderHistory();
+renderReview();
+renderMap();
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+
+"myride_admin_language",
+
+lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+async function serverCall(name,data={}){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+name,
+{timeout:25000}
+
+)(data);
+
+if(currentGeneration!==generation
+||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+function validSettings(data){
+
+return data
+
+&&validCount(data.version)
+
+&&typeof data.weatherEnabled==="boolean"
+
+&&typeof data.roadEnabled==="boolean"
+
+&&typeof data.weatherChargeEnabled==="boolean"
+
+&&typeof data.roadChargeEnabled==="boolean"
+
+&&(!data.weatherChargeEnabled
+||data.weatherEnabled)
+
+&&(!data.roadChargeEnabled
+||data.roadEnabled)
+
+&&validNumber(data.rainThreshold,0.1,100)
+
+&&[5,10,15,30,60]
+.includes(data.weatherIntervalMinutes)
+
+&&[10,15,30,60]
+.includes(data.weatherMaxAgeMinutes)
+
+&&data.weatherMaxAgeMinutes>=
+data.weatherIntervalMinutes
+
+&&[1,3,7,14,30]
+.includes(data.roadMaxAgeDays)
+
+&&validTime(data.updatedAtMs);
+
+}
+
+function validWeather(record){
+
+return record
+
+&&districts.includes(record.district)
+
+&&validPoint(record.location)
+
+&&["normal","rain","unknown"]
+.includes(record.weatherStatus)
+
+&&(record.temperature===null
+||validNumber(record.temperature,-30,70))
+
+&&(record.rainfall===null
+||validNumber(record.rainfall,0,1000))
+
+&&(record.humidity===null
+||validNumber(record.humidity,0,100))
+
+&&(record.windSpeed===null
+||validNumber(record.windSpeed,0,500))
+
+&&validText(record.source,100)
+
+&&validTime(record.updatedAtMs)
+
+&&typeof record.verified==="boolean";
+
+}
+
+function validSegment(record){
+
+return record
+
+&&validId(record.segmentId)
+
+&&districts.includes(record.district)
+
+&&validText(record.locationName,300)
+
+&&Array.isArray(record.points)
+
+&&record.points.length>=2
+
+&&record.points.length<=500
+
+&&record.points.every(validPoint)
+
+&&["normal","difficult","unsafe","unknown"]
+.includes(record.roadStatus)
+
+&&typeof record.verified==="boolean"
+
+&&validTime(record.updatedAtMs)
+
+&&validTime(record.expiresAtMs)
+
+&&record.expiresAtMs>=record.updatedAtMs;
+
+}
+
+function validSummary(data){
+
+return data
+
+&&["connected","disconnected","unknown"]
+.includes(data.weatherApiStatus)
+
+&&["connected","disconnected","unknown"]
+.includes(data.roadApiStatus)
+
+&&validCount(data.pendingReports);
+
+}
+
+function validFares(data){
+
+return data
+
+&&validCount(data.version)
+
+&&data.published===true
+
+&&validNumber(data.rainSurchargePerKm,0,10000)
+
+&&validNumber(data.difficultRoadSurchargePerKm,0,10000);
+
+}
+
+function weatherState(record){
+
+if(!settings||!record.verified){
+
+return "unknown";
+
+}
+
+const age=serverNow()-record.updatedAtMs;
+
+if(age< -5000
+
+||age>settings.weatherMaxAgeMinutes*60000){
+
+return "unknown";
+
+}
+
+return record.weatherStatus;
+
+}
+
+function roadState(record){
+
+if(!settings||!record.verified){
+
+return "unknown";
+
+}
+
+const age=serverNow()-record.updatedAtMs;
+
+if(age< -5000
+
+||age>settings.roadMaxAgeDays*86400000
+
+||serverNow()>record.expiresAtMs){
+
+return "unknown";
+
+}
+
+return record.roadStatus;
+
+}
+
+function renderOverview(){
+
+const container=$("overview");
+
+container.replaceChildren();
+
+const rain=weatherRecords.filter(
+
+record=>weatherState(record)==="rain"
+
+).length;
+
+const normal=weatherRecords.filter(
+
+record=>weatherState(record)==="normal"
+
+).length;
+
+container.append(
+
+createStat(
+
+"weatherAPI",
+
+summary?t(summary.weatherApiStatus):"—"
+
+),
+
+createStat(
+
+"roadAPI",
+
+summary?t(summary.roadApiStatus):"—"
+
+),
+
+createStat(
+
+"rainDistricts",
+
+summary?rain:"—"
+
+),
+
+createStat(
+
+"normalDistricts",
+
+summary?normal:"—"
+
+),
+
+createStat(
+
+"unknownDistricts",
+
+summary?25-rain-normal:"—"
+
+),
+
+createStat(
+
+"pendingReports",
+
+summary?summary.pendingReports:"—"
+
+)
+
+);
+
+$("lastUpdate").textContent=
+
+lastSync===null
+
+?""
+
+:t("updated")+": "+formatDate(lastSync);
+
+}
+
+function renderFares(){
+
+const container=$("fareSummary");
+
+container.replaceChildren();
+
+container.append(
+
+createStat(
+
+"rainRate",
+
+fares?money(fares.rainSurchargePerKm)+"/KM":"—"
+
+),
+
+createStat(
+
+"roadRate",
+
+fares?money(fares.difficultRoadSurchargePerKm)+"/KM":"—"
+
+),
+
+createStat(
+
+"combinedRate",
+
+fares
+
+?money(
+
+fares.rainSurchargePerKm+
+fares.difficultRoadSurchargePerKm
+
+)+"/KM"
+
+:"—"
+
+),
+
+createStat(
+
+"fareVersion",
+
+fares?.version??"—"
+
+)
+
+);
+
+}
+
+function renderWeather(){
+
+const container=$("weatherList");
+
+container.replaceChildren();
+
+if(!isOwner())return;
+
+const district=$("districtFilter").value;
+
+const list=weatherRecords.filter(
+
+record=>district==="all"
+||record.district===district
+
+);
+
+if(!list.length){
+
+container.textContent=t("noRecords");
+
+return;
+
+}
+
+list.forEach(record=>{
+
+const panel=document.createElement("div");
+
+panel.className="record";
+
+const title=document.createElement("h4");
+
+title.textContent=record.district;
+
+panel.appendChild(title);
+
+const state=weatherState(record);
+
+const stateLine=document.createElement("strong");
+
+stateLine.className=
+
+state==="normal"?"good":
+state==="rain"?"warning":"bad";
+
+stateLine.textContent=t(state);
+
+panel.appendChild(stateLine);
+
+addLine(panel,"temperature",
+
+record.temperature===null
+
+?"—"
+
+:record.temperature+" °C");
+
+addLine(panel,"rainfall",
+
+record.rainfall===null
+
+?"—"
+
+:record.rainfall+" mm/h");
+
+addLine(panel,"humidity",
+
+record.humidity===null
+
+?"—"
+
+:record.humidity+"%");
+
+addLine(panel,"wind",
+
+record.windSpeed===null
+
+?"—"
+
+:record.windSpeed+" KM/H");
+
+addLine(panel,"source",record.source);
+
+addLine(panel,"updated",
+
+formatDate(record.updatedAtMs));
+
+panel.appendChild(
+
+createButton("viewMap",()=>{
+
+if(!isOwner()||!map)return;
+
+map.setView(
+
+[record.location.lat,record.location.lon],
+
+12
+
+);
+
+$("map").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+})
+
+);
+
+container.appendChild(panel);
+
+});
+
+}
+
+$("checkDistrict").onclick=()=>{
+
+renderWeather();
+
+const district=$("districtFilter").value;
+
+const record=weatherRecords.find(
+
+item=>item.district===district
+
+);
+
+if(record&&map&&isOwner()){
+
+map.setView(
+
+[record.location.lat,record.location.lon],
+
+11
+
+);
+
+}
+
+};
+
+$("districtFilter").onchange=renderWeather;
+
+function initializeMap(){
+
+if(map)return;
+
+if(typeof L==="undefined"){
+
+result("mapError");
+
+return;
+
+}
+
+map=L.map("map",{
+
+maxZoom:19
+
+}).setView([7.8731,80.7718],7);
+
+L.tileLayer(
+
+"https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+{
+
+maxZoom:19,
+
+attribution:"&copy; OpenStreetMap contributors"
+
+}
+
+).addTo(map);
+
+mapLayer=L.layerGroup().addTo(map);
+
+setTimeout(()=>{
+
+if(map&&isOwner())map.invalidateSize();
+
+},200);
+
+}
+
+function renderMap(){
+
+if(!map||!mapLayer)return;
+
+mapLayer.clearLayers();
+
+if(!isOwner())return;
+
+weatherRecords.forEach(record=>{
+
+const state=weatherState(record);
+
+const color=
+
+state==="rain"?"#3388FF":
+
+state==="normal"?"#25D366":"#888888";
+
+const popup=document.createElement("div");
+
+addLine(popup,"district",record.district);
+
+addLine(popup,"weather",t(state));
+
+addLine(popup,"updated",
+
+formatDate(record.updatedAtMs));
+
+L.circleMarker(
+
+[record.location.lat,record.location.lon],
+
+{
+
+radius:10,
+
+color:"#111",
+
+weight:2,
+
+fillColor:color,
+
+fillOpacity:1
+
+}
+
+).bindPopup(popup).addTo(mapLayer);
+
+});
+
+roadSegments.forEach(record=>{
+
+const state=roadState(record);
+
+if(state==="unknown")return;
+
+const color=
+
+state==="unsafe"?"#FF4444":
+
+state==="difficult"?"#FF9800":"#25D366";
+
+const popup=document.createElement("div");
+
+addLine(popup,"location",record.locationName);
+
+addLine(popup,"road",t(state));
+
+addLine(popup,"updated",
+
+formatDate(record.updatedAtMs));
+
+L.polyline(
+
+record.points.map(point=>[point.lat,point.lon]),
+
+{
+
+color,
+
+weight:6,
+
+opacity:.9
+
+}
+
+).bindPopup(popup).addTo(mapLayer);
+
+});
+
+}
+
+$("fitMap").onclick=()=>{
+
+if(!map||!isOwner())return;
+
+const points=weatherRecords.map(
+
+record=>[record.location.lat,record.location.lon]
+
+);
+
+roadSegments
+
+.filter(record=>roadState(record)!=="unknown")
+
+.forEach(record=>{
+
+record.points.forEach(point=>{
+
+points.push([point.lat,point.lon]);
+
+});
+
+});
+
+if(points.length){
+
+map.fitBounds(points,{
+
+padding:[25,25],
+
+maxZoom:14
+
+});
+
+}else{
+
+map.setView([7.8731,80.7718],7);
+
+}
+
+};
+
+const settingFields=[
+
+"weatherEnabled",
+"roadEnabled",
+"weatherChargeEnabled",
+"roadChargeEnabled",
+"rainThreshold",
+"weatherInterval",
+"weatherMaxAge",
+"roadMaxAge"
+
+];
+
+function populateSettings(data){
+
+$("weatherEnabled").checked=data.weatherEnabled;
+
+$("roadEnabled").checked=data.roadEnabled;
+
+$("weatherChargeEnabled").checked=
+data.weatherChargeEnabled;
+
+$("roadChargeEnabled").checked=
+data.roadChargeEnabled;
+
+$("rainThreshold").value=data.rainThreshold;
+
+$("weatherInterval").value=
+data.weatherIntervalMinutes;
+
+$("weatherMaxAge").value=
+data.weatherMaxAgeMinutes;
+
+$("roadMaxAge").value=
+data.roadMaxAgeDays;
+
+$("settingsReason").value="";
+
+$("settingsConsent").checked=false;
+
+dirty=false;
+
+updateControls();
+
+}
+
+function readSettings(){
+
+if(!settings){
+
+throw new Error("Settings unavailable");
+
+}
+
+const data={
+
+weatherEnabled:$("weatherEnabled").checked,
+
+roadEnabled:$("roadEnabled").checked,
+
+weatherChargeEnabled:
+$("weatherChargeEnabled").checked,
+
+roadChargeEnabled:
+$("roadChargeEnabled").checked,
+
+rainThreshold:Number($("rainThreshold").value),
+
+weatherIntervalMinutes:
+Number($("weatherInterval").value),
+
+weatherMaxAgeMinutes:
+Number($("weatherMaxAge").value),
+
+roadMaxAgeDays:Number($("roadMaxAge").value)
+
+};
+
+if(!validSettings({
+
+...data,
+
+version:settings.version,
+
+updatedAtMs:settings.updatedAtMs
+
+})){
+
+throw new Error("Invalid settings");
+
+}
+
+return data;
+
+}
+
+function settingsFingerprint(data){
+
+return JSON.stringify([
+
+data.weatherEnabled,
+
+data.roadEnabled,
+
+data.weatherChargeEnabled,
+
+data.roadChargeEnabled,
+
+data.rainThreshold,
+
+data.weatherIntervalMinutes,
+
+data.weatherMaxAgeMinutes,
+
+data.roadMaxAgeDays
+
+]);
+
+}
+
+function updateControls(){
+
+const locked=busy||mutationBusy||!isOwner();
+
+[
+
+"refreshButton",
+"checkDistrict",
+"districtFilter",
+"loadReports",
+"reportStatus",
+"moreReports",
+"loadHistory",
+"moreHistory"
+
+].forEach(id=>{
+
+$(id).disabled=locked;
+
+});
+
+settingFields.forEach(id=>{
+
+$(id).disabled=locked||!settings;
+
+});
+
+$("settingsReason").disabled=locked||!settings;
+
+$("settingsConsent").disabled=locked||!settings;
+
+$("weatherChargeEnabled").disabled=
+
+locked||!settings||!$("weatherEnabled").checked;
+
+$("roadChargeEnabled").disabled=
+
+locked||!settings||!$("roadEnabled").checked;
+
+let validDraft=false;
+
+try{
+
+readSettings();
+
+validDraft=true;
+
+}catch(e){}
+
+$("saveSettings").disabled=
+
+locked
+
+||!settings
+
+||!dirty
+
+||!validDraft
+
+||!$("settingsConsent").checked
+
+||$("settingsReason").value.trim().length<10;
+
+$("reviewDecision").disabled=locked;
+
+$("reviewReason").disabled=locked;
+
+$("evidence").disabled=locked;
+
+$("reviewConsent").disabled=locked;
+
+$("closeReview").disabled=mutationBusy;
+
+const approval=$("reviewDecision").value==="approved";
+
+$("submitReview").disabled=
+
+locked
+
+||!selectedReport
+
+||selectedReport.status!=="pending"
+
+||!$("reviewConsent").checked
+
+||$("reviewReason").value.trim().length<10
+
+||(approval&&$("evidence").value.trim().length<10)
+
+||(approval&&selectedReport.unsafe===true);
+
+$("fitMap").disabled=!isOwner()||!map;
+
+}
+
+settingFields.forEach(id=>{
+
+$(id).addEventListener("input",()=>{
+
+if(!$("weatherEnabled").checked){
+
+$("weatherChargeEnabled").checked=false;
+
+}
+
+if(!$("roadEnabled").checked){
+
+$("roadChargeEnabled").checked=false;
+
+}
+
+try{
+
+dirty=settingsFingerprint(readSettings())
+
+!==settingsFingerprint(settings);
+
+}catch(e){
+
+dirty=true;
+
+}
+
+$("settingsConsent").checked=false;
+
+saveResult(dirty?"unsaved":"");
+
+updateControls();
+
+});
+
+});
+
+[
+
+"settingsReason",
+"settingsConsent",
+"reviewDecision",
+"reviewReason",
+"evidence",
+"reviewConsent"
+
+].forEach(id=>{
+
+$(id).addEventListener("input",updateControls);
+
+});
+
+async function loadOverview(preserveDraft=false){
+
+const started=Date.now();
+
+const response=await serverCall(
+
+"getAdminWeatherRoadOverview"
+
+);
+
+const finished=Date.now();
+
+if(
+
+response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!validTime(response.serverTimeMs)
+
+||finished-started>15000
+
+||!validSettings(response.settings)
+
+||!validSummary(response.summary)
+
+||!validFares(response.fares)
+
+||!Array.isArray(response.weatherRecords)
+
+||response.weatherRecords.length>25
+
+||!response.weatherRecords.every(validWeather)
+
+||new Set(
+
+response.weatherRecords.map(record=>record.district)
+
+).size!==response.weatherRecords.length
+
+||!Array.isArray(response.roadSegments)
+
+||response.roadSegments.length>200
+
+||!response.roadSegments.every(validSegment)
+
+){
+
+throw new Error("Invalid overview");
+
+}
+
+serverOffset=response.serverTimeMs
+
+-((started+finished)/2);
+
+lastSync=response.serverTimeMs;
+
+summary=response.summary;
+
+fares=response.fares;
+
+weatherRecords=response.weatherRecords;
+
+roadSegments=response.roadSegments;
+
+if(!preserveDraft||!dirty){
+
+settings=response.settings;
+
+populateSettings(settings);
+
+}else if(settings.version!==response.settings.version){
+
+saveResult("saveError");
+
+}
+
+renderOverview();
+
+renderFares();
+
+renderWeather();
+
+renderMap();
+
+}
+
+async function refreshOverview(automatic=false){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+if(!automatic&&dirty
+
+&&!window.confirm(t("discard")))return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+if(!automatic)result("loading");
+
+try{
+
+await loadOverview(automatic);
+
+result("");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+summary=null;
+
+fares=null;
+
+weatherRecords=[];
+
+roadSegments=[];
+
+lastSync=null;
+
+renderOverview();
+
+renderFares();
+
+renderWeather();
+
+renderMap();
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+renderWeather();
+
+}
+
+}
+
+}
+
+$("refreshButton").onclick=()=>refreshOverview(false);
+
+async function freshOwnerAuthentication(){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const user=auth.currentUser;
+
+const uid=user.uid;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=await reauthenticateWithPopup(
+
+user,
+
+provider
+
+);
+
+if(credential.user.uid!==uid
+
+||auth.currentUser?.uid!==uid
+
+||!isOwner()){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Invalid owner");
+
+}
+
+const response=await serverCall("verifyOwnerAdmin");
+
+if(!validOwner(response,uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+}
+
+function requestIdFor(payload){
+
+const fingerprint=JSON.stringify(payload);
+
+if(pendingMutation){
+
+if(pendingMutation.fingerprint!==fingerprint){
+
+throw new Error("Previous action unresolved");
+
+}
+
+return pendingMutation.requestId;
+
+}
+
+pendingMutation={
+
+fingerprint,
+
+requestId:crypto.randomUUID()
+
+};
+
+return pendingMutation.requestId;
+
+}
+
+$("saveSettings").onclick=async()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||!settings
+
+||!dirty
+
+||!$("settingsConsent").checked)return;
+
+let data;
+
+try{
+
+data=readSettings();
+
+}catch(e){
+
+saveResult("invalid");
+
+return;
+
+}
+
+const reason=$("settingsReason").value.trim();
+
+if(reason.length<10||reason.length>500){
+
+saveResult("invalid");
+
+return;
+
+}
+
+const expectedVersion=settings.version;
+
+const payload={
+
+settings:data,
+
+reason,
+
+expectedVersion,
+
+applyTo:"future_confirmed_bookings"
+
+};
+
+let requestId;
+
+try{
+
+requestId=requestIdFor({
+
+action:"settings",
+
+...payload
+
+});
+
+}catch(e){
+
+saveResult("saveError");
+
+return;
+
+}
+
+const currentGeneration=generation;
+
+mutationBusy=true;
+
+updateControls();
+
+saveResult("saving");
+
+try{
+
+await freshOwnerAuthentication();
+
+const response=await serverCall(
+
+"saveAdminWeatherRoadSettings",
+
+{
+
+...payload,
+
+requestId
+
+}
+
+);
+
+if(response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!validSettings(response.settings)
+
+||response.settings.version<=expectedVersion
+
+||settingsFingerprint(response.settings)
+
+!==settingsFingerprint(data)){
+
+throw new Error("Save not confirmed");
+
+}
+
+settings=response.settings;
+
+pendingMutation=null;
+
+populateSettings(settings);
+
+saveResult("saved");
+
+try{
+
+await loadOverview(false);
+
+}catch(e){
+
+result("error");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+$("settingsConsent").checked=false;
+
+saveResult("saveError");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+function validReport(record){
+
+return record
+
+&&validId(record.reportId)
+
+&&validId(record.driverId)
+
+&&(record.bookingId===null
+
+||validId(record.bookingId))
+
+&&districts.includes(record.district)
+
+&&validPoint(record.location)
+
+&&validText(record.locationName,300)
+
+&&roadTypes.includes(record.roadType)
+
+&&validText(record.description,1000)
+
+&&reportStatuses.includes(record.status)
+
+&&typeof record.unsafe==="boolean"
+
+&&validCount(record.revision)
+
+&&validTime(record.createdAtMs);
+
+}
+
+function renderReports(){
+
+const container=$("reportList");
+
+container.replaceChildren();
+
+$("moreReports").hidden=reportCursor===null;
+
+if(!isOwner()||!reportsLoaded)return;
+
+if(!reports.length){
+
+container.textContent=t("noRecords");
+
+return;
+
+}
+
+reports.forEach(record=>{
+
+const panel=document.createElement("div");
+
+panel.className="record";
+
+const title=document.createElement("h4");
+
+title.textContent=record.reportId;
+
+panel.appendChild(title);
+
+addLine(panel,"reportStatus",t(record.status));
+
+addLine(panel,"driverId",record.driverId);
+
+addLine(panel,"bookingId",record.bookingId||"—");
+
+addLine(panel,"district",record.district);
+
+addLine(panel,"location",record.locationName);
+
+addLine(panel,"roadType",t(record.roadType));
+
+addLine(panel,"description",record.description);
+
+addLine(panel,"reported",
+
+formatDate(record.createdAtMs));
+
+if(record.unsafe){
+
+const warning=document.createElement("p");
+
+warning.className="bad";
+
+warning.textContent=t("unsafe");
+
+panel.appendChild(warning);
+
+}
+
+panel.appendChild(
+
+createButton("viewMap",()=>{
+
+if(!map||!isOwner())return;
+
+map.setView(
+
+[record.location.lat,record.location.lon],
+
+16
+
+);
+
+$("map").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+})
+
+);
+
+if(record.status==="pending"){
+
+panel.appendChild(
+
+createButton("review",()=>openReview(record))
+
+);
+
+}
+
+container.appendChild(panel);
+
+});
+
+}
+
+async function loadReports(reset=true){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+result("loading");
+
+try{
+
+if(reset){
+
+reportFilter=$("reportStatus").value;
+
+}
+
+if(!["all",...reportStatuses]
+
+.includes(reportFilter)){
+
+throw new Error("Invalid filter");
+
+}
+
+const response=await serverCall(
+
+"getAdminRoadReports",
+
+{
+
+status:reportFilter,
+
+limit:30,
+
+cursor:reset?null:reportCursor
+
+}
+
+);
+
+if(response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validReport)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid reports");
+
+}
+
+const unique=new Map(
+
+(reset?[]:reports)
+
+.map(record=>[record.reportId,record])
+
+);
+
+response.records.forEach(record=>{
+
+unique.set(record.reportId,record);
+
+});
+
+reports=[...unique.values()];
+
+reportCursor=response.nextCursor;
+
+reportsLoaded=true;
+
+result("");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+reports=[];
+
+reportCursor=null;
+
+reportsLoaded=false;
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+renderReports();
+
+}
+
+}
+
+}
+
+$("loadReports").onclick=()=>loadReports(true);
+
+$("moreReports").onclick=()=>{
+
+if(reportCursor!==null){
+
+loadReports(false);
+
+}
+
+};
+
+function renderReview(){
+
+const container=$("reviewDetails");
+
+container.replaceChildren();
+
+if(!selectedReport||!isOwner()){
+
+$("reviewPanel").hidden=true;
+
+return;
+
+}
+
+$("reviewPanel").hidden=false;
+
+addLine(container,"reportId",selectedReport.reportId);
+
+addLine(container,"location",selectedReport.locationName);
+
+addLine(container,"roadType",t(selectedReport.roadType));
+
+addLine(container,"description",selectedReport.description);
+
+if(selectedReport.unsafe){
+
+addLine(container,"road",t("unsafe"));
+
+}
+
+updateControls();
+
+}
+
+function openReview(record){
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||record.status!=="pending")return;
+
+selectedReport=record;
+
+$("reviewDecision").value=
+
+record.unsafe?"rejected":"approved";
+
+$("reviewReason").value="";
+
+$("evidence").value="";
+
+$("reviewConsent").checked=false;
+
+reviewResult("");
+
+renderReview();
+
+$("reviewPanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+function closeReview(force=false){
+
+if(mutationBusy&&!force)return;
+
+selectedReport=null;
+
+$("reviewPanel").hidden=true;
+
+$("reviewDetails").replaceChildren();
+
+$("reviewReason").value="";
+
+$("evidence").value="";
+
+$("reviewConsent").checked=false;
+
+reviewResult("");
+
+updateControls();
+
+}
+
+$("closeReview").onclick=()=>closeReview();
+
+$("submitReview").onclick=async()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||!selectedReport
+
+||!$("reviewConsent").checked)return;
+
+const decision=$("reviewDecision").value;
+
+const reason=$("reviewReason").value.trim();
+
+const evidence=$("evidence").value.trim();
+
+if(!["approved","rejected"].includes(decision)
+
+||reason.length<10
+
+||reason.length>500
+
+||evidence.length>1000
+
+||(decision==="approved"&&evidence.length<10)
+
+||(decision==="approved"&&selectedReport.unsafe)){
+
+reviewResult("invalid");
+
+return;
+
+}
+
+const payload={
+
+reportId:selectedReport.reportId,
+
+expectedRevision:selectedReport.revision,
+
+decision,
+
+reason,
+
+evidence
+
+};
+
+let requestId;
+
+try{
+
+requestId=requestIdFor({
+
+action:"review",
+
+...payload
+
+});
+
+}catch(e){
+
+reviewResult("saveError");
+
+return;
+
+}
+
+const currentGeneration=generation;
+
+mutationBusy=true;
+
+updateControls();
+
+reviewResult("saving");
+
+try{
+
+await freshOwnerAuthentication();
+
+const response=await serverCall(
+
+"reviewAdminRoadReport",
+
+{
+
+...payload,
+
+requestId
+
+}
+
+);
+
+if(response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!validReport(response.report)
+
+||response.report.reportId!==payload.reportId
+
+||response.report.status!==decision
+
+||response.report.revision<=payload.expectedRevision){
+
+throw new Error("Review not confirmed");
+
+}
+
+pendingMutation=null;
+
+reports=reports.map(record=>
+
+record.reportId===response.report.reportId
+
+?response.report
+
+:record
+
+);
+
+if(reportFilter!=="all"){
+
+reports=reports.filter(
+
+record=>record.status===reportFilter
+
+);
+
+}
+
+closeReview(true);
+
+result("saved");
+
+try{
+
+await loadOverview(true);
+
+}catch(e){
+
+result("error");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+$("reviewConsent").checked=false;
+
+reviewResult("saveError");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+renderReports();
+
+}
+
+}
+
+};
+
+function validHistory(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&["settingsChange","reportReview"]
+.includes(record.action)
+
+&&validText(record.reason,500)
+
+&&validTime(record.createdAtMs)
+
+&&(record.version===null
+
+||validCount(record.version))
+
+&&(record.reportId===null
+
+||validId(record.reportId));
+
+}
+
+function renderHistory(){
+
+const container=$("historyList");
+
+container.replaceChildren();
+
+$("moreHistory").hidden=historyCursor===null;
+
+if(!isOwner()||!historyLoaded)return;
+
+if(!historyRecords.length){
+
+container.textContent=t("noRecords");
+
+return;
+
+}
+
+historyRecords.forEach(record=>{
+
+const panel=document.createElement("div");
+
+panel.className="record";
+
+addLine(panel,"action",t(record.action));
+
+addLine(panel,"reason",record.reason);
+
+addLine(panel,"updated",
+
+formatDate(record.createdAtMs));
+
+if(record.version!==null){
+
+addLine(panel,"version",record.version);
+
+}
+
+if(record.reportId!==null){
+
+addLine(panel,"reportId",record.reportId);
+
+}
+
+container.appendChild(panel);
+
+});
+
+}
+
+async function loadHistory(reset=true){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+result("loading");
+
+try{
+
+const response=await serverCall(
+
+"getAdminWeatherRoadHistory",
+
+{
+
+limit:30,
+
+cursor:reset?null:historyCursor
+
+}
+
+);
+
+if(response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validHistory)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid history");
+
+}
+
+const unique=new Map(
+
+(reset?[]:historyRecords)
+
+.map(record=>[record.recordId,record])
+
+);
+
+response.records.forEach(record=>{
+
+unique.set(record.recordId,record);
+
+});
+
+historyRecords=[...unique.values()];
+
+historyCursor=response.nextCursor;
+
+historyLoaded=true;
+
+result("");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+historyRecords=[];
+
+historyCursor=null;
+
+historyLoaded=false;
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+renderHistory();
+
+}
+
+}
+
+}
+
+$("loadHistory").onclick=()=>loadHistory(true);
+
+$("moreHistory").onclick=()=>{
+
+if(historyCursor!==null){
+
+loadHistory(false);
+
+}
+
+};
+
+function startLiveUpdates(){
+
+if(refreshTimer){
+
+clearInterval(refreshTimer);
+
+}
+
+refreshTimer=setInterval(()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||document.hidden)return;
+
+refreshOverview(true);
+
+},60000);
+
+}
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+ownerUid=null;
+
+busy=false;
+
+mutationBusy=false;
+
+settings=null;
+
+summary=null;
+
+fares=null;
+
+weatherRecords=[];
+
+roadSegments=[];
+
+reports=[];
+
+historyRecords=[];
+
+reportCursor=null;
+
+historyCursor=null;
+
+reportsLoaded=false;
+
+historyLoaded=false;
+
+dirty=false;
+
+lastSync=null;
+
+serverOffset=0;
+
+pendingMutation=null;
+
+if(refreshTimer){
+
+clearInterval(refreshTimer);
+
+refreshTimer=null;
+
+}
+
+if(map){
+
+map.remove();
+
+map=null;
+
+mapLayer=null;
+
+}
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+closeReview(true);
+
+$("weatherList").replaceChildren();
+
+$("reportList").replaceChildren();
+
+$("historyList").replaceChildren();
+
+$("settingsReason").value="";
+
+$("settingsConsent").checked=false;
+
+$("rainThreshold").value="";
+
+[
+
+"weatherEnabled",
+
+"roadEnabled",
+
+"weatherChargeEnabled",
+
+"roadChargeEnabled"
+
+].forEach(id=>{
+
+$(id).checked=false;
+
+});
+
+$("districtFilter").value="all";
+
+$("reportStatus").value="all";
+
+reportFilter="all";
+
+result("");
+
+saveResult("");
+
+renderOverview();
+
+renderFares();
+
+renderReports();
+
+renderHistory();
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+status("denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status("offline");
+
+return;
+
+}
+
+status("checking");
+
+try{
+
+const appToken=await getToken(appCheck,false);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+status("verified");
+
+initializeMap();
+
+await refreshOverview(false);
+
+if(currentGeneration===generation
+
+&&isOwner()){
+
+startLiveUpdates();
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+let checking=false;
+
+setInterval(async()=>{
+
+if(!isOwner()||checking||mutationBusy)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(!validOwner(response,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+setInterval(()=>{
+
+if(!isOwner()||busy||mutationBusy)return;
+
+renderOverview();
+
+renderWeather();
+
+renderMap();
+
+},15000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+status("offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("beforeunload",event=>{
+
+if(dirty||mutationBusy||pendingMutation){
+
+event.preventDefault();
+
+event.returnValue="";
+
+}
+
+});
+
+window.addEventListener(
+
+"pagehide",
+
+clearSession
+
+);
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+document.addEventListener(
+
+"visibilitychange",
+
+()=>{
+
+if(!document.hidden&&isOwner()){
+
+refreshOverview(true);
+
+}
+
+}
+
+);
+
+renderLanguage();
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
