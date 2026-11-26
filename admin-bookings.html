@@ -1,0 +1,3017 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+
+<meta name="google"
+content="notranslate">
+
+<meta name="referrer"
+content="no-referrer">
+
+<title>MY RIDE - Booking Management</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+input,select,textarea{
+width:100%;
+padding:13px;
+margin:8px 0;
+background:#292929;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:110px;
+resize:vertical;
+}
+
+label{
+display:block;
+margin-top:12px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border-radius:9px;
+padding:15px;
+}
+
+.stat strong{
+display:block;
+font-size:26px;
+margin-top:10px;
+color:#FFD600;
+}
+
+.booking{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+.bookingId{
+font-size:19px;
+font-weight:bold;
+color:#FFD600;
+}
+
+.completed,.paid,.accepted{
+color:#55E68A;
+}
+
+.active,.arrived,.searching,.offered,.scheduled{
+color:#FFB347;
+}
+
+.cancelled,.no_driver,.rejected{
+color:#FF7777;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+#status,#result,#actionResult{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.danger{
+background:#C62828;
+color:white;
+}
+
+.warning{
+background:#FF9800;
+color:#111;
+}
+
+.whatsapp{
+background:#25D366;
+color:#111;
+}
+
+.sectionTitle{
+color:#FFD600;
+font-weight:bold;
+margin-top:18px;
+border-bottom:1px solid #555;
+padding-bottom:8px;
+}
+
+.checkRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+line-height:1.6;
+}
+
+.checkRow input{
+width:20px;
+height:20px;
+flex-shrink:0;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading">
+Booking Management
+</h2>
+
+<div class="languages">
+
+<button data-lang="si">සිංහල</button>
+
+<button data-lang="en">English</button>
+
+<button data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+role="status"
+aria-live="polite">
+
+Checking security...
+
+</p>
+
+<section id="accessPanel"
+class="panel"
+hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action">
+
+Admin Login
+
+</a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="statistics"></h3>
+
+<div id="statistics"
+class="grid"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="searchBookings"></h3>
+
+<label for="searchInput"
+data-t="searchLabel"></label>
+
+<input id="searchInput"
+type="search"
+maxlength="100"
+autocomplete="off">
+
+<label for="statusFilter"
+data-t="bookingStatus"></label>
+
+<select id="statusFilter">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="confirmed"
+data-t="confirmed"></option>
+
+<option value="searching"
+data-t="searching"></option>
+
+<option value="offered"
+data-t="offered"></option>
+
+<option value="accepted"
+data-t="accepted"></option>
+
+<option value="scheduled"
+data-t="scheduled"></option>
+
+<option value="arrived"
+data-t="arrived"></option>
+
+<option value="active"
+data-t="active"></option>
+
+<option value="completed"
+data-t="completed"></option>
+
+<option value="no_driver"
+data-t="no_driver"></option>
+
+<option value="cancelled"
+data-t="cancelled"></option>
+
+</select>
+
+<label for="vehicleFilter"
+data-t="vehicle"></label>
+
+<select id="vehicleFilter">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="bike"
+data-t="bike"></option>
+
+<option value="tuk"
+data-t="tuk"></option>
+
+<option value="car"
+data-t="car"></option>
+
+<option value="van"
+data-t="van"></option>
+
+</select>
+
+<label for="fromDate"
+data-t="fromDate"></label>
+
+<input id="fromDate"
+type="date">
+
+<label for="toDate"
+data-t="toDate"></label>
+
+<input id="toDate"
+type="date">
+
+<button id="searchButton"
+data-t="search"></button>
+
+<button id="resetButton"
+data-t="reset"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="bookingList"></h3>
+
+<p id="recordCount"
+class="note"></p>
+
+<div id="bookingList"></div>
+
+<button id="loadMore"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section id="detailsPanel"
+class="panel"
+hidden>
+
+<h3 data-t="bookingDetails"></h3>
+
+<div id="bookingDetails"></div>
+
+<button id="reassignButton"
+class="warning"
+data-t="reassign"
+hidden></button>
+
+<button id="cancelButton"
+class="danger"
+data-t="emergencyCancel"
+hidden></button>
+
+<button id="closeDetails"
+class="back"
+data-t="close"></button>
+
+</section>
+
+<section id="actionPanel"
+class="panel"
+hidden>
+
+<h3 id="actionHeading"></h3>
+
+<p id="actionWarning"
+class="note"></p>
+
+<label for="actionReason"
+data-t="reason"></label>
+
+<textarea id="actionReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="actionConsent"
+type="checkbox">
+
+<span data-t="confirmAction"></span>
+
+</label>
+
+<button id="confirmActionButton"
+class="danger"
+data-t="continueAction"
+disabled></button>
+
+<button id="closeAction"
+class="back"
+data-t="close"></button>
+
+<p id="actionResult"
+role="status"
+aria-live="polite"></p>
+
+</section>
+
+<p id="result"
+role="status"
+aria-live="polite"></p>
+
+<p id="lastUpdate"
+class="note"></p>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const bookingStatuses=[
+
+"confirmed",
+"searching",
+"offered",
+"accepted",
+"scheduled",
+"arrived",
+"active",
+"completed",
+"no_driver",
+"cancelled"
+
+];
+
+const vehicles=[
+
+"bike",
+"tuk",
+"car",
+"van"
+
+];
+
+const paymentStatuses=[
+
+"unpaid",
+"pending",
+"paid",
+"partial",
+"rejected"
+
+];
+
+const words={
+
+si:{
+
+heading:"හයර් වෙන්කිරීම් කළමනාකරණය",
+statistics:"01. හයර් සංඛ්‍යාලේඛන",
+totalBookings:"මුළු හයර්",
+confirmed:"තහවුරු කළ",
+searching:"රියදුරන් සොයමින්",
+offered:"රියදුරු පිළිතුර අපේක්ෂාවෙන්",
+accepted:"රියදුරු භාරගත්",
+scheduled:"ඉදිරි දින සඳහා වෙන්කළ",
+arrived:"රියදුරු පැමිණ ඇත",
+active:"දැනට ක්‍රියාත්මක",
+completed:"අවසන් කළ",
+no_driver:"රියදුරන් නොමැති",
+cancelled:"අවලංගු කළ",
+searchBookings:"02. හයර් සෙවීම",
+searchLabel:"හයර් ID / නම / දුරකථන අංකය",
+bookingStatus:"හයර් තත්ත්වය",
+vehicle:"වාහන වර්ගය",
+all:"සියල්ල",
+bike:"Scooter / Bike",
+tuk:"ත්‍රීරෝද රථ",
+car:"කාර්",
+van:"වෑන්",
+fromDate:"ආරම්භක දිනය",
+toDate:"අවසන් දිනය",
+search:"සොයන්න",
+reset:"සෙවුම් සැකසුම් ඉවත් කරන්න",
+bookingList:"03. හයර් ලැයිස්තුව",
+bookingDetails:"04. සම්පූර්ණ හයර් විස්තර",
+more:"තවත් හයර් බලන්න",
+back:"Admin Dashboard වෙත",
+refresh:"යාවත්කාලීන කරන්න",
+checking:"ආරක්ෂාව පරීක්ෂා කරමින්...",
+denied:"Owner Admin අවසරය තහවුරු කර නොමැත.",
+verified:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+loading:"හයර් දත්ත ලබාගනිමින්...",
+error:"Server දත්ත ලබාගත නොහැක.",
+offlineInternet:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+records:"පෙන්වන හයර්",
+noRecords:"හයර් වාර්තා හමු නොවීය.",
+bookingId:"හයර් ID",
+customer:"පාරිභෝගිකයා",
+customerName:"පාරිභෝගික නම",
+customerPhone:"පාරිභෝගික දුරකථනය",
+driver:"රියදුරු",
+driverName:"රියදුරු නම",
+driverPhone:"රියදුරු දුරකථනය",
+driverId:"රියදුරු ID",
+pickup:"ගමන ආරම්භ කරන ස්ථානය",
+destination:"ගමනාන්තය",
+date:"දිනය",
+time:"වේලාව",
+passengers:"මගීන් ගණන",
+estimatedDistance:"ඇස්තමේන්තුගත දුර",
+actualDistance:"සැබෑ ගමන් දුර",
+estimatedFare:"ඇස්තමේන්තුගත ගාස්තුව",
+finalFare:"අවසන් ගාස්තුව",
+duration:"ගමන් කාලය",
+commission:"MY RIDE කොමිස්",
+driverNet:"රියදුරු ශුද්ධ ආදායම",
+payment:"ගෙවීම් තත්ත්වය",
+paymentMethod:"ගෙවීම් ක්‍රමය",
+cash:"මුදල්",
+bank:"බැංකු මාරු",
+unpaid:"ගෙවා නැත",
+pending:"තහවුරු කිරීමට ඇත",
+paid:"ගෙවා ඇත",
+partial:"කොටසක් ගෙවා ඇත",
+rejected:"ප්‍රතික්ෂේප කළ",
+created:"වෙන්කළ වේලාව",
+updated:"අවසන් යාවත්කාලීනය",
+details:"සම්පූර්ණ විස්තර බලන්න",
+close:"වසන්න",
+callCustomer:"පාරිභෝගිකයාට ඇමතුමක්",
+callDriver:"රියදුරුට ඇමතුමක්",
+whatsapp:"WhatsApp පණිවිඩයක්",
+reassign:"වෙනත් රියදුරෙකු සොයන්න",
+emergencyCancel:"හදිසි අවලංගු කිරීම",
+reason:"ක්‍රියාමාර්ගයට හේතුව",
+confirmAction:"මෙම ක්‍රියාමාර්ගය ගැනීමට මම එකඟ වෙමි.",
+continueAction:"ක්‍රියාමාර්ගය තහවුරු කරන්න",
+cancelWarning:"ගමන ආරම්භ කර නොමැති හයර් සඳහා පමණි. හේතුව Server වාර්තාවේ සුරැකේ.",
+reassignWarning:"දැනට පවරා ඇති රියදුරු නිදහස් කිරීම සහ නව රියදුරෙකු සෙවීම Server මගින් පාලනය කළ යුතුය.",
+invalidReason:"අවම වශයෙන් අකුරු 10ක හේතුවක් ඇතුළත් කරන්න.",
+invalidDates:"නිවැරදි දින පරාසයක් තෝරන්න.",
+processing:"ක්‍රියාමාර්ගය සකස් කරමින්...",
+success:"Server මගින් ක්‍රියාමාර්ගය තහවුරු කර ඇත.",
+actionError:"ක්‍රියාමාර්ගය තහවුරු කළ නොහැක. නැවත දත්ත පරීක්ෂා කරන්න.",
+lastSync:"අවසන් Server යාවත්කාලීනය",
+notAssigned:"රියදුරෙකු පවරා නැත",
+minutes:"මිනිත්තු",
+cancelReason:"අවලංගු කිරීමට හේතුව",
+activeNotice:"ක්‍රියාත්මක ගමන් මෙම පිටුවෙන් අවලංගු කළ නොහැක."
+
+},
+
+en:{
+
+heading:"Booking Management",
+statistics:"01. Booking Statistics",
+totalBookings:"Total Bookings",
+confirmed:"Confirmed",
+searching:"Searching for Driver",
+offered:"Awaiting Driver Response",
+accepted:"Accepted",
+scheduled:"Scheduled",
+arrived:"Driver Arrived",
+active:"Active Ride",
+completed:"Completed",
+no_driver:"No Driver Available",
+cancelled:"Cancelled",
+searchBookings:"02. Search Bookings",
+searchLabel:"Booking ID / Name / Phone Number",
+bookingStatus:"Booking Status",
+vehicle:"Vehicle Type",
+all:"All",
+bike:"Scooter / Bike",
+tuk:"Three Wheeler",
+car:"Car",
+van:"Van",
+fromDate:"From Date",
+toDate:"To Date",
+search:"Search",
+reset:"Reset Filters",
+bookingList:"03. Booking List",
+bookingDetails:"04. Booking Details",
+more:"Load More",
+back:"Back to Admin Dashboard",
+refresh:"Refresh",
+checking:"Checking security...",
+denied:"Owner Admin authorization is not verified.",
+verified:"Owner authorization verified.",
+loading:"Loading booking data...",
+error:"Unable to retrieve server data.",
+offlineInternet:"No internet connection.",
+records:"Displayed Bookings",
+noRecords:"No bookings found.",
+bookingId:"Booking ID",
+customer:"Customer",
+customerName:"Customer Name",
+customerPhone:"Customer Phone",
+driver:"Driver",
+driverName:"Driver Name",
+driverPhone:"Driver Phone",
+driverId:"Driver ID",
+pickup:"Pickup Location",
+destination:"Destination",
+date:"Date",
+time:"Time",
+passengers:"Passengers",
+estimatedDistance:"Estimated Distance",
+actualDistance:"Actual Distance",
+estimatedFare:"Estimated Fare",
+finalFare:"Final Fare",
+duration:"Trip Duration",
+commission:"MY RIDE Commission",
+driverNet:"Driver Net Income",
+payment:"Payment Status",
+paymentMethod:"Payment Method",
+cash:"Cash",
+bank:"Bank Transfer",
+unpaid:"Unpaid",
+pending:"Pending Verification",
+paid:"Paid",
+partial:"Partially Paid",
+rejected:"Rejected",
+created:"Booking Created",
+updated:"Last Updated",
+details:"View Full Details",
+close:"Close",
+callCustomer:"Call Customer",
+callDriver:"Call Driver",
+whatsapp:"WhatsApp Message",
+reassign:"Search for Another Driver",
+emergencyCancel:"Emergency Cancellation",
+reason:"Reason for Action",
+confirmAction:"I authorize this action.",
+continueAction:"Confirm Action",
+cancelWarning:"Only rides that have not started can be cancelled here. The reason is recorded on the server.",
+reassignWarning:"Driver release and reassignment must be controlled by the server.",
+invalidReason:"Enter a reason of at least 10 characters.",
+invalidDates:"Select a valid date range.",
+processing:"Processing action...",
+success:"Action confirmed by the server.",
+actionError:"Action could not be confirmed. Refresh the booking.",
+lastSync:"Last Server Update",
+notAssigned:"No Driver Assigned",
+minutes:"minutes",
+cancelReason:"Cancellation Reason",
+activeNotice:"Active trips cannot be cancelled from this page."
+
+},
+
+ta:{
+
+heading:"பயண முன்பதிவு மேலாண்மை",
+statistics:"01. முன்பதிவு புள்ளிவிவரங்கள்",
+totalBookings:"மொத்த முன்பதிவுகள்",
+confirmed:"உறுதிப்படுத்தப்பட்டவை",
+searching:"சாரதியை தேடுகிறது",
+offered:"சாரதி பதிலுக்காக காத்திருக்கிறது",
+accepted:"ஏற்றுக்கொள்ளப்பட்டது",
+scheduled:"திட்டமிடப்பட்டவை",
+arrived:"சாரதி வந்துள்ளார்",
+active:"நடைபெறும் பயணம்",
+completed:"முடிக்கப்பட்டவை",
+no_driver:"சாரதி கிடைக்கவில்லை",
+cancelled:"ரத்து செய்யப்பட்டவை",
+searchBookings:"02. முன்பதிவுகளை தேடவும்",
+searchLabel:"முன்பதிவு ID / பெயர் / தொலைபேசி",
+bookingStatus:"முன்பதிவு நிலை",
+vehicle:"வாகன வகை",
+all:"அனைத்தும்",
+bike:"மோட்டார் சைக்கிள்",
+tuk:"முச்சக்கர வண்டி",
+car:"கார்",
+van:"வேன்",
+fromDate:"ஆரம்ப தேதி",
+toDate:"இறுதி தேதி",
+search:"தேடவும்",
+reset:"வடிகட்டிகளை மீட்டமைக்கவும்",
+bookingList:"03. முன்பதிவு பட்டியல்",
+bookingDetails:"04. முழு முன்பதிவு விவரங்கள்",
+more:"மேலும் பார்க்கவும்",
+back:"நிர்வாக முதன்மைப் பக்கத்திற்கு",
+refresh:"புதுப்பிக்கவும்",
+checking:"பாதுகாப்பு சரிபார்க்கப்படுகிறது...",
+denied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+verified:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+loading:"முன்பதிவு தரவு பெறப்படுகிறது...",
+error:"சேவையக தரவை பெற முடியவில்லை.",
+offlineInternet:"இணைய இணைப்பு இல்லை.",
+records:"காட்டப்படும் முன்பதிவுகள்",
+noRecords:"முன்பதிவுகள் இல்லை.",
+bookingId:"முன்பதிவு ID",
+customer:"வாடிக்கையாளர்",
+customerName:"வாடிக்கையாளர் பெயர்",
+customerPhone:"வாடிக்கையாளர் தொலைபேசி",
+driver:"சாரதி",
+driverName:"சாரதி பெயர்",
+driverPhone:"சாரதி தொலைபேசி",
+driverId:"சாரதி ID",
+pickup:"பயண ஆரம்ப இடம்",
+destination:"செல்லும் இடம்",
+date:"தேதி",
+time:"நேரம்",
+passengers:"பயணிகள் எண்ணிக்கை",
+estimatedDistance:"மதிப்பிடப்பட்ட தூரம்",
+actualDistance:"உண்மையான தூரம்",
+estimatedFare:"மதிப்பிடப்பட்ட கட்டணம்",
+finalFare:"இறுதி கட்டணம்",
+duration:"பயண நேரம்",
+commission:"MY RIDE கமிஷன்",
+driverNet:"சாரதி நிகர வருமானம்",
+payment:"கட்டண நிலை",
+paymentMethod:"கட்டண முறை",
+cash:"பணம்",
+bank:"வங்கி பரிமாற்றம்",
+unpaid:"செலுத்தப்படவில்லை",
+pending:"சரிபார்ப்பு நிலுவையில்",
+paid:"செலுத்தப்பட்டது",
+partial:"பகுதி செலுத்தப்பட்டது",
+rejected:"நிராகரிக்கப்பட்டது",
+created:"முன்பதிவு நேரம்",
+updated:"கடைசி புதுப்பிப்பு",
+details:"முழு விவரங்களை பார்க்கவும்",
+close:"மூடவும்",
+callCustomer:"வாடிக்கையாளரை அழைக்கவும்",
+callDriver:"சாரதியை அழைக்கவும்",
+whatsapp:"WhatsApp செய்தி",
+reassign:"வேறு சாரதியை தேடவும்",
+emergencyCancel:"அவசர ரத்து",
+reason:"நடவடிக்கைக்கான காரணம்",
+confirmAction:"இந்த நடவடிக்கையை அங்கீகரிக்கிறேன்.",
+continueAction:"நடவடிக்கையை உறுதிப்படுத்தவும்",
+cancelWarning:"ஆரம்பிக்காத பயணங்களை மட்டும் ரத்து செய்யலாம். காரணம் சேவையகத்தில் பதிவு செய்யப்படும்.",
+reassignWarning:"சாரதி மாற்றம் சேவையகத்தால் கட்டுப்படுத்தப்பட வேண்டும்.",
+invalidReason:"குறைந்தது 10 எழுத்துகள் கொண்ட காரணத்தை உள்ளிடவும்.",
+invalidDates:"சரியான தேதி வரம்பை தேர்ந்தெடுக்கவும்.",
+processing:"நடவடிக்கை செயலாக்கப்படுகிறது...",
+success:"சேவையகம் நடவடிக்கையை உறுதிப்படுத்தியது.",
+actionError:"நடவடிக்கையை உறுதிப்படுத்த முடியவில்லை.",
+lastSync:"கடைசி சேவையக புதுப்பிப்பு",
+notAssigned:"சாரதி நியமிக்கப்படவில்லை",
+minutes:"நிமிடங்கள்",
+cancelReason:"ரத்து செய்த காரணம்",
+activeNotice:"நடைபெறும் பயணங்களை இங்கு ரத்து செய்ய முடியாது."
+
+}
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+
+new URLSearchParams(location.search).get("lang")
+
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected)){
+
+lang=selected;
+
+}
+
+}catch(e){}
+
+const t=key=>words[lang][key]||key;
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let db=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+let busy=false;
+let mutationBusy=false;
+
+let records=[];
+let statistics=null;
+let cursor=null;
+let selectedBooking=null;
+let selectedAction=null;
+let pendingRequestId=null;
+let lastSync=null;
+
+let unsubscribe=null;
+let refreshTimer=null;
+
+let statusKey="checking";
+let resultKey="";
+let actionResultKey="";
+
+let filters={
+
+search:"",
+status:"all",
+vehicle:"all",
+fromDate:null,
+toDate:null
+
+};
+
+function status(key){
+
+statusKey=key;
+
+$("status").textContent=t(key);
+
+}
+
+function result(key){
+
+resultKey=key;
+
+$("result").textContent=key?t(key):"";
+
+}
+
+function actionResult(key){
+
+actionResultKey=key;
+
+$("actionResult").textContent=key?t(key):"";
+
+}
+
+function isOwner(){
+
+return authorized
+&&ownerUid!==null
+&&auth?.currentUser?.uid===ownerUid
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+&&data.uid===uid
+&&data.role==="owner"
+&&data.ownerUidVerified===true
+&&data.sessionValid===true;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validPhone(value){
+
+return typeof value==="string"
+&&/^\+[1-9]\d{7,14}$/.test(value);
+
+}
+
+function validText(value,max){
+
+return typeof value==="string"
+&&value.length<=max;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+&&value>=0;
+
+}
+
+function validNumber(value){
+
+return Number.isFinite(value)
+&&value>=0;
+
+}
+
+function nullableNumber(value){
+
+return value===null||validNumber(value);
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+&&value>0
+&&value<=8640000000000000;
+
+}
+
+function validDate(value){
+
+if(typeof value!=="string"
+||!/^\d{4}-\d{2}-\d{2}$/.test(value)){
+
+return false;
+
+}
+
+const date=new Date(value+"T00:00:00Z");
+
+return Number.isFinite(date.getTime())
+&&date.toISOString().slice(0,10)===value;
+
+}
+
+function validClock(value){
+
+return typeof value==="string"
+&&/^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"medium"
+
+}
+
+).format(new Date(value));
+
+}
+
+function money(value){
+
+if(!validNumber(value))return "—";
+
+return new Intl.NumberFormat("en-LK",{
+
+style:"currency",
+currency:"LKR",
+minimumFractionDigits:2
+
+}).format(value);
+
+}
+
+function distance(value){
+
+if(!validNumber(value))return "—";
+
+return (value/1000).toFixed(2)+" KM";
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="
++encodeURIComponent(lang);
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+$("searchInput").placeholder=t("searchLabel");
+
+$("actionReason").placeholder=t("reason");
+
+$("loginLink").href=
+pageLink("admin-login.html");
+
+$("dashboardLink").href=
+pageLink("admin-dashboard.html");
+
+$("backLink").href=
+pageLink("admin-dashboard.html");
+
+status(statusKey);
+
+result(resultKey);
+
+actionResult(actionResultKey);
+
+renderStatistics();
+
+renderBookings();
+
+renderDetails();
+
+renderLastSync();
+
+renderAction();
+
+}
+
+document.querySelectorAll("[data-lang]")
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+
+"myride_admin_language",
+
+lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+function updateControls(){
+
+const locked=
+
+busy||mutationBusy||!isOwner();
+
+[
+
+"searchInput",
+"statusFilter",
+"vehicleFilter",
+"fromDate",
+"toDate",
+"searchButton",
+"resetButton",
+"refreshButton",
+"loadMore",
+"reassignButton",
+"cancelButton"
+
+].forEach(id=>{
+
+$(id).disabled=locked;
+
+});
+
+$("actionReason").disabled=mutationBusy;
+
+$("actionConsent").disabled=mutationBusy;
+
+$("closeAction").disabled=mutationBusy;
+
+$("closeDetails").disabled=mutationBusy;
+
+$("confirmActionButton").disabled=
+
+locked
+
+||!selectedAction
+
+||!selectedBooking
+
+||!$("actionConsent").checked
+
+||$("actionReason").value.trim().length<10;
+
+}
+
+async function serverCall(name,data={}){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+name,
+{timeout:25000}
+
+)(data);
+
+if(currentGeneration!==generation
+||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+function renderStatistics(){
+
+const container=$("statistics");
+
+container.replaceChildren();
+
+[
+
+"totalBookings",
+
+...bookingStatuses
+
+].forEach(key=>{
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const label=document.createElement("span");
+
+label.textContent=t(key);
+
+const value=document.createElement("strong");
+
+value.textContent=statistics
+
+?String(statistics[key])
+
+:"—";
+
+box.append(label,value);
+
+container.appendChild(box);
+
+});
+
+}
+
+function subscribeStatistics(){
+
+if(unsubscribe)unsubscribe();
+
+const currentGeneration=generation;
+
+unsubscribe=onSnapshot(
+
+doc(db,"adminDashboard","bookings"),
+
+{includeMetadataChanges:true},
+
+snapshot=>{
+
+if(currentGeneration!==generation
+||!isOwner())return;
+
+const data=snapshot.data();
+
+const keys=[
+
+"totalBookings",
+
+...bookingStatuses
+
+];
+
+if(snapshot.metadata.fromCache
+
+||snapshot.metadata.hasPendingWrites
+
+||!snapshot.exists()
+
+||!keys.every(key=>validCount(data[key]))
+
+||bookingStatuses.reduce(
+
+(sum,key)=>sum+data[key],0
+
+)!==data.totalBookings){
+
+statistics=null;
+
+}else{
+
+statistics=data;
+
+}
+
+renderStatistics();
+
+},
+
+()=>{
+
+if(currentGeneration!==generation)return;
+
+statistics=null;
+
+renderStatistics();
+
+});
+
+}
+
+function validBooking(record){
+
+return record
+
+&&validId(record.bookingId)
+
+&&bookingStatuses.includes(record.status)
+
+&&vehicles.includes(record.vehicleType)
+
+&&validText(record.customerName,150)
+
+&&validPhone(record.customerPhone)
+
+&&validText(record.pickupName,500)
+
+&&validText(record.destinationName,500)
+
+&&validDate(record.date)
+
+&&validClock(record.time)
+
+&&Number.isSafeInteger(record.passengers)
+
+&&record.passengers>=1
+
+&&record.passengers<=10
+
+&&nullableNumber(record.estimatedFare)
+
+&&nullableNumber(record.finalFare)
+
+&&validCount(record.revision)
+
+&&validTime(record.createdAtMs)
+
+&&validTime(record.updatedAtMs);
+
+}
+
+function validDriver(driver){
+
+return driver===null
+
+||(
+
+driver
+
+&&validId(driver.uid)
+
+&&validId(driver.driverId)
+
+&&validText(driver.name,150)
+
+&&validPhone(driver.phone)
+
+&&(driver.whatsapp===null
+
+||validPhone(driver.whatsapp))
+
+);
+
+}
+
+function validDetails(record){
+
+return validBooking(record)
+
+&&validDriver(record.assignedDriver)
+
+&&nullableNumber(record.estimatedDistanceMeters)
+
+&&nullableNumber(record.actualDistanceMeters)
+
+&&nullableNumber(record.durationSeconds)
+
+&&nullableNumber(record.commissionAmount)
+
+&&nullableNumber(record.driverNet)
+
+&&(record.customerWhatsapp===null
+
+||validPhone(record.customerWhatsapp))
+
+&&paymentStatuses.includes(record.paymentStatus)
+
+&&[null,"cash","bank"].includes(record.paymentMethod)
+
+&&(record.cancelReason===null
+
+||validText(record.cancelReason,500))
+
+&&typeof record.canCancel==="boolean"
+
+&&typeof record.canReassign==="boolean";
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=t(label)+": "
++String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function addTitle(container,key){
+
+const title=document.createElement("div");
+
+title.className="sectionTitle";
+
+title.textContent=t(key);
+
+container.appendChild(title);
+
+}
+
+function makeAction(label,href,className=""){
+
+const link=document.createElement("a");
+
+link.className="action "+className;
+
+link.textContent=t(label);
+
+link.href=href;
+
+return link;
+
+}
+
+function renderLastSync(){
+
+$("lastUpdate").textContent=
+
+lastSync===null
+
+?""
+
+:t("lastSync")+": "+formatDate(lastSync);
+
+}
+
+function renderBookings(){
+
+const container=$("bookingList");
+
+container.replaceChildren();
+
+$("recordCount").textContent=
+
+t("records")+": "+records.length;
+
+if(!isOwner())return;
+
+records.forEach(record=>{
+
+const panel=document.createElement("div");
+
+panel.className="booking";
+
+const title=document.createElement("div");
+
+title.className="bookingId";
+
+title.textContent=record.bookingId;
+
+panel.appendChild(title);
+
+const state=document.createElement("strong");
+
+state.className=record.status;
+
+state.textContent=t(record.status);
+
+panel.appendChild(state);
+
+addLine(panel,"customerName",record.customerName);
+
+addLine(panel,"vehicle",t(record.vehicleType));
+
+addLine(panel,"pickup",record.pickupName);
+
+addLine(panel,"destination",record.destinationName);
+
+addLine(panel,"date",record.date);
+
+addLine(panel,"time",record.time);
+
+addLine(panel,"estimatedFare",
+
+money(record.estimatedFare));
+
+if(record.status==="completed"){
+
+addLine(panel,"finalFare",
+
+money(record.finalFare));
+
+}
+
+const button=document.createElement("button");
+
+button.textContent=t("details");
+
+button.disabled=busy||mutationBusy;
+
+button.onclick=()=>openBooking(record.bookingId);
+
+panel.appendChild(button);
+
+container.appendChild(panel);
+
+});
+
+$("loadMore").hidden=cursor===null;
+
+if(!records.length){
+
+container.textContent=t("noRecords");
+
+}
+
+}
+
+function readFilters(){
+
+const search=$("searchInput").value.trim();
+
+const statusValue=$("statusFilter").value;
+
+const vehicle=$("vehicleFilter").value;
+
+const fromDate=$("fromDate").value||null;
+
+const toDate=$("toDate").value||null;
+
+if(
+
+search.length>100
+
+||!["all",...bookingStatuses].includes(statusValue)
+
+||!["all",...vehicles].includes(vehicle)
+
+||(fromDate!==null&&!validDate(fromDate))
+
+||(toDate!==null&&!validDate(toDate))
+
+||(fromDate&&toDate&&fromDate>toDate)
+
+){
+
+throw new Error("Invalid filters");
+
+}
+
+return {
+
+search,
+
+status:statusValue,
+
+vehicle,
+
+fromDate,
+
+toDate
+
+};
+
+}
+
+async function loadBookings(reset=true){
+
+const response=await serverCall(
+
+"getAdminBookings",
+
+{
+
+...filters,
+
+limit:30,
+
+cursor:reset?null:cursor
+
+}
+
+);
+
+if(
+
+response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validBooking)
+
+||!(response.nextCursor===null
+
+||typeof response.nextCursor==="string")
+
+||!validTime(response.serverTimeMs)
+
+){
+
+throw new Error("Invalid records");
+
+}
+
+const unique=new Map(
+
+(reset?[]:records)
+
+.map(record=>[record.bookingId,record])
+
+);
+
+response.records.forEach(record=>{
+
+unique.set(record.bookingId,record);
+
+});
+
+records=[...unique.values()];
+
+cursor=response.nextCursor;
+
+lastSync=response.serverTimeMs;
+
+renderBookings();
+
+renderLastSync();
+
+}
+
+async function refreshBookings(reset=true){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const currentGeneration=generation;
+
+if(reset){
+
+try{
+
+filters=readFilters();
+
+}catch(e){
+
+result("invalidDates");
+
+return;
+
+}
+
+}
+
+busy=true;
+
+updateControls();
+
+result("loading");
+
+try{
+
+await loadBookings(reset);
+
+result("");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+records=[];
+
+cursor=null;
+
+lastSync=null;
+
+renderBookings();
+
+renderLastSync();
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+renderBookings();
+
+}
+
+}
+
+}
+
+$("searchButton").onclick=()=>{
+
+closeDetails();
+
+refreshBookings(true);
+
+};
+
+$("searchInput").addEventListener(
+
+"keydown",
+
+event=>{
+
+if(event.key==="Enter"){
+
+closeDetails();
+
+refreshBookings(true);
+
+}
+
+}
+
+);
+
+$("resetButton").onclick=()=>{
+
+$("searchInput").value="";
+
+$("statusFilter").value="all";
+
+$("vehicleFilter").value="all";
+
+$("fromDate").value="";
+
+$("toDate").value="";
+
+closeDetails();
+
+refreshBookings(true);
+
+};
+
+$("loadMore").onclick=()=>{
+
+if(cursor!==null){
+
+refreshBookings(false);
+
+}
+
+};
+
+$("refreshButton").onclick=()=>{
+
+closeDetails();
+
+refreshBookings(true);
+
+};
+
+function cancellable(record){
+
+return record?.canCancel===true
+
+&&[
+
+"confirmed",
+"searching",
+"offered",
+"accepted",
+"scheduled",
+"arrived",
+"no_driver"
+
+].includes(record.status);
+
+}
+
+function reassignable(record){
+
+return record?.canReassign===true
+
+&&[
+
+"confirmed",
+"searching",
+"offered",
+"accepted",
+"scheduled",
+"no_driver"
+
+].includes(record.status);
+
+}
+
+function renderDetails(){
+
+const container=$("bookingDetails");
+
+container.replaceChildren();
+
+if(!selectedBooking||!isOwner()){
+
+$("detailsPanel").hidden=true;
+
+return;
+
+}
+
+const record=selectedBooking;
+
+$("detailsPanel").hidden=false;
+
+addLine(container,"bookingId",record.bookingId);
+
+addLine(container,"bookingStatus",t(record.status));
+
+addLine(container,"created",
+
+formatDate(record.createdAtMs));
+
+addLine(container,"updated",
+
+formatDate(record.updatedAtMs));
+
+addTitle(container,"customer");
+
+addLine(container,"customerName",record.customerName);
+
+addLine(container,"customerPhone",record.customerPhone);
+
+container.appendChild(
+
+makeAction(
+
+"callCustomer",
+
+"tel:"+record.customerPhone
+
+)
+
+);
+
+if(record.customerWhatsapp){
+
+const link=makeAction(
+
+"whatsapp",
+
+"https://wa.me/"
+
++record.customerWhatsapp.slice(1),
+
+"whatsapp"
+
+);
+
+link.target="_blank";
+
+link.rel="noopener noreferrer";
+
+container.appendChild(link);
+
+}
+
+addTitle(container,"driver");
+
+if(record.assignedDriver){
+
+const driver=record.assignedDriver;
+
+addLine(container,"driverName",driver.name);
+
+addLine(container,"driverId",driver.driverId);
+
+addLine(container,"driverPhone",driver.phone);
+
+container.appendChild(
+
+makeAction(
+
+"callDriver",
+
+"tel:"+driver.phone
+
+)
+
+);
+
+if(driver.whatsapp){
+
+const link=makeAction(
+
+"whatsapp",
+
+"https://wa.me/"+driver.whatsapp.slice(1),
+
+"whatsapp"
+
+);
+
+link.target="_blank";
+
+link.rel="noopener noreferrer";
+
+container.appendChild(link);
+
+}
+
+}else{
+
+const line=document.createElement("p");
+
+line.textContent=t("notAssigned");
+
+container.appendChild(line);
+
+}
+
+addTitle(container,"bookingDetails");
+
+addLine(container,"vehicle",t(record.vehicleType));
+
+addLine(container,"pickup",record.pickupName);
+
+addLine(container,"destination",record.destinationName);
+
+addLine(container,"date",record.date);
+
+addLine(container,"time",record.time);
+
+addLine(container,"passengers",record.passengers);
+
+addLine(container,"estimatedDistance",
+
+distance(record.estimatedDistanceMeters));
+
+addLine(container,"actualDistance",
+
+distance(record.actualDistanceMeters));
+
+addLine(container,"duration",
+
+record.durationSeconds===null
+
+?"—"
+
+:(record.durationSeconds/60).toFixed(1)
+
++" "+t("minutes"));
+
+addTitle(container,"payment");
+
+addLine(container,"estimatedFare",
+
+money(record.estimatedFare));
+
+addLine(container,"finalFare",
+
+money(record.finalFare));
+
+addLine(container,"commission",
+
+money(record.commissionAmount));
+
+addLine(container,"driverNet",
+
+money(record.driverNet));
+
+addLine(container,"payment",
+
+t(record.paymentStatus));
+
+addLine(container,"paymentMethod",
+
+record.paymentMethod
+
+?t(record.paymentMethod)
+
+:"—");
+
+if(record.cancelReason){
+
+addLine(container,"cancelReason",
+
+record.cancelReason);
+
+}
+
+if(record.status==="active"){
+
+const notice=document.createElement("p");
+
+notice.className="note";
+
+notice.textContent=t("activeNotice");
+
+container.appendChild(notice);
+
+}
+
+$("cancelButton").hidden=!cancellable(record);
+
+$("reassignButton").hidden=!reassignable(record);
+
+updateControls();
+
+}
+
+async function fetchBooking(bookingId){
+
+if(!validId(bookingId)){
+
+throw new Error("Invalid booking ID");
+
+}
+
+const response=await serverCall(
+
+"getAdminBookingDetails",
+
+{bookingId}
+
+);
+
+if(
+
+response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!validDetails(response.booking)
+
+||response.booking.bookingId!==bookingId
+
+){
+
+throw new Error("Invalid booking details");
+
+}
+
+return response.booking;
+
+}
+
+async function openBooking(bookingId){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const currentGeneration=generation;
+
+closeDetails();
+
+busy=true;
+
+updateControls();
+
+result("loading");
+
+try{
+
+selectedBooking=await fetchBooking(bookingId);
+
+renderDetails();
+
+result("");
+
+$("detailsPanel").scrollIntoView({
+
+behavior:"smooth",
+
+block:"start"
+
+});
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+selectedBooking=null;
+
+renderDetails();
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+renderBookings();
+
+}
+
+}
+
+}
+
+function closeAction(force=false){
+
+if(mutationBusy&&!force)return;
+
+selectedAction=null;
+
+pendingRequestId=null;
+
+$("actionPanel").hidden=true;
+
+$("actionReason").value="";
+
+$("actionConsent").checked=false;
+
+actionResult("");
+
+updateControls();
+
+}
+
+function closeDetails(force=false){
+
+if(mutationBusy&&!force)return;
+
+closeAction(force);
+
+selectedBooking=null;
+
+$("detailsPanel").hidden=true;
+
+$("bookingDetails").replaceChildren();
+
+$("cancelButton").hidden=true;
+
+$("reassignButton").hidden=true;
+
+}
+
+$("closeDetails").onclick=()=>closeDetails();
+
+$("closeAction").onclick=()=>closeAction();
+
+function renderAction(){
+
+if(!selectedAction
+
+||!selectedBooking
+
+||!isOwner()){
+
+$("actionPanel").hidden=true;
+
+return;
+
+}
+
+$("actionPanel").hidden=false;
+
+$("actionHeading").textContent=
+
+t(selectedAction==="cancel"
+
+?"emergencyCancel"
+
+:"reassign");
+
+$("actionWarning").textContent=
+
+t(selectedAction==="cancel"
+
+?"cancelWarning"
+
+:"reassignWarning");
+
+updateControls();
+
+}
+
+function openAction(action){
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||!selectedBooking)return;
+
+if(action==="cancel"
+
+&&!cancellable(selectedBooking))return;
+
+if(action==="reassign"
+
+&&!reassignable(selectedBooking))return;
+
+closeAction();
+
+selectedAction=action;
+
+pendingRequestId=crypto.randomUUID();
+
+renderAction();
+
+$("actionPanel").scrollIntoView({
+
+behavior:"smooth",
+
+block:"start"
+
+});
+
+}
+
+$("cancelButton").onclick=()=>{
+
+openAction("cancel");
+
+};
+
+$("reassignButton").onclick=()=>{
+
+openAction("reassign");
+
+};
+
+$("actionReason").addEventListener(
+
+"input",
+
+updateControls
+
+);
+
+$("actionConsent").addEventListener(
+
+"change",
+
+updateControls
+
+);
+
+async function freshOwnerAuthentication(){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const user=auth.currentUser;
+
+const uid=user.uid;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=
+
+await reauthenticateWithPopup(
+
+user,
+
+provider
+
+);
+
+if(credential.user.uid!==uid
+
+||auth.currentUser?.uid!==uid
+
+||!isOwner()){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Invalid owner");
+
+}
+
+const verified=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(!validOwner(verified,uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+}
+
+$("confirmActionButton").onclick=async()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||!selectedBooking
+
+||!selectedAction
+
+||!pendingRequestId)return;
+
+const reason=$("actionReason").value.trim();
+
+if(reason.length<10||reason.length>500){
+
+actionResult("invalidReason");
+
+return;
+
+}
+
+if(!$("actionConsent").checked)return;
+
+const currentGeneration=generation;
+
+const bookingId=selectedBooking.bookingId;
+
+const expectedRevision=selectedBooking.revision;
+
+const action=selectedAction;
+
+const requestId=pendingRequestId;
+
+if(action==="cancel"
+
+&&!cancellable(selectedBooking))return;
+
+if(action==="reassign"
+
+&&!reassignable(selectedBooking))return;
+
+mutationBusy=true;
+
+updateControls();
+
+renderBookings();
+
+actionResult("processing");
+
+try{
+
+await freshOwnerAuthentication();
+
+const latest=await fetchBooking(bookingId);
+
+if(latest.revision!==expectedRevision){
+
+throw new Error("Booking changed");
+
+}
+
+if(action==="cancel"
+
+&&!cancellable(latest)){
+
+throw new Error("Cancellation unavailable");
+
+}
+
+if(action==="reassign"
+
+&&!reassignable(latest)){
+
+throw new Error("Reassignment unavailable");
+
+}
+
+const functionName=
+
+action==="cancel"
+
+?"adminEmergencyCancelBooking"
+
+:"adminReassignBooking";
+
+const response=await serverCall(
+
+functionName,
+
+{
+
+bookingId,
+
+reason,
+
+expectedRevision,
+
+requestId
+
+}
+
+);
+
+if(
+
+response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||response.bookingId!==bookingId
+
+||!validCount(response.revision)
+
+||response.revision<=expectedRevision
+
+){
+
+throw new Error("Action not confirmed");
+
+}
+
+closeAction(true);
+
+result("success");
+
+try{
+
+selectedBooking=await fetchBooking(bookingId);
+
+renderDetails();
+
+await loadBookings(true);
+
+}catch(e){
+
+closeDetails(true);
+
+records=[];
+
+cursor=null;
+
+renderBookings();
+
+result("error");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+actionResult("actionError");
+
+try{
+
+selectedBooking=await fetchBooking(bookingId);
+
+renderDetails();
+
+}catch(error){
+
+closeDetails(true);
+
+result("error");
+
+}
+
+if(selectedBooking
+
+&&selectedBooking.revision!==expectedRevision){
+
+closeAction(true);
+
+result("actionError");
+
+}
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+renderBookings();
+
+}
+
+}
+
+};
+
+function startLiveUpdates(){
+
+if(refreshTimer){
+
+clearInterval(refreshTimer);
+
+}
+
+refreshTimer=setInterval(async()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||selectedAction
+
+||document.hidden)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+try{
+
+await loadBookings(true);
+
+if(selectedBooking){
+
+selectedBooking=await fetchBooking(
+
+selectedBooking.bookingId
+
+);
+
+renderDetails();
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+records=[];
+
+cursor=null;
+
+lastSync=null;
+
+closeDetails(true);
+
+renderBookings();
+
+renderLastSync();
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+renderBookings();
+
+}
+
+}
+
+},30000);
+
+}
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+ownerUid=null;
+
+records=[];
+
+statistics=null;
+
+cursor=null;
+
+lastSync=null;
+
+busy=false;
+
+mutationBusy=false;
+
+if(unsubscribe){
+
+unsubscribe();
+
+unsubscribe=null;
+
+}
+
+if(refreshTimer){
+
+clearInterval(refreshTimer);
+
+refreshTimer=null;
+
+}
+
+closeDetails(true);
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("bookingList").replaceChildren();
+
+$("recordCount").textContent="";
+
+$("lastUpdate").textContent="";
+
+$("loadMore").hidden=true;
+
+$("searchInput").value="";
+
+$("statusFilter").value="all";
+
+$("vehicleFilter").value="all";
+
+$("fromDate").value="";
+
+$("toDate").value="";
+
+filters={
+
+search:"",
+status:"all",
+vehicle:"all",
+fromDate:null,
+toDate:null
+
+};
+
+result("");
+
+renderStatistics();
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+status("denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status("offlineInternet");
+
+return;
+
+}
+
+status("checking");
+
+try{
+
+const appToken=await getToken(
+
+appCheck,
+
+false
+
+);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+status("verified");
+
+subscribeStatistics();
+
+await refreshBookings(true);
+
+if(currentGeneration===generation
+
+&&isOwner()){
+
+startLiveUpdates();
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+db=getFirestore(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(
+
+auth,
+
+verifyOwner
+
+);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+let checking=false;
+
+setInterval(async()=>{
+
+if(!isOwner()||checking)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(!validOwner(response,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+status("offlineInternet");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener(
+
+"pagehide",
+
+clearSession
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+}
+
+);
+
+document.addEventListener(
+
+"visibilitychange",
+
+()=>{
+
+if(!document.hidden
+
+&&isOwner()
+
+&&!selectedAction
+
+&&!mutationBusy){
+
+refreshBookings(true);
+
+}
+
+}
+
+);
+
+renderLanguage();
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+
+</html>
