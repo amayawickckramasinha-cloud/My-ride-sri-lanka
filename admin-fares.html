@@ -1,0 +1,3181 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+
+<meta name="google"
+content="notranslate">
+
+<meta name="referrer"
+content="no-referrer">
+
+<title>MY RIDE - Fare Management</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3,h4{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+input,select,textarea{
+width:100%;
+padding:12px;
+margin:8px 0;
+background:#292929;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+label{
+display:block;
+margin-top:12px;
+line-height:1.6;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border-radius:9px;
+padding:15px;
+overflow-wrap:anywhere;
+}
+
+.stat strong{
+display:block;
+font-size:22px;
+margin-top:10px;
+color:#FFD600;
+}
+
+.tableWrap{
+overflow-x:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:470px;
+}
+
+th,td{
+border:1px solid #555;
+padding:8px;
+text-align:center;
+}
+
+th{
+background:#FFD600;
+color:#111;
+}
+
+td input{
+min-width:75px;
+margin:0;
+}
+
+.vehiclePanel{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:12px;
+margin:16px 0;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+.warning{
+color:#FFB347;
+line-height:1.8;
+}
+
+.danger{
+background:#C62828;
+color:white;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.checkRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+}
+
+.checkRow input{
+width:20px;
+height:20px;
+flex-shrink:0;
+}
+
+#status,#result,#saveResult{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+
+.historyItem{
+background:#292929;
+border:1px solid #555;
+border-radius:8px;
+padding:14px;
+margin:10px 0;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading">
+Fare Management
+</h2>
+
+<div class="languages">
+
+<button data-lang="si">සිංහල</button>
+
+<button data-lang="en">English</button>
+
+<button data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+role="status"
+aria-live="polite">
+Checking security...
+</p>
+
+<section id="accessPanel"
+class="panel"
+hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="currentSettings"></h3>
+
+<div id="currentSettings"
+class="grid"></div>
+
+<p id="lastUpdate"
+class="note"></p>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="timeSettings"></h3>
+
+<label for="dayStart"
+data-t="dayStart"></label>
+
+<input id="dayStart"
+type="time">
+
+<label for="nightStart"
+data-t="nightStart"></label>
+
+<input id="nightStart"
+type="time">
+
+<p class="note"
+data-t="timezone"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="extraSettings"></h3>
+
+<label for="rainRate"
+data-t="rainRate"></label>
+
+<input id="rainRate"
+type="number"
+min="0"
+max="10000"
+step="0.01">
+
+<label for="roadRate"
+data-t="roadRate"></label>
+
+<input id="roadRate"
+type="number"
+min="0"
+max="10000"
+step="0.01">
+
+<label for="commissionRate"
+data-t="commissionRate"></label>
+
+<input id="commissionRate"
+type="number"
+min="0"
+max="100"
+step="0.01">
+
+<p class="note"
+data-t="commissionNotice"></p>
+
+<p class="note"
+data-t="verificationNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="vehicleRates"></h3>
+
+<p class="note"
+data-t="progressiveNotice"></p>
+
+<div id="vehicleRates"></div>
+
+<button id="defaultButton"
+class="back"
+data-t="loadDefaults"></button>
+
+<button id="restoreButton"
+class="back"
+data-t="restore"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="calculator"></h3>
+
+<label for="testVehicle"
+data-t="vehicle"></label>
+
+<select id="testVehicle">
+
+<option value="bike"
+data-t="bike"></option>
+
+<option value="tuk"
+data-t="tuk"></option>
+
+<option value="car"
+data-t="car"></option>
+
+<option value="van"
+data-t="van"></option>
+
+</select>
+
+<label for="testDistance"
+data-t="distance"></label>
+
+<input id="testDistance"
+type="number"
+min="0.01"
+max="2000"
+step="0.01"
+value="10">
+
+<label for="testTime"
+data-t="startTime"></label>
+
+<input id="testTime"
+type="time"
+value="10:00">
+
+<label for="testRainKm"
+data-t="rainDistance"></label>
+
+<input id="testRainKm"
+type="number"
+min="0"
+step="0.01"
+value="0">
+
+<label for="testRoadKm"
+data-t="roadDistance"></label>
+
+<input id="testRoadKm"
+type="number"
+min="0"
+step="0.01"
+value="0">
+
+<label for="testTolls"
+data-t="tolls"></label>
+
+<input id="testTolls"
+type="number"
+min="0"
+step="0.01"
+value="0">
+
+<label for="testParking"
+data-t="parking"></label>
+
+<input id="testParking"
+type="number"
+min="0"
+step="0.01"
+value="0">
+
+<button id="calculateButton"
+data-t="calculate"></button>
+
+<div id="calculationResult"
+class="grid"></div>
+
+<p class="note"
+data-t="previewNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="publishSettings"></h3>
+
+<p class="warning"
+data-t="publishWarning"></p>
+
+<label for="changeReason"
+data-t="reason"></label>
+
+<textarea id="changeReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="publishConsent"
+type="checkbox">
+
+<span data-t="confirmPublish"></span>
+
+</label>
+
+<button id="publishButton"
+data-t="publish"
+disabled></button>
+
+<p id="saveResult"
+role="status"
+aria-live="polite"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="history"></h3>
+
+<div id="historyList"></div>
+
+<button id="loadHistory"
+data-t="loadHistory"></button>
+
+<button id="moreHistory"
+data-t="more"
+hidden></button>
+
+</section>
+
+<p id="result"
+role="status"
+aria-live="polite"></p>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const vehicles=["bike","tuk","car","van"];
+
+const limits=[10,25,50,100,null];
+
+const ranges=[
+
+"0 – 10 KM",
+"10 – 25 KM",
+"25 – 50 KM",
+"50 – 100 KM",
+"100 KM+"
+
+];
+
+const words={
+
+si:{
+
+heading:"හයර් ගාස්තු කළමනාකරණය",
+currentSettings:"01. දැනට ක්‍රියාත්මක ගාස්තු",
+version:"ගාස්තු සංස්කරණ අංකය",
+published:"ප්‍රකාශිත තත්ත්වය",
+yes:"ඔව්",
+no:"නැහැ",
+timeSettings:"02. දිවා සහ රාත්‍රී කාලසීමා",
+dayStart:"දිවා කාලය ආරම්භය",
+nightStart:"රාත්‍රී කාලය ආරම්භය",
+timezone:"සියලු වේලාවන් ශ්‍රී ලංකා වේලාව අනුව ගණනය වේ.",
+extraSettings:"03. අමතර ගාස්තු සහ කොමිස්",
+rainRate:"වැසි අමතර ගාස්තුව (රු./KM)",
+roadRate:"දුෂ්කර මාර්ග අමතර ගාස්තුව (රු./KM)",
+commissionRate:"MY RIDE කොමිස් ප්‍රතිශතය (%)",
+commissionNotice:"කොමිස් මුදල රියදුරුගේ හයර් ආදායමෙන් අඩු වේ. පාරිභෝගිකයාට අමතර ගාස්තුවක් නොවේ.",
+verificationNotice:"වැසි සහ දුෂ්කර මාර්ග ගාස්තු අදාළ වන්නේ Server මගින් තහවුරු කළ දුර සඳහා පමණි.",
+vehicleRates:"04. වාහන අනුව ගාස්තු",
+vehicle:"වාහන වර්ගය",
+bike:"Scooter / Bike",
+tuk:"ත්‍රීරෝද රථ",
+car:"කාර්",
+van:"වෑන්",
+minimumFare:"අවම හයර් ගාස්තුව (රු.)",
+range:"දුර කාණ්ඩය",
+dayRate:"දිවා රු./KM",
+nightRate:"රාත්‍රී රු./KM",
+discountRate:"වට්ටම රු./KM",
+progressiveNotice:"එක් එක් දුර කාණ්ඩයේ ගාස්තුව අදාළ කිලෝමීටර් සඳහා පමණක් ගණනය වේ. වට්ටම් දැනටමත් අදාළ ගාස්තුවට ඇතුළත්ය.",
+loadDefaults:"මුල් ගාස්තු වගුව ලබාගන්න",
+restore:"Server ගාස්තු නැවත ලබාගන්න",
+calculator:"05. ගාස්තු ගණනය කිරීමේ පරීක්ෂණය",
+distance:"මුළු දුර (KM)",
+startTime:"ගමන ආරම්භ කරන වේලාව",
+rainDistance:"වැසි සහිත දුර (KM)",
+roadDistance:"දුෂ්කර මාර්ග දුර (KM)",
+tolls:"අධිවේගී මාර්ග ගාස්තු (රු.)",
+parking:"වාහන නැවැත්වීමේ ගාස්තු (රු.)",
+calculate:"ගාස්තුව ගණනය කරන්න",
+baseFare:"දුර සඳහා ගාස්තුව",
+discount:"දුර අනුව ලැබුණු වට්ටම",
+rainCharge:"වැසි අමතර ගාස්තුව",
+roadCharge:"දුෂ්කර මාර්ග ගාස්තුව",
+minimumAdjustment:"අවම ගාස්තු ගැළපීම",
+rideFare:"හයර් ගාස්තුව",
+finalFare:"පාරිභෝගික මුළු ගාස්තුව",
+commission:"MY RIDE කොමිස්",
+driverNet:"රියදුරු ශුද්ධ හයර් ආදායම",
+period:"ගාස්තු කාලය",
+day:"දිවා",
+night:"රාත්‍රී",
+previewNotice:"මෙය පරීක්ෂණ ගණනය කිරීමක් පමණි. සැබෑ හයර් ගාස්තු Server මගින් ගණනය කළ යුතුය.",
+publishSettings:"06. නව ගාස්තු ප්‍රකාශයට පත් කිරීම",
+publishWarning:"නව ගාස්තු අලුතින් තහවුරු කරන හයර් සඳහා පමණක් අදාළ වේ. කලින් තහවුරු කළ හයර්වල ගාස්තු වෙනස් නොවේ.",
+reason:"ගාස්තු වෙනස් කිරීමට හේතුව",
+confirmPublish:"මෙම නව ගාස්තු පරීක්ෂා කර ප්‍රකාශයට පත් කිරීමට මම එකඟ වෙමි.",
+publish:"නව ගාස්තු ක්‍රියාත්මක කරන්න",
+history:"07. ගාස්තු වෙනස් කළ ඉතිහාසය",
+loadHistory:"ගාස්තු ඉතිහාසය බලන්න",
+more:"තවත් වාර්තා බලන්න",
+back:"Admin Dashboard වෙත",
+login:"Admin Login",
+refresh:"යාවත්කාලීන කරන්න",
+checking:"ආරක්ෂාව පරීක්ෂා කරමින්...",
+denied:"Owner Admin අවසරය තහවුරු කර නොමැත.",
+verified:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+loading:"Server දත්ත ලබාගනිමින්...",
+error:"Server දත්ත ලබාගත නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+invalid:"ගාස්තු සහ ඇතුළත් කළ දත්ත පරීක්ෂා කරන්න.",
+invalidReason:"අවම වශයෙන් අකුරු 10ක හේතුවක් ඇතුළත් කරන්න.",
+saving:"නව ගාස්තු ප්‍රකාශයට පත් කරමින්...",
+saved:"Server මගින් නව ගාස්තු තහවුරු කර ඇත.",
+saveError:"ගාස්තු වෙනස් කිරීම තහවුරු කළ නොහැක. Server දත්ත නැවත පරීක්ෂා කරන්න.",
+updated:"අවසන් යාවත්කාලීනය",
+effective:"ක්‍රියාත්මක වූ වේලාව",
+noHistory:"ඉතිහාස වාර්තා නොමැත.",
+unsaved:"මෙම වෙනස්කම් තවම ප්‍රකාශයට පත් කර නැත.",
+noChanges:"ප්‍රකාශයට පත් කිරීමට වෙනස්කම් නොමැත.",
+discard:"සුරැකී නැති වෙනස්කම් ඉවත් කරන්නද?",
+confirmDefault:"මුල් ගාස්තු වගුව සංස්කරණයට ලබාගන්නද?"
+
+},
+
+en:{
+
+heading:"Fare Management",
+currentSettings:"01. Current Published Fares",
+version:"Fare Version",
+published:"Published",
+yes:"Yes",
+no:"No",
+timeSettings:"02. Day and Night Periods",
+dayStart:"Day Start Time",
+nightStart:"Night Start Time",
+timezone:"All times use Sri Lanka time.",
+extraSettings:"03. Surcharges and Commission",
+rainRate:"Rain Surcharge (LKR/KM)",
+roadRate:"Difficult Road Surcharge (LKR/KM)",
+commissionRate:"MY RIDE Commission (%)",
+commissionNotice:"Commission is deducted from driver ride income, not added to the customer fare.",
+verificationNotice:"Weather and difficult road charges apply only to server-verified eligible distances.",
+vehicleRates:"04. Vehicle Fare Rates",
+vehicle:"Vehicle Type",
+bike:"Scooter / Bike",
+tuk:"Three Wheeler",
+car:"Car",
+van:"Van",
+minimumFare:"Minimum Fare (LKR)",
+range:"Distance Band",
+dayRate:"Day LKR/KM",
+nightRate:"Night LKR/KM",
+discountRate:"Discount LKR/KM",
+progressiveNotice:"Each rate applies only to kilometers within its distance band. Discounts are already included in the applicable rates.",
+loadDefaults:"Load Original Fare Chart",
+restore:"Restore Server Settings",
+calculator:"05. Fare Calculator Test",
+distance:"Total Distance (KM)",
+startTime:"Trip Start Time",
+rainDistance:"Rain-affected Distance (KM)",
+roadDistance:"Difficult Road Distance (KM)",
+tolls:"Highway Tolls (LKR)",
+parking:"Parking Charges (LKR)",
+calculate:"Calculate Fare",
+baseFare:"Distance Fare",
+discount:"Included Distance Discount",
+rainCharge:"Rain Surcharge",
+roadCharge:"Difficult Road Surcharge",
+minimumAdjustment:"Minimum Fare Adjustment",
+rideFare:"Ride Fare",
+finalFare:"Total Customer Fare",
+commission:"MY RIDE Commission",
+driverNet:"Driver Net Ride Income",
+period:"Fare Period",
+day:"Day",
+night:"Night",
+previewNotice:"This is a test calculation only. Actual ride fares must be calculated by the server.",
+publishSettings:"06. Publish New Fares",
+publishWarning:"New fares apply only to newly confirmed bookings. Previously confirmed bookings retain their fare version.",
+reason:"Reason for Fare Change",
+confirmPublish:"I have reviewed and authorize publication of these fares.",
+publish:"Publish New Fares",
+history:"07. Fare Change History",
+loadHistory:"View Fare History",
+more:"Load More Records",
+back:"Back to Admin Dashboard",
+login:"Admin Login",
+refresh:"Refresh",
+checking:"Checking security...",
+denied:"Owner Admin authorization is not verified.",
+verified:"Owner authorization verified.",
+loading:"Loading server data...",
+error:"Unable to retrieve server data.",
+offline:"No internet connection.",
+invalid:"Check the fare rates and entered values.",
+invalidReason:"Enter a reason of at least 10 characters.",
+saving:"Publishing new fares...",
+saved:"New fares confirmed by the server.",
+saveError:"Publication could not be confirmed. Check the server settings.",
+updated:"Last Updated",
+effective:"Effective Time",
+noHistory:"No history records.",
+unsaved:"These changes have not been published.",
+noChanges:"No changes to publish.",
+discard:"Discard unpublished changes?",
+confirmDefault:"Load the original fare chart for editing?"
+
+},
+
+ta:{
+
+heading:"பயண கட்டண மேலாண்மை",
+currentSettings:"01. தற்போதைய கட்டணங்கள்",
+version:"கட்டண பதிப்பு",
+published:"வெளியிடப்பட்டது",
+yes:"ஆம்",
+no:"இல்லை",
+timeSettings:"02. பகல் மற்றும் இரவு நேரம்",
+dayStart:"பகல் ஆரம்ப நேரம்",
+nightStart:"இரவு ஆரம்ப நேரம்",
+timezone:"அனைத்து நேரங்களும் இலங்கை நேரப்படி.",
+extraSettings:"03. கூடுதல் கட்டணம் மற்றும் கமிஷன்",
+rainRate:"மழை கூடுதல் கட்டணம் (ரூ./KM)",
+roadRate:"கடின சாலை கட்டணம் (ரூ./KM)",
+commissionRate:"MY RIDE கமிஷன் (%)",
+commissionNotice:"கமிஷன் சாரதி வருமானத்திலிருந்து கழிக்கப்படும்.",
+verificationNotice:"சேவையகத்தால் உறுதிப்படுத்தப்பட்ட தூரத்திற்கு மட்டும் கூடுதல் கட்டணம்.",
+vehicleRates:"04. வாகன கட்டணங்கள்",
+vehicle:"வாகன வகை",
+bike:"மோட்டார் சைக்கிள்",
+tuk:"முச்சக்கர வண்டி",
+car:"கார்",
+van:"வேன்",
+minimumFare:"குறைந்தபட்ச கட்டணம் (ரூ.)",
+range:"தூர வரம்பு",
+dayRate:"பகல் ரூ./KM",
+nightRate:"இரவு ரூ./KM",
+discountRate:"தள்ளுபடி ரூ./KM",
+progressiveNotice:"ஒவ்வொரு தூர வரம்பிற்கும் உரிய கட்டணம் மட்டும் கணக்கிடப்படும். தள்ளுபடி ஏற்கனவே கட்டணத்தில் உள்ளது.",
+loadDefaults:"ஆரம்ப கட்டண அட்டவணை",
+restore:"சேவையக அமைப்புகளை மீட்டமைக்கவும்",
+calculator:"05. கட்டண கணக்கீட்டு சோதனை",
+distance:"மொத்த தூரம் (KM)",
+startTime:"பயண ஆரம்ப நேரம்",
+rainDistance:"மழை பாதித்த தூரம் (KM)",
+roadDistance:"கடின சாலை தூரம் (KM)",
+tolls:"நெடுஞ்சாலை கட்டணம் (ரூ.)",
+parking:"வாகன நிறுத்த கட்டணம் (ரூ.)",
+calculate:"கட்டணத்தை கணக்கிடவும்",
+baseFare:"தூர கட்டணம்",
+discount:"உள்ளடங்கிய தள்ளுபடி",
+rainCharge:"மழை கூடுதல் கட்டணம்",
+roadCharge:"கடின சாலை கட்டணம்",
+minimumAdjustment:"குறைந்தபட்ச கட்டண சரிசெய்தல்",
+rideFare:"பயண கட்டணம்",
+finalFare:"வாடிக்கையாளர் மொத்த கட்டணம்",
+commission:"MY RIDE கமிஷன்",
+driverNet:"சாரதி நிகர பயண வருமானம்",
+period:"கட்டண நேரம்",
+day:"பகல்",
+night:"இரவு",
+previewNotice:"இது சோதனை கணக்கீடு மட்டும். உண்மையான கட்டணம் சேவையகத்தால் கணக்கிடப்படும்.",
+publishSettings:"06. புதிய கட்டணங்களை வெளியிடவும்",
+publishWarning:"புதிய கட்டணங்கள் புதிதாக உறுதிப்படுத்தப்படும் முன்பதிவுகளுக்கு மட்டும் பொருந்தும்.",
+reason:"கட்டண மாற்றத்திற்கான காரணம்",
+confirmPublish:"புதிய கட்டணங்களை சரிபார்த்து வெளியிட ஒப்புக்கொள்கிறேன்.",
+publish:"புதிய கட்டணங்களை வெளியிடவும்",
+history:"07. கட்டண மாற்ற வரலாறு",
+loadHistory:"கட்டண வரலாற்றை பார்க்கவும்",
+more:"மேலும் பதிவுகள்",
+back:"நிர்வாக முதன்மைப் பக்கத்திற்கு",
+login:"நிர்வாக உள்நுழைவு",
+refresh:"புதுப்பிக்கவும்",
+checking:"பாதுகாப்பு சரிபார்க்கப்படுகிறது...",
+denied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+verified:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+loading:"சேவையக தரவு பெறப்படுகிறது...",
+error:"சேவையக தரவை பெற முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+invalid:"உள்ளிட்ட கட்டணங்களை சரிபார்க்கவும்.",
+invalidReason:"குறைந்தது 10 எழுத்துகள் கொண்ட காரணத்தை உள்ளிடவும்.",
+saving:"புதிய கட்டணங்கள் வெளியிடப்படுகின்றன...",
+saved:"புதிய கட்டணங்கள் உறுதிப்படுத்தப்பட்டன.",
+saveError:"கட்டண வெளியீட்டை உறுதிப்படுத்த முடியவில்லை.",
+updated:"கடைசி புதுப்பிப்பு",
+effective:"செயல்படும் நேரம்",
+noHistory:"வரலாற்று பதிவுகள் இல்லை.",
+unsaved:"மாற்றங்கள் இன்னும் வெளியிடப்படவில்லை.",
+noChanges:"வெளியிட மாற்றங்கள் இல்லை.",
+discard:"சேமிக்காத மாற்றங்களை நீக்கவா?",
+confirmDefault:"ஆரம்ப கட்டணங்களை பெறவா?"
+
+}
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+
+new URLSearchParams(location.search).get("lang")
+
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected)){
+
+lang=selected;
+
+}
+
+}catch(e){}
+
+const t=key=>words[lang][key]||key;
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+const originalRates={
+
+bike:{
+
+minimumFare:100,
+
+day:[60,50,40,30,20],
+
+night:[75,65,55,45,35]
+
+},
+
+tuk:{
+
+minimumFare:150,
+
+day:[90,80,70,60,50],
+
+night:[110,100,90,80,70]
+
+},
+
+car:{
+
+minimumFare:200,
+
+day:[120,110,100,90,80],
+
+night:[150,140,130,120,110]
+
+},
+
+van:{
+
+minimumFare:300,
+
+day:[160,150,140,130,120],
+
+night:[200,190,180,170,160]
+
+}
+
+};
+
+function createDefaults(){
+
+const data={
+
+dayStartMinutes:480,
+
+nightStartMinutes:1200,
+
+rainSurchargePerKm:15,
+
+difficultRoadSurchargePerKm:20,
+
+commissionRate:5,
+
+vehicles:{}
+
+};
+
+vehicles.forEach(vehicle=>{
+
+const source=originalRates[vehicle];
+
+data.vehicles[vehicle]={
+
+minimumFare:source.minimumFare,
+
+bands:limits.map((limit,index)=>({
+
+upToKm:limit,
+
+dayRate:source.day[index],
+
+nightRate:source.night[index],
+
+discountPerKm:index*10
+
+}))
+
+};
+
+});
+
+return data;
+
+}
+
+let auth=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+let busy=false;
+let mutationBusy=false;
+
+let currentSettings=null;
+let draftReady=false;
+let dirty=false;
+let historyRecords=[];
+let historyCursor=null;
+let historyLoaded=false;
+let calculation=null;
+let pendingRequestId=null;
+let pendingFingerprint=null;
+let statusKey="checking";
+let resultKey="";
+let saveResultKey="";
+
+function status(key){
+
+statusKey=key;
+
+$("status").textContent=t(key);
+
+}
+
+function result(key){
+
+resultKey=key;
+
+$("result").textContent=key?t(key):"";
+
+}
+
+function saveResult(key){
+
+saveResultKey=key;
+
+$("saveResult").textContent=key?t(key):"";
+
+}
+
+function isOwner(){
+
+return authorized
+
+&&ownerUid!==null
+
+&&auth?.currentUser?.uid===ownerUid
+
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+
+&&data.uid===uid
+
+&&data.role==="owner"
+
+&&data.ownerUidVerified===true
+
+&&data.sessionValid===true;
+
+}
+
+function validNumber(value,max=10000000){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=0
+
+&&value<=max;
+
+}
+
+function validMoney(value,max=10000000){
+
+return validNumber(value,max)
+
+&&Math.abs(value*100-Math.round(value*100))<0.000001;
+
+}
+
+function validVersion(value){
+
+return Number.isSafeInteger(value)
+
+&&value>=0;
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+
+&&value>0
+
+&&value<=8640000000000000;
+
+}
+
+function validMinutes(value){
+
+return Number.isInteger(value)
+
+&&value>=0
+
+&&value<1440;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validFareData(data){
+
+if(!data
+
+||!validMinutes(data.dayStartMinutes)
+
+||!validMinutes(data.nightStartMinutes)
+
+||data.dayStartMinutes>=data.nightStartMinutes
+
+||!validMoney(data.rainSurchargePerKm,10000)
+
+||!validMoney(data.difficultRoadSurchargePerKm,10000)
+
+||!validMoney(data.commissionRate,100)
+
+||!data.vehicles){
+
+return false;
+
+}
+
+return vehicles.every(vehicle=>{
+
+const item=data.vehicles[vehicle];
+
+if(!item
+
+||!validMoney(item.minimumFare)
+
+||!Array.isArray(item.bands)
+
+||item.bands.length!==5){
+
+return false;
+
+}
+
+const first=item.bands[0];
+
+return item.bands.every((band,index)=>{
+
+if(!band
+
+||band.upToKm!==limits[index]
+
+||!validMoney(band.dayRate,10000)
+
+||!validMoney(band.nightRate,10000)
+
+||!validMoney(band.discountPerKm,10000)
+
+||band.dayRate<=0
+
+||band.nightRate<=0
+
+||band.nightRate<band.dayRate){
+
+return false;
+
+}
+
+if(index===0){
+
+return band.discountPerKm===0;
+
+}
+
+const previous=item.bands[index-1];
+
+return band.discountPerKm>=previous.discountPerKm
+
+&&band.dayRate<=previous.dayRate
+
+&&band.nightRate<=previous.nightRate
+
+&&Math.abs(
+
+first.dayRate-band.dayRate-band.discountPerKm
+
+)<0.000001
+
+&&Math.abs(
+
+first.nightRate-band.nightRate-band.discountPerKm
+
+)<0.000001;
+
+});
+
+});
+
+}
+
+function validSettings(data){
+
+return validFareData(data)
+
+&&validVersion(data.version)
+
+&&typeof data.published==="boolean"
+
+&&(data.updatedAtMs===null
+
+||validTime(data.updatedAtMs))
+
+&&(data.effectiveAtMs===null
+
+||validTime(data.effectiveAtMs));
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"medium"
+
+}
+
+).format(new Date(value));
+
+}
+
+function money(value){
+
+if(!validNumber(value,1000000000))return "—";
+
+return new Intl.NumberFormat("en-LK",{
+
+style:"currency",
+
+currency:"LKR",
+
+minimumFractionDigits:2
+
+}).format(value);
+
+}
+
+function roundMoney(value){
+
+return Math.round((value+Number.EPSILON)*100)/100;
+
+}
+
+function clockToMinutes(value){
+
+if(typeof value!=="string"
+
+||!/^([01]\d|2[0-3]):[0-5]\d$/.test(value)){
+
+throw new Error("Invalid time");
+
+}
+
+const parts=value.split(":").map(Number);
+
+return parts[0]*60+parts[1];
+
+}
+
+function minutesToClock(value){
+
+if(!validMinutes(value))return "";
+
+return String(Math.floor(value/60)).padStart(2,"0")
+
++":"
+
++String(value%60).padStart(2,"0");
+
+}
+
+function readNumber(id){
+
+const element=$(id);
+
+if(!element
+
+||element.value.trim()===""
+
+||!element.checkValidity()){
+
+throw new Error("Invalid number");
+
+}
+
+const value=Number(element.value);
+
+if(!Number.isFinite(value)||value<0){
+
+throw new Error("Invalid number");
+
+}
+
+return value;
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+encodeURIComponent(lang);
+
+}
+
+function makeStat(label,value){
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const name=document.createElement("span");
+
+name.textContent=t(label);
+
+const number=document.createElement("strong");
+
+number.textContent=String(value??"—");
+
+box.append(name,number);
+
+return box;
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function renderCurrentSettings(){
+
+const container=$("currentSettings");
+
+container.replaceChildren();
+
+container.append(
+
+makeStat(
+
+"version",
+
+currentSettings?.version??"—"
+
+),
+
+makeStat(
+
+"published",
+
+currentSettings
+
+?t(currentSettings.published?"yes":"no")
+
+:"—"
+
+),
+
+makeStat(
+
+"commissionRate",
+
+currentSettings
+
+?currentSettings.commissionRate+"%"
+
+:"—"
+
+),
+
+makeStat(
+
+"effective",
+
+formatDate(currentSettings?.effectiveAtMs)
+
+)
+
+);
+
+$("lastUpdate").textContent=
+
+currentSettings
+
+?t("updated")+": "+formatDate(currentSettings.updatedAtMs)
+
+:"";
+
+}
+
+function makeNumberInput(id,value,max=10000){
+
+const input=document.createElement("input");
+
+input.id=id;
+
+input.type="number";
+
+input.min="0";
+
+input.max=String(max);
+
+input.step="0.01";
+
+input.value=String(value);
+
+input.className="fareInput";
+
+input.required=true;
+
+return input;
+
+}
+
+function buildVehicleEditor(data){
+
+const container=$("vehicleRates");
+
+container.replaceChildren();
+
+vehicles.forEach(vehicle=>{
+
+const item=data.vehicles[vehicle];
+
+const panel=document.createElement("div");
+
+panel.className="vehiclePanel";
+
+const title=document.createElement("h4");
+
+title.dataset.t=vehicle;
+
+title.textContent=t(vehicle);
+
+panel.appendChild(title);
+
+const label=document.createElement("label");
+
+label.dataset.t="minimumFare";
+
+label.textContent=t("minimumFare");
+
+label.htmlFor=vehicle+"_minimum";
+
+panel.appendChild(label);
+
+panel.appendChild(
+
+makeNumberInput(
+
+vehicle+"_minimum",
+
+item.minimumFare,
+
+10000000
+
+)
+
+);
+
+const wrap=document.createElement("div");
+
+wrap.className="tableWrap";
+
+const table=document.createElement("table");
+
+const header=document.createElement("tr");
+
+[
+
+"range",
+
+"dayRate",
+
+"nightRate",
+
+"discountRate"
+
+].forEach(key=>{
+
+const cell=document.createElement("th");
+
+cell.dataset.t=key;
+
+cell.textContent=t(key);
+
+header.appendChild(cell);
+
+});
+
+const head=document.createElement("thead");
+
+head.appendChild(header);
+
+table.appendChild(head);
+
+const body=document.createElement("tbody");
+
+item.bands.forEach((band,index)=>{
+
+const row=document.createElement("tr");
+
+const range=document.createElement("td");
+
+range.textContent=ranges[index];
+
+row.appendChild(range);
+
+[
+
+"dayRate",
+
+"nightRate",
+
+"discountPerKm"
+
+].forEach(key=>{
+
+const cell=document.createElement("td");
+
+const input=makeNumberInput(
+
+vehicle+"_"+index+"_"+key,
+
+band[key]
+
+);
+
+input.setAttribute(
+
+"aria-label",
+
+vehicle+" "+ranges[index]+" "+key
+
+);
+
+cell.appendChild(input);
+
+row.appendChild(cell);
+
+});
+
+body.appendChild(row);
+
+});
+
+table.appendChild(body);
+
+wrap.appendChild(table);
+
+panel.appendChild(wrap);
+
+container.appendChild(panel);
+
+});
+
+}
+
+function populateEditor(data){
+
+$("dayStart").value=
+
+minutesToClock(data.dayStartMinutes);
+
+$("nightStart").value=
+
+minutesToClock(data.nightStartMinutes);
+
+$("rainRate").value=
+
+String(data.rainSurchargePerKm);
+
+$("roadRate").value=
+
+String(data.difficultRoadSurchargePerKm);
+
+$("commissionRate").value=
+
+String(data.commissionRate);
+
+buildVehicleEditor(data);
+
+draftReady=true;
+
+calculation=null;
+
+renderCalculation();
+
+updateControls();
+
+}
+
+function readDraft(){
+
+if(!draftReady){
+
+throw new Error("Settings unavailable");
+
+}
+
+const data={
+
+dayStartMinutes:clockToMinutes($("dayStart").value),
+
+nightStartMinutes:clockToMinutes($("nightStart").value),
+
+rainSurchargePerKm:readNumber("rainRate"),
+
+difficultRoadSurchargePerKm:readNumber("roadRate"),
+
+commissionRate:readNumber("commissionRate"),
+
+vehicles:{}
+
+};
+
+vehicles.forEach(vehicle=>{
+
+data.vehicles[vehicle]={
+
+minimumFare:readNumber(vehicle+"_minimum"),
+
+bands:limits.map((limit,index)=>({
+
+upToKm:limit,
+
+dayRate:readNumber(vehicle+"_"+index+"_dayRate"),
+
+nightRate:readNumber(vehicle+"_"+index+"_nightRate"),
+
+discountPerKm:readNumber(vehicle+"_"+index+"_discountPerKm")
+
+}))
+
+};
+
+});
+
+if(!validFareData(data)){
+
+throw new Error("Invalid fare settings");
+
+}
+
+return data;
+
+}
+
+function fareFingerprint(data){
+
+return JSON.stringify([
+
+data.dayStartMinutes,
+
+data.nightStartMinutes,
+
+data.rainSurchargePerKm,
+
+data.difficultRoadSurchargePerKm,
+
+data.commissionRate,
+
+vehicles.map(vehicle=>[
+
+data.vehicles[vehicle].minimumFare,
+
+data.vehicles[vehicle].bands.map(band=>[
+
+band.upToKm,
+
+band.dayRate,
+
+band.nightRate,
+
+band.discountPerKm
+
+])
+
+])
+
+]);
+
+}
+
+function updateDirty(){
+
+try{
+
+dirty=!currentSettings
+
+||fareFingerprint(readDraft())
+
+!==fareFingerprint(currentSettings);
+
+}catch(e){
+
+dirty=true;
+
+}
+
+}
+
+function updateControls(){
+
+const locked=busy||mutationBusy||!isOwner();
+
+[
+
+"refreshButton",
+
+"defaultButton",
+
+"restoreButton",
+
+"loadHistory",
+
+"moreHistory"
+
+].forEach(id=>{
+
+$(id).disabled=locked;
+
+});
+
+$("restoreButton").disabled=
+
+locked||!currentSettings;
+
+[
+
+"dayStart",
+
+"nightStart",
+
+"rainRate",
+
+"roadRate",
+
+"commissionRate",
+
+"changeReason",
+
+"publishConsent"
+
+].forEach(id=>{
+
+$(id).disabled=locked||!draftReady;
+
+});
+
+document.querySelectorAll(".fareInput")
+
+.forEach(input=>{
+
+input.disabled=locked;
+
+});
+
+$("calculateButton").disabled=
+
+locked||!draftReady;
+
+let validDraft=false;
+
+try{
+
+validDraft=validFareData(readDraft());
+
+}catch(e){}
+
+$("publishButton").disabled=
+
+locked
+
+||!currentSettings
+
+||!validDraft
+
+||!dirty
+
+||!$("publishConsent").checked
+
+||$("changeReason").value.trim().length<10;
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+$("loginLink").href=pageLink("admin-login.html");
+
+$("dashboardLink").href=pageLink("admin-dashboard.html");
+
+$("backLink").href=pageLink("admin-dashboard.html");
+
+$("changeReason").placeholder=t("reason");
+
+status(statusKey);
+
+result(resultKey);
+
+saveResult(saveResultKey);
+
+renderCurrentSettings();
+
+renderCalculation();
+
+renderHistory();
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+
+"myride_admin_language",
+
+lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+async function serverCall(name,data={}){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+
+name,
+
+{timeout:25000}
+
+)(data);
+
+if(currentGeneration!==generation
+
+||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+async function loadSettings(){
+
+const response=await serverCall(
+
+"getAdminFareSettings"
+
+);
+
+if(response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!validSettings(response.settings)){
+
+throw new Error("Invalid fare settings");
+
+}
+
+currentSettings=response.settings;
+
+populateEditor(currentSettings);
+
+dirty=false;
+
+pendingRequestId=null;
+
+pendingFingerprint=null;
+
+$("changeReason").value="";
+
+$("publishConsent").checked=false;
+
+renderCurrentSettings();
+
+updateControls();
+
+}
+
+async function refreshSettings(){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+if(dirty&&!window.confirm(t("discard")))return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+result("loading");
+
+try{
+
+await loadSettings();
+
+result("");
+
+saveResult("");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+currentSettings=null;
+
+draftReady=false;
+
+dirty=false;
+
+$("vehicleRates").replaceChildren();
+
+calculation=null;
+
+renderCalculation();
+
+renderCurrentSettings();
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("refreshButton").onclick=refreshSettings;
+
+$("restoreButton").onclick=()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||!currentSettings)return;
+
+if(dirty&&!window.confirm(t("discard")))return;
+
+populateEditor(currentSettings);
+
+dirty=false;
+
+pendingRequestId=null;
+
+pendingFingerprint=null;
+
+$("publishConsent").checked=false;
+
+$("changeReason").value="";
+
+saveResult("");
+
+result("");
+
+updateControls();
+
+};
+
+$("defaultButton").onclick=()=>{
+
+if(!isOwner()||busy||mutationBusy)return;
+
+if(!window.confirm(t("confirmDefault")))return;
+
+populateEditor(createDefaults());
+
+updateDirty();
+
+pendingRequestId=null;
+
+pendingFingerprint=null;
+
+$("publishConsent").checked=false;
+
+saveResult(dirty?"unsaved":"noChanges");
+
+updateControls();
+
+};
+
+function editorChanged(){
+
+if(!isOwner()||!draftReady)return;
+
+updateDirty();
+
+calculation=null;
+
+pendingRequestId=null;
+
+pendingFingerprint=null;
+
+$("publishConsent").checked=false;
+
+renderCalculation();
+
+saveResult(dirty?"unsaved":"");
+
+updateControls();
+
+}
+
+[
+
+"dayStart",
+
+"nightStart",
+
+"rainRate",
+
+"roadRate",
+
+"commissionRate"
+
+].forEach(id=>{
+
+$(id).addEventListener("input",editorChanged);
+
+});
+
+$("vehicleRates").addEventListener(
+
+"input",
+
+editorChanged
+
+);
+
+$("changeReason").addEventListener("input",()=>{
+
+pendingRequestId=null;
+
+pendingFingerprint=null;
+
+updateControls();
+
+});
+
+$("publishConsent").addEventListener(
+
+"change",
+
+updateControls
+
+);
+
+function calculateFare(data,options){
+
+const item=data.vehicles[options.vehicle];
+
+if(!item
+
+||!validNumber(options.distanceKm,2000)
+
+||options.distanceKm<=0
+
+||!validMinutes(options.startMinutes)
+
+||!validNumber(options.rainKm,options.distanceKm)
+
+||!validNumber(options.roadKm,options.distanceKm)
+
+||!validMoney(options.tolls)
+
+||!validMoney(options.parking)){
+
+throw new Error("Invalid test values");
+
+}
+
+const night=
+
+options.startMinutes<data.dayStartMinutes
+
+||options.startMinutes>=data.nightStartMinutes;
+
+let distanceFare=0;
+
+let includedDiscount=0;
+
+let previousLimit=0;
+
+item.bands.forEach(band=>{
+
+const upperLimit=
+
+band.upToKm===null
+
+?options.distanceKm
+
+:Math.min(options.distanceKm,band.upToKm);
+
+const bandDistance=
+
+Math.max(0,upperLimit-previousLimit);
+
+const rate=night
+
+?band.nightRate
+
+:band.dayRate;
+
+distanceFare+=bandDistance*rate;
+
+includedDiscount+=
+
+bandDistance*band.discountPerKm;
+
+if(band.upToKm!==null){
+
+previousLimit=band.upToKm;
+
+}
+
+});
+
+distanceFare=roundMoney(distanceFare);
+
+includedDiscount=roundMoney(includedDiscount);
+
+const rainCharge=roundMoney(
+
+options.rainKm*data.rainSurchargePerKm
+
+);
+
+const roadCharge=roundMoney(
+
+options.roadKm*data.difficultRoadSurchargePerKm
+
+);
+
+const subtotal=roundMoney(
+
+distanceFare+rainCharge+roadCharge
+
+);
+
+const rideFare=roundMoney(
+
+Math.max(item.minimumFare,subtotal)
+
+);
+
+const minimumAdjustment=roundMoney(
+
+rideFare-subtotal
+
+);
+
+const commission=roundMoney(
+
+rideFare*data.commissionRate/100
+
+);
+
+const driverNet=roundMoney(
+
+rideFare-commission
+
+);
+
+const finalFare=roundMoney(
+
+rideFare+options.tolls+options.parking
+
+);
+
+return {
+
+period:night?"night":"day",
+
+baseFare:distanceFare,
+
+discount:includedDiscount,
+
+rainCharge,
+
+roadCharge,
+
+minimumAdjustment,
+
+rideFare,
+
+finalFare,
+
+commission,
+
+driverNet
+
+};
+
+}
+
+function renderCalculation(){
+
+const container=$("calculationResult");
+
+container.replaceChildren();
+
+if(!calculation||!isOwner())return;
+
+container.appendChild(
+
+makeStat("period",t(calculation.period))
+
+);
+
+[
+
+"baseFare",
+
+"discount",
+
+"rainCharge",
+
+"roadCharge",
+
+"minimumAdjustment",
+
+"rideFare",
+
+"finalFare",
+
+"commission",
+
+"driverNet"
+
+].forEach(key=>{
+
+container.appendChild(
+
+makeStat(key,money(calculation[key]))
+
+);
+
+});
+
+}
+
+$("calculateButton").onclick=()=>{
+
+if(!isOwner()||busy||mutationBusy)return;
+
+try{
+
+const data=readDraft();
+
+calculation=calculateFare(data,{
+
+vehicle:$("testVehicle").value,
+
+distanceKm:readNumber("testDistance"),
+
+startMinutes:clockToMinutes($("testTime").value),
+
+rainKm:readNumber("testRainKm"),
+
+roadKm:readNumber("testRoadKm"),
+
+tolls:readNumber("testTolls"),
+
+parking:readNumber("testParking")
+
+});
+
+renderCalculation();
+
+result("");
+
+}catch(e){
+
+calculation=null;
+
+renderCalculation();
+
+result("invalid");
+
+}
+
+};
+
+[
+
+"testVehicle",
+
+"testDistance",
+
+"testTime",
+
+"testRainKm",
+
+"testRoadKm",
+
+"testTolls",
+
+"testParking"
+
+].forEach(id=>{
+
+$(id).addEventListener("input",()=>{
+
+calculation=null;
+
+renderCalculation();
+
+});
+
+});
+
+async function freshOwnerAuthentication(){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const user=auth.currentUser;
+
+const uid=user.uid;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=
+
+await reauthenticateWithPopup(user,provider);
+
+if(credential.user.uid!==uid
+
+||auth.currentUser?.uid!==uid
+
+||!isOwner()){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Invalid owner");
+
+}
+
+const verified=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(!validOwner(verified,uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+}
+
+$("publishButton").onclick=async()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||!currentSettings
+
+||!dirty
+
+||!$("publishConsent").checked)return;
+
+let data;
+
+try{
+
+data=readDraft();
+
+}catch(e){
+
+saveResult("invalid");
+
+return;
+
+}
+
+const reason=$("changeReason").value.trim();
+
+if(reason.length<10||reason.length>500){
+
+saveResult("invalidReason");
+
+return;
+
+}
+
+const expectedVersion=currentSettings.version;
+
+const fingerprint=JSON.stringify([
+
+expectedVersion,
+
+fareFingerprint(data),
+
+reason
+
+]);
+
+if(!pendingRequestId
+
+||pendingFingerprint!==fingerprint){
+
+pendingRequestId=crypto.randomUUID();
+
+pendingFingerprint=fingerprint;
+
+}
+
+const requestId=pendingRequestId;
+
+const currentGeneration=generation;
+
+mutationBusy=true;
+
+updateControls();
+
+saveResult("saving");
+
+try{
+
+await freshOwnerAuthentication();
+
+const response=await serverCall(
+
+"publishAdminFareSettings",
+
+{
+
+settings:data,
+
+reason,
+
+expectedVersion,
+
+requestId,
+
+applyTo:"future_confirmed_bookings"
+
+}
+
+);
+
+if(response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!validSettings(response.settings)
+
+||response.settings.published!==true
+
+||response.settings.version<=expectedVersion
+
+||fareFingerprint(response.settings)
+
+!==fareFingerprint(data)
+
+||!validTime(response.settings.effectiveAtMs)){
+
+throw new Error("Publication not confirmed");
+
+}
+
+currentSettings=response.settings;
+
+populateEditor(currentSettings);
+
+dirty=false;
+
+pendingRequestId=null;
+
+pendingFingerprint=null;
+
+$("publishConsent").checked=false;
+
+$("changeReason").value="";
+
+renderCurrentSettings();
+
+saveResult("saved");
+
+historyRecords=[];
+
+historyCursor=null;
+
+historyLoaded=false;
+
+renderHistory();
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+saveResult("saveError");
+
+$("publishConsent").checked=false;
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+function validHistory(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&validVersion(record.version)
+
+&&validTime(record.createdAtMs)
+
+&&validTime(record.effectiveAtMs)
+
+&&typeof record.reason==="string"
+
+&&record.reason.length<=500
+
+&&validMoney(record.commissionRate,100)
+
+&&validMoney(record.rainSurchargePerKm,10000)
+
+&&validMoney(record.difficultRoadSurchargePerKm,10000);
+
+}
+
+function renderHistory(){
+
+const container=$("historyList");
+
+container.replaceChildren();
+
+$("moreHistory").hidden=historyCursor===null;
+
+if(!isOwner()||!historyLoaded)return;
+
+if(!historyRecords.length){
+
+container.textContent=t("noHistory");
+
+return;
+
+}
+
+historyRecords.forEach(record=>{
+
+const panel=document.createElement("div");
+
+panel.className="historyItem";
+
+const title=document.createElement("strong");
+
+title.textContent=
+
+t("version")+": "+record.version;
+
+panel.appendChild(title);
+
+addLine(
+
+panel,
+
+"updated",
+
+formatDate(record.createdAtMs)
+
+);
+
+addLine(
+
+panel,
+
+"effective",
+
+formatDate(record.effectiveAtMs)
+
+);
+
+addLine(
+
+panel,
+
+"reason",
+
+record.reason
+
+);
+
+addLine(
+
+panel,
+
+"commissionRate",
+
+record.commissionRate+"%"
+
+);
+
+addLine(
+
+panel,
+
+"rainRate",
+
+money(record.rainSurchargePerKm)
+
+);
+
+addLine(
+
+panel,
+
+"roadRate",
+
+money(record.difficultRoadSurchargePerKm)
+
+);
+
+container.appendChild(panel);
+
+});
+
+}
+
+async function loadFareHistory(reset=true){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+result("loading");
+
+try{
+
+const response=await serverCall(
+
+"getAdminFareHistory",
+
+{
+
+limit:20,
+
+cursor:reset?null:historyCursor
+
+}
+
+);
+
+if(response?.success!==true
+
+||response.ownerUid!==ownerUid
+
+||!Array.isArray(response.records)
+
+||response.records.length>20
+
+||!response.records.every(validHistory)
+
+||!(response.nextCursor===null
+
+||typeof response.nextCursor==="string")){
+
+throw new Error("Invalid history");
+
+}
+
+const unique=new Map(
+
+(reset?[]:historyRecords)
+
+.map(record=>[record.recordId,record])
+
+);
+
+response.records.forEach(record=>{
+
+unique.set(record.recordId,record);
+
+});
+
+historyRecords=[...unique.values()];
+
+historyCursor=response.nextCursor;
+
+historyLoaded=true;
+
+renderHistory();
+
+result("");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+historyRecords=[];
+
+historyCursor=null;
+
+historyLoaded=false;
+
+renderHistory();
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("loadHistory").onclick=()=>{
+
+loadFareHistory(true);
+
+};
+
+$("moreHistory").onclick=()=>{
+
+if(historyCursor!==null){
+
+loadFareHistory(false);
+
+}
+
+};
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+ownerUid=null;
+
+busy=false;
+
+mutationBusy=false;
+
+currentSettings=null;
+
+draftReady=false;
+
+dirty=false;
+
+calculation=null;
+
+historyRecords=[];
+
+historyCursor=null;
+
+historyLoaded=false;
+
+pendingRequestId=null;
+
+pendingFingerprint=null;
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("vehicleRates").replaceChildren();
+
+$("calculationResult").replaceChildren();
+
+$("historyList").replaceChildren();
+
+$("changeReason").value="";
+
+$("publishConsent").checked=false;
+
+[
+
+"dayStart",
+
+"nightStart",
+
+"rainRate",
+
+"roadRate",
+
+"commissionRate"
+
+].forEach(id=>{
+
+$(id).value="";
+
+});
+
+result("");
+
+saveResult("");
+
+renderCurrentSettings();
+
+renderHistory();
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+status("denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status("offline");
+
+return;
+
+}
+
+status("checking");
+
+try{
+
+const appToken=await getToken(
+
+appCheck,
+
+false
+
+);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+status("verified");
+
+await refreshSettings();
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(
+
+auth,
+
+verifyOwner
+
+);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+let checking=false;
+
+setInterval(async()=>{
+
+if(!isOwner()||checking||mutationBusy)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(!validOwner(response,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+status("offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener(
+
+"beforeunload",
+
+event=>{
+
+if(dirty||mutationBusy){
+
+event.preventDefault();
+
+event.returnValue="";
+
+}
+
+}
+
+);
+
+window.addEventListener(
+
+"pagehide",
+
+clearSession
+
+);
+
+window.addEventListener(
+
+"pageshow",
+
+event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+}
+
+);
+
+renderLanguage();
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+
+</html>
