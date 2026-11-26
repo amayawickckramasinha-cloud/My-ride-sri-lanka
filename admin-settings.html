@@ -1,0 +1,3802 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - System Settings</title>
+
+<style>
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3,h4{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+input,select,textarea{
+width:100%;
+padding:13px;
+margin:8px 0;
+background:#292929;
+color:#fff;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+label{
+display:block;
+margin-top:12px;
+line-height:1.7;
+}
+
+.checkRow{
+display:flex;
+align-items:center;
+gap:12px;
+background:#292929;
+padding:12px;
+border-radius:8px;
+margin:8px 0;
+}
+
+.checkRow input{
+width:22px;
+height:22px;
+flex-shrink:0;
+accent-color:#FFD600;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+padding:14px;
+border-radius:9px;
+overflow-wrap:anywhere;
+}
+
+.stat strong{
+display:block;
+margin-top:10px;
+color:#FFD600;
+font-size:18px;
+}
+
+.record{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+line-height:1.9;
+overflow-wrap:anywhere;
+}
+
+.good{
+color:#55E68A!important;
+}
+
+.bad{
+color:#FF7777!important;
+}
+
+.warning{
+color:#FFB347;
+line-height:1.8;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+.message{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+@media(max-width:450px){
+.grid{
+grid-template-columns:1fr;
+}
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading">
+System Settings
+</h2>
+
+<div class="languages">
+<button data-lang="si">සිංහල</button>
+<button data-lang="en">English</button>
+<button data-lang="ta">தமிழ்</button>
+</div>
+
+<p id="status"
+class="message"
+role="status"
+aria-live="polite">
+Checking security...
+</p>
+
+<section id="accessPanel"
+class="panel"
+hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="overview"></h3>
+
+<div id="systemOverview"
+class="grid"></div>
+
+<p id="lastUpdate"
+class="note"></p>
+
+<p id="settingsVersion"
+class="note"></p>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+</section>
+
+<form id="settingsForm">
+
+<fieldset id="settingsFields"
+disabled
+style="border:0;padding:0;margin:0">
+
+<section class="panel">
+
+<h3 data-t="generalSettings"></h3>
+
+<label for="appName"
+data-t="appName"></label>
+
+<input id="appName"
+value="MY RIDE"
+readonly>
+
+<label for="country"
+data-t="country"></label>
+
+<input id="country"
+value="Sri Lanka"
+readonly>
+
+<label for="currency"
+data-t="currency"></label>
+
+<input id="currency"
+value="LKR"
+readonly>
+
+<label for="timeZone"
+data-t="timeZone"></label>
+
+<input id="timeZone"
+value="Asia/Colombo"
+readonly>
+
+<label for="defaultLanguage"
+data-t="defaultLanguage"></label>
+
+<select id="defaultLanguage">
+<option value="si">සිංහල</option>
+<option value="en">English</option>
+<option value="ta">தமிழ்</option>
+</select>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="serviceSettings"></h3>
+
+<label class="checkRow">
+<input id="customerBooking"
+type="checkbox">
+<span data-t="customerBooking"></span>
+</label>
+
+<label class="checkRow">
+<input id="driverRegistration"
+type="checkbox">
+<span data-t="driverRegistration"></span>
+</label>
+
+<label class="checkRow">
+<input id="driverLogin"
+type="checkbox">
+<span data-t="driverLogin"></span>
+</label>
+
+<label class="checkRow">
+<input id="automaticMatching"
+type="checkbox">
+<span data-t="automaticMatching"></span>
+</label>
+
+<label class="checkRow">
+<input id="scheduledBooking"
+type="checkbox">
+<span data-t="scheduledBooking"></span>
+</label>
+
+<p class="note"
+data-t="serviceNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="matchingSettings"></h3>
+
+<label for="searchRadius"
+data-t="searchRadius"></label>
+
+<select id="searchRadius">
+<option value="1">1 KM</option>
+<option value="2">2 KM</option>
+<option value="3">3 KM</option>
+<option value="5">5 KM</option>
+<option value="10">10 KM</option>
+<option value="15">15 KM</option>
+<option value="20">20 KM</option>
+<option value="25">25 KM</option>
+</select>
+
+<label for="offerTimeout"
+data-t="offerTimeout"></label>
+
+<select id="offerTimeout">
+<option value="30">30 Seconds</option>
+<option value="45">45 Seconds</option>
+<option value="60">60 Seconds</option>
+<option value="90">90 Seconds</option>
+<option value="120">120 Seconds</option>
+</select>
+
+<label for="maximumAttempts"
+data-t="maximumAttempts"></label>
+
+<select id="maximumAttempts">
+<option value="3">3</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+</select>
+
+<p class="note"
+data-t="matchingNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="gpsSettings"></h3>
+
+<label for="gpsInterval"
+data-t="gpsInterval"></label>
+
+<select id="gpsInterval">
+<option value="5">5 Seconds</option>
+<option value="10">10 Seconds</option>
+<option value="15">15 Seconds</option>
+<option value="20">20 Seconds</option>
+<option value="30">30 Seconds</option>
+</select>
+
+<label for="gpsMaxAge"
+data-t="gpsMaxAge"></label>
+
+<select id="gpsMaxAge">
+<option value="30">30 Seconds</option>
+<option value="60">60 Seconds</option>
+<option value="90">90 Seconds</option>
+<option value="120">120 Seconds</option>
+</select>
+
+<label for="gpsAccuracy"
+data-t="gpsAccuracy"></label>
+
+<select id="gpsAccuracy">
+<option value="20">20 Meters</option>
+<option value="30">30 Meters</option>
+<option value="50">50 Meters</option>
+<option value="100">100 Meters</option>
+</select>
+
+<p class="note"
+data-t="gpsNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="scheduleSettings"></h3>
+
+<label for="minimumAdvance"
+data-t="minimumAdvance"></label>
+
+<select id="minimumAdvance">
+<option value="15">15 Minutes</option>
+<option value="30">30 Minutes</option>
+<option value="60">60 Minutes</option>
+<option value="120">120 Minutes</option>
+</select>
+
+<label for="maximumAdvance"
+data-t="maximumAdvance"></label>
+
+<select id="maximumAdvance">
+<option value="1">1 Day</option>
+<option value="3">3 Days</option>
+<option value="7">7 Days</option>
+<option value="14">14 Days</option>
+<option value="30">30 Days</option>
+</select>
+
+<label for="scheduledReminder"
+data-t="scheduledReminder"></label>
+
+<select id="scheduledReminder">
+<option value="15">15 Minutes</option>
+<option value="30">30 Minutes</option>
+<option value="60">60 Minutes</option>
+</select>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="vehicleSettings"></h3>
+
+<label class="checkRow">
+<input id="vehicleBike"
+type="checkbox">
+<span data-t="bike"></span>
+</label>
+
+<label class="checkRow">
+<input id="vehicleTuk"
+type="checkbox">
+<span data-t="tuk"></span>
+</label>
+
+<label class="checkRow">
+<input id="vehicleCar"
+type="checkbox">
+<span data-t="car"></span>
+</label>
+
+<label class="checkRow">
+<input id="vehicleVan"
+type="checkbox">
+<span data-t="van"></span>
+</label>
+
+<p class="note"
+data-t="vehicleNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="districtSettings"></h3>
+
+<button id="selectAllDistricts"
+type="button"
+data-t="selectAll"></button>
+
+<button id="clearDistricts"
+type="button"
+class="back"
+data-t="clearAll"></button>
+
+<div id="districtList"
+class="grid"></div>
+
+<p id="districtCount"
+class="note"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="supportSettings"></h3>
+
+<label for="customerSupportPhone"
+data-t="customerSupportPhone"></label>
+
+<input id="customerSupportPhone"
+type="tel"
+maxlength="16"
+placeholder="+94XXXXXXXXX">
+
+<label for="driverSupportPhone"
+data-t="driverSupportPhone"></label>
+
+<input id="driverSupportPhone"
+type="tel"
+maxlength="16"
+placeholder="+94XXXXXXXXX">
+
+<label for="supportWhatsapp"
+data-t="supportWhatsapp"></label>
+
+<input id="supportWhatsapp"
+type="tel"
+maxlength="16"
+placeholder="+94XXXXXXXXX">
+
+<label for="supportEmail"
+data-t="supportEmail"></label>
+
+<input id="supportEmail"
+type="email"
+maxlength="254">
+
+<p class="note"
+data-t="supportNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="maintenanceSettings"></h3>
+
+<label class="checkRow">
+
+<input id="maintenanceMode"
+type="checkbox">
+
+<span data-t="maintenanceMode"></span>
+
+</label>
+
+<p class="warning"
+data-t="maintenanceNotice"></p>
+
+<label for="maintenanceSi">
+සිංහල
+</label>
+
+<textarea id="maintenanceSi"
+maxlength="500"></textarea>
+
+<label for="maintenanceEn">
+English
+</label>
+
+<textarea id="maintenanceEn"
+maxlength="500"></textarea>
+
+<label for="maintenanceTa">
+தமிழ்
+</label>
+
+<textarea id="maintenanceTa"
+maxlength="500"></textarea>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="saveSection"></h3>
+
+<label for="changeReason"
+data-t="reason"></label>
+
+<textarea id="changeReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="confirmSettings"
+type="checkbox">
+
+<span data-t="confirmSettings"></span>
+
+</label>
+
+<p class="warning"
+data-t="futureNotice"></p>
+
+<button id="saveSettings"
+type="submit"
+data-t="saveSettings"></button>
+
+<button id="discardSettings"
+type="button"
+class="back"
+data-t="discardSettings"></button>
+
+</section>
+
+</fieldset>
+
+</form>
+
+<section class="panel">
+
+<h3 data-t="history"></h3>
+
+<button id="loadHistory"
+data-t="viewHistory"></button>
+
+<div id="historyList"></div>
+
+<button id="moreHistory"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section id="historyDetailsPanel"
+class="panel"
+hidden>
+
+<h3 data-t="historyDetails"></h3>
+
+<div id="historyDetails"></div>
+
+<button id="closeHistory"
+class="back"
+data-t="close"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="relatedPages"></h3>
+
+<a id="fareLink"
+class="action"
+data-t="farePage"></a>
+
+<a id="weatherLink"
+class="action"
+data-t="weatherPage"></a>
+
+<a id="commissionLink"
+class="action"
+data-t="commissionPage"></a>
+
+<a id="paymentLink"
+class="action"
+data-t="paymentPage"></a>
+
+<a id="notificationLink"
+class="action"
+data-t="notificationPage"></a>
+
+<a id="securityLink"
+class="action"
+data-t="securityPage"></a>
+
+<a id="databaseLink"
+class="action"
+data-t="databasePage"></a>
+
+<a id="termsLink"
+class="action"
+data-t="termsPage"></a>
+
+<a id="accountLink"
+class="action"
+data-t="accountPage"></a>
+
+</section>
+
+<p id="result"
+class="message"
+role="status"
+aria-live="polite"></p>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const dictionary={
+
+heading:[
+"පද්ධති සැකසුම්",
+"System Settings",
+"அமைப்பு அமைப்புகள்"
+],
+
+overview:[
+"01. පද්ධතියේ වත්මන් තත්ත්වය",
+"01. System Overview",
+"01. அமைப்பின் தற்போதைய நிலை"
+],
+
+generalSettings:[
+"02. ප්‍රධාන සැකසුම්",
+"02. General Settings",
+"02. பொது அமைப்புகள்"
+],
+
+appName:[
+"යෙදුමේ නම",
+"Application Name",
+"செயலியின் பெயர்"
+],
+
+country:[
+"රට",
+"Country",
+"நாடு"
+],
+
+currency:[
+"මුදල් ඒකකය",
+"Currency",
+"நாணயம்"
+],
+
+timeZone:[
+"වේලා කලාපය",
+"Time Zone",
+"நேர மண்டலம்"
+],
+
+defaultLanguage:[
+"පෙරනිමි භාෂාව",
+"Default Language",
+"இயல்புநிலை மொழி"
+],
+
+serviceSettings:[
+"03. සේවා සැකසුම්",
+"03. Service Settings",
+"03. சேவை அமைப்புகள்"
+],
+
+customerBooking:[
+"නව හයර් ලබාගැනීම",
+"Enable New Customer Bookings",
+"புதிய பயண முன்பதிவுகளை இயக்கவும்"
+],
+
+driverRegistration:[
+"නව රියදුරු ලියාපදිංචිය",
+"Enable Driver Registration",
+"சாரதி பதிவை இயக்கவும்"
+],
+
+driverLogin:[
+"නව රියදුරු Login",
+"Enable New Driver Login",
+"புதிய சாரதி உள்நுழைவை இயக்கவும்"
+],
+
+automaticMatching:[
+"ස්වයංක්‍රීය රියදුරු සෙවීම",
+"Automatic Driver Matching",
+"தானியங்கி சாரதி தேடல்"
+],
+
+scheduledBooking:[
+"කලින් සැලසුම් කළ හයර්",
+"Enable Scheduled Bookings",
+"திட்டமிட்ட முன்பதிவுகளை இயக்கவும்"
+],
+
+serviceNotice:[
+"සේවාවක් නතර කළත් දැනට පිළිගත් හයර් සහ ආරක්ෂක සේවා අඛණ්ඩව පවත්වාගත යුතුය.",
+"Disabling a service must preserve accepted trips and safety functions.",
+"சேவையை நிறுத்தினாலும் ஏற்கப்பட்ட பயணங்களும் பாதுகாப்பு சேவைகளும் தொடர வேண்டும்."
+],
+
+matchingSettings:[
+"04. රියදුරු සෙවීමේ සැකසුම්",
+"04. Driver Matching Settings",
+"04. சாரதி தேடல் அமைப்புகள்"
+],
+
+searchRadius:[
+"රියදුරන් සොයන උපරිම අරය",
+"Maximum Driver Search Radius",
+"அதிகபட்ச சாரதி தேடல் ஆரம்"
+],
+
+offerTimeout:[
+"හයර් එක පිළිගැනීමට ලබාදෙන කාලය",
+"Driver Offer Response Time",
+"பயணத்தை ஏற்க வழங்கப்படும் நேரம்"
+],
+
+maximumAttempts:[
+"සෙවිය හැකි උපරිම රියදුරන් ගණන",
+"Maximum Driver Offer Attempts",
+"அதிகபட்ச சாரதி முயற்சிகள்"
+],
+
+matchingNotice:[
+"අනුමත, Online, GPS සක්‍රීය, සුදුසු වාහනයක් ඇති සහ වලංගු ලේඛන සහිත රියදුරන් පමණක් තෝරාගත යුතුය.",
+"Only approved, available, GPS-enabled drivers with suitable vehicles and valid documents may be matched.",
+"அங்கீகரிக்கப்பட்ட, கிடைக்கக்கூடிய, செல்லுபடியாகும் ஆவணங்களுடன் GPS இயக்கப்பட்ட சாரதிகள் மட்டும் தேர்வு செய்யப்பட வேண்டும்."
+],
+
+gpsSettings:[
+"05. GPS සැකසුම්",
+"05. GPS Settings",
+"05. GPS அமைப்புகள்"
+],
+
+gpsInterval:[
+"GPS යාවත්කාලීන කාල පරතරය",
+"GPS Update Interval",
+"GPS புதுப்பிப்பு இடைவெளி"
+],
+
+gpsMaxAge:[
+"GPS දත්තවල උපරිම වයස",
+"Maximum GPS Data Age",
+"அதிகபட்ச GPS தரவு வயது"
+],
+
+gpsAccuracy:[
+"පිළිගත හැකි උපරිම GPS දෝෂ දුර",
+"Maximum GPS Accuracy Error",
+"அதிகபட்ச GPS துல்லிய பிழை"
+],
+
+gpsNotice:[
+"GPS දත්ත සත්‍යාපනය Server මගින් සිදු කළ යුතුය. GPS අවසරය නොමැතිව රහසිගතව දත්ත ලබා නොගත යුතුය.",
+"GPS data must be validated by the server. Location must not be collected without applicable permission.",
+"GPS தரவை சேவையகம் சரிபார்க்க வேண்டும். அனுமதியின்றி இருப்பிடத்தை சேகரிக்கக்கூடாது."
+],
+
+scheduleSettings:[
+"06. Scheduled Booking සැකසුම්",
+"06. Scheduled Booking Settings",
+"06. திட்டமிட்ட பயண அமைப்புகள்"
+],
+
+minimumAdvance:[
+"අවම කලින් වෙන්කරවා ගැනීමේ කාලය",
+"Minimum Advance Booking Time",
+"குறைந்தபட்ச முன்பதிவு நேரம்"
+],
+
+maximumAdvance:[
+"උපරිම කලින් වෙන්කරවා ගැනීමේ කාලය",
+"Maximum Advance Booking Period",
+"அதிகபட்ச முன்பதிவு காலம்"
+],
+
+scheduledReminder:[
+"ගමනට පෙර දැනුම්දීම",
+"Reminder Before Scheduled Trip",
+"திட்டமிட்ட பயணத்திற்கு முன் நினைவூட்டல்"
+],
+
+vehicleSettings:[
+"07. වාහන වර්ග",
+"07. Vehicle Categories",
+"07. வாகன வகைகள்"
+],
+
+bike:[
+"Scooter / Bike",
+"Scooter / Bike",
+"ஸ்கூட்டர் / மோட்டார் சைக்கிள்"
+],
+
+tuk:[
+"ත්‍රිරෝද රථ",
+"Three Wheeler",
+"முச்சக்கர வண்டி"
+],
+
+car:[
+"කාර්",
+"Car",
+"கார்"
+],
+
+van:[
+"වෑන්",
+"Van",
+"வேன்"
+],
+
+vehicleNotice:[
+"වාහන වර්ගයක් නතර කිරීම අනාගත හයර් සඳහා පමණක් යෙදිය යුතුය.",
+"Disabling a vehicle category applies to future bookings only.",
+"வாகன வகையை நிறுத்துவது எதிர்கால முன்பதிவுகளுக்கு மட்டும் பொருந்தும்."
+],
+
+districtSettings:[
+"08. සේවා සපයන දිස්ත්‍රික්ක",
+"08. Service Districts",
+"08. சேவை மாவட்டங்கள்"
+],
+
+selectAll:[
+"සියලු දිස්ත්‍රික්ක තෝරන්න",
+"Select All Districts",
+"அனைத்து மாவட்டங்களையும் தேர்வு செய்யவும்"
+],
+
+clearAll:[
+"සියලු තේරීම් ඉවත් කරන්න",
+"Clear All Selections",
+"அனைத்து தேர்வுகளையும் நீக்கவும்"
+],
+
+selectedDistricts:[
+"තෝරාගත් දිස්ත්‍රික්ක",
+"Selected Districts",
+"தேர்ந்தெடுக்கப்பட்ட மாவட்டங்கள்"
+],
+
+supportSettings:[
+"09. සහාය සේවා සැකසුම්",
+"09. Support Settings",
+"09. உதவி சேவை அமைப்புகள்"
+],
+
+customerSupportPhone:[
+"පාරිභෝගික සහාය දුරකථන අංකය",
+"Customer Support Phone",
+"பயணி உதவி தொலைபேசி"
+],
+
+driverSupportPhone:[
+"රියදුරු සහාය දුරකථන අංකය",
+"Driver Support Phone",
+"சாரதி உதவி தொலைபேசி"
+],
+
+supportWhatsapp:[
+"සහාය WhatsApp අංකය",
+"Support WhatsApp Number",
+"உதவி WhatsApp எண்"
+],
+
+supportEmail:[
+"සහාය Email ලිපිනය",
+"Support Email Address",
+"உதவி மின்னஞ்சல் முகவரி"
+],
+
+supportNotice:[
+"මෙහි ඇතුළත් සහාය අංක පරිශීලකයන්ට පෙන්විය හැකිය. පුද්ගලික රහස් තොරතුරු ඇතුළත් නොකරන්න.",
+"Support contact details may be displayed to users. Do not enter confidential information.",
+"உதவி தொடர்பு விவரங்கள் பயனர்களுக்கு காட்டப்படலாம். ரகசிய தகவல்களை உள்ளிட வேண்டாம்."
+],
+
+maintenanceSettings:[
+"10. නඩත්තු සැකසුම්",
+"10. Maintenance Settings",
+"10. பராமரிப்பு அமைப்புகள்"
+],
+
+maintenanceMode:[
+"Maintenance Mode සක්‍රීය කරන්න",
+"Enable Maintenance Mode",
+"பராமரிப்பு முறையை இயக்கவும்"
+],
+
+maintenanceNotice:[
+"Maintenance Mode මගින් නව හයර් සහ නව ලියාපදිංචි කිරීම් නතර කළ හැකිය. දැනට පිළිගත් හයර්, ගමන් මීටරය සහ හදිසි සේවා නතර නොකළ යුතුය.",
+"Maintenance mode may pause new bookings and registrations. Accepted trips, active meters and emergency services must remain available.",
+"பராமரிப்பு முறையில் புதிய முன்பதிவுகள் நிறுத்தப்படலாம். ஏற்கப்பட்ட பயணங்கள், மீட்டர் மற்றும் அவசர சேவைகள் தொடர வேண்டும்."
+],
+
+saveSection:[
+"11. සැකසුම් සුරැකීම",
+"11. Save System Settings",
+"11. அமைப்புகளை சேமித்தல்"
+],
+
+reason:[
+"වෙනස් කිරීමට හේතුව",
+"Reason for Change",
+"மாற்றத்திற்கான காரணம்"
+],
+
+confirmSettings:[
+"මෙම වෙනස්කම් තහවුරු කරමි.",
+"I confirm these changes.",
+"இந்த மாற்றங்களை உறுதிப்படுத்துகிறேன்."
+],
+
+futureNotice:[
+"නව සැකසුම් දැනට පිළිගත් හයර්වල ගාස්තු, කොමිස් හෝ ආරක්ෂක සේවා වෙනස් නොකළ යුතුය.",
+"New settings must not alter fares, commissions or safety functions of accepted trips.",
+"புதிய அமைப்புகள் ஏற்கப்பட்ட பயணங்களின் கட்டணம், கமிஷன் அல்லது பாதுகாப்பை மாற்றக்கூடாது."
+],
+
+saveSettings:[
+"පද්ධති සැකසුම් සුරකින්න",
+"Save System Settings",
+"அமைப்பு அமைப்புகளை சேமிக்கவும்"
+],
+
+discardSettings:[
+"සුරැකී නැති වෙනස්කම් ඉවත් කරන්න",
+"Discard Unsaved Changes",
+"சேமிக்காத மாற்றங்களை நீக்கவும்"
+],
+
+history:[
+"12. සැකසුම් වෙනස්කම් ඉතිහාසය",
+"12. Settings Version History",
+"12. அமைப்பு பதிப்பு வரலாறு"
+],
+
+historyDetails:[
+"පැරණි සැකසුම් විස්තර",
+"Historical Settings Details",
+"பழைய அமைப்பு விவரங்கள்"
+],
+
+relatedPages:[
+"අදාළ කළමනාකරණ පිටු",
+"Related Management Pages",
+"தொடர்புடைய மேலாண்மை பக்கங்கள்"
+],
+
+farePage:[
+"ගාස්තු කළමනාකරණය",
+"Fare Management",
+"கட்டண மேலாண்மை"
+],
+
+weatherPage:[
+"කාලගුණ සහ මාර්ග",
+"Weather & Road Management",
+"வானிலை மற்றும் சாலை மேலாண்மை"
+],
+
+commissionPage:[
+"කොමිස් කළමනාකරණය",
+"Commission Management",
+"கமிஷன் மேலாண்மை"
+],
+
+paymentPage:[
+"ගෙවීම් කළමනාකරණය",
+"Payment Management",
+"கட்டண மேலாண்மை"
+],
+
+notificationPage:[
+"දැනුම්දීම් කළමනාකරණය",
+"Notification Management",
+"அறிவிப்பு மேலாண்மை"
+],
+
+securityPage:[
+"ආරක්ෂක කළමනාකරණය",
+"Security Management",
+"பாதுகாப்பு மேலாண்மை"
+],
+
+databasePage:[
+"Database කළමනාකරණය",
+"Database Management",
+"தரவுத்தள மேலாண்மை"
+],
+
+termsPage:[
+"නීති හා කොන්දේසි",
+"Terms & Conditions",
+"விதிமுறைகள் மற்றும் நிபந்தனைகள்"
+],
+
+accountPage:[
+"Owner Admin ගිණුම",
+"Owner Admin Account",
+"உரிமையாளர் நிர்வாக கணக்கு"
+],
+
+authentication:[
+"Authentication",
+"Authentication",
+"அங்கீகாரம்"
+],
+
+database:[
+"Database",
+"Database",
+"தரவுத்தளம்"
+],
+
+backend:[
+"Backend Functions",
+"Backend Functions",
+"பின்தள செயல்பாடுகள்"
+],
+
+routing:[
+"Route Service",
+"Route Service",
+"வழித்தட சேவை"
+],
+
+weather:[
+"කාලගුණ සේවාව",
+"Weather Service",
+"வானிலை சேவை"
+],
+
+notifications:[
+"දැනුම්දීම් සේවාව",
+"Notification Service",
+"அறிவிப்பு சேவை"
+],
+
+emergencyLock:[
+"හදිසි පද්ධති අගුල",
+"Emergency System Lock",
+"அவசர அமைப்பு பூட்டு"
+],
+
+connected:[
+"සම්බන්ධයි",
+"Connected",
+"இணைக்கப்பட்டுள்ளது"
+],
+
+disconnected:[
+"සම්බන්ධ නැත",
+"Disconnected",
+"இணைக்கப்படவில்லை"
+],
+
+unknown:[
+"තහවුරු කර නැත",
+"Not Verified",
+"உறுதிப்படுத்தப்படவில்லை"
+],
+
+enabled:[
+"සක්‍රීයයි",
+"Enabled",
+"இயக்கப்பட்டுள்ளது"
+],
+
+disabled:[
+"අක්‍රීයයි",
+"Disabled",
+"முடக்கப்பட்டுள்ளது"
+],
+
+version:[
+"අනුවාදය",
+"Version",
+"பதிப்பு"
+],
+
+updated:[
+"අවසන් යාවත්කාලීනය",
+"Last Updated",
+"கடைசி புதுப்பிப்பு"
+],
+
+created:[
+"නිර්මාණය කළ වේලාව",
+"Created At",
+"உருவாக்கிய நேரம்"
+],
+
+viewHistory:[
+"ඉතිහාසය බලන්න",
+"View History",
+"வரலாற்றை பார்க்கவும்"
+],
+
+viewDetails:[
+"විස්තර බලන්න",
+"View Details",
+"விவரங்களை பார்க்கவும்"
+],
+
+more:[
+"තවත් වාර්තා",
+"Load More",
+"மேலும் பதிவுகள்"
+],
+
+close:[
+"වසන්න",
+"Close",
+"மூடவும்"
+],
+
+refresh:[
+"යාවත්කාලීන කරන්න",
+"Refresh",
+"புதுப்பிக்கவும்"
+],
+
+back:[
+"Admin Dashboard වෙත",
+"Back to Admin Dashboard",
+"நிர்வாக முதன்மைப் பக்கத்திற்கு"
+],
+
+login:[
+"Admin Login",
+"Admin Login",
+"நிர்வாக உள்நுழைவு"
+],
+
+checking:[
+"ආරක්ෂාව පරීක්ෂා කරමින්...",
+"Checking security...",
+"பாதுகாப்பு சரிபார்க்கப்படுகிறது..."
+],
+
+denied:[
+"Owner Admin අවසරය තහවුරු කර නොමැත.",
+"Owner Admin authorization is not verified.",
+"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை."
+],
+
+verified:[
+"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+"Owner authorization verified.",
+"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது."
+],
+
+offline:[
+"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+"No internet connection.",
+"இணைய இணைப்பு இல்லை."
+],
+
+loading:[
+"Server දත්ත ලබාගනිමින්...",
+"Loading server data...",
+"சேவையக தரவு பெறப்படுகிறது..."
+],
+
+error:[
+"Server දත්ත තහවුරු කළ නොහැක.",
+"Unable to verify server data.",
+"சேவையக தரவை உறுதிப்படுத்த முடியவில்லை."
+],
+
+invalid:[
+"ඇතුළත් කළ සැකසුම් පරීක්ෂා කරන්න.",
+"Check the entered settings.",
+"உள்ளிட்ட அமைப்புகளை சரிபார்க்கவும்."
+],
+
+saving:[
+"Server වෙත යොමු කරමින්...",
+"Submitting to server...",
+"சேவையகத்திற்கு அனுப்பப்படுகிறது..."
+],
+
+saved:[
+"සැකසුම් Server මගින් තහවුරු කර ඇත.",
+"Settings confirmed by server.",
+"அமைப்புகள் சேவையகத்தால் உறுதிப்படுத்தப்பட்டது."
+],
+
+saveError:[
+"සුරැකීම තහවුරු කළ නොහැක. නැවත උත්සාහ කිරීමට පෙර Server වාර්තා පරීක්ෂා කරන්න.",
+"Save not confirmed. Check server records before retrying.",
+"சேமிப்பு உறுதிப்படுத்தப்படவில்லை. மீண்டும் முயற்சிக்கும் முன் சேவையக பதிவுகளை சரிபார்க்கவும்."
+],
+
+noRecords:[
+"වාර්තා නොමැත.",
+"No records found.",
+"பதிவுகள் இல்லை."
+],
+
+discard:[
+"සුරැකී නැති වෙනස්කම් ඉවත් කරන්නද?",
+"Discard unsaved changes?",
+"சேமிக்காத மாற்றங்களை நீக்கவா?"
+],
+
+conflict:[
+"Server සැකසුම් වෙනස් වී ඇත. අලුත් අනුවාදය පරීක්ෂා කරන්න.",
+"Server settings have changed. Review the latest version.",
+"சேவையக அமைப்புகள் மாறியுள்ளன. புதிய பதிப்பை சரிபார்க்கவும்."
+]
+
+};
+
+const districts=[
+
+["Colombo","කොළඹ","கொழும்பு"],
+["Gampaha","ගම්පහ","கம்பஹா"],
+["Kalutara","කළුතර","களுத்துறை"],
+["Kandy","මහනුවර","கண்டி"],
+["Matale","මාතලේ","மாத்தளை"],
+["Nuwara Eliya","නුවරඑළිය","நுவரெலியா"],
+["Galle","ගාල්ල","காலி"],
+["Matara","මාතර","மாத்தறை"],
+["Hambantota","හම්බන්තොට","அம்பாந்தோட்டை"],
+["Jaffna","යාපනය","யாழ்ப்பாணம்"],
+["Kilinochchi","කිලිනොච්චිය","கிளிநொச்சி"],
+["Mannar","මන්නාරම","மன்னார்"],
+["Vavuniya","වවුනියාව","வவுனியா"],
+["Mullaitivu","මුලතිව්","முல்லைத்தீவு"],
+["Batticaloa","මඩකලපුව","மட்டக்களப்பு"],
+["Ampara","අම්පාර","அம்பாறை"],
+["Trincomalee","ත්‍රිකුණාමලය","திருகோணமலை"],
+["Kurunegala","කුරුණෑගල","குருநாகல்"],
+["Puttalam","පුත්තලම","புத்தளம்"],
+["Anuradhapura","අනුරාධපුර","அனுராதபுரம்"],
+["Polonnaruwa","පොළොන්නරුව","பொலன்னறுவை"],
+["Badulla","බදුල්ල","பதுளை"],
+["Monaragala","මොනරාගල","மொனராகலை"],
+["Ratnapura","රත්නපුර","இரத்தினபுரி"],
+["Kegalle","කෑගල්ල","கேகாலை"]
+
+];
+
+const districtNames=districts.map(
+item=>item[0]
+);
+
+const vehicleKeys=[
+"bike","tuk","car","van"
+];
+
+const serviceKeys=[
+"customerBooking",
+"driverRegistration",
+"driverLogin",
+"automaticMatching",
+"scheduledBooking"
+];
+
+const connectionKeys=[
+"authentication",
+"database",
+"backend",
+"routing",
+"weather",
+"notifications"
+];
+
+const allowedNumbers={
+
+searchRadius:[1,2,3,5,10,15,20,25],
+
+offerTimeout:[30,45,60,90,120],
+
+maximumAttempts:[3,5,10,15,20],
+
+gpsInterval:[5,10,15,20,30],
+
+gpsMaxAge:[30,60,90,120],
+
+gpsAccuracy:[20,30,50,100],
+
+minimumAdvance:[15,30,60,120],
+
+maximumAdvance:[1,3,7,14,30],
+
+scheduledReminder:[15,30,60]
+
+};
+
+const numberKeys=Object.keys(
+allowedNumbers
+);
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+
+new URLSearchParams(location.search).get("lang")
+
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected)){
+
+lang=selected;
+
+}
+
+}catch(e){}
+
+const t=key=>
+
+dictionary[key]?.[languages.indexOf(lang)]
+
+||key;
+
+let auth=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+
+let busy=false;
+let mutationBusy=false;
+let checking=false;
+
+let overview=null;
+let settings=null;
+let latestVersion=null;
+
+let dirty=false;
+let conflict=false;
+
+let historyRecords=[];
+let historyCursor=null;
+let selectedHistory=null;
+
+let pendingMutation=null;
+
+const messages={
+status:"checking",
+result:""
+};
+
+function message(id,key){
+
+messages[id]=key;
+
+$(id).textContent=key?t(key):"";
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+
+&&value>=0;
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+
+&&value>0
+
+&&value<=8640000000000000;
+
+}
+
+function validText(value,max){
+
+return typeof value==="string"
+
+&&value.length<=max;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validPhone(value){
+
+return value===""
+
+||(
+
+typeof value==="string"
+
+&&/^\+[1-9]\d{7,14}$/.test(value)
+
+);
+
+}
+
+function validEmail(value){
+
+return value===""
+
+||(
+
+validText(value,254)
+
+&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+
+);
+
+}
+
+function validCursor(value){
+
+return value===null
+
+||(
+
+validText(value,4000)
+
+&&value.length>0
+
+);
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(value));
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+encodeURIComponent(lang);
+
+}
+
+function isOwner(){
+
+return authorized
+
+&&ownerUid!==null
+
+&&auth?.currentUser?.uid===ownerUid
+
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+
+&&data.uid===uid
+
+&&data.role==="owner"
+
+&&data.ownerUidVerified===true
+
+&&data.sessionValid===true;
+
+}
+
+async function serverCall(name,data={}){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+
+name,
+
+{timeout:30000}
+
+)(data);
+
+if(currentGeneration!==generation
+
+||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+if(response.data?.success!==true
+
+||response.data.ownerUid!==ownerUid){
+
+throw new Error("Invalid response");
+
+}
+
+return response.data;
+
+}
+
+async function freshOwnerAuthentication(){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const user=auth.currentUser;
+
+const uid=user.uid;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=await reauthenticateWithPopup(
+
+user,
+
+provider
+
+);
+
+if(credential.user.uid!==uid
+
+||auth.currentUser?.uid!==uid
+
+||!isOwner()){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Invalid owner");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(!validOwner(response.data,uid)
+
+||!isOwner()){
+
+throw new Error("Owner verification failed");
+
+}
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=
+
+t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function makeRecord(){
+
+const box=document.createElement("div");
+
+box.className="record";
+
+return box;
+
+}
+
+function addStat(container,label,value,color=""){
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const name=document.createElement("span");
+
+name.textContent=t(label);
+
+const content=document.createElement("strong");
+
+content.textContent=value;
+
+if(color){
+
+content.classList.add(color);
+
+}
+
+box.append(name,content);
+
+container.appendChild(box);
+
+}
+
+function validOverview(data){
+
+return data
+
+&&validTime(data.serverTimeMs)
+
+&&typeof data.emergencyLocked==="boolean"
+
+&&typeof data.maintenanceMode==="boolean"
+
+&&data.connections
+
+&&connectionKeys.every(key=>
+
+["connected","disconnected","unknown"]
+
+.includes(data.connections[key]))
+
+&&validCount(data.settingsVersion);
+
+}
+
+function renderOverview(){
+
+const container=$("systemOverview");
+
+container.replaceChildren();
+
+connectionKeys.forEach(key=>{
+
+const value=
+
+overview?.connections?.[key]
+
+||"unknown";
+
+addStat(
+
+container,
+
+key,
+
+t(value),
+
+value==="connected"?"good":
+
+value==="disconnected"?"bad":""
+
+);
+
+});
+
+addStat(
+
+container,
+
+"emergencyLock",
+
+overview
+
+?t(overview.emergencyLocked
+
+?"enabled":"disabled")
+
+:"—",
+
+overview?.emergencyLocked?"bad":""
+
+);
+
+addStat(
+
+container,
+
+"maintenanceMode",
+
+overview
+
+?t(overview.maintenanceMode
+
+?"enabled":"disabled")
+
+:"—",
+
+overview?.maintenanceMode?"bad":""
+
+);
+
+$("lastUpdate").textContent=
+
+overview
+
+?t("updated")+": "
+
++formatDate(overview.serverTimeMs)
+
+:"";
+
+}
+
+function validSettings(data){
+
+if(!data
+
+||!validCount(data.version)
+
+||!validTime(data.updatedAtMs)
+
+||!languages.includes(data.defaultLanguage)
+
+||!data.services
+
+||!serviceKeys.every(key=>
+
+typeof data.services[key]==="boolean")
+
+||!data.vehicles
+
+||!vehicleKeys.every(key=>
+
+typeof data.vehicles[key]==="boolean")
+
+||!data.matching
+
+||!data.gps
+
+||!data.schedule
+
+||!Array.isArray(data.districts)
+
+||data.districts.length>25
+
+||new Set(data.districts).size!==data.districts.length
+
+||!data.districts.every(name=>
+
+districtNames.includes(name))
+
+||!data.support
+
+||!validPhone(data.support.customerPhone)
+
+||!validPhone(data.support.driverPhone)
+
+||!validPhone(data.support.whatsapp)
+
+||!validEmail(data.support.email)
+
+||!data.maintenance
+
+||typeof data.maintenance.enabled!=="boolean"
+
+||!data.maintenance.messages
+
+||!languages.every(language=>
+
+validText(data.maintenance.messages[language],500))){
+
+return false;
+
+}
+
+const values={
+
+...data.matching,
+
+...data.gps,
+
+...data.schedule
+
+};
+
+if(!numberKeys.every(key=>
+
+allowedNumbers[key].includes(values[key]))){
+
+return false;
+
+}
+
+if(data.gps.gpsMaxAge
+
+<data.gps.gpsInterval*2){
+
+return false;
+
+}
+
+if(data.schedule.scheduledReminder
+
+>data.schedule.minimumAdvance){
+
+return false;
+
+}
+
+if(data.services.customerBooking){
+
+if(!data.services.automaticMatching
+
+||!data.districts.length
+
+||!vehicleKeys.some(key=>
+
+data.vehicles[key])){
+
+return false;
+
+}
+
+}
+
+if(data.maintenance.enabled
+
+&&!languages.every(language=>
+
+data.maintenance.messages[language]
+
+.trim().length>=5)){
+
+return false;
+
+}
+
+return true;
+
+}
+
+function districtLabel(name){
+
+const district=districts.find(
+
+item=>item[0]===name
+
+);
+
+if(!district)return name;
+
+return district[
+
+lang==="si"?1:
+
+lang==="ta"?2:0
+
+];
+
+}
+
+function renderDistricts(){
+
+const container=$("districtList");
+
+container.replaceChildren();
+
+districts.forEach(item=>{
+
+const label=document.createElement("label");
+
+label.className="checkRow";
+
+const input=document.createElement("input");
+
+input.type="checkbox";
+
+input.value=item[0];
+
+input.dataset.district="true";
+
+const span=document.createElement("span");
+
+span.dataset.districtName=item[0];
+
+span.textContent=districtLabel(item[0]);
+
+label.append(input,span);
+
+container.appendChild(label);
+
+});
+
+}
+
+function getSelectedDistricts(){
+
+return [
+
+...document.querySelectorAll(
+
+"[data-district]:checked"
+
+)
+
+].map(input=>input.value);
+
+}
+
+function updateDistrictCount(){
+
+$("districtCount").textContent=
+
+t("selectedDistricts")+": "
+
++getSelectedDistricts().length
+
++" / 25";
+
+}
+
+function fillSettings(){
+
+$("settingsVersion").textContent=
+
+settings
+
+?t("version")+": "+settings.version
+
+:"—";
+
+if(!settings){
+
+return;
+
+}
+
+$("defaultLanguage").value=
+
+settings.defaultLanguage;
+
+serviceKeys.forEach(key=>{
+
+$(key).checked=
+
+settings.services[key];
+
+});
+
+const values={
+
+...settings.matching,
+
+...settings.gps,
+
+...settings.schedule
+
+};
+
+numberKeys.forEach(key=>{
+
+$(key).value=String(values[key]);
+
+});
+
+$("vehicleBike").checked=
+
+settings.vehicles.bike;
+
+$("vehicleTuk").checked=
+
+settings.vehicles.tuk;
+
+$("vehicleCar").checked=
+
+settings.vehicles.car;
+
+$("vehicleVan").checked=
+
+settings.vehicles.van;
+
+document.querySelectorAll(
+
+"[data-district]"
+
+).forEach(input=>{
+
+input.checked=
+
+settings.districts.includes(input.value);
+
+});
+
+$("customerSupportPhone").value=
+
+settings.support.customerPhone;
+
+$("driverSupportPhone").value=
+
+settings.support.driverPhone;
+
+$("supportWhatsapp").value=
+
+settings.support.whatsapp;
+
+$("supportEmail").value=
+
+settings.support.email;
+
+$("maintenanceMode").checked=
+
+settings.maintenance.enabled;
+
+$("maintenanceSi").value=
+
+settings.maintenance.messages.si;
+
+$("maintenanceEn").value=
+
+settings.maintenance.messages.en;
+
+$("maintenanceTa").value=
+
+settings.maintenance.messages.ta;
+
+$("changeReason").value="";
+
+$("confirmSettings").checked=false;
+
+updateDistrictCount();
+
+}
+
+async function loadOverview(){
+
+try{
+
+const response=await serverCall(
+
+"getAdminSystemOverview"
+
+);
+
+if(!validOverview(response.overview)){
+
+throw new Error("Invalid overview");
+
+}
+
+overview=response.overview;
+
+latestVersion=overview.settingsVersion;
+
+if(settings
+
+&&latestVersion!==settings.version){
+
+conflict=true;
+
+}
+
+renderOverview();
+
+}catch(e){
+
+overview=null;
+
+renderOverview();
+
+throw e;
+
+}
+
+}
+
+async function loadSettings(force=false){
+
+const response=await serverCall(
+
+"getAdminSystemSettings"
+
+);
+
+if(!validSettings(response.settings)){
+
+throw new Error("Invalid settings");
+
+}
+
+latestVersion=response.settings.version;
+
+if(dirty&&!force){
+
+conflict=
+
+settings?.version!==latestVersion;
+
+return;
+
+}
+
+settings=response.settings;
+
+dirty=false;
+
+conflict=false;
+
+fillSettings();
+
+}
+
+function markDirty(){
+
+if(!isOwner()
+
+||!settings
+
+||busy
+
+||mutationBusy
+
+||pendingMutation)return;
+
+dirty=true;
+
+$("confirmSettings").checked=false;
+
+updateDistrictCount();
+
+updateControls();
+
+}
+
+$("settingsForm").addEventListener(
+
+"input",
+
+event=>{
+
+if(event.target.id==="confirmSettings"){
+
+updateControls();
+
+return;
+
+}
+
+markDirty();
+
+}
+
+);
+
+$("settingsForm").addEventListener(
+
+"change",
+
+event=>{
+
+if(event.target.id==="confirmSettings"){
+
+updateControls();
+
+}
+
+}
+
+);
+
+$("selectAllDistricts").onclick=()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation)return;
+
+document.querySelectorAll(
+
+"[data-district]"
+
+).forEach(input=>{
+
+input.checked=true;
+
+});
+
+markDirty();
+
+};
+
+$("clearDistricts").onclick=()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation)return;
+
+document.querySelectorAll(
+
+"[data-district]"
+
+).forEach(input=>{
+
+input.checked=false;
+
+});
+
+markDirty();
+
+};
+
+function readSettings(){
+
+if(!settings
+
+||!dirty
+
+||conflict
+
+||!$("confirmSettings").checked){
+
+return null;
+
+}
+
+const services={};
+
+serviceKeys.forEach(key=>{
+
+services[key]=$(key).checked;
+
+});
+
+const data={
+
+defaultLanguage:$("defaultLanguage").value,
+
+services,
+
+matching:{
+
+searchRadius:Number(
+
+$("searchRadius").value
+
+),
+
+offerTimeout:Number(
+
+$("offerTimeout").value
+
+),
+
+maximumAttempts:Number(
+
+$("maximumAttempts").value
+
+)
+
+},
+
+gps:{
+
+gpsInterval:Number(
+
+$("gpsInterval").value
+
+),
+
+gpsMaxAge:Number(
+
+$("gpsMaxAge").value
+
+),
+
+gpsAccuracy:Number(
+
+$("gpsAccuracy").value
+
+)
+
+},
+
+schedule:{
+
+minimumAdvance:Number(
+
+$("minimumAdvance").value
+
+),
+
+maximumAdvance:Number(
+
+$("maximumAdvance").value
+
+),
+
+scheduledReminder:Number(
+
+$("scheduledReminder").value
+
+)
+
+},
+
+vehicles:{
+
+bike:$("vehicleBike").checked,
+
+tuk:$("vehicleTuk").checked,
+
+car:$("vehicleCar").checked,
+
+van:$("vehicleVan").checked
+
+},
+
+districts:getSelectedDistricts(),
+
+support:{
+
+customerPhone:
+
+$("customerSupportPhone").value.trim(),
+
+driverPhone:
+
+$("driverSupportPhone").value.trim(),
+
+whatsapp:
+
+$("supportWhatsapp").value.trim(),
+
+email:
+
+$("supportEmail").value.trim()
+
+},
+
+maintenance:{
+
+enabled:$("maintenanceMode").checked,
+
+messages:{
+
+si:$("maintenanceSi").value.trim(),
+
+en:$("maintenanceEn").value.trim(),
+
+ta:$("maintenanceTa").value.trim()
+
+}
+
+}
+
+};
+
+const reason=
+
+$("changeReason").value.trim();
+
+if(!validSettings({
+
+...data,
+
+version:settings.version,
+
+updatedAtMs:settings.updatedAtMs
+
+})
+
+||reason.length<10
+
+||reason.length>500){
+
+return null;
+
+}
+
+return {
+
+settings:data,
+
+expectedVersion:settings.version,
+
+reason,
+
+applyTo:"future_actions",
+
+preserveAcceptedTrips:true,
+
+preserveActiveTrips:true,
+
+preserveEmergencyServices:true
+
+};
+
+}
+
+function equalData(a,b){
+
+if(a===b)return true;
+
+if(Array.isArray(a)
+
+||Array.isArray(b)){
+
+return Array.isArray(a)
+
+&&Array.isArray(b)
+
+&&a.length===b.length
+
+&&a.every((item,index)=>
+
+equalData(item,b[index]));
+
+}
+
+if(a&&b
+
+&&typeof a==="object"
+
+&&typeof b==="object"){
+
+const keys=Object.keys(a);
+
+return keys.length===Object.keys(b).length
+
+&&keys.every(key=>
+
+Object.prototype.hasOwnProperty.call(b,key)
+
+&&equalData(a[key],b[key]));
+
+}
+
+return false;
+
+}
+
+async function runRead(callback){
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+message("result","loading");
+
+try{
+
+await callback();
+
+if(currentGeneration===generation){
+
+message(
+
+"result",
+
+conflict?"conflict":""
+
+);
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message("result","error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("settingsForm").onsubmit=async event=>{
+
+event.preventDefault();
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy)return;
+
+const payload=
+
+pendingMutation?.payload
+
+||readSettings();
+
+if(!payload){
+
+message(
+
+"result",
+
+conflict?"conflict":"invalid"
+
+);
+
+return;
+
+}
+
+if(!pendingMutation){
+
+pendingMutation={
+
+payload,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const currentGeneration=generation;
+
+mutationBusy=true;
+
+updateControls();
+
+message("result","saving");
+
+try{
+
+await freshOwnerAuthentication();
+
+if(currentGeneration!==generation
+
+||!isOwner())return;
+
+const response=await serverCall(
+
+"saveAdminSystemSettings",
+
+{
+
+...pendingMutation.payload,
+
+requestId:pendingMutation.requestId
+
+}
+
+);
+
+if(!validSettings(response.settings)
+
+||response.settings.version
+
+<=payload.expectedVersion){
+
+throw new Error("Save not confirmed");
+
+}
+
+const returned={};
+
+Object.keys(payload.settings)
+
+.forEach(key=>{
+
+returned[key]=response.settings[key];
+
+});
+
+if(!equalData(returned,payload.settings)){
+
+throw new Error("Settings mismatch");
+
+}
+
+pendingMutation=null;
+
+settings=response.settings;
+
+latestVersion=settings.version;
+
+dirty=false;
+
+conflict=false;
+
+fillSettings();
+
+message("result","saved");
+
+try{
+
+await loadOverview();
+
+}catch(e){
+
+message("result","error");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message("result","saveError");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+$("refreshButton").onclick=()=>{
+
+runRead(async()=>{
+
+await loadOverview();
+
+await loadSettings(false);
+
+});
+
+};
+
+$("discardSettings").onclick=()=>{
+
+if(dirty
+
+&&!window.confirm(t("discard")))return;
+
+runRead(async()=>{
+
+await loadSettings(true);
+
+await loadOverview();
+
+});
+
+};
+
+function validHistory(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&validCount(record.version)
+
+&&validText(record.reason,500)
+
+&&validTime(record.createdAtMs)
+
+&&Array.isArray(record.changedSections)
+
+&&record.changedSections.length<=20
+
+&&record.changedSections.every(section=>
+
+validText(section,100));
+
+}
+
+function renderHistory(){
+
+const container=$("historyList");
+
+container.replaceChildren();
+
+$("moreHistory").hidden=
+
+historyCursor===null;
+
+historyRecords.forEach(record=>{
+
+const box=makeRecord();
+
+addLine(box,"version",record.version);
+
+addLine(box,"reason",record.reason);
+
+addLine(
+
+box,
+
+"created",
+
+formatDate(record.createdAtMs)
+
+);
+
+const button=document.createElement("button");
+
+button.textContent=t("viewDetails");
+
+button.dataset.dynamic="true";
+
+button.onclick=()=>{
+
+openHistory(record.version);
+
+};
+
+button.disabled=
+
+busy||mutationBusy||!!pendingMutation;
+
+box.appendChild(button);
+
+container.appendChild(box);
+
+});
+
+}
+
+async function loadHistory(reset=true){
+
+const response=await serverCall(
+
+"getAdminSystemSettingsHistory",
+
+{
+
+limit:30,
+
+cursor:reset?null:historyCursor
+
+}
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validHistory)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid history");
+
+}
+
+const records=new Map(
+
+(reset?[]:historyRecords)
+
+.map(record=>[record.recordId,record])
+
+);
+
+response.records.forEach(record=>{
+
+records.set(record.recordId,record);
+
+});
+
+historyRecords=[...records.values()];
+
+historyCursor=response.nextCursor;
+
+renderHistory();
+
+if(!historyRecords.length){
+
+$("historyList").textContent=t("noRecords");
+
+}
+
+}
+
+$("loadHistory").onclick=()=>{
+
+runRead(()=>loadHistory(true));
+
+};
+
+$("moreHistory").onclick=()=>{
+
+if(historyCursor!==null){
+
+runRead(()=>loadHistory(false));
+
+}
+
+};
+
+function renderHistoryDetails(){
+
+const container=$("historyDetails");
+
+container.replaceChildren();
+
+$("historyDetailsPanel").hidden=
+
+!selectedHistory||!isOwner();
+
+if(!selectedHistory)return;
+
+const data=selectedHistory;
+
+addLine(container,"version",data.version);
+
+addLine(
+
+container,
+
+"updated",
+
+formatDate(data.updatedAtMs)
+
+);
+
+addLine(
+
+container,
+
+"defaultLanguage",
+
+data.defaultLanguage
+
+);
+
+serviceKeys.forEach(key=>{
+
+addLine(
+
+container,
+
+key,
+
+t(data.services[key]
+
+?"enabled":"disabled")
+
+);
+
+});
+
+numberKeys.forEach(key=>{
+
+const values={
+
+...data.matching,
+
+...data.gps,
+
+...data.schedule
+
+};
+
+addLine(container,key,values[key]);
+
+});
+
+vehicleKeys.forEach(key=>{
+
+addLine(
+
+container,
+
+key,
+
+t(data.vehicles[key]
+
+?"enabled":"disabled")
+
+);
+
+});
+
+addLine(
+
+container,
+
+"selectedDistricts",
+
+data.districts.map(districtLabel).join(", ")
+
+);
+
+addLine(
+
+container,
+
+"customerSupportPhone",
+
+data.support.customerPhone||"—"
+
+);
+
+addLine(
+
+container,
+
+"driverSupportPhone",
+
+data.support.driverPhone||"—"
+
+);
+
+addLine(
+
+container,
+
+"supportWhatsapp",
+
+data.support.whatsapp||"—"
+
+);
+
+addLine(
+
+container,
+
+"supportEmail",
+
+data.support.email||"—"
+
+);
+
+addLine(
+
+container,
+
+"maintenanceMode",
+
+t(data.maintenance.enabled
+
+?"enabled":"disabled")
+
+);
+
+languages.forEach(language=>{
+
+const paragraph=document.createElement("p");
+
+paragraph.textContent=
+
+language.toUpperCase()+": "
+
++data.maintenance.messages[language];
+
+container.appendChild(paragraph);
+
+});
+
+}
+
+function openHistory(version){
+
+runRead(async()=>{
+
+const response=await serverCall(
+
+"getAdminSystemSettingsVersion",
+
+{version}
+
+);
+
+if(!validSettings(response.settings)
+
+||response.settings.version!==version){
+
+throw new Error("Invalid version");
+
+}
+
+selectedHistory=response.settings;
+
+renderHistoryDetails();
+
+$("historyDetailsPanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+});
+
+}
+
+$("closeHistory").onclick=()=>{
+
+selectedHistory=null;
+
+renderHistoryDetails();
+
+};
+
+function updateControls(){
+
+const locked=
+
+!isOwner()
+
+||busy
+
+||mutationBusy;
+
+const pending=!!pendingMutation;
+
+$("settingsFields").disabled=
+
+locked||!settings;
+
+$("settingsFields")
+
+.querySelectorAll("input,select,textarea,button")
+
+.forEach(element=>{
+
+element.disabled=
+
+locked||pending||!settings;
+
+});
+
+$("saveSettings").disabled=
+
+locked
+
+||!settings
+
+||(
+
+!pending
+
+&&!readSettings()
+
+);
+
+$("discardSettings").disabled=
+
+locked||pending||!settings;
+
+[
+
+"refreshButton",
+
+"loadHistory",
+
+"moreHistory",
+
+"closeHistory"
+
+].forEach(id=>{
+
+$(id).disabled=locked||pending;
+
+});
+
+document.querySelectorAll(
+
+"[data-dynamic]"
+
+).forEach(button=>{
+
+button.disabled=locked||pending;
+
+});
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+document.querySelectorAll(
+
+"[data-district-name]"
+
+).forEach(element=>{
+
+element.textContent=
+
+districtLabel(element.dataset.districtName);
+
+});
+
+const links={
+
+loginLink:"admin-login.html",
+
+dashboardLink:"admin-dashboard.html",
+
+backLink:"admin-dashboard.html",
+
+fareLink:"admin-fares.html",
+
+weatherLink:"admin-weather-road.html",
+
+commissionLink:"admin-commission.html",
+
+paymentLink:"admin-payments.html",
+
+notificationLink:"admin-notifications.html",
+
+securityLink:"admin-security.html",
+
+databaseLink:"admin-database.html",
+
+termsLink:"admin-terms.html",
+
+accountLink:"admin-account.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href=pageLink(page);
+
+});
+
+Object.keys(messages).forEach(id=>{
+
+message(id,messages[id]);
+
+});
+
+$("settingsVersion").textContent=
+
+settings
+
+?t("version")+": "+settings.version
+
+:"—";
+
+renderOverview();
+
+updateDistrictCount();
+
+renderHistory();
+
+renderHistoryDetails();
+
+updateControls();
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang)){
+
+return;
+
+}
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+
+"myride_admin_language",
+
+lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+ownerUid=null;
+
+busy=false;
+
+mutationBusy=false;
+
+overview=null;
+
+settings=null;
+
+latestVersion=null;
+
+dirty=false;
+
+conflict=false;
+
+pendingMutation=null;
+
+historyRecords=[];
+
+historyCursor=null;
+
+selectedHistory=null;
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("historyDetailsPanel").hidden=true;
+
+$("settingsForm").reset();
+
+$("settingsFields")
+
+.querySelectorAll("input,textarea,select")
+
+.forEach(element=>{
+
+if(element.readOnly)return;
+
+if(element.type==="checkbox"){
+
+element.checked=false;
+
+}else{
+
+element.value="";
+
+}
+
+});
+
+message("result","");
+
+renderLanguage();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+message("status","denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+message("status","offline");
+
+return;
+
+}
+
+message("status","checking");
+
+try{
+
+const appToken=await getToken(
+
+appCheck,
+
+false
+
+);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+message("status","verified");
+
+updateControls();
+
+await runRead(async()=>{
+
+await loadSettings(true);
+
+await loadOverview();
+
+});
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+setInterval(async()=>{
+
+if(!isOwner()
+
+||checking
+
+||mutationBusy)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation)return;
+
+if(!validOwner(response.data,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+setInterval(()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation
+
+||document.hidden)return;
+
+runRead(async()=>{
+
+await loadOverview();
+
+if(!dirty
+
+&&latestVersion!==settings?.version){
+
+await loadSettings(true);
+
+}
+
+});
+
+},60000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+message("status","offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("beforeunload",event=>{
+
+if(dirty
+
+||mutationBusy
+
+||pendingMutation){
+
+event.preventDefault();
+
+event.returnValue="";
+
+}
+
+});
+
+window.addEventListener(
+
+"pagehide",
+
+clearSession
+
+);
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+renderDistricts();
+
+renderLanguage();
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
