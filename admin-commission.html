@@ -1,0 +1,3205 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Commission Management</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3,h4{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+input,select,textarea{
+width:100%;
+padding:13px;
+margin:8px 0;
+background:#292929;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:90px;
+resize:vertical;
+}
+
+label{
+display:block;
+margin-top:12px;
+line-height:1.7;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border-radius:9px;
+padding:15px;
+overflow-wrap:anywhere;
+}
+
+.stat strong{
+display:block;
+font-size:21px;
+margin-top:10px;
+color:#FFD600;
+}
+
+.record{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+line-height:1.9;
+overflow-wrap:anywhere;
+}
+
+.good{
+color:#55E68A;
+}
+
+.warning{
+color:#FFB347;
+}
+
+.bad{
+color:#FF7777;
+}
+
+.danger{
+background:#C62828;
+color:white;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+.checkRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+}
+
+.checkRow input{
+width:20px;
+height:20px;
+flex-shrink:0;
+}
+
+#status,#result,#actionResult{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+}
+
+#proofImage{
+max-width:100%;
+max-height:650px;
+object-fit:contain;
+border-radius:8px;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading">
+Commission Management
+</h2>
+
+<div class="languages">
+
+<button data-lang="si">සිංහල</button>
+<button data-lang="en">English</button>
+<button data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status" role="status"
+aria-live="polite">
+Checking security...
+</p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="overview"></h3>
+
+<div id="overview" class="grid"></div>
+
+<p id="lastUpdate" class="note"></p>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="income"></h3>
+
+<div id="incomeSummary"
+class="grid"></div>
+
+<p class="note"
+data-t="incomeNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="commissionSettings"></h3>
+
+<div id="commissionSettings"
+class="grid"></div>
+
+<p class="note"
+data-t="rateNotice"></p>
+
+<a id="fareLink"
+class="action"
+data-t="fareManagement"></a>
+
+<label for="deadlineDays"
+data-t="deadline"></label>
+
+<input id="deadlineDays"
+type="number"
+min="1"
+max="30"
+step="1">
+
+<label for="settingsReason"
+data-t="reason"></label>
+
+<textarea id="settingsReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="settingsConsent"
+type="checkbox">
+
+<span data-t="confirmSettings"></span>
+
+</label>
+
+<button id="saveSettings"
+data-t="save"
+disabled></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="driverAccounts"></h3>
+
+<label for="driverSearch"
+data-t="search"></label>
+
+<input id="driverSearch"
+type="search"
+maxlength="100"
+autocomplete="off">
+
+<label for="driverFilter"
+data-t="accountStatus"></label>
+
+<select id="driverFilter">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="paid"
+data-t="paid"></option>
+
+<option value="unpaid"
+data-t="unpaid"></option>
+
+<option value="overdue"
+data-t="overdue"></option>
+
+</select>
+
+<button id="searchDrivers"
+data-t="searchButton"></button>
+
+<div id="driverList"></div>
+
+<button id="moreDrivers"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section id="driverDetailsPanel"
+class="panel"
+hidden>
+
+<h3 data-t="driverDetails"></h3>
+
+<div id="driverDetails"></div>
+
+<h4 data-t="commissionLedger"></h4>
+
+<div id="ledgerList"></div>
+
+<button id="moreLedger"
+data-t="more"
+hidden></button>
+
+<button id="sendReminder"
+data-t="reminder"></button>
+
+<button id="closeDriver"
+class="back"
+data-t="close"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="paymentRequests"></h3>
+
+<label for="paymentFilter"
+data-t="paymentStatus"></label>
+
+<select id="paymentFilter">
+
+<option value="pending"
+data-t="pending"></option>
+
+<option value="approved"
+data-t="approved"></option>
+
+<option value="rejected"
+data-t="rejected"></option>
+
+<option value="all"
+data-t="all"></option>
+
+</select>
+
+<button id="loadPayments"
+data-t="loadPayments"></button>
+
+<div id="paymentList"></div>
+
+<button id="morePayments"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section id="reviewPanel"
+class="panel"
+hidden>
+
+<h3 data-t="reviewPayment"></h3>
+
+<div id="reviewDetails"></div>
+
+<button id="viewProof"
+data-t="viewProof"></button>
+
+<img id="proofImage"
+alt="Payment proof"
+hidden>
+
+<p class="note"
+data-t="proofNotice"></p>
+
+<label for="reviewDecision"
+data-t="decision"></label>
+
+<select id="reviewDecision">
+
+<option value="approved"
+data-t="approved"></option>
+
+<option value="rejected"
+data-t="rejected"></option>
+
+</select>
+
+<label for="bankTransaction"
+data-t="bankTransaction"></label>
+
+<input id="bankTransaction"
+maxlength="150"
+autocomplete="off">
+
+<label for="reviewReason"
+data-t="reason"></label>
+
+<textarea id="reviewReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="reviewConsent"
+type="checkbox">
+
+<span data-t="confirmReview"></span>
+
+</label>
+
+<button id="submitReview"
+data-t="confirm"
+disabled></button>
+
+<button id="closeReview"
+class="back"
+data-t="close"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="history"></h3>
+
+<div id="historyList"></div>
+
+<button id="loadHistory"
+data-t="loadHistory"></button>
+
+<button id="moreHistory"
+data-t="more"
+hidden></button>
+
+</section>
+
+<p id="actionResult"
+role="status"
+aria-live="polite"></p>
+
+<p id="result"
+role="status"
+aria-live="polite"></p>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {initializeApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const words={
+
+si:{
+
+heading:"කොමිස් මුදල් කළමනාකරණය",
+overview:"01. කොමිස් ගිණුම් සාරාංශය",
+totalCommission:"මුළු උපයාගත් කොමිස්",
+totalPaid:"ලැබුණු කොමිස් මුදල්",
+totalUnpaid:"ලැබීමට ඇති කොමිස්",
+totalOverdue:"කල් ඉකුත් වූ කොමිස්",
+pendingPayments:"පරීක්ෂා කළ යුතු ගෙවීම්",
+overdueDrivers:"ගෙවීම් ප්‍රමාද රියදුරන්",
+income:"02. කොමිස් ආදායම් වාර්තාව",
+today:"අද",
+week:"මෙම සතිය",
+month:"මෙම මාසය",
+incomeNotice:"මෙහි පෙන්වන්නේ තහවුරු කළ ලැබීම්ය. සියලු කාලසීමා ශ්‍රී ලංකා වේලාව අනුවයි.",
+commissionSettings:"03. කොමිස් සැකසුම්",
+rate:"දැනට ක්‍රියාත්මක කොමිස් ප්‍රතිශතය",
+deadline:"කොමිස් ගෙවීමේ කාලසීමාව (දින)",
+rateNotice:"කොමිස් ප්‍රතිශතය වෙනස් කිරීම 50 වැනි Fare Management පිටුවෙන් සිදු කරන්න.",
+fareManagement:"Fare Management වෙත",
+reason:"හේතුව",
+confirmSettings:"මෙම නව කාලසීමාව අනාගත හයර් සඳහා ක්‍රියාත්මක කිරීමට එකඟ වෙමි.",
+save:"සැකසුම් සුරකින්න",
+driverAccounts:"04. රියදුරු කොමිස් ගිණුම්",
+search:"රියදුරු ID / නම / දුරකථන අංකය",
+searchButton:"සොයන්න",
+accountStatus:"ගිණුම් තත්ත්වය",
+all:"සියල්ල",
+paid:"ගෙවා ඇත",
+unpaid:"ගෙවීමට ඇත",
+overdue:"කල් ඉකුත් වී ඇත",
+more:"තවත් වාර්තා",
+driverDetails:"05. රියදුරු ගිණුම් විස්තර",
+commissionLedger:"කොමිස් ගනුදෙනු ලේඛනය",
+reminder:"කොමිස් ගෙවීමේ මතක් කිරීම යවන්න",
+close:"වසන්න",
+paymentRequests:"06. කොමිස් ගෙවීම් ඉල්ලීම්",
+paymentStatus:"ගෙවීම් තත්ත්වය",
+pending:"පරීක්ෂා කිරීමට ඇත",
+approved:"අනුමත කළ",
+rejected:"ප්‍රතික්ෂේප කළ",
+loadPayments:"ගෙවීම් වාර්තා බලන්න",
+reviewPayment:"07. ගෙවීම පරීක්ෂා කිරීම",
+viewProof:"ගෙවීම් සාක්ෂිය බලන්න",
+proofNotice:"බැංකු ගිණුමට මුදල් ලැබී ඇති බව වෙනම තහවුරු කිරීමෙන් පසුව පමණක් ගෙවීම අනුමත කරන්න.",
+decision:"තීරණය",
+bankTransaction:"තහවුරු කළ බැංකු ගනුදෙනු අංකය",
+confirmReview:"ගෙවීම පරීක්ෂා කර මෙම තීරණය තහවුරු කරමි.",
+confirm:"තහවුරු කරන්න",
+history:"08. කොමිස් ක්‍රියාමාර්ග ඉතිහාසය",
+loadHistory:"ඉතිහාසය බලන්න",
+driverId:"රියදුරු ID",
+driverName:"රියදුරු නම",
+phone:"දුරකථන අංකය",
+bookingId:"හයර් ID",
+paymentId:"ගෙවීම් ID",
+amount:"මුදල",
+reference:"බැංකු යොමු අංකය",
+grossFare:"කොමිස් අදාළ හයර් ගාස්තුව",
+commission:"කොමිස් මුදල",
+driverNet:"රියදුරු ශුද්ධ ආදායම",
+dueDate:"ගෙවිය යුතු දිනය",
+date:"දිනය",
+updated:"අවසන් යාවත්කාලීනය",
+details:"සම්පූර්ණ විස්තර",
+review:"පරීක්ෂා කරන්න",
+action:"ක්‍රියාමාර්ගය",
+settingsChange:"සැකසුම් වෙනස් කිරීම",
+paymentReview:"ගෙවීම් පරීක්ෂාව",
+reminderQueued:"මතක් කිරීම යැවීමට භාරගෙන ඇත.",
+reminderAction:"ගෙවීම් මතක් කිරීම",
+reminderConfirm:"මෙම රියදුරුට කොමිස් ගෙවීමේ මතක් කිරීමක් යවන්නද?",
+back:"Admin Dashboard වෙත",
+login:"Admin Login",
+refresh:"යාවත්කාලීන කරන්න",
+checking:"ආරක්ෂාව පරීක්ෂා කරමින්...",
+denied:"Owner Admin අවසරය තහවුරු කර නොමැත.",
+verified:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+loading:"Server දත්ත ලබාගනිමින්...",
+error:"Server දත්ත ලබාගත නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+invalid:"ඇතුළත් කළ දත්ත පරීක්ෂා කරන්න.",
+saving:"Server වෙත යොමු කරමින්...",
+saved:"Server මගින් තහවුරු කර ඇත.",
+saveError:"ක්‍රියාමාර්ගය තහවුරු කළ නොහැක. නැවත දත්ත පරීක්ෂා කරන්න.",
+noRecords:"වාර්තා නොමැත.",
+noProof:"ගෙවීම් සාක්ෂිය ලබාගත නොහැක.",
+version:"සංස්කරණ අංකය",
+receipt:"රිසිට්පත් අංකය",
+noChanges:"වෙනස්කම් නොමැත.",
+discard:"සුරැකී නැති වෙනස්කම් ඉවත් කරන්නද?"
+
+},
+
+en:{
+
+heading:"Commission Management",
+overview:"01. Commission Overview",
+totalCommission:"Total Commission Earned",
+totalPaid:"Total Commission Received",
+totalUnpaid:"Outstanding Commission",
+totalOverdue:"Overdue Commission",
+pendingPayments:"Pending Payment Reviews",
+overdueDrivers:"Drivers with Overdue Balances",
+income:"02. Commission Income",
+today:"Today",
+week:"This Week",
+month:"This Month",
+incomeNotice:"Confirmed receipts only. All reporting periods use Sri Lanka time.",
+commissionSettings:"03. Commission Settings",
+rate:"Current Commission Rate",
+deadline:"Commission Payment Deadline (Days)",
+rateNotice:"Change the commission rate through page 50, Fare Management.",
+fareManagement:"Open Fare Management",
+reason:"Reason",
+confirmSettings:"I authorize this deadline for future bookings.",
+save:"Save Settings",
+driverAccounts:"04. Driver Commission Accounts",
+search:"Driver ID / Name / Phone Number",
+searchButton:"Search",
+accountStatus:"Account Status",
+all:"All",
+paid:"Paid",
+unpaid:"Outstanding",
+overdue:"Overdue",
+more:"Load More",
+driverDetails:"05. Driver Account Details",
+commissionLedger:"Commission Ledger",
+reminder:"Send Commission Payment Reminder",
+close:"Close",
+paymentRequests:"06. Commission Payment Requests",
+paymentStatus:"Payment Status",
+pending:"Pending",
+approved:"Approved",
+rejected:"Rejected",
+loadPayments:"View Payment Records",
+reviewPayment:"07. Review Payment",
+viewProof:"View Payment Proof",
+proofNotice:"Approve only after independently verifying receipt of funds in the bank account.",
+decision:"Decision",
+bankTransaction:"Verified Bank Transaction ID",
+confirmReview:"I have reviewed the payment and confirm this decision.",
+confirm:"Confirm",
+history:"08. Commission Audit History",
+loadHistory:"View History",
+driverId:"Driver ID",
+driverName:"Driver Name",
+phone:"Phone Number",
+bookingId:"Booking ID",
+paymentId:"Payment ID",
+amount:"Amount",
+reference:"Bank Reference",
+grossFare:"Commissionable Ride Fare",
+commission:"Commission",
+driverNet:"Driver Net Income",
+dueDate:"Due Date",
+date:"Date",
+updated:"Last Updated",
+details:"View Details",
+review:"Review",
+action:"Action",
+settingsChange:"Settings Change",
+paymentReview:"Payment Review",
+reminderQueued:"Reminder accepted for delivery.",
+reminderAction:"Payment Reminder",
+reminderConfirm:"Send a commission payment reminder to this driver?",
+back:"Back to Admin Dashboard",
+login:"Admin Login",
+refresh:"Refresh",
+checking:"Checking security...",
+denied:"Owner Admin authorization is not verified.",
+verified:"Owner authorization verified.",
+loading:"Loading server data...",
+error:"Unable to retrieve server data.",
+offline:"No internet connection.",
+invalid:"Check the entered information.",
+saving:"Submitting to server...",
+saved:"Confirmed by server.",
+saveError:"Action could not be confirmed. Refresh server data.",
+noRecords:"No records found.",
+noProof:"Payment proof unavailable.",
+version:"Version",
+receipt:"Receipt Number",
+noChanges:"No changes.",
+discard:"Discard unsaved changes?"
+
+},
+
+ta:{
+
+heading:"கமிஷன் மேலாண்மை",
+overview:"01. கமிஷன் கணக்கு சுருக்கம்",
+totalCommission:"மொத்த கமிஷன்",
+totalPaid:"பெறப்பட்ட கமிஷன்",
+totalUnpaid:"நிலுவை கமிஷன்",
+totalOverdue:"காலாவதியான கமிஷன்",
+pendingPayments:"நிலுவை கட்டண சரிபார்ப்புகள்",
+overdueDrivers:"தாமதமான சாரதிகள்",
+income:"02. கமிஷன் வருமானம்",
+today:"இன்று",
+week:"இந்த வாரம்",
+month:"இந்த மாதம்",
+incomeNotice:"உறுதிப்படுத்தப்பட்ட வரவுகள் மட்டும். இலங்கை நேரப்படி.",
+commissionSettings:"03. கமிஷன் அமைப்புகள்",
+rate:"தற்போதைய கமிஷன் சதவீதம்",
+deadline:"கமிஷன் செலுத்தும் காலம் (நாட்கள்)",
+rateNotice:"கமிஷன் சதவீதத்தை 50வது கட்டண மேலாண்மை பக்கத்தில் மாற்றவும்.",
+fareManagement:"கட்டண மேலாண்மை",
+reason:"காரணம்",
+confirmSettings:"எதிர்கால பயணங்களுக்கு இந்த காலவரம்பை அங்கீகரிக்கிறேன்.",
+save:"சேமிக்கவும்",
+driverAccounts:"04. சாரதி கமிஷன் கணக்குகள்",
+search:"சாரதி ID / பெயர் / தொலைபேசி",
+searchButton:"தேடவும்",
+accountStatus:"கணக்கு நிலை",
+all:"அனைத்தும்",
+paid:"செலுத்தப்பட்டது",
+unpaid:"நிலுவை",
+overdue:"காலாவதியானது",
+more:"மேலும் பதிவுகள்",
+driverDetails:"05. சாரதி கணக்கு விவரங்கள்",
+commissionLedger:"கமிஷன் பரிவர்த்தனை பதிவேடு",
+reminder:"கமிஷன் கட்டண நினைவூட்டல் அனுப்பவும்",
+close:"மூடவும்",
+paymentRequests:"06. கமிஷன் கட்டண கோரிக்கைகள்",
+paymentStatus:"கட்டண நிலை",
+pending:"நிலுவையில்",
+approved:"அங்கீகரிக்கப்பட்டது",
+rejected:"நிராகரிக்கப்பட்டது",
+loadPayments:"கட்டண பதிவுகளை பார்க்கவும்",
+reviewPayment:"07. கட்டண சரிபார்ப்பு",
+viewProof:"கட்டண ஆதாரத்தை பார்க்கவும்",
+proofNotice:"வங்கி கணக்கில் பணம் பெறப்பட்டதை உறுதிப்படுத்திய பின் மட்டும் அங்கீகரிக்கவும்.",
+decision:"தீர்மானம்",
+bankTransaction:"உறுதிப்படுத்திய வங்கி பரிவர்த்தனை ID",
+confirmReview:"கட்டணத்தை சரிபார்த்து தீர்மானத்தை உறுதிப்படுத்துகிறேன்.",
+confirm:"உறுதிப்படுத்தவும்",
+history:"08. கமிஷன் நடவடிக்கை வரலாறு",
+loadHistory:"வரலாற்றை பார்க்கவும்",
+driverId:"சாரதி ID",
+driverName:"சாரதி பெயர்",
+phone:"தொலைபேசி எண்",
+bookingId:"பயண ID",
+paymentId:"கட்டண ID",
+amount:"தொகை",
+reference:"வங்கி குறிப்பு எண்",
+grossFare:"கமிஷனுக்குரிய பயண கட்டணம்",
+commission:"கமிஷன்",
+driverNet:"சாரதி நிகர வருமானம்",
+dueDate:"செலுத்த வேண்டிய தேதி",
+date:"தேதி",
+updated:"கடைசி புதுப்பிப்பு",
+details:"விவரங்களை பார்க்கவும்",
+review:"சரிபார்க்கவும்",
+action:"நடவடிக்கை",
+settingsChange:"அமைப்பு மாற்றம்",
+paymentReview:"கட்டண சரிபார்ப்பு",
+reminderQueued:"நினைவூட்டல் அனுப்ப ஏற்கப்பட்டது.",
+reminderAction:"கட்டண நினைவூட்டல்",
+reminderConfirm:"இந்த சாரதிக்கு கட்டண நினைவூட்டல் அனுப்பவா?",
+back:"நிர்வாக முதன்மைப் பக்கத்திற்கு",
+login:"நிர்வாக உள்நுழைவு",
+refresh:"புதுப்பிக்கவும்",
+checking:"பாதுகாப்பு சரிபார்க்கப்படுகிறது...",
+denied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+verified:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+loading:"சேவையக தரவு பெறப்படுகிறது...",
+error:"சேவையக தரவை பெற முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+invalid:"உள்ளிட்ட தகவல்களை சரிபார்க்கவும்.",
+saving:"சேவையகத்திற்கு அனுப்பப்படுகிறது...",
+saved:"சேவையகம் உறுதிப்படுத்தியது.",
+saveError:"நடவடிக்கையை உறுதிப்படுத்த முடியவில்லை.",
+noRecords:"பதிவுகள் இல்லை.",
+noProof:"கட்டண ஆதாரம் கிடைக்கவில்லை.",
+version:"பதிப்பு",
+receipt:"ரசீது எண்",
+noChanges:"மாற்றங்கள் இல்லை.",
+discard:"சேமிக்காத மாற்றங்களை நீக்கவா?"
+
+}
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+new URLSearchParams(location.search).get("lang")
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected)){
+lang=selected;
+}
+
+}catch(e){}
+
+const t=key=>words[lang][key]||key;
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+let busy=false;
+let mutationBusy=false;
+
+let overview=null;
+let settings=null;
+let lastSync=null;
+
+let drivers=[];
+let payments=[];
+let ledger=[];
+let historyRecords=[];
+
+let driverCursor=null;
+let paymentCursor=null;
+let ledgerCursor=null;
+let historyCursor=null;
+
+let selectedDriver=null;
+let selectedPayment=null;
+
+let driverQuery=null;
+let paymentQuery=null;
+
+let proofUrl=null;
+let pendingMutation=null;
+
+let statusKey="checking";
+let resultKey="";
+let actionKey="";
+
+let dirty=false;
+
+function status(key){
+
+statusKey=key;
+$("status").textContent=t(key);
+
+}
+
+function result(key){
+
+resultKey=key;
+$("result").textContent=key?t(key):"";
+
+}
+
+function actionResult(key){
+
+actionKey=key;
+$("actionResult").textContent=key?t(key):"";
+
+}
+
+function isOwner(){
+
+return authorized
+&&ownerUid!==null
+&&auth?.currentUser?.uid===ownerUid
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+&&data.uid===uid
+&&data.role==="owner"
+&&data.ownerUidVerified===true
+&&data.sessionValid===true;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,max=500){
+
+return typeof value==="string"
+&&value.length<=max;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+&&value>=0;
+
+}
+
+function validAmount(value){
+
+return Number.isSafeInteger(value)
+&&value>=0
+&&value<=1000000000000;
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+&&value>0
+&&value<=8640000000000000;
+
+}
+
+function validCursor(value){
+
+return value===null
+||validText(value,4000);
+
+}
+
+function money(cents){
+
+if(!validAmount(cents))return "—";
+
+return new Intl.NumberFormat("en-LK",{
+
+style:"currency",
+currency:"LKR",
+minimumFractionDigits:2
+
+}).format(cents/100);
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"short"
+
+}
+
+).format(new Date(value));
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+encodeURIComponent(lang);
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function createStat(label,value){
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const name=document.createElement("span");
+
+name.textContent=t(label);
+
+const number=document.createElement("strong");
+
+number.textContent=String(value??"—");
+
+box.append(name,number);
+
+return box;
+
+}
+
+function createButton(label,callback){
+
+const button=document.createElement("button");
+
+button.textContent=t(label);
+button.onclick=callback;
+button.dataset.dynamic="true";
+
+button.disabled=busy||mutationBusy||!isOwner();
+
+return button;
+
+}
+
+function recordBox(){
+
+const panel=document.createElement("div");
+
+panel.className="record";
+
+return panel;
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+$("loginLink").href=pageLink("admin-login.html");
+
+$("dashboardLink").href=
+pageLink("admin-dashboard.html");
+
+$("backLink").href=
+pageLink("admin-dashboard.html");
+
+$("fareLink").href=
+pageLink("admin-fares.html");
+
+$("driverSearch").placeholder=t("search");
+
+$("settingsReason").placeholder=t("reason");
+
+$("reviewReason").placeholder=t("reason");
+
+status(statusKey);
+result(resultKey);
+actionResult(actionKey);
+
+renderOverview();
+renderDrivers();
+renderDriverDetails();
+renderPayments();
+renderReview();
+renderHistory();
+updateControls();
+
+}
+
+document.querySelectorAll("[data-lang]")
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+"myride_admin_language",
+lang
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+async function serverCall(name,data={}){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+name,
+{timeout:30000}
+
+)(data);
+
+if(currentGeneration!==generation
+||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+function requireSuccess(response){
+
+if(response?.success!==true
+||response.ownerUid!==ownerUid){
+
+throw new Error("Invalid server response");
+
+}
+
+return response;
+
+}
+
+function validSettings(data){
+
+return data
+&&validCount(data.version)
+&&Number.isInteger(data.deadlineDays)
+&&data.deadlineDays>=1
+&&data.deadlineDays<=30
+&&typeof data.commissionRate==="number"
+&&Number.isFinite(data.commissionRate)
+&&data.commissionRate>=0
+&&data.commissionRate<=100;
+
+}
+
+function validOverview(data){
+
+return data
+
+&&[
+
+"totalCommissionCents",
+"totalPaidCents",
+"totalUnpaidCents",
+"totalOverdueCents",
+"todayReceivedCents",
+"weekReceivedCents",
+"monthReceivedCents"
+
+].every(key=>validAmount(data[key]))
+
+&&data.totalCommissionCents===
+
+data.totalPaidCents+data.totalUnpaidCents
+
+&&data.totalOverdueCents<=data.totalUnpaidCents
+
+&&validCount(data.pendingPayments)
+
+&&validCount(data.overdueDrivers);
+
+}
+
+function renderOverview(){
+
+const container=$("overview");
+
+container.replaceChildren();
+
+const fields=[
+
+["totalCommission","totalCommissionCents"],
+["totalPaid","totalPaidCents"],
+["totalUnpaid","totalUnpaidCents"],
+["totalOverdue","totalOverdueCents"]
+
+];
+
+fields.forEach(([label,key])=>{
+
+container.appendChild(
+
+createStat(label,overview?money(overview[key]):"—")
+
+);
+
+});
+
+container.append(
+
+createStat(
+"pendingPayments",
+overview?.pendingPayments??"—"
+),
+
+createStat(
+"overdueDrivers",
+overview?.overdueDrivers??"—"
+)
+
+);
+
+const income=$("incomeSummary");
+
+income.replaceChildren();
+
+[
+
+["today","todayReceivedCents"],
+["week","weekReceivedCents"],
+["month","monthReceivedCents"]
+
+].forEach(([label,key])=>{
+
+income.appendChild(
+
+createStat(label,overview?money(overview[key]):"—")
+
+);
+
+});
+
+const settingsBox=$("commissionSettings");
+
+settingsBox.replaceChildren();
+
+settingsBox.append(
+
+createStat(
+"rate",
+settings?settings.commissionRate+"%":"—"
+),
+
+createStat(
+"deadline",
+settings?.deadlineDays??"—"
+),
+
+createStat(
+"version",
+settings?.version??"—"
+)
+
+);
+
+$("lastUpdate").textContent=
+
+lastSync?t("updated")+": "+formatDate(lastSync):"";
+
+}
+
+async function loadOverview(preserveDraft=false){
+
+const response=requireSuccess(
+
+await serverCall("getAdminCommissionOverview")
+
+);
+
+if(!validOverview(response.overview)
+
+||!validSettings(response.settings)
+
+||!validTime(response.serverTimeMs)){
+
+throw new Error("Invalid overview");
+
+}
+
+overview=response.overview;
+
+lastSync=response.serverTimeMs;
+
+if(!preserveDraft||!dirty){
+
+settings=response.settings;
+
+$("deadlineDays").value=settings.deadlineDays;
+
+$("settingsReason").value="";
+
+$("settingsConsent").checked=false;
+
+dirty=false;
+
+}else if(settings.version!==response.settings.version){
+
+actionResult("saveError");
+
+}
+
+renderOverview();
+
+}
+
+async function runRead(callback){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+result("loading");
+
+try{
+
+await callback();
+
+if(currentGeneration===generation){
+
+result("");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+result("error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("refreshButton").onclick=()=>{
+
+if(dirty&&!window.confirm(t("discard")))return;
+
+runRead(async()=>{
+
+overview=null;
+
+renderOverview();
+
+await loadOverview(false);
+
+});
+
+};
+
+function updateControls(){
+
+const locked=busy||mutationBusy||!isOwner();
+
+[
+
+"refreshButton",
+"driverSearch",
+"driverFilter",
+"searchDrivers",
+"moreDrivers",
+"moreLedger",
+"paymentFilter",
+"loadPayments",
+"morePayments",
+"loadHistory",
+"moreHistory",
+"viewProof",
+"reviewDecision",
+"reviewReason",
+"reviewConsent",
+"bankTransaction"
+
+].forEach(id=>{
+
+$(id).disabled=locked;
+
+});
+
+document.querySelectorAll("[data-dynamic]")
+.forEach(button=>{
+
+button.disabled=locked;
+
+});
+
+[
+
+"deadlineDays",
+"settingsReason",
+"settingsConsent"
+
+].forEach(id=>{
+
+$(id).disabled=locked||!settings;
+
+});
+
+$("saveSettings").disabled=
+
+locked
+
+||!settings
+
+||!dirty
+
+||!$("deadlineDays").checkValidity()
+
+||!$("deadlineDays").value
+
+||!$("settingsConsent").checked
+
+||$("settingsReason").value.trim().length<10;
+
+$("sendReminder").disabled=
+
+locked
+
+||!selectedDriver
+
+||selectedDriver.totalUnpaidCents<=0;
+
+$("closeDriver").disabled=locked;
+
+$("closeReview").disabled=locked;
+
+const approval=$("reviewDecision").value==="approved";
+
+$("bankTransaction").disabled=locked||!approval;
+
+$("submitReview").disabled=
+
+locked
+
+||!selectedPayment
+
+||selectedPayment.status!=="pending"
+
+||!$("reviewConsent").checked
+
+||$("reviewReason").value.trim().length<10
+
+||(approval&&$("bankTransaction").value.trim().length<3);
+
+}
+
+$("deadlineDays").oninput=()=>{
+
+dirty=!!settings
+
+&&Number($("deadlineDays").value)!==settings.deadlineDays;
+
+$("settingsConsent").checked=false;
+
+updateControls();
+
+};
+
+[
+
+"settingsReason",
+"settingsConsent",
+"reviewDecision",
+"reviewReason",
+"reviewConsent",
+"bankTransaction"
+
+].forEach(id=>{
+
+$(id).addEventListener("input",updateControls);
+
+});
+
+async function freshOwnerAuthentication(){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const user=auth.currentUser;
+
+const uid=user.uid;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=
+
+await reauthenticateWithPopup(user,provider);
+
+if(credential.user.uid!==uid
+
+||auth.currentUser?.uid!==uid
+
+||!isOwner()){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Invalid owner");
+
+}
+
+const response=await serverCall("verifyOwnerAdmin");
+
+if(!validOwner(response,uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+}
+
+async function runMutation(name,payload,onSuccess){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const currentGeneration=generation;
+
+const fingerprint=JSON.stringify([name,payload]);
+
+if(pendingMutation
+
+&&pendingMutation.fingerprint!==fingerprint){
+
+actionResult("saveError");
+
+return;
+
+}
+
+if(!pendingMutation){
+
+pendingMutation={
+
+fingerprint,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const requestId=pendingMutation.requestId;
+
+mutationBusy=true;
+
+updateControls();
+
+actionResult("saving");
+
+try{
+
+await freshOwnerAuthentication();
+
+const response=requireSuccess(
+
+await serverCall(name,{
+
+...payload,
+
+requestId
+
+})
+
+);
+
+await onSuccess(response);
+
+pendingMutation=null;
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+actionResult("saveError");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("saveSettings").onclick=()=>{
+
+if(!settings||!dirty
+
+||!$("settingsConsent").checked)return;
+
+const deadlineDays=Number($("deadlineDays").value);
+
+const reason=$("settingsReason").value.trim();
+
+if(!Number.isInteger(deadlineDays)
+
+||deadlineDays<1
+
+||deadlineDays>30
+
+||reason.length<10
+
+||reason.length>500){
+
+actionResult("invalid");
+
+return;
+
+}
+
+const expectedVersion=settings.version;
+
+runMutation(
+
+"saveAdminCommissionSettings",
+
+{
+
+deadlineDays,
+
+reason,
+
+expectedVersion,
+
+applyTo:"future_confirmed_bookings"
+
+},
+
+async response=>{
+
+if(!validSettings(response.settings)
+
+||response.settings.version<=expectedVersion
+
+||response.settings.deadlineDays!==deadlineDays){
+
+throw new Error("Save not confirmed");
+
+}
+
+settings=response.settings;
+
+dirty=false;
+
+$("settingsConsent").checked=false;
+
+$("settingsReason").value="";
+
+renderOverview();
+
+actionResult("saved");
+
+}
+
+);
+
+};
+
+function validDriver(record){
+
+return record
+
+&&validId(record.uid)
+
+&&validId(record.driverId)
+
+&&validText(record.fullName,200)
+
+&&validText(record.phone,30)
+
+&&validAmount(record.totalCommissionCents)
+
+&&validAmount(record.totalPaidCents)
+
+&&validAmount(record.totalUnpaidCents)
+
+&&validAmount(record.totalOverdueCents)
+
+&&record.totalCommissionCents===
+
+record.totalPaidCents+record.totalUnpaidCents
+
+&&record.totalOverdueCents<=record.totalUnpaidCents
+
+&&validCount(record.revision)
+
+&&(record.nextDueAtMs===null
+
+||validTime(record.nextDueAtMs));
+
+}
+
+function renderDrivers(){
+
+const container=$("driverList");
+
+container.replaceChildren();
+
+$("moreDrivers").hidden=driverCursor===null;
+
+if(!isOwner()||!driverQuery)return;
+
+if(!drivers.length){
+
+container.textContent=t("noRecords");
+
+return;
+
+}
+
+drivers.forEach(record=>{
+
+const panel=recordBox();
+
+const title=document.createElement("h4");
+
+title.textContent=record.fullName;
+
+panel.appendChild(title);
+
+addLine(panel,"driverId",record.driverId);
+
+addLine(panel,"phone",record.phone);
+
+addLine(panel,"totalCommission",
+
+money(record.totalCommissionCents));
+
+addLine(panel,"totalPaid",
+
+money(record.totalPaidCents));
+
+addLine(panel,"totalUnpaid",
+
+money(record.totalUnpaidCents));
+
+addLine(panel,"totalOverdue",
+
+money(record.totalOverdueCents));
+
+addLine(panel,"dueDate",
+
+formatDate(record.nextDueAtMs));
+
+panel.appendChild(
+
+createButton("details",()=>openDriver(record.uid))
+
+);
+
+container.appendChild(panel);
+
+});
+
+}
+
+function mergeRecords(oldRecords,newRecords,key){
+
+const unique=new Map(
+
+oldRecords.map(record=>[record[key],record])
+
+);
+
+newRecords.forEach(record=>{
+
+unique.set(record[key],record);
+
+});
+
+return [...unique.values()];
+
+}
+
+async function loadDrivers(reset=true){
+
+await runRead(async()=>{
+
+if(reset){
+
+driverQuery={
+
+search:$("driverSearch").value.trim(),
+
+status:$("driverFilter").value
+
+};
+
+drivers=[];
+
+driverCursor=null;
+
+renderDrivers();
+
+}
+
+const response=requireSuccess(
+
+await serverCall("getAdminCommissionDrivers",{
+
+...driverQuery,
+
+limit:30,
+
+cursor:reset?null:driverCursor
+
+})
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validDriver)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid driver records");
+
+}
+
+drivers=mergeRecords(
+
+drivers,
+
+response.records,
+
+"uid"
+
+);
+
+driverCursor=response.nextCursor;
+
+renderDrivers();
+
+});
+
+}
+
+$("searchDrivers").onclick=()=>loadDrivers(true);
+
+$("moreDrivers").onclick=()=>{
+
+if(driverCursor!==null){
+
+loadDrivers(false);
+
+}
+
+};
+
+function validLedger(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&validId(record.bookingId)
+
+&&validAmount(record.grossFareCents)
+
+&&validAmount(record.commissionCents)
+
+&&validAmount(record.driverNetCents)
+
+&&validAmount(record.outstandingCents)
+
+&&record.grossFareCents===
+
+record.commissionCents+record.driverNetCents
+
+&&record.outstandingCents<=record.commissionCents
+
+&&typeof record.commissionRate==="number"
+
+&&Number.isFinite(record.commissionRate)
+
+&&record.commissionRate>=0
+
+&&record.commissionRate<=100
+
+&&validTime(record.createdAtMs)
+
+&&validTime(record.dueAtMs)
+
+&&["paid","unpaid","overdue"].includes(record.status);
+
+}
+
+function renderDriverDetails(){
+
+const container=$("driverDetails");
+
+container.replaceChildren();
+
+const list=$("ledgerList");
+
+list.replaceChildren();
+
+$("driverDetailsPanel").hidden=
+
+!selectedDriver||!isOwner();
+
+$("moreLedger").hidden=ledgerCursor===null;
+
+if(!selectedDriver||!isOwner())return;
+
+const record=selectedDriver;
+
+addLine(container,"driverName",record.fullName);
+
+addLine(container,"driverId",record.driverId);
+
+addLine(container,"phone",record.phone);
+
+addLine(container,"totalCommission",
+
+money(record.totalCommissionCents));
+
+addLine(container,"totalPaid",
+
+money(record.totalPaidCents));
+
+addLine(container,"totalUnpaid",
+
+money(record.totalUnpaidCents));
+
+addLine(container,"totalOverdue",
+
+money(record.totalOverdueCents));
+
+addLine(container,"dueDate",
+
+formatDate(record.nextDueAtMs));
+
+if(!ledger.length){
+
+list.textContent=t("noRecords");
+
+}
+
+ledger.forEach(item=>{
+
+const panel=recordBox();
+
+addLine(panel,"bookingId",item.bookingId);
+
+addLine(panel,"date",formatDate(item.createdAtMs));
+
+addLine(panel,"grossFare",money(item.grossFareCents));
+
+addLine(panel,"rate",item.commissionRate+"%");
+
+addLine(panel,"commission",money(item.commissionCents));
+
+addLine(panel,"driverNet",money(item.driverNetCents));
+
+addLine(panel,"totalUnpaid",money(item.outstandingCents));
+
+addLine(panel,"dueDate",formatDate(item.dueAtMs));
+
+addLine(panel,"accountStatus",t(item.status));
+
+list.appendChild(panel);
+
+});
+
+}
+
+async function loadDriverLedger(uid,reset=true){
+
+const response=requireSuccess(
+
+await serverCall("getAdminDriverCommissionLedger",{
+
+driverUid:uid,
+
+limit:30,
+
+cursor:reset?null:ledgerCursor
+
+})
+
+);
+
+if(!validDriver(response.driver)
+
+||response.driver.uid!==uid
+
+||!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validLedger)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid ledger");
+
+}
+
+selectedDriver=response.driver;
+
+ledger=mergeRecords(
+
+reset?[]:ledger,
+
+response.records,
+
+"recordId"
+
+);
+
+ledgerCursor=response.nextCursor;
+
+renderDriverDetails();
+
+}
+
+function openDriver(uid){
+
+runRead(async()=>{
+
+selectedDriver=null;
+
+ledger=[];
+
+ledgerCursor=null;
+
+renderDriverDetails();
+
+await loadDriverLedger(uid,true);
+
+$("driverDetailsPanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+});
+
+}
+
+$("moreLedger").onclick=()=>{
+
+if(!selectedDriver||ledgerCursor===null)return;
+
+const uid=selectedDriver.uid;
+
+runRead(()=>loadDriverLedger(uid,false));
+
+};
+
+$("closeDriver").onclick=()=>{
+
+selectedDriver=null;
+
+ledger=[];
+
+ledgerCursor=null;
+
+renderDriverDetails();
+
+updateControls();
+
+};
+
+$("sendReminder").onclick=()=>{
+
+if(!selectedDriver
+
+||selectedDriver.totalUnpaidCents<=0)return;
+
+if(!window.confirm(t("reminderConfirm")))return;
+
+runMutation(
+
+"sendAdminCommissionReminder",
+
+{
+
+driverUid:selectedDriver.uid,
+
+expectedRevision:selectedDriver.revision
+
+},
+
+async response=>{
+
+if(response.accepted!==true
+
+||!validId(response.notificationId)){
+
+throw new Error("Reminder not confirmed");
+
+}
+
+actionResult("reminderQueued");
+
+}
+
+);
+
+};
+
+function validPayment(record){
+
+return record
+
+&&validId(record.paymentId)
+
+&&validId(record.driverUid)
+
+&&validId(record.driverId)
+
+&&validText(record.driverName,200)
+
+&&validAmount(record.amountCents)
+
+&&record.amountCents>0
+
+&&validText(record.reference,150)
+
+&&["pending","approved","rejected"].includes(record.status)
+
+&&typeof record.hasProof==="boolean"
+
+&&validCount(record.revision)
+
+&&validTime(record.createdAtMs)
+
+&&(record.receiptId===null
+
+||validId(record.receiptId));
+
+}
+
+function renderPayments(){
+
+const container=$("paymentList");
+
+container.replaceChildren();
+
+$("morePayments").hidden=paymentCursor===null;
+
+if(!isOwner()||!paymentQuery)return;
+
+if(!payments.length){
+
+container.textContent=t("noRecords");
+
+return;
+
+}
+
+payments.forEach(record=>{
+
+const panel=recordBox();
+
+addLine(panel,"paymentId",record.paymentId);
+
+addLine(panel,"driverName",record.driverName);
+
+addLine(panel,"driverId",record.driverId);
+
+addLine(panel,"amount",money(record.amountCents));
+
+addLine(panel,"reference",record.reference);
+
+addLine(panel,"date",formatDate(record.createdAtMs));
+
+addLine(panel,"paymentStatus",t(record.status));
+
+if(record.receiptId){
+
+addLine(panel,"receipt",record.receiptId);
+
+}
+
+if(record.status==="pending"){
+
+panel.appendChild(
+
+createButton("review",()=>openReview(record))
+
+);
+
+}
+
+container.appendChild(panel);
+
+});
+
+}
+
+async function loadPayments(reset=true){
+
+await runRead(async()=>{
+
+if(reset){
+
+paymentQuery={
+
+status:$("paymentFilter").value
+
+};
+
+payments=[];
+
+paymentCursor=null;
+
+renderPayments();
+
+}
+
+const response=requireSuccess(
+
+await serverCall("getAdminCommissionPayments",{
+
+...paymentQuery,
+
+limit:30,
+
+cursor:reset?null:paymentCursor
+
+})
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validPayment)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid payment records");
+
+}
+
+payments=mergeRecords(
+
+payments,
+
+response.records,
+
+"paymentId"
+
+);
+
+paymentCursor=response.nextCursor;
+
+renderPayments();
+
+});
+
+}
+
+$("loadPayments").onclick=()=>loadPayments(true);
+
+$("morePayments").onclick=()=>{
+
+if(paymentCursor!==null){
+
+loadPayments(false);
+
+}
+
+};
+
+function clearProof(){
+
+if(proofUrl){
+
+URL.revokeObjectURL(proofUrl);
+
+proofUrl=null;
+
+}
+
+$("proofImage").removeAttribute("src");
+
+$("proofImage").hidden=true;
+
+}
+
+function renderReview(){
+
+const container=$("reviewDetails");
+
+container.replaceChildren();
+
+$("reviewPanel").hidden=
+
+!selectedPayment||!isOwner();
+
+if(!selectedPayment||!isOwner())return;
+
+addLine(container,"paymentId",
+
+selectedPayment.paymentId);
+
+addLine(container,"driverName",
+
+selectedPayment.driverName);
+
+addLine(container,"driverId",
+
+selectedPayment.driverId);
+
+addLine(container,"amount",
+
+money(selectedPayment.amountCents));
+
+addLine(container,"reference",
+
+selectedPayment.reference);
+
+addLine(container,"paymentStatus",
+
+t(selectedPayment.status));
+
+$("viewProof").hidden=!selectedPayment.hasProof;
+
+}
+
+function openReview(record){
+
+if(!isOwner()||busy||mutationBusy
+
+||record.status!=="pending")return;
+
+clearProof();
+
+selectedPayment=record;
+
+$("reviewDecision").value="approved";
+
+$("reviewReason").value="";
+
+$("bankTransaction").value="";
+
+$("reviewConsent").checked=false;
+
+renderReview();
+
+updateControls();
+
+$("reviewPanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+function closeReview(){
+
+clearProof();
+
+selectedPayment=null;
+
+$("reviewReason").value="";
+
+$("bankTransaction").value="";
+
+$("reviewConsent").checked=false;
+
+renderReview();
+
+updateControls();
+
+}
+
+$("closeReview").onclick=closeReview;
+
+$("viewProof").onclick=async()=>{
+
+if(!selectedPayment||!selectedPayment.hasProof)return;
+
+const paymentId=selectedPayment.paymentId;
+
+await runRead(async()=>{
+
+clearProof();
+
+const response=requireSuccess(
+
+await serverCall("getAdminCommissionPaymentProof",{
+
+paymentId
+
+})
+
+);
+
+if(response.paymentId!==paymentId
+
+||!["image/jpeg","image/png","image/webp"]
+
+.includes(response.contentType)
+
+||typeof response.base64!=="string"
+
+||response.base64.length>7000000
+
+||!selectedPayment
+
+||selectedPayment.paymentId!==paymentId){
+
+throw new Error("Invalid proof");
+
+}
+
+const decoded=atob(response.base64);
+
+if(decoded.length>5000000){
+
+throw new Error("Proof too large");
+
+}
+
+const bytes=Uint8Array.from(
+
+decoded,
+
+character=>character.charCodeAt(0)
+
+);
+
+const blob=new Blob([bytes],{
+
+type:response.contentType
+
+});
+
+proofUrl=URL.createObjectURL(blob);
+
+$("proofImage").src=proofUrl;
+
+$("proofImage").hidden=false;
+
+});
+
+};
+
+$("submitReview").onclick=()=>{
+
+if(!selectedPayment
+
+||selectedPayment.status!=="pending"
+
+||!$("reviewConsent").checked)return;
+
+const decision=$("reviewDecision").value;
+
+const reason=$("reviewReason").value.trim();
+
+const bankTransactionId=
+
+decision==="approved"
+
+?$("bankTransaction").value.trim()
+
+:null;
+
+if(!["approved","rejected"].includes(decision)
+
+||reason.length<10
+
+||reason.length>500
+
+||(decision==="approved"
+
+&&(!bankTransactionId
+
+||bankTransactionId.length<3
+
+||bankTransactionId.length>150))){
+
+actionResult("invalid");
+
+return;
+
+}
+
+const paymentId=selectedPayment.paymentId;
+
+const expectedRevision=selectedPayment.revision;
+
+runMutation(
+
+"reviewAdminCommissionPayment",
+
+{
+
+paymentId,
+
+expectedRevision,
+
+decision,
+
+reason,
+
+bankTransactionId
+
+},
+
+async response=>{
+
+if(!validPayment(response.payment)
+
+||response.payment.paymentId!==paymentId
+
+||response.payment.status!==decision
+
+||response.payment.revision<=expectedRevision
+
+||(decision==="approved"
+
+&&!response.payment.receiptId)){
+
+throw new Error("Review not confirmed");
+
+}
+
+payments=payments.map(record=>
+
+record.paymentId===paymentId
+
+?response.payment
+
+:record
+
+);
+
+if(paymentQuery?.status!=="all"){
+
+payments=payments.filter(record=>
+
+record.status===paymentQuery?.status
+
+);
+
+}
+
+closeReview();
+
+renderPayments();
+
+drivers=[];
+
+driverCursor=null;
+
+driverQuery=null;
+
+selectedDriver=null;
+
+ledger=[];
+
+ledgerCursor=null;
+
+renderDrivers();
+
+renderDriverDetails();
+
+overview=null;
+
+renderOverview();
+
+actionResult("saved");
+
+try{
+
+await loadOverview(true);
+
+}catch(e){
+
+result("error");
+
+}
+
+}
+
+);
+
+};
+
+function validHistory(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&[
+
+"settingsChange",
+"paymentReview",
+"reminderAction"
+
+].includes(record.action)
+
+&&validText(record.reason,500)
+
+&&validTime(record.createdAtMs)
+
+&&(record.driverId===null
+
+||validId(record.driverId))
+
+&&(record.paymentId===null
+
+||validId(record.paymentId))
+
+&&(record.amountCents===null
+
+||validAmount(record.amountCents));
+
+}
+
+function renderHistory(){
+
+const container=$("historyList");
+
+container.replaceChildren();
+
+$("moreHistory").hidden=historyCursor===null;
+
+if(!isOwner())return;
+
+historyRecords.forEach(record=>{
+
+const panel=recordBox();
+
+addLine(panel,"action",t(record.action));
+
+addLine(panel,"date",formatDate(record.createdAtMs));
+
+addLine(panel,"reason",record.reason);
+
+if(record.driverId){
+
+addLine(panel,"driverId",record.driverId);
+
+}
+
+if(record.paymentId){
+
+addLine(panel,"paymentId",record.paymentId);
+
+}
+
+if(record.amountCents!==null){
+
+addLine(panel,"amount",money(record.amountCents));
+
+}
+
+container.appendChild(panel);
+
+});
+
+}
+
+async function loadHistory(reset=true){
+
+await runRead(async()=>{
+
+if(reset){
+
+historyRecords=[];
+
+historyCursor=null;
+
+renderHistory();
+
+}
+
+const response=requireSuccess(
+
+await serverCall("getAdminCommissionHistory",{
+
+limit:30,
+
+cursor:reset?null:historyCursor
+
+})
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validHistory)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid history");
+
+}
+
+historyRecords=mergeRecords(
+
+historyRecords,
+
+response.records,
+
+"recordId"
+
+);
+
+historyCursor=response.nextCursor;
+
+renderHistory();
+
+if(!historyRecords.length){
+
+$("historyList").textContent=t("noRecords");
+
+}
+
+});
+
+}
+
+$("loadHistory").onclick=()=>loadHistory(true);
+
+$("moreHistory").onclick=()=>{
+
+if(historyCursor!==null){
+
+loadHistory(false);
+
+}
+
+};
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+ownerUid=null;
+
+busy=false;
+
+mutationBusy=false;
+
+overview=null;
+
+settings=null;
+
+lastSync=null;
+
+drivers=[];
+
+payments=[];
+
+ledger=[];
+
+historyRecords=[];
+
+driverCursor=null;
+
+paymentCursor=null;
+
+ledgerCursor=null;
+
+historyCursor=null;
+
+selectedDriver=null;
+
+selectedPayment=null;
+
+driverQuery=null;
+
+paymentQuery=null;
+
+pendingMutation=null;
+
+dirty=false;
+
+clearProof();
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("driverDetailsPanel").hidden=true;
+
+$("reviewPanel").hidden=true;
+
+[
+
+"driverSearch",
+"deadlineDays",
+"settingsReason",
+"reviewReason",
+"bankTransaction"
+
+].forEach(id=>{
+
+$(id).value="";
+
+});
+
+$("settingsConsent").checked=false;
+
+$("reviewConsent").checked=false;
+
+result("");
+
+actionResult("");
+
+renderOverview();
+
+renderDrivers();
+
+renderDriverDetails();
+
+renderPayments();
+
+renderReview();
+
+renderHistory();
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+status("denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+status("offline");
+
+return;
+
+}
+
+status("checking");
+
+try{
+
+const appToken=await getToken(appCheck,false);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+status("verified");
+
+await runRead(()=>loadOverview(false));
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+let checking=false;
+
+setInterval(async()=>{
+
+if(!isOwner()||checking||mutationBusy)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(!validOwner(response,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+setInterval(()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||document.hidden)return;
+
+runRead(()=>loadOverview(true));
+
+},60000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+status("offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("beforeunload",event=>{
+
+if(dirty||mutationBusy||pendingMutation){
+
+event.preventDefault();
+
+event.returnValue="";
+
+}
+
+});
+
+window.addEventListener(
+
+"pagehide",
+
+clearSession
+
+);
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+renderLanguage();
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
