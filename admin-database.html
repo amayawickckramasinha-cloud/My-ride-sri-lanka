@@ -1,0 +1,4009 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Database Management</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3,h4{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+input,select,textarea{
+width:100%;
+padding:13px;
+margin:8px 0;
+background:#292929;
+color:#fff;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+label{
+display:block;
+margin-top:12px;
+line-height:1.7;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border-radius:9px;
+padding:15px;
+overflow-wrap:anywhere;
+}
+
+.stat strong{
+display:block;
+font-size:24px;
+margin-top:10px;
+color:#FFD600;
+}
+
+.record{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+line-height:1.9;
+overflow-wrap:anywhere;
+}
+
+.checkRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+}
+
+.checkRow input{
+width:20px;
+height:20px;
+flex-shrink:0;
+}
+
+.good{
+color:#55E68A;
+}
+
+.warning{
+color:#FFB347;
+}
+
+.bad{
+color:#FF7777;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+.message{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading">
+Database Management
+</h2>
+
+<div class="languages">
+
+<button data-lang="si">සිංහල</button>
+<button data-lang="en">English</button>
+<button data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+class="message"
+role="status"
+aria-live="polite">
+Checking security...
+</p>
+
+<section id="accessPanel"
+class="panel"
+hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="overview"></h3>
+
+<div id="databaseStatus"></div>
+
+<p id="lastUpdate"
+class="note"></p>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="dataRecords"></h3>
+
+<div id="recordCounts"
+class="grid"></div>
+
+<p class="note"
+data-t="countNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="storage"></h3>
+
+<div id="storageInfo"></div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="backupSettings"></h3>
+
+<p id="settingsVersion"
+class="note"></p>
+
+<label class="checkRow">
+
+<input id="autoBackup"
+type="checkbox">
+
+<span data-t="autoBackup"></span>
+
+</label>
+
+<label for="backupFrequency"
+data-t="backupFrequency"></label>
+
+<select id="backupFrequency">
+
+<option value="daily"
+data-t="daily"></option>
+
+<option value="weekly"
+data-t="weekly"></option>
+
+</select>
+
+<label for="backupTime"
+data-t="backupTime"></label>
+
+<input id="backupTime"
+type="time">
+
+<label for="backupRetention"
+data-t="backupRetention"></label>
+
+<select id="backupRetention">
+
+<option value="7">7 Days</option>
+<option value="14">14 Days</option>
+<option value="30">30 Days</option>
+<option value="60">60 Days</option>
+<option value="90">90 Days</option>
+
+</select>
+
+<label for="backupReason"
+data-t="reason"></label>
+
+<textarea id="backupReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="confirmBackupSettings"
+type="checkbox">
+
+<span data-t="confirmAction"></span>
+
+</label>
+
+<button id="saveBackupSettings"
+data-t="saveSettings"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="manualBackup"></h3>
+
+<div id="backupSummary"></div>
+
+<p class="note"
+data-t="backupNotice"></p>
+
+<label for="manualReason"
+data-t="reason"></label>
+
+<textarea id="manualReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="confirmManualBackup"
+type="checkbox">
+
+<span data-t="confirmAction"></span>
+
+</label>
+
+<button id="createBackup"
+data-t="createBackup"></button>
+
+<p id="backupResult"
+class="message"
+role="status"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="backupHistory"></h3>
+
+<label for="backupFilter"
+data-t="currentStatus"></label>
+
+<select id="backupFilter">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="queued"
+data-t="queued"></option>
+
+<option value="running"
+data-t="running"></option>
+
+<option value="completed"
+data-t="completed"></option>
+
+<option value="failed"
+data-t="failed"></option>
+
+<option value="expired"
+data-t="expired"></option>
+
+</select>
+
+<button id="loadBackups"
+data-t="search"></button>
+
+<div id="backupList"></div>
+
+<button id="moreBackups"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section id="restorePanel"
+class="panel"
+hidden>
+
+<h3 data-t="restoreTest"></h3>
+
+<div id="selectedBackupInfo"></div>
+
+<p class="warning"
+data-t="restoreNotice"></p>
+
+<label for="restoreReason"
+data-t="reason"></label>
+
+<textarea id="restoreReason"
+maxlength="500"></textarea>
+
+<label for="restoreConfirmation"
+data-t="restoreConfirmation"></label>
+
+<input id="restoreConfirmation"
+maxlength="20"
+autocomplete="off">
+
+<label class="checkRow">
+
+<input id="confirmRestore"
+type="checkbox">
+
+<span data-t="confirmAction"></span>
+
+</label>
+
+<button id="requestRestore"
+data-t="requestRestore"></button>
+
+<button id="closeRestore"
+class="back"
+data-t="close"></button>
+
+<p id="restoreResult"
+class="message"
+role="status"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="restoreHistory"></h3>
+
+<button id="loadRestores"
+data-t="viewHistory"></button>
+
+<div id="restoreList"></div>
+
+<button id="moreRestores"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="integrityCheck"></h3>
+
+<p class="note"
+data-t="integrityNotice"></p>
+
+<div id="integritySummary"></div>
+
+<button id="runIntegrity"
+data-t="runIntegrity"></button>
+
+<button id="loadIntegrity"
+data-t="refresh"></button>
+
+<div id="integrityList"></div>
+
+<p id="integrityResult"
+class="message"
+role="status"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="retentionSettings"></h3>
+
+<p class="note"
+data-t="retentionNotice"></p>
+
+<p id="retentionVersion"
+class="note"></p>
+
+<label for="gpsRetention"
+data-t="gpsRetention"></label>
+
+<select id="gpsRetention">
+
+<option value="7">7 Days</option>
+<option value="14">14 Days</option>
+<option value="30">30 Days</option>
+<option value="60">60 Days</option>
+<option value="90">90 Days</option>
+
+</select>
+
+<label for="loginRetention"
+data-t="loginRetention"></label>
+
+<select id="loginRetention">
+
+<option value="30">30 Days</option>
+<option value="90">90 Days</option>
+<option value="180">180 Days</option>
+<option value="365">365 Days</option>
+
+</select>
+
+<label for="notificationRetention"
+data-t="notificationRetention"></label>
+
+<select id="notificationRetention">
+
+<option value="30">30 Days</option>
+<option value="60">60 Days</option>
+<option value="90">90 Days</option>
+<option value="180">180 Days</option>
+
+</select>
+
+<label for="retentionReason"
+data-t="reason"></label>
+
+<textarea id="retentionReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="confirmRetention"
+type="checkbox">
+
+<span data-t="confirmAction"></span>
+
+</label>
+
+<button id="saveRetention"
+data-t="saveSettings"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="auditHistory"></h3>
+
+<button id="loadAudit"
+data-t="viewHistory"></button>
+
+<div id="auditList"></div>
+
+<button id="moreAudit"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="relatedPages"></h3>
+
+<a id="securityLink"
+class="action"
+data-t="securityPage"></a>
+
+<a id="settingsLink"
+class="action"
+data-t="settingsPage"></a>
+
+<a id="accountLink"
+class="action"
+data-t="accountPage"></a>
+
+</section>
+
+<p id="result"
+class="message"
+role="status"
+aria-live="polite"></p>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const dictionary={
+
+heading:[
+"දත්ත පද්ධති කළමනාකරණය",
+"Database Management",
+"தரவுத்தள மேலாண்மை"
+],
+
+overview:[
+"01. Database සම්බන්ධතාව",
+"01. Database Connection",
+"01. தரவுத்தள இணைப்பு"
+],
+
+connection:[
+"සම්බන්ධතාව",
+"Connection",
+"இணைப்பு"
+],
+
+connected:[
+"සම්බන්ධ වී ඇත",
+"Connected",
+"இணைக்கப்பட்டுள்ளது"
+],
+
+disconnected:[
+"සම්බන්ධ වී නොමැත",
+"Disconnected",
+"இணைக்கப்படவில்லை"
+],
+
+unknown:[
+"තහවුරු කර නොමැත",
+"Not Verified",
+"உறுதிப்படுத்தப்படவில்லை"
+],
+
+project:[
+"Firebase ව්‍යාපෘතිය",
+"Firebase Project",
+"Firebase திட்டம்"
+],
+
+databaseRegion:[
+"Database කලාපය",
+"Database Region",
+"தரவுத்தள பகுதி"
+],
+
+recordCounts:[
+"වාර්තා ගණන",
+"Record Count",
+"பதிவுகளின் எண்ணிக்கை"
+],
+
+dataRecords:[
+"02. දත්ත වාර්තා",
+"02. Database Records",
+"02. தரவுத்தள பதிவுகள்"
+],
+
+customers:[
+"පාරිභෝගිකයන්",
+"Customers",
+"பயணிகள்"
+],
+
+drivers:[
+"රියදුරන්",
+"Drivers",
+"சாரதிகள்"
+],
+
+bookings:[
+"හයර් වාර්තා",
+"Bookings",
+"பயண முன்பதிவுகள்"
+],
+
+completedTrips:[
+"අවසන් කළ ගමන්",
+"Completed Trips",
+"முடிக்கப்பட்ட பயணங்கள்"
+],
+
+activeTrips:[
+"ක්‍රියාත්මක ගමන්",
+"Active Trips",
+"செயலில் உள்ள பயணங்கள்"
+],
+
+payments:[
+"ගෙවීම් වාර්තා",
+"Payment Records",
+"கட்டண பதிவுகள்"
+],
+
+commissions:[
+"කොමිස් වාර්තා",
+"Commission Records",
+"கமிஷன் பதிவுகள்"
+],
+
+complaints:[
+"පැමිණිලි",
+"Complaints",
+"புகார்கள்"
+],
+
+emergencies:[
+"හදිසි වාර්තා",
+"Emergency Records",
+"அவசர பதிவுகள்"
+],
+
+notifications:[
+"දැනුම්දීම්",
+"Notifications",
+"அறிவிப்புகள்"
+],
+
+securityAlerts:[
+"ආරක්ෂක දැනුම්දීම්",
+"Security Alerts",
+"பாதுகாப்பு எச்சரிக்கைகள்"
+],
+
+auditLogs:[
+"Audit වාර්තා",
+"Audit Logs",
+"தணிக்கை பதிவுகள்"
+],
+
+countNotice:[
+"Server මගින් ලබාදෙන වාර්තා ගණන පමණක් පෙන්වයි. පුද්ගලික දත්ත මෙම සාරාංශයේ පෙන්වන්නේ නැත.",
+"Only server-reported record counts are displayed. Personal data is not shown in this summary.",
+"சேவையகம் வழங்கும் பதிவு எண்ணிக்கை மட்டும் காட்டப்படும்."
+],
+
+storage:[
+"03. Database Storage",
+"03. Database Storage",
+"03. தரவுத்தள சேமிப்பு"
+],
+
+databaseSize:[
+"Database ප්‍රමාණය",
+"Database Size",
+"தரவுத்தள அளவு"
+],
+
+backupSize:[
+"Backup ප්‍රමාණය",
+"Backup Storage Size",
+"காப்புப்பிரதி அளவு"
+],
+
+reads:[
+"අද Database Reads",
+"Database Reads Today",
+"இன்றைய தரவு வாசிப்புகள்"
+],
+
+writes:[
+"අද Database Writes",
+"Database Writes Today",
+"இன்றைய தரவு எழுதுதல்கள்"
+],
+
+deletes:[
+"අද Database Deletes",
+"Database Deletes Today",
+"இன்றைய தரவு நீக்கங்கள்"
+],
+
+backupSettings:[
+"04. ස්වයංක්‍රීය Backup සැකසුම්",
+"04. Automatic Backup Settings",
+"04. தானியங்கி காப்புப்பிரதி அமைப்புகள்"
+],
+
+autoBackup:[
+"ස්වයංක්‍රීය Backup සක්‍රීය කරන්න",
+"Enable Automatic Backup",
+"தானியங்கி காப்புப்பிரதியை இயக்கவும்"
+],
+
+backupFrequency:[
+"Backup කාල පරතරය",
+"Backup Frequency",
+"காப்புப்பிரதி இடைவெளி"
+],
+
+daily:[
+"දිනපතා",
+"Daily",
+"தினசரி"
+],
+
+weekly:[
+"සෑම සඳුදා දිනකම",
+"Weekly - Monday",
+"வாராந்திரம் - திங்கள்"
+],
+
+backupTime:[
+"Backup වේලාව - ශ්‍රී ලංකා වේලාව",
+"Backup Time - Sri Lanka Time",
+"காப்புப்பிரதி நேரம் - இலங்கை நேரம்"
+],
+
+backupRetention:[
+"Backup තබාගන්නා කාලය",
+"Backup Retention Period",
+"காப்புப்பிரதி வைத்திருக்கும் காலம்"
+],
+
+manualBackup:[
+"05. Manual Backup",
+"05. Manual Backup",
+"05. கைமுறை காப்புப்பிரதி"
+],
+
+createBackup:[
+"නව Backup එකක් ඉල්ලන්න",
+"Request New Backup",
+"புதிய காப்புப்பிரதியை கோரவும்"
+],
+
+lastBackup:[
+"අවසන් සාර්ථක Backup",
+"Last Successful Backup",
+"கடைசி வெற்றிகரமான காப்புப்பிரதி"
+],
+
+nextBackup:[
+"ඊළඟ සැලසුම් කළ Backup",
+"Next Scheduled Backup",
+"அடுத்த திட்டமிட்ட காப்புப்பிரதி"
+],
+
+backupNotice:[
+"Backup ඉල්ලීම භාරගැනීම සහ Backup සාර්ථකව අවසන් වීම වෙනස් තත්ත්ව දෙකකි.",
+"An accepted backup request is not a completed backup.",
+"காப்புப்பிரதி கோரிக்கை ஏற்கப்படுவது நிறைவடைந்ததாக அர்த்தமல்ல."
+],
+
+backupHistory:[
+"06. Backup ඉතිහාසය",
+"06. Backup History",
+"06. காப்புப்பிரதி வரலாறு"
+],
+
+backupId:[
+"Backup ID",
+"Backup ID",
+"காப்புப்பிரதி ID"
+],
+
+backupType:[
+"Backup වර්ගය",
+"Backup Type",
+"காப்புப்பிரதி வகை"
+],
+
+automatic:[
+"ස්වයංක්‍රීය",
+"Automatic",
+"தானியங்கி"
+],
+
+manual:[
+"අතින් ඉල්ලූ",
+"Manual",
+"கைமுறை"
+],
+
+currentStatus:[
+"වත්මන් තත්ත්වය",
+"Current Status",
+"தற்போதைய நிலை"
+],
+
+all:["සියල්ල","All","அனைத்தும்"],
+
+queued:[
+"පෝලිමේ ඇත",
+"Queued",
+"வரிசையில் உள்ளது"
+],
+
+running:[
+"ක්‍රියාත්මකයි",
+"Running",
+"செயல்படுகிறது"
+],
+
+completed:[
+"සාර්ථකව අවසන්",
+"Completed",
+"நிறைவடைந்தது"
+],
+
+failed:[
+"අසාර්ථකයි",
+"Failed",
+"தோல்வி"
+],
+
+expired:[
+"කල් ඉකුත් වී ඇත",
+"Expired",
+"காலாவதியானது"
+],
+
+created:[
+"ආරම්භ කළ වේලාව",
+"Created At",
+"உருவாக்கிய நேரம்"
+],
+
+finished:[
+"අවසන් කළ වේලාව",
+"Completed At",
+"முடிக்கப்பட்ட நேரம்"
+],
+
+expires:[
+"කල් ඉකුත් වන දිනය",
+"Expires At",
+"காலாவதி நேரம்"
+],
+
+size:[
+"ප්‍රමාණය",
+"Size",
+"அளவு"
+],
+
+restoreTest:[
+"07. Backup Restore පරීක්ෂාව",
+"07. Backup Restore Test",
+"07. காப்புப்பிரதி மீட்பு சோதனை"
+],
+
+restoreNotice:[
+"මෙය වෙන් කළ පරීක්ෂණ Database එකකට පමණක් Restore කළ යුතුය. ක්‍රියාත්මක Database එකේ දත්ත වෙනස් නොකළ යුතුය.",
+"Restore tests must use an isolated test database. Production data must not be overwritten.",
+"மீட்பு சோதனை தனி சோதனை தரவுத்தளத்தில் மட்டுமே நடைபெற வேண்டும்."
+],
+
+restoreConfirmation:[
+"තහවුරු කිරීමට TEST RESTORE ලෙස ටයිප් කරන්න.",
+"Type TEST RESTORE to confirm.",
+"உறுதிப்படுத்த TEST RESTORE என உள்ளிடவும்."
+],
+
+requestRestore:[
+"Restore පරීක්ෂාව ඉල්ලන්න",
+"Request Restore Test",
+"மீட்பு சோதனையை கோரவும்"
+],
+
+restoreHistory:[
+"08. Restore පරීක්ෂණ ඉතිහාසය",
+"08. Restore Test History",
+"08. மீட்பு சோதனை வரலாறு"
+],
+
+testId:[
+"පරීක්ෂණ ID",
+"Test ID",
+"சோதனை ID"
+],
+
+integrityCheck:[
+"09. දත්ත නිවැරදිභාවය පරීක්ෂා කිරීම",
+"09. Data Integrity Check",
+"09. தரவு ஒருமைப்பாடு சோதனை"
+],
+
+integrityNotice:[
+"මෙම පරීක්ෂාව දත්ත කියවීම සඳහා පමණි. වාර්තා ස්වයංක්‍රීයව වෙනස් කිරීම හෝ මකා දැමීම සිදු නොකරයි.",
+"This is a read-only check. Records are not automatically modified or deleted.",
+"இது வாசிப்பு மட்டும் செய்யும் சோதனை. பதிவுகள் மாற்றப்படவோ நீக்கப்படவோ மாட்டாது."
+],
+
+runIntegrity:[
+"දත්ත පරීක්ෂණයක් ඉල්ලන්න",
+"Request Integrity Check",
+"தரவு சோதனையை கோரவும்"
+],
+
+duplicateDrivers:[
+"අනුපිටපත් රියදුරු වාර්තා",
+"Duplicate Driver Records",
+"நகல் சாரதி பதிவுகள்"
+],
+
+orphanBookings:[
+"සම්බන්ධතා නොමැති හයර් වාර්තා",
+"Orphan Booking Records",
+"தொடர்பற்ற பயண பதிவுகள்"
+],
+
+paymentMismatch:[
+"ගෙවීම් දත්ත නොගැළපීම්",
+"Payment Mismatches",
+"கட்டண முரண்பாடுகள்"
+],
+
+commissionMismatch:[
+"කොමිස් දත්ත නොගැළපීම්",
+"Commission Mismatches",
+"கமிஷன் முரண்பாடுகள்"
+],
+
+invalidTripStates:[
+"වැරදි ගමන් තත්ත්ව",
+"Invalid Trip States",
+"தவறான பயண நிலைகள்"
+],
+
+missingReferences:[
+"අස්ථානගත දත්ත සම්බන්ධතා",
+"Missing References",
+"காணாமல் போன தொடர்புகள்"
+],
+
+issues:[
+"හඳුනාගත් ගැටලු",
+"Detected Issues",
+"கண்டறியப்பட்ட சிக்கல்கள்"
+],
+
+retentionSettings:[
+"10. Data Retention සැකසුම්",
+"10. Data Retention Settings",
+"10. தரவு வைத்திருப்பு அமைப்புகள்"
+],
+
+retentionNotice:[
+"මෙම සැකසුම් GPS, Login සහ Notification දත්ත සඳහා පමණි. නීතිමය වාර්තා, මුදල් ගනුදෙනු සහ විමර්ශනයට අදාළ දත්ත ස්වයංක්‍රීයව මකා නොදැමිය යුතුය.",
+"These settings cover GPS, login and notification records only. Financial, legally required and investigation-held records must be preserved.",
+"GPS, உள்நுழைவு மற்றும் அறிவிப்பு பதிவுகளுக்கு மட்டும் இவை பொருந்தும். சட்ட மற்றும் நிதி பதிவுகள் பாதுகாக்கப்பட வேண்டும்."
+],
+
+gpsRetention:[
+"ගමන අවසන් වූ පසු GPS දත්ත තබාගන්නා කාලය",
+"GPS Retention After Trip Completion",
+"பயணம் முடிந்த பின் GPS தரவு வைத்திருப்பு"
+],
+
+loginRetention:[
+"Login වාර්තා තබාගන්නා කාලය",
+"Login History Retention",
+"உள்நுழைவு வரலாறு வைத்திருப்பு"
+],
+
+notificationRetention:[
+"දැනුම්දීම් තබාගන්නා කාලය",
+"Notification Retention",
+"அறிவிப்பு வைத்திருப்பு"
+],
+
+auditHistory:[
+"11. Database Audit History",
+"11. Database Audit History",
+"11. தரவுத்தள தணிக்கை வரலாறு"
+],
+
+action:[
+"ක්‍රියාමාර්ගය",
+"Action",
+"நடவடிக்கை"
+],
+
+reason:[
+"හේතුව",
+"Reason",
+"காரணம்"
+],
+
+confirmAction:[
+"මෙම ක්‍රියාමාර්ගය තහවුරු කරමි.",
+"I confirm this action.",
+"இந்த நடவடிக்கையை உறுதிப்படுத்துகிறேன்."
+],
+
+saveSettings:[
+"සැකසුම් සුරකින්න",
+"Save Settings",
+"அமைப்புகளை சேமிக்கவும்"
+],
+
+version:["අනුවාදය","Version","பதிப்பு"],
+
+updated:[
+"අවසන් යාවත්කාලීනය",
+"Last Updated",
+"கடைசி புதுப்பிப்பு"
+],
+
+viewHistory:[
+"ඉතිහාසය බලන්න",
+"View History",
+"வரலாற்றை பார்க்கவும்"
+],
+
+search:["සොයන්න","Search","தேடவும்"],
+
+more:[
+"තවත් වාර්තා",
+"Load More",
+"மேலும் பதிவுகள்"
+],
+
+close:["වසන්න","Close","மூடவும்"],
+
+refresh:[
+"යාවත්කාලීන කරන්න",
+"Refresh",
+"புதுப்பிக்கவும்"
+],
+
+relatedPages:[
+"අදාළ කළමනාකරණ පිටු",
+"Related Management Pages",
+"தொடர்புடைய மேலாண்மை பக்கங்கள்"
+],
+
+securityPage:[
+"ආරක්ෂක කළමනාකරණය",
+"Security Management",
+"பாதுகாப்பு மேலாண்மை"
+],
+
+settingsPage:[
+"පද්ධති සැකසුම්",
+"System Settings",
+"அமைப்பு அமைப்புகள்"
+],
+
+accountPage:[
+"Owner Admin ගිණුම",
+"Owner Admin Account",
+"உரிமையாளர் நிர்வாக கணக்கு"
+],
+
+back:[
+"Admin Dashboard වෙත",
+"Back to Admin Dashboard",
+"நிர்வாக முதன்மைப் பக்கத்திற்கு"
+],
+
+login:[
+"Admin Login",
+"Admin Login",
+"நிர்வாக உள்நுழைவு"
+],
+
+checking:[
+"ආරක්ෂාව පරීක්ෂා කරමින්...",
+"Checking security...",
+"பாதுகாப்பு சரிபார்க்கப்படுகிறது..."
+],
+
+denied:[
+"Owner Admin අවසරය තහවුරු කර නොමැත.",
+"Owner Admin authorization is not verified.",
+"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை."
+],
+
+verified:[
+"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+"Owner authorization verified.",
+"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது."
+],
+
+offline:[
+"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+"No internet connection.",
+"இணைய இணைப்பு இல்லை."
+],
+
+loading:[
+"Server දත්ත ලබාගනිමින්...",
+"Loading server data...",
+"சேவையக தரவு பெறப்படுகிறது..."
+],
+
+error:[
+"Server දත්ත තහවුරු කළ නොහැක.",
+"Unable to verify server data.",
+"சேவையக தரவை உறுதிப்படுத்த முடியவில்லை."
+],
+
+invalid:[
+"ඇතුළත් කළ තොරතුරු පරීක්ෂා කරන්න.",
+"Check the entered information.",
+"உள்ளிட்ட தகவல்களை சரிபார்க்கவும்."
+],
+
+saving:[
+"Server වෙත යොමු කරමින්...",
+"Submitting to server...",
+"சேவையகத்திற்கு அனுப்பப்படுகிறது..."
+],
+
+saved:[
+"සැකසුම් Server මගින් තහවුරු කර ඇත.",
+"Settings confirmed by server.",
+"அமைப்புகள் சேவையகத்தால் உறுதிப்படுத்தப்பட்டது."
+],
+
+accepted:[
+"ඉල්ලීම Server භාරගෙන ඇත. අවසන් ප්‍රතිඵලය ඉතිහාසයෙන් පරීක්ෂා කරන්න.",
+"Request accepted by server. Check history for the final result.",
+"கோரிக்கை ஏற்கப்பட்டது. இறுதி முடிவை வரலாற்றில் பார்க்கவும்."
+],
+
+saveError:[
+"ක්‍රියාමාර්ගය තහවුරු කළ නොහැක. නැවත උත්සාහ කිරීමට පෙර Server වාර්තා පරීක්ෂා කරන්න.",
+"Action not confirmed. Check server records before retrying.",
+"நடவடிக்கை உறுதிப்படுத்தப்படவில்லை. மீண்டும் முயற்சிக்கும் முன் பதிவுகளை சரிபார்க்கவும்."
+],
+
+noRecords:[
+"වාර්තා නොමැත.",
+"No records found.",
+"பதிவுகள் இல்லை."
+],
+
+discard:[
+"සුරැකී නැති සටහන් ඉවත් කරන්නද?",
+"Discard unsaved notes?",
+"சேமிக்காத குறிப்புகளை நீக்கவா?"
+]
+
+};
+
+const countKeys=[
+
+"customers",
+"drivers",
+"bookings",
+"completedTrips",
+"activeTrips",
+"payments",
+"commissions",
+"complaints",
+"emergencies",
+"notifications",
+"securityAlerts",
+"auditLogs"
+
+];
+
+const integrityKeys=[
+
+"duplicateDrivers",
+"orphanBookings",
+"paymentMismatch",
+"commissionMismatch",
+"invalidTripStates",
+"missingReferences"
+
+];
+
+const jobStatuses=[
+
+"queued",
+"running",
+"completed",
+"failed"
+
+];
+
+const backupStatuses=[
+
+...jobStatuses,
+"expired"
+
+];
+
+let lang="si";
+
+try{
+
+const selected=
+
+new URLSearchParams(location.search).get("lang")
+
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected)){
+
+lang=selected;
+
+}
+
+}catch(e){}
+
+const t=key=>
+
+dictionary[key]?.[languages.indexOf(lang)]
+
+||key;
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+
+let busy=false;
+let mutationBusy=false;
+let checking=false;
+
+let overview=null;
+let backupSettings=null;
+let retentionSettings=null;
+
+let backupDirty=false;
+let retentionDirty=false;
+
+let backupRecords=[];
+let restoreRecords=[];
+let auditRecords=[];
+
+let backupCursor=null;
+let restoreCursor=null;
+let auditCursor=null;
+
+let backupQuery=null;
+let selectedBackup=null;
+
+let integrityReport=null;
+
+let pendingMutation=null;
+
+const messages={
+
+status:"checking",
+result:"",
+backupResult:"",
+restoreResult:"",
+integrityResult:""
+
+};
+
+function message(id,key){
+
+messages[id]=key;
+
+$(id).textContent=key?t(key):"";
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,max){
+
+return typeof value==="string"
+
+&&value.length<=max;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+
+&&value>=0;
+
+}
+
+function nullableCount(value){
+
+return value===null||validCount(value);
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+
+&&value>0
+
+&&value<=8640000000000000;
+
+}
+
+function nullableTime(value){
+
+return value===null||validTime(value);
+
+}
+
+function validCursor(value){
+
+return value===null
+
+||validText(value,4000);
+
+}
+
+function validClock(value){
+
+return typeof value==="string"
+
+&&/^([01]\d|2[0-3]):[0-5]\d$/.test(value);
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(value));
+
+}
+
+function formatBytes(value){
+
+if(!validCount(value))return "—";
+
+if(value===0)return "0 B";
+
+const units=["B","KB","MB","GB","TB"];
+
+const index=Math.min(
+
+Math.floor(Math.log(value)/Math.log(1024)),
+
+units.length-1
+
+);
+
+return (
+
+value/Math.pow(1024,index)
+
+).toFixed(index===0?0:2)
+
++" "+units[index];
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+encodeURIComponent(lang);
+
+}
+
+function isOwner(){
+
+return authorized
+
+&&ownerUid!==null
+
+&&auth?.currentUser?.uid===ownerUid
+
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+
+&&data.uid===uid
+
+&&data.role==="owner"
+
+&&data.ownerUidVerified===true
+
+&&data.sessionValid===true;
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=
+
+t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function makeRecord(){
+
+const box=document.createElement("div");
+
+box.className="record";
+
+return box;
+
+}
+
+function makeButton(label,callback){
+
+const button=document.createElement("button");
+
+button.textContent=t(label);
+
+button.dataset.dynamic="true";
+
+button.onclick=callback;
+
+button.disabled=
+
+busy||mutationBusy||!isOwner()
+
+||!!pendingMutation;
+
+return button;
+
+}
+
+function mergeRecords(previous,next,key){
+
+const map=new Map(
+
+previous.map(record=>[record[key],record])
+
+);
+
+next.forEach(record=>{
+
+map.set(record[key],record);
+
+});
+
+return [...map.values()];
+
+}
+
+async function serverCall(name,data={}){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+
+name,
+
+{timeout:30000}
+
+)(data);
+
+if(currentGeneration!==generation
+
+||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+if(response.data?.success!==true
+
+||response.data.ownerUid!==ownerUid){
+
+throw new Error("Invalid response");
+
+}
+
+return response.data;
+
+}
+
+async function freshOwnerAuthentication(){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const user=auth.currentUser;
+
+const uid=user.uid;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=await reauthenticateWithPopup(
+
+user,
+
+provider
+
+);
+
+if(credential.user.uid!==uid
+
+||auth.currentUser?.uid!==uid
+
+||!isOwner()){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Invalid owner");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(!validOwner(response.data,uid)
+
+||!isOwner()){
+
+throw new Error("Owner verification failed");
+
+}
+
+}
+
+function validOverview(data){
+
+return data
+
+&&data.projectId==="my-ride-sri-lanka"
+
+&&["connected","disconnected","unknown"]
+
+.includes(data.connection)
+
+&&validText(data.region,100)
+
+&&validTime(data.serverTimeMs)
+
+&&data.counts
+
+&&countKeys.every(key=>
+
+nullableCount(data.counts[key]))
+
+&&data.storage
+
+&&nullableCount(data.storage.databaseBytes)
+
+&&nullableCount(data.storage.backupBytes)
+
+&&nullableCount(data.storage.readsToday)
+
+&&nullableCount(data.storage.writesToday)
+
+&&nullableCount(data.storage.deletesToday)
+
+&&nullableTime(data.lastBackupMs)
+
+&&nullableTime(data.nextBackupMs);
+
+}
+
+function renderOverview(){
+
+const connection=$("databaseStatus");
+
+connection.replaceChildren();
+
+addLine(
+
+connection,
+
+"connection",
+
+t(overview?.connection||"unknown")
+
+);
+
+addLine(
+
+connection,
+
+"project",
+
+overview?.projectId||"—"
+
+);
+
+addLine(
+
+connection,
+
+"databaseRegion",
+
+overview?.region||"—"
+
+);
+
+$("lastUpdate").textContent=
+
+overview
+
+?t("updated")+": "
+
++formatDate(overview.serverTimeMs)
+
+:"";
+
+const counts=$("recordCounts");
+
+counts.replaceChildren();
+
+countKeys.forEach(key=>{
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const label=document.createElement("span");
+
+label.textContent=t(key);
+
+const value=document.createElement("strong");
+
+value.textContent=
+
+String(overview?.counts?.[key]??"—");
+
+box.append(label,value);
+
+counts.appendChild(box);
+
+});
+
+const storage=$("storageInfo");
+
+storage.replaceChildren();
+
+addLine(
+
+storage,
+
+"databaseSize",
+
+formatBytes(overview?.storage?.databaseBytes)
+
+);
+
+addLine(
+
+storage,
+
+"backupSize",
+
+formatBytes(overview?.storage?.backupBytes)
+
+);
+
+addLine(
+
+storage,
+
+"reads",
+
+overview?.storage?.readsToday
+
+);
+
+addLine(
+
+storage,
+
+"writes",
+
+overview?.storage?.writesToday
+
+);
+
+addLine(
+
+storage,
+
+"deletes",
+
+overview?.storage?.deletesToday
+
+);
+
+const summary=$("backupSummary");
+
+summary.replaceChildren();
+
+addLine(
+
+summary,
+
+"lastBackup",
+
+formatDate(overview?.lastBackupMs)
+
+);
+
+addLine(
+
+summary,
+
+"nextBackup",
+
+formatDate(overview?.nextBackupMs)
+
+);
+
+}
+
+async function loadOverview(){
+
+try{
+
+const response=await serverCall(
+
+"getAdminDatabaseOverview"
+
+);
+
+if(!validOverview(response.overview)){
+
+throw new Error("Invalid overview");
+
+}
+
+overview=response.overview;
+
+renderOverview();
+
+}catch(e){
+
+overview=null;
+
+renderOverview();
+
+throw e;
+
+}
+
+}
+
+function validBackupSettings(data){
+
+return data
+
+&&validCount(data.version)
+
+&&typeof data.autoEnabled==="boolean"
+
+&&["daily","weekly"].includes(data.frequency)
+
+&&validClock(data.time)
+
+&&[7,14,30,60,90].includes(data.retentionDays)
+
+&&data.timeZone==="Asia/Colombo";
+
+}
+
+function validRetentionSettings(data){
+
+return data
+
+&&validCount(data.version)
+
+&&[7,14,30,60,90].includes(data.gpsDays)
+
+&&[30,90,180,365].includes(data.loginDays)
+
+&&[30,60,90,180].includes(data.notificationDays);
+
+}
+
+function renderSettings(){
+
+$("settingsVersion").textContent=
+
+backupSettings
+
+?t("version")+": "+backupSettings.version
+
+:"—";
+
+$("retentionVersion").textContent=
+
+retentionSettings
+
+?t("version")+": "+retentionSettings.version
+
+:"—";
+
+if(!backupDirty){
+
+$("autoBackup").checked=
+
+backupSettings?.autoEnabled===true;
+
+$("backupFrequency").value=
+
+backupSettings?.frequency||"";
+
+$("backupTime").value=
+
+backupSettings?.time||"";
+
+$("backupRetention").value=
+
+backupSettings
+
+?String(backupSettings.retentionDays)
+
+:"";
+
+}
+
+if(!retentionDirty){
+
+$("gpsRetention").value=
+
+retentionSettings
+
+?String(retentionSettings.gpsDays)
+
+:"";
+
+$("loginRetention").value=
+
+retentionSettings
+
+?String(retentionSettings.loginDays)
+
+:"";
+
+$("notificationRetention").value=
+
+retentionSettings
+
+?String(retentionSettings.notificationDays)
+
+:"";
+
+}
+
+}
+
+async function loadSettings(){
+
+const response=await serverCall(
+
+"getAdminDatabaseSettings"
+
+);
+
+if(!validBackupSettings(response.backupSettings)
+
+||!validRetentionSettings(response.retentionSettings)){
+
+throw new Error("Invalid settings");
+
+}
+
+if(!backupDirty){
+
+backupSettings=response.backupSettings;
+
+}
+
+if(!retentionDirty){
+
+retentionSettings=response.retentionSettings;
+
+}
+
+renderSettings();
+
+}
+
+async function runRead(callback){
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+message("result","loading");
+
+try{
+
+await callback();
+
+if(currentGeneration===generation){
+
+message("result","");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message("result","error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+async function runMutation(
+
+name,
+
+payload,
+
+validate,
+
+onSuccess,
+
+resultId="result"
+
+){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const fingerprint=JSON.stringify({
+
+name,payload
+
+});
+
+if(pendingMutation
+
+&&pendingMutation.fingerprint!==fingerprint){
+
+message(resultId,"saveError");
+
+return;
+
+}
+
+if(!pendingMutation){
+
+pendingMutation={
+
+fingerprint,
+
+name,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const currentGeneration=generation;
+
+mutationBusy=true;
+
+updateControls();
+
+message(resultId,"saving");
+
+try{
+
+await freshOwnerAuthentication();
+
+if(currentGeneration!==generation
+
+||!isOwner())return;
+
+const response=await serverCall(
+
+name,
+
+{
+
+...payload,
+
+requestId:pendingMutation.requestId
+
+}
+
+);
+
+if(!validate(response)){
+
+throw new Error("Action not confirmed");
+
+}
+
+pendingMutation=null;
+
+await onSuccess(response);
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message(resultId,"saveError");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+const backupInputs=[
+
+"autoBackup",
+"backupFrequency",
+"backupTime",
+"backupRetention",
+"backupReason"
+
+];
+
+backupInputs.forEach(id=>{
+
+$(id).addEventListener("input",()=>{
+
+backupDirty=true;
+
+$("confirmBackupSettings").checked=false;
+
+updateControls();
+
+});
+
+});
+
+function readBackupSettings(){
+
+if(!backupSettings
+
+||!backupDirty
+
+||!$("confirmBackupSettings").checked)return null;
+
+const settings={
+
+autoEnabled:$("autoBackup").checked,
+
+frequency:$("backupFrequency").value,
+
+time:$("backupTime").value,
+
+retentionDays:Number($("backupRetention").value),
+
+timeZone:"Asia/Colombo"
+
+};
+
+const reason=$("backupReason").value.trim();
+
+if(!validBackupSettings({
+
+...settings,
+
+version:backupSettings.version
+
+})
+
+||reason.length<10
+
+||reason.length>500)return null;
+
+return {
+
+settings,
+
+expectedVersion:backupSettings.version,
+
+reason
+
+};
+
+}
+
+$("saveBackupSettings").onclick=()=>{
+
+const payload=readBackupSettings();
+
+if(!payload){
+
+message("result","invalid");
+
+return;
+
+}
+
+runMutation(
+
+"saveAdminDatabaseBackupSettings",
+
+payload,
+
+response=>
+
+validBackupSettings(response.settings)
+
+&&response.settings.version>payload.expectedVersion
+
+&&Object.keys(payload.settings).every(key=>
+
+response.settings[key]===payload.settings[key]),
+
+async response=>{
+
+backupSettings=response.settings;
+
+backupDirty=false;
+
+$("backupReason").value="";
+
+$("confirmBackupSettings").checked=false;
+
+renderSettings();
+
+message("result","saved");
+
+}
+
+);
+
+};
+
+function readManualBackup(){
+
+const reason=$("manualReason").value.trim();
+
+if(reason.length<10
+
+||reason.length>500
+
+||!$("confirmManualBackup").checked){
+
+return null;
+
+}
+
+return {reason};
+
+}
+
+$("createBackup").onclick=()=>{
+
+const payload=readManualBackup();
+
+if(!payload){
+
+message("backupResult","invalid");
+
+return;
+
+}
+
+runMutation(
+
+"requestAdminDatabaseBackup",
+
+payload,
+
+response=>
+
+response.accepted===true
+
+&&validId(response.backupId),
+
+async()=>{
+
+$("manualReason").value="";
+
+$("confirmManualBackup").checked=false;
+
+message("backupResult","accepted");
+
+try{
+
+await loadOverview();
+
+if(backupQuery){
+
+await loadBackups(true);
+
+}
+
+}catch(e){
+
+message("result","error");
+
+}
+
+},
+
+"backupResult"
+
+);
+
+};
+
+function validBackup(record){
+
+return record
+
+&&validId(record.backupId)
+
+&&["automatic","manual"].includes(record.type)
+
+&&backupStatuses.includes(record.status)
+
+&&validTime(record.createdAtMs)
+
+&&nullableTime(record.completedAtMs)
+
+&&nullableTime(record.expiresAtMs)
+
+&&nullableCount(record.sizeBytes)
+
+&&typeof record.canTestRestore==="boolean"
+
+&&(record.status!=="completed"
+
+||validTime(record.completedAtMs));
+
+}
+
+function backupLines(container,record){
+
+addLine(container,"backupId",record.backupId);
+
+addLine(container,"backupType",t(record.type));
+
+addLine(container,"currentStatus",t(record.status));
+
+addLine(container,"created",formatDate(record.createdAtMs));
+
+addLine(container,"finished",formatDate(record.completedAtMs));
+
+addLine(container,"expires",formatDate(record.expiresAtMs));
+
+addLine(container,"size",formatBytes(record.sizeBytes));
+
+}
+
+function renderBackups(){
+
+const container=$("backupList");
+
+container.replaceChildren();
+
+$("moreBackups").hidden=backupCursor===null;
+
+if(!backupQuery||!isOwner())return;
+
+if(!backupRecords.length){
+
+container.textContent=t("noRecords");
+
+return;
+
+}
+
+backupRecords.forEach(record=>{
+
+const box=makeRecord();
+
+backupLines(box,record);
+
+if(record.status==="completed"
+
+&&record.canTestRestore){
+
+box.appendChild(
+
+makeButton(
+
+"restoreTest",
+
+()=>selectBackup(record)
+
+)
+
+);
+
+}
+
+container.appendChild(box);
+
+});
+
+}
+
+async function loadBackups(reset=true){
+
+if(!backupQuery)return;
+
+const response=await serverCall(
+
+"getAdminDatabaseBackups",
+
+{
+
+status:backupQuery,
+
+limit:30,
+
+cursor:reset?null:backupCursor
+
+}
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validBackup)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid backup records");
+
+}
+
+if(backupQuery!=="all"
+
+&&response.records.some(record=>
+
+record.status!==backupQuery)){
+
+throw new Error("Invalid backup filter");
+
+}
+
+backupRecords=mergeRecords(
+
+reset?[]:backupRecords,
+
+response.records,
+
+"backupId"
+
+);
+
+backupCursor=response.nextCursor;
+
+renderBackups();
+
+}
+
+$("loadBackups").onclick=()=>{
+
+const status=$("backupFilter").value;
+
+if(!["all",...backupStatuses].includes(status)){
+
+message("result","invalid");
+
+return;
+
+}
+
+runRead(async()=>{
+
+backupQuery=status;
+
+backupRecords=[];
+
+backupCursor=null;
+
+renderBackups();
+
+await loadBackups(true);
+
+});
+
+};
+
+$("moreBackups").onclick=()=>{
+
+if(backupCursor!==null){
+
+runRead(()=>loadBackups(false));
+
+}
+
+};
+
+function selectBackup(record){
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation
+
+||record.status!=="completed"
+
+||!record.canTestRestore)return;
+
+if($("restoreReason").value.trim()
+
+&&!window.confirm(t("discard")))return;
+
+selectedBackup=record;
+
+$("restoreReason").value="";
+
+$("restoreConfirmation").value="";
+
+$("confirmRestore").checked=false;
+
+message("restoreResult","");
+
+renderSelectedBackup();
+
+updateControls();
+
+$("restorePanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+function renderSelectedBackup(){
+
+const container=$("selectedBackupInfo");
+
+container.replaceChildren();
+
+$("restorePanel").hidden=
+
+!selectedBackup||!isOwner();
+
+if(selectedBackup&&isOwner()){
+
+backupLines(container,selectedBackup);
+
+}
+
+}
+
+$("closeRestore").onclick=()=>{
+
+if(busy||mutationBusy||pendingMutation)return;
+
+if($("restoreReason").value.trim()
+
+&&!window.confirm(t("discard")))return;
+
+selectedBackup=null;
+
+$("restoreReason").value="";
+
+$("restoreConfirmation").value="";
+
+$("confirmRestore").checked=false;
+
+renderSelectedBackup();
+
+updateControls();
+
+};
+
+function readRestore(){
+
+if(!selectedBackup
+
+||selectedBackup.status!=="completed"
+
+||!selectedBackup.canTestRestore
+
+||!$("confirmRestore").checked)return null;
+
+const reason=$("restoreReason").value.trim();
+
+const confirmation=
+
+$("restoreConfirmation").value.trim();
+
+if(reason.length<10
+
+||reason.length>500
+
+||confirmation!=="TEST RESTORE"){
+
+return null;
+
+}
+
+return {
+
+backupId:selectedBackup.backupId,
+
+target:"isolated_test_database",
+
+reason
+
+};
+
+}
+
+$("requestRestore").onclick=()=>{
+
+const payload=readRestore();
+
+if(!payload){
+
+message("restoreResult","invalid");
+
+return;
+
+}
+
+runMutation(
+
+"requestAdminDatabaseRestoreTest",
+
+payload,
+
+response=>
+
+response.accepted===true
+
+&&validId(response.testId)
+
+&&response.target==="isolated_test_database",
+
+async()=>{
+
+$("restoreReason").value="";
+
+$("restoreConfirmation").value="";
+
+$("confirmRestore").checked=false;
+
+message("restoreResult","accepted");
+
+try{
+
+await loadRestores(true);
+
+}catch(e){
+
+message("result","error");
+
+}
+
+},
+
+"restoreResult"
+
+);
+
+};
+
+function validRestore(record){
+
+return record
+
+&&validId(record.testId)
+
+&&validId(record.backupId)
+
+&&jobStatuses.includes(record.status)
+
+&&record.target==="isolated_test_database"
+
+&&validTime(record.createdAtMs)
+
+&&nullableTime(record.completedAtMs);
+
+}
+
+function renderRestores(){
+
+const container=$("restoreList");
+
+container.replaceChildren();
+
+$("moreRestores").hidden=restoreCursor===null;
+
+restoreRecords.forEach(record=>{
+
+const box=makeRecord();
+
+addLine(box,"testId",record.testId);
+
+addLine(box,"backupId",record.backupId);
+
+addLine(box,"currentStatus",t(record.status));
+
+addLine(box,"created",formatDate(record.createdAtMs));
+
+addLine(box,"finished",formatDate(record.completedAtMs));
+
+container.appendChild(box);
+
+});
+
+}
+
+async function loadRestores(reset=true){
+
+const response=await serverCall(
+
+"getAdminDatabaseRestoreHistory",
+
+{
+
+limit:30,
+
+cursor:reset?null:restoreCursor
+
+}
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validRestore)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid restore history");
+
+}
+
+restoreRecords=mergeRecords(
+
+reset?[]:restoreRecords,
+
+response.records,
+
+"testId"
+
+);
+
+restoreCursor=response.nextCursor;
+
+renderRestores();
+
+if(!restoreRecords.length){
+
+$("restoreList").textContent=t("noRecords");
+
+}
+
+}
+
+$("loadRestores").onclick=()=>{
+
+runRead(()=>loadRestores(true));
+
+};
+
+$("moreRestores").onclick=()=>{
+
+if(restoreCursor!==null){
+
+runRead(()=>loadRestores(false));
+
+}
+
+};
+
+function validIntegrity(report){
+
+return report
+
+&&validId(report.testId)
+
+&&jobStatuses.includes(report.status)
+
+&&validTime(report.createdAtMs)
+
+&&nullableTime(report.completedAtMs)
+
+&&(
+
+report.status==="completed"
+
+?report.counts
+
+&&integrityKeys.every(key=>
+
+validCount(report.counts[key]))
+
+:report.counts===null
+
+);
+
+}
+
+function renderIntegrity(){
+
+const summary=$("integritySummary");
+
+const container=$("integrityList");
+
+summary.replaceChildren();
+
+container.replaceChildren();
+
+if(!integrityReport){
+
+summary.textContent=t("unknown");
+
+return;
+
+}
+
+addLine(summary,"testId",integrityReport.testId);
+
+addLine(
+
+summary,
+
+"currentStatus",
+
+t(integrityReport.status)
+
+);
+
+addLine(
+
+summary,
+
+"created",
+
+formatDate(integrityReport.createdAtMs)
+
+);
+
+addLine(
+
+summary,
+
+"finished",
+
+formatDate(integrityReport.completedAtMs)
+
+);
+
+if(integrityReport.status!=="completed")return;
+
+integrityKeys.forEach(key=>{
+
+const box=makeRecord();
+
+addLine(
+
+box,
+
+key,
+
+integrityReport.counts[key]
+
+);
+
+box.classList.add(
+
+integrityReport.counts[key]>0
+
+?"warning":"good"
+
+);
+
+container.appendChild(box);
+
+});
+
+}
+
+async function loadIntegrity(){
+
+try{
+
+const response=await serverCall(
+
+"getAdminDatabaseIntegrityReport"
+
+);
+
+if(response.report!==null
+
+&&!validIntegrity(response.report)){
+
+throw new Error("Invalid integrity report");
+
+}
+
+integrityReport=response.report;
+
+renderIntegrity();
+
+}catch(e){
+
+integrityReport=null;
+
+renderIntegrity();
+
+throw e;
+
+}
+
+}
+
+$("runIntegrity").onclick=()=>{
+
+runMutation(
+
+"requestAdminDatabaseIntegrityCheck",
+
+{mode:"read_only"},
+
+response=>
+
+response.accepted===true
+
+&&validId(response.testId),
+
+async()=>{
+
+message("integrityResult","accepted");
+
+try{
+
+await loadIntegrity();
+
+}catch(e){
+
+message("result","error");
+
+}
+
+},
+
+"integrityResult"
+
+);
+
+};
+
+$("loadIntegrity").onclick=()=>{
+
+runRead(loadIntegrity);
+
+};
+
+const retentionInputs=[
+
+"gpsRetention",
+"loginRetention",
+"notificationRetention",
+"retentionReason"
+
+];
+
+retentionInputs.forEach(id=>{
+
+$(id).addEventListener("input",()=>{
+
+retentionDirty=true;
+
+$("confirmRetention").checked=false;
+
+updateControls();
+
+});
+
+});
+
+function readRetention(){
+
+if(!retentionSettings
+
+||!retentionDirty
+
+||!$("confirmRetention").checked)return null;
+
+const settings={
+
+gpsDays:Number($("gpsRetention").value),
+
+loginDays:Number($("loginRetention").value),
+
+notificationDays:Number($("notificationRetention").value)
+
+};
+
+const reason=$("retentionReason").value.trim();
+
+if(!validRetentionSettings({
+
+...settings,
+
+version:retentionSettings.version
+
+})
+
+||reason.length<10
+
+||reason.length>500)return null;
+
+return {
+
+settings,
+
+expectedVersion:retentionSettings.version,
+
+reason,
+
+applyTo:"future_records"
+
+};
+
+}
+
+$("saveRetention").onclick=()=>{
+
+const payload=readRetention();
+
+if(!payload){
+
+message("result","invalid");
+
+return;
+
+}
+
+runMutation(
+
+"saveAdminDatabaseRetentionSettings",
+
+payload,
+
+response=>
+
+validRetentionSettings(response.settings)
+
+&&response.settings.version>payload.expectedVersion
+
+&&Object.keys(payload.settings).every(key=>
+
+response.settings[key]===payload.settings[key]),
+
+async response=>{
+
+retentionSettings=response.settings;
+
+retentionDirty=false;
+
+$("retentionReason").value="";
+
+$("confirmRetention").checked=false;
+
+renderSettings();
+
+message("result","saved");
+
+}
+
+);
+
+};
+
+function validAudit(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&validText(record.action,150)
+
+&&validText(record.reason,1000)
+
+&&validTime(record.createdAtMs);
+
+}
+
+function renderAudit(){
+
+const container=$("auditList");
+
+container.replaceChildren();
+
+$("moreAudit").hidden=auditCursor===null;
+
+auditRecords.forEach(record=>{
+
+const box=makeRecord();
+
+addLine(box,"action",record.action);
+
+addLine(box,"reason",record.reason);
+
+addLine(box,"created",formatDate(record.createdAtMs));
+
+container.appendChild(box);
+
+});
+
+}
+
+async function loadAudit(reset=true){
+
+const response=await serverCall(
+
+"getAdminDatabaseAuditHistory",
+
+{
+
+limit:30,
+
+cursor:reset?null:auditCursor
+
+}
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validAudit)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid audit history");
+
+}
+
+auditRecords=mergeRecords(
+
+reset?[]:auditRecords,
+
+response.records,
+
+"recordId"
+
+);
+
+auditCursor=response.nextCursor;
+
+renderAudit();
+
+if(!auditRecords.length){
+
+$("auditList").textContent=t("noRecords");
+
+}
+
+}
+
+$("loadAudit").onclick=()=>{
+
+runRead(()=>loadAudit(true));
+
+};
+
+$("moreAudit").onclick=()=>{
+
+if(auditCursor!==null){
+
+runRead(()=>loadAudit(false));
+
+}
+
+};
+
+$("refreshButton").onclick=()=>{
+
+runRead(async()=>{
+
+await loadOverview();
+
+await loadSettings();
+
+await loadIntegrity();
+
+if(backupQuery){
+
+await loadBackups(true);
+
+}
+
+});
+
+};
+
+const mutationInputs=[
+
+...backupInputs,
+
+"confirmBackupSettings",
+
+"manualReason",
+"confirmManualBackup",
+
+"restoreReason",
+"restoreConfirmation",
+"confirmRestore",
+
+...retentionInputs,
+
+"confirmRetention"
+
+];
+
+mutationInputs.forEach(id=>{
+
+$(id).addEventListener("input",updateControls);
+
+$(id).addEventListener("change",updateControls);
+
+});
+
+[
+
+["manualReason","confirmManualBackup"],
+
+["restoreReason","confirmRestore"],
+
+["restoreConfirmation","confirmRestore"]
+
+].forEach(([id,confirmId])=>{
+
+$(id).addEventListener("input",()=>{
+
+$(confirmId).checked=false;
+
+updateControls();
+
+});
+
+});
+
+function updateControls(){
+
+const locked=
+
+busy||mutationBusy||!isOwner();
+
+const pending=!!pendingMutation;
+
+[
+
+"refreshButton",
+"backupFilter",
+"loadBackups",
+"moreBackups",
+"closeRestore",
+"loadRestores",
+"moreRestores",
+"loadIntegrity",
+"loadAudit",
+"moreAudit"
+
+].forEach(id=>{
+
+$(id).disabled=locked||pending;
+
+});
+
+document.querySelectorAll("[data-dynamic]")
+
+.forEach(button=>{
+
+button.disabled=locked||pending;
+
+});
+
+mutationInputs.forEach(id=>{
+
+$(id).disabled=locked||pending;
+
+});
+
+backupInputs.forEach(id=>{
+
+$(id).disabled=
+
+locked||pending||!backupSettings;
+
+});
+
+$("confirmBackupSettings").disabled=
+
+locked||pending||!backupSettings;
+
+retentionInputs.forEach(id=>{
+
+$(id).disabled=
+
+locked||pending||!retentionSettings;
+
+});
+
+$("confirmRetention").disabled=
+
+locked||pending||!retentionSettings;
+
+function mutationAllowed(name){
+
+return !locked
+
+&&(!pendingMutation
+
+||pendingMutation.name===name);
+
+}
+
+$("saveBackupSettings").disabled=
+
+!mutationAllowed("saveAdminDatabaseBackupSettings")
+
+||!readBackupSettings();
+
+$("createBackup").disabled=
+
+!mutationAllowed("requestAdminDatabaseBackup")
+
+||!readManualBackup();
+
+$("requestRestore").disabled=
+
+!mutationAllowed("requestAdminDatabaseRestoreTest")
+
+||!readRestore();
+
+$("runIntegrity").disabled=
+
+!mutationAllowed("requestAdminDatabaseIntegrityCheck");
+
+$("saveRetention").disabled=
+
+!mutationAllowed("saveAdminDatabaseRetentionSettings")
+
+||!readRetention();
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+const links={
+
+loginLink:"admin-login.html",
+
+dashboardLink:"admin-dashboard.html",
+
+backLink:"admin-dashboard.html",
+
+securityLink:"admin-security.html",
+
+settingsLink:"admin-settings.html",
+
+accountLink:"admin-account.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href=pageLink(page);
+
+});
+
+Object.keys(messages).forEach(id=>{
+
+message(id,messages[id]);
+
+});
+
+renderOverview();
+
+renderSettings();
+
+renderBackups();
+
+renderSelectedBackup();
+
+renderRestores();
+
+renderIntegrity();
+
+renderAudit();
+
+updateControls();
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+
+"myride_admin_language",
+
+lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+ownerUid=null;
+
+busy=false;
+
+mutationBusy=false;
+
+overview=null;
+
+backupSettings=null;
+
+retentionSettings=null;
+
+backupDirty=false;
+
+retentionDirty=false;
+
+backupRecords=[];
+
+restoreRecords=[];
+
+auditRecords=[];
+
+backupCursor=null;
+
+restoreCursor=null;
+
+auditCursor=null;
+
+backupQuery=null;
+
+selectedBackup=null;
+
+integrityReport=null;
+
+pendingMutation=null;
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("restorePanel").hidden=true;
+
+[
+
+"backupReason",
+"manualReason",
+"restoreReason",
+"restoreConfirmation",
+"retentionReason"
+
+].forEach(id=>{
+
+$(id).value="";
+
+});
+
+[
+
+"confirmBackupSettings",
+"confirmManualBackup",
+"confirmRestore",
+"confirmRetention"
+
+].forEach(id=>{
+
+$(id).checked=false;
+
+});
+
+$("backupFilter").value="all";
+
+[
+
+"result",
+"backupResult",
+"restoreResult",
+"integrityResult"
+
+].forEach(id=>{
+
+message(id,"");
+
+});
+
+renderLanguage();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+message("status","denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+message("status","offline");
+
+return;
+
+}
+
+message("status","checking");
+
+try{
+
+const appToken=await getToken(
+
+appCheck,
+
+false
+
+);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+message("status","verified");
+
+updateControls();
+
+await runRead(async()=>{
+
+await loadOverview();
+
+await loadSettings();
+
+backupQuery="all";
+
+await loadBackups(true);
+
+await loadIntegrity();
+
+});
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+setInterval(async()=>{
+
+if(!isOwner()
+
+||checking
+
+||mutationBusy)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation)return;
+
+if(!validOwner(response.data,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+setInterval(()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation
+
+||document.hidden)return;
+
+runRead(async()=>{
+
+await loadOverview();
+
+await loadIntegrity();
+
+if(backupQuery
+
+&&backupCursor===null
+
+&&!selectedBackup){
+
+await loadBackups(true);
+
+}
+
+});
+
+},60000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+message("status","offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("beforeunload",event=>{
+
+if(backupDirty
+
+||retentionDirty
+
+||mutationBusy
+
+||pendingMutation
+
+||$("manualReason").value.trim()
+
+||$("restoreReason").value.trim()){
+
+event.preventDefault();
+
+event.returnValue="";
+
+}
+
+});
+
+window.addEventListener(
+
+"pagehide",
+
+clearSession
+
+);
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+renderLanguage();
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
