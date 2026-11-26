@@ -1,0 +1,4660 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+
+<meta name="google" content="notranslate">
+
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Terms Management</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3,h4{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+input,select,textarea{
+width:100%;
+padding:13px;
+margin:8px 0;
+background:#292929;
+color:#fff;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:120px;
+resize:vertical;
+line-height:1.8;
+}
+
+.termsEditor{
+min-height:350px;
+}
+
+label{
+display:block;
+margin-top:12px;
+line-height:1.7;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border-radius:9px;
+padding:15px;
+overflow-wrap:anywhere;
+}
+
+.stat strong{
+display:block;
+font-size:24px;
+margin-top:10px;
+color:#FFD600;
+}
+
+.record{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+line-height:1.9;
+overflow-wrap:anywhere;
+}
+
+.checkRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+}
+
+.checkRow input{
+width:20px;
+height:20px;
+flex-shrink:0;
+}
+
+.good{
+color:#55E68A;
+}
+
+.warning{
+color:#FFB347;
+}
+
+.bad{
+color:#FF7777;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+.message{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+.documentBody{
+white-space:pre-wrap;
+overflow-wrap:anywhere;
+background:#181818;
+border:1px solid #555;
+border-radius:9px;
+padding:16px;
+line-height:1.9;
+max-height:650px;
+overflow:auto;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading">
+Terms & Conditions Management
+</h2>
+
+<div class="languages">
+
+<button data-lang="si">සිංහල</button>
+
+<button data-lang="en">English</button>
+
+<button data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+class="message"
+role="status"
+aria-live="polite">
+Checking security...
+</p>
+
+<section id="accessPanel"
+class="panel"
+hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="overview"></h3>
+
+<div id="overview"
+class="grid"></div>
+
+<p id="lastUpdate"
+class="note"></p>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="documentSelection"></h3>
+
+<label for="documentType"
+data-t="documentType"></label>
+
+<select id="documentType">
+
+<option value="customerTerms"
+data-t="customerTerms"></option>
+
+<option value="driverTerms"
+data-t="driverTerms"></option>
+
+<option value="privacyPolicy"
+data-t="privacyPolicy"></option>
+
+<option value="gpsConsent"
+data-t="gpsConsent"></option>
+
+<option value="whatsappConsent"
+data-t="whatsappConsent"></option>
+
+</select>
+
+<button id="loadDocument"
+data-t="loadDocument"></button>
+
+</section>
+
+<section id="currentPanel"
+class="panel"
+hidden>
+
+<h3 data-t="currentDocument"></h3>
+
+<div id="currentInfo"></div>
+
+<label for="viewLanguage"
+data-t="documentLanguage"></label>
+
+<select id="viewLanguage">
+
+<option value="si">සිංහල</option>
+
+<option value="en">English</option>
+
+<option value="ta">தமிழ்</option>
+
+</select>
+
+<h4 id="currentTitle"></h4>
+
+<div id="currentBody"
+class="documentBody"></div>
+
+<button id="editDocument"
+data-t="editDocument"></button>
+
+</section>
+
+<section id="editorPanel"
+class="panel"
+hidden>
+
+<h3 data-t="editor"></h3>
+
+<p id="editorVersion"
+class="note"></p>
+
+<h4>සිංහල</h4>
+
+<label for="titleSi"
+data-t="title"></label>
+
+<input id="titleSi"
+maxlength="200">
+
+<label for="bodySi"
+data-t="documentContent"></label>
+
+<textarea id="bodySi"
+class="termsEditor"
+maxlength="50000"></textarea>
+
+<h4>English</h4>
+
+<label for="titleEn"
+data-t="title"></label>
+
+<input id="titleEn"
+maxlength="200">
+
+<label for="bodyEn"
+data-t="documentContent"></label>
+
+<textarea id="bodyEn"
+class="termsEditor"
+maxlength="50000"></textarea>
+
+<h4>தமிழ்</h4>
+
+<label for="titleTa"
+data-t="title"></label>
+
+<input id="titleTa"
+maxlength="200">
+
+<label for="bodyTa"
+data-t="documentContent"></label>
+
+<textarea id="bodyTa"
+class="termsEditor"
+maxlength="50000"></textarea>
+
+<label for="changeType"
+data-t="changeType"></label>
+
+<select id="changeType">
+
+<option value=""
+data-t="choose"></option>
+
+<option value="minor"
+data-t="minor"></option>
+
+<option value="material"
+data-t="material"></option>
+
+</select>
+
+<label class="checkRow">
+
+<input id="requireReaccept"
+type="checkbox">
+
+<span data-t="requireReaccept"></span>
+
+</label>
+
+<p class="note"
+data-t="reacceptNotice"></p>
+
+<label for="effectiveDate"
+data-t="effectiveDate"></label>
+
+<input id="effectiveDate"
+type="date">
+
+<label for="effectiveTime"
+data-t="effectiveTime"></label>
+
+<input id="effectiveTime"
+type="time">
+
+<label for="changeReason"
+data-t="changeReason"></label>
+
+<textarea id="changeReason"
+maxlength="1000"></textarea>
+
+<label class="checkRow">
+
+<input id="translationConfirmed"
+type="checkbox">
+
+<span data-t="translationConfirmed"></span>
+
+</label>
+
+<label class="checkRow">
+
+<input id="legalConfirmed"
+type="checkbox">
+
+<span data-t="legalConfirmed"></span>
+
+</label>
+
+<button id="previewButton"
+data-t="preview"></button>
+
+<button id="saveDraft"
+data-t="saveDraft"></button>
+
+<button id="closeEditor"
+class="back"
+data-t="close"></button>
+
+<p id="editorResult"
+class="message"
+role="status"></p>
+
+</section>
+
+<section id="previewPanel"
+class="panel"
+hidden>
+
+<h3 data-t="preview"></h3>
+
+<label for="previewLanguage"
+data-t="documentLanguage"></label>
+
+<select id="previewLanguage">
+
+<option value="si">සිංහල</option>
+
+<option value="en">English</option>
+
+<option value="ta">தமிழ்</option>
+
+</select>
+
+<h4 id="previewTitle"></h4>
+
+<div id="previewBody"
+class="documentBody"></div>
+
+<button id="closePreview"
+class="back"
+data-t="close"></button>
+
+</section>
+
+<section id="draftPanel"
+class="panel"
+hidden>
+
+<h3 data-t="savedDraft"></h3>
+
+<div id="draftInfo"></div>
+
+<label for="draftLanguage"
+data-t="documentLanguage"></label>
+
+<select id="draftLanguage">
+
+<option value="si">සිංහල</option>
+
+<option value="en">English</option>
+
+<option value="ta">தமிழ்</option>
+
+</select>
+
+<h4 id="draftTitle"></h4>
+
+<div id="draftBody"
+class="documentBody"></div>
+
+<button id="editDraft"
+data-t="editDraft"></button>
+
+<label for="publishConfirmation"
+data-t="publishConfirmation"></label>
+
+<input id="publishConfirmation"
+autocomplete="off"
+maxlength="20">
+
+<label class="checkRow">
+
+<input id="confirmPublish"
+type="checkbox">
+
+<span data-t="confirmPublish"></span>
+
+</label>
+
+<p class="warning"
+data-t="publishNotice"></p>
+
+<button id="publishDocument"
+data-t="publishDocument"></button>
+
+<p id="publishResult"
+class="message"
+role="status"></p>
+
+</section>
+
+<section id="scheduledPanel"
+class="panel"
+hidden>
+
+<h3 data-t="scheduledDocument"></h3>
+
+<div id="scheduledInfo"></div>
+
+<label for="cancelScheduleReason"
+data-t="changeReason"></label>
+
+<textarea id="cancelScheduleReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="confirmCancelSchedule"
+type="checkbox">
+
+<span data-t="confirmAction"></span>
+
+</label>
+
+<button id="cancelSchedule"
+data-t="cancelSchedule"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="acceptanceOverview"></h3>
+
+<div id="acceptanceStats"
+class="grid"></div>
+
+<p class="note"
+data-t="acceptanceNotice"></p>
+
+<button id="loadAcceptance"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="acceptanceHistory"></h3>
+
+<label for="acceptanceRole"
+data-t="role"></label>
+
+<select id="acceptanceRole">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="customer"
+data-t="customer"></option>
+
+<option value="driver"
+data-t="driver"></option>
+
+</select>
+
+<label for="acceptanceStatus"
+data-t="currentStatus"></label>
+
+<select id="acceptanceStatus">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="accepted"
+data-t="accepted"></option>
+
+<option value="pending"
+data-t="pending"></option>
+
+<option value="declined"
+data-t="declined"></option>
+
+<option value="withdrawn"
+data-t="withdrawn"></option>
+
+</select>
+
+<label for="acceptanceSearch"
+data-t="accountId"></label>
+
+<input id="acceptanceSearch"
+maxlength="128"
+autocomplete="off">
+
+<button id="searchAcceptance"
+data-t="search"></button>
+
+<div id="acceptanceList"></div>
+
+<button id="moreAcceptance"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="versionHistory"></h3>
+
+<button id="loadVersions"
+data-t="viewHistory"></button>
+
+<div id="versionList"></div>
+
+<button id="moreVersions"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section id="versionDetailsPanel"
+class="panel"
+hidden>
+
+<h3 data-t="versionDetails"></h3>
+
+<div id="versionDetailsInfo"></div>
+
+<label for="historyLanguage"
+data-t="documentLanguage"></label>
+
+<select id="historyLanguage">
+
+<option value="si">සිංහල</option>
+
+<option value="en">English</option>
+
+<option value="ta">தமிழ்</option>
+
+</select>
+
+<h4 id="historyTitle"></h4>
+
+<div id="historyBody"
+class="documentBody"></div>
+
+<button id="copyOldVersion"
+data-t="copyOldVersion"></button>
+
+<button id="closeVersion"
+class="back"
+data-t="close"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="auditHistory"></h3>
+
+<button id="loadAudit"
+data-t="viewHistory"></button>
+
+<div id="auditList"></div>
+
+<button id="moreAudit"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="relatedPages"></h3>
+
+<a id="customerLink"
+class="action"
+data-t="customerManagement"></a>
+
+<a id="driverLink"
+class="action"
+data-t="driverManagement"></a>
+
+<a id="securityLink"
+class="action"
+data-t="securityManagement"></a>
+
+<a id="settingsLink"
+class="action"
+data-t="systemSettings"></a>
+
+</section>
+
+<p id="result"
+class="message"
+role="status"
+aria-live="polite"></p>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const documentTypes=[
+
+"customerTerms",
+"driverTerms",
+"privacyPolicy",
+"gpsConsent",
+"whatsappConsent"
+
+];
+
+const dictionary={
+
+heading:[
+"නීති හා කොන්දේසි කළමනාකරණය",
+"Terms & Conditions Management",
+"விதிமுறைகள் மற்றும் நிபந்தனைகள் மேலாண்மை"
+],
+
+overview:[
+"01. කොන්දේසි සාරාංශය",
+"01. Terms Overview",
+"01. விதிமுறைகள் சுருக்கம்"
+],
+
+publishedDocuments:[
+"ප්‍රකාශිත ලේඛන",
+"Published Documents",
+"வெளியிடப்பட்ட ஆவணங்கள்"
+],
+
+draftDocuments:[
+"කෙටුම්පත්",
+"Draft Documents",
+"வரைவு ஆவணங்கள்"
+],
+
+scheduledDocuments:[
+"ප්‍රකාශනයට සැලසුම් කළ ලේඛන",
+"Scheduled Documents",
+"திட்டமிடப்பட்ட ஆவணங்கள்"
+],
+
+totalVersions:[
+"මුළු අනුවාද",
+"Total Versions",
+"மொத்த பதிப்புகள்"
+],
+
+documentSelection:[
+"02. ලේඛනය තෝරන්න",
+"02. Select Document",
+"02. ஆவணத்தை தேர்ந்தெடுக்கவும்"
+],
+
+documentType:[
+"ලේඛන වර්ගය",
+"Document Type",
+"ஆவண வகை"
+],
+
+customerTerms:[
+"පාරිභෝගික නීති හා කොන්දේසි",
+"Customer Terms & Conditions",
+"பயணி விதிமுறைகள்"
+],
+
+driverTerms:[
+"රියදුරු නීති හා කොන්දේසි",
+"Driver Terms & Conditions",
+"சாரதி விதிமுறைகள்"
+],
+
+privacyPolicy:[
+"පෞද්ගලිකත්ව ප්‍රතිපත්තිය",
+"Privacy Policy",
+"தனியுரிமைக் கொள்கை"
+],
+
+gpsConsent:[
+"GPS භාවිත අවසරය",
+"GPS Consent",
+"GPS பயன்பாட்டு ஒப்புதல்"
+],
+
+whatsappConsent:[
+"WhatsApp අවසරය",
+"WhatsApp Consent",
+"WhatsApp ஒப்புதல்"
+],
+
+loadDocument:[
+"ලේඛනය විවෘත කරන්න",
+"Open Document",
+"ஆவணத்தை திறக்கவும்"
+],
+
+currentDocument:[
+"03. දැනට ක්‍රියාත්මක කොන්දේසි",
+"03. Current Effective Document",
+"03. தற்போதைய நடைமுறை ஆவணம்"
+],
+
+documentLanguage:[
+"ලේඛනයේ භාෂාව",
+"Document Language",
+"ஆவண மொழி"
+],
+
+editDocument:[
+"කොන්දේසි සංස්කරණය කරන්න",
+"Edit Document",
+"ஆவணத்தை திருத்தவும்"
+],
+
+editor:[
+"04. නීති හා කොන්දේසි සංස්කරණය",
+"04. Terms Editor",
+"04. விதிமுறைகள் திருத்தம்"
+],
+
+title:[
+"මාතෘකාව",
+"Title",
+"தலைப்பு"
+],
+
+documentContent:[
+"සම්පූර්ණ කොන්දේසි",
+"Complete Document Content",
+"முழுமையான ஆவண உள்ளடக்கம்"
+],
+
+changeType:[
+"වෙනස්කමේ වර්ගය",
+"Change Type",
+"மாற்றத்தின் வகை"
+],
+
+choose:[
+"තෝරන්න",
+"Select",
+"தேர்ந்தெடுக்கவும்"
+],
+
+minor:[
+"සුළු වෙනස්කම",
+"Minor Change",
+"சிறிய மாற்றம்"
+],
+
+material:[
+"වැදගත් කොන්දේසි වෙනස්කම",
+"Material Change",
+"முக்கிய மாற்றம்"
+],
+
+requireReaccept:[
+"අදාළ පරිශීලකයන්ගෙන් නැවත පිළිගැනීම ලබාගන්න.",
+"Require applicable users to accept again.",
+"பொருந்தும் பயனர்களிடம் மீண்டும் ஒப்புதல் பெறவும்."
+],
+
+reacceptNotice:[
+"වැදගත් කොන්දේසි වෙනස්කම් සඳහා නැවත පිළිගැනීම අවශ්‍යයි. WhatsApp අවසරය ස්වේච්ඡා අවසරයක් ලෙස පවත්වාගත යුතුය.",
+"Material changes require renewed acceptance where applicable. WhatsApp consent must remain voluntary.",
+"முக்கிய மாற்றங்களுக்கு மீண்டும் ஒப்புதல் தேவை. WhatsApp ஒப்புதல் விருப்பத்திற்குரியது."
+],
+
+effectiveDate:[
+"ක්‍රියාත්මක වන දිනය",
+"Effective Date",
+"நடைமுறைக்கு வரும் தேதி"
+],
+
+effectiveTime:[
+"ක්‍රියාත්මක වන වේලාව - ශ්‍රී ලංකා වේලාව",
+"Effective Time - Sri Lanka Time",
+"நடைமுறை நேரம் - இலங்கை நேரம்"
+],
+
+changeReason:[
+"වෙනස් කිරීමට හේතුව",
+"Reason for Change",
+"மாற்றத்திற்கான காரணம்"
+],
+
+translationConfirmed:[
+"භාෂා තුනේම අර්ථය ගැළපෙන බව තහවුරු කරමි.",
+"I confirm that all three translations have consistent meaning.",
+"மூன்று மொழிகளின் பொருளும் ஒன்றாக இருப்பதை உறுதிப்படுத்துகிறேன்."
+],
+
+legalConfirmed:[
+"අදාළ නීතිමය සහ පෞද්ගලිකත්ව අවශ්‍යතා සමාලෝචනය කළ බව තහවුරු කරමි.",
+"I confirm that applicable legal and privacy requirements have been reviewed.",
+"சட்ட மற்றும் தனியுரிமை தேவைகள் மதிப்பாய்வு செய்யப்பட்டதை உறுதிப்படுத்துகிறேன்."
+],
+
+preview:[
+"පෙරදසුන",
+"Preview",
+"முன்னோட்டம்"
+],
+
+saveDraft:[
+"කෙටුම්පත සුරකින්න",
+"Save Draft",
+"வரைவை சேமிக்கவும்"
+],
+
+savedDraft:[
+"05. සුරැකූ කෙටුම්පත",
+"05. Saved Draft",
+"05. சேமிக்கப்பட்ட வரைவு"
+],
+
+editDraft:[
+"කෙටුම්පත සංස්කරණය කරන්න",
+"Edit Draft",
+"வரைவை திருத்தவும்"
+],
+
+publishConfirmation:[
+"ප්‍රකාශයට පත් කිරීමට PUBLISH ලෙස ටයිප් කරන්න.",
+"Type PUBLISH to confirm publication.",
+"வெளியிட PUBLISH என உள்ளிடவும்."
+],
+
+confirmPublish:[
+"මෙම සුරැකූ අනුවාදය ප්‍රකාශයට පත් කිරීම තහවුරු කරමි.",
+"I confirm publication of this saved version.",
+"இந்த சேமிக்கப்பட்ட பதிப்பை வெளியிட உறுதிப்படுத்துகிறேன்."
+],
+
+publishNotice:[
+"නව කොන්දේසි අතීත ගනුදෙනුවලට බලෙන් යෙදිය නොහැක. දැනට ක්‍රියාත්මක ගමන්වල ආරක්ෂක සේවා නතර නොකළ යුතුය.",
+"New terms must not be applied retroactively. Existing trip safety services must remain available.",
+"புதிய விதிமுறைகள் கடந்த பரிவர்த்தனைகளுக்கு பயன்படுத்தப்படக்கூடாது. தற்போதைய பயண பாதுகாப்பு தொடர வேண்டும்."
+],
+
+publishDocument:[
+"නව කොන්දේසි ප්‍රකාශයට පත් කරන්න",
+"Publish New Terms",
+"புதிய விதிமுறைகளை வெளியிடவும்"
+],
+
+scheduledDocument:[
+"06. ප්‍රකාශනයට සැලසුම් කළ ලේඛනය",
+"06. Scheduled Document",
+"06. திட்டமிடப்பட்ட ஆவணம்"
+],
+
+cancelSchedule:[
+"සැලසුම් කළ ප්‍රකාශනය අවලංගු කරන්න",
+"Cancel Scheduled Publication",
+"திட்டமிடப்பட்ட வெளியீட்டை ரத்து செய்யவும்"
+],
+
+acceptanceOverview:[
+"07. කොන්දේසි පිළිගැනීමේ සාරාංශය",
+"07. Acceptance Overview",
+"07. ஒப்புதல் சுருக்கம்"
+],
+
+eligibleCustomers:[
+"අදාළ පාරිභෝගිකයන්",
+"Applicable Customers",
+"பொருந்தும் பயணிகள்"
+],
+
+acceptedCustomers:[
+"පිළිගත් පාරිභෝගිකයන්",
+"Accepted Customers",
+"ஒப்புக்கொண்ட பயணிகள்"
+],
+
+eligibleDrivers:[
+"අදාළ රියදුරන්",
+"Applicable Drivers",
+"பொருந்தும் சாரதிகள்"
+],
+
+acceptedDrivers:[
+"පිළිගත් රියදුරන්",
+"Accepted Drivers",
+"ஒப்புக்கொண்ட சாரதிகள்"
+],
+
+acceptanceNotice:[
+"දැනට ක්‍රියාත්මක අනුවාදයට අදාළ Server වාර්තා පමණක් පෙන්වයි. අවසර ලබා නොදීම සහ අවසර ඉවත් කිරීම පිළිගැනීමක් ලෙස ගණනය නොකරයි.",
+"Only server records for the current effective version are shown. Declined or withdrawn consent is not counted as acceptance.",
+"தற்போதைய பதிப்பிற்கான சேவையக பதிவுகள் மட்டும் காட்டப்படும்."
+],
+
+acceptanceHistory:[
+"08. කොන්දේසි පිළිගැනීමේ වාර්තා",
+"08. Acceptance Records",
+"08. ஒப்புதல் பதிவுகள்"
+],
+
+role:[
+"ගිණුම් වර්ගය",
+"Account Role",
+"கணக்கு வகை"
+],
+
+customer:[
+"පාරිභෝගික",
+"Customer",
+"பயணி"
+],
+
+driver:[
+"රියදුරු",
+"Driver",
+"சாரதி"
+],
+
+all:["සියල්ල","All","அனைத்தும்"],
+
+accepted:[
+"පිළිගෙන ඇත",
+"Accepted",
+"ஒப்புக்கொள்ளப்பட்டது"
+],
+
+pending:[
+"පිළිගැනීමට ඇත",
+"Pending",
+"நிலுவையில் உள்ளது"
+],
+
+declined:[
+"ප්‍රතික්ෂේප කර ඇත",
+"Declined",
+"நிராகரிக்கப்பட்டது"
+],
+
+withdrawn:[
+"අවසරය ඉවත් කර ඇත",
+"Withdrawn",
+"திரும்பப் பெறப்பட்டது"
+],
+
+accountId:[
+"ගිණුම් ID",
+"Account ID",
+"கணக்கு ID"
+],
+
+currentStatus:[
+"වත්මන් තත්ත්වය",
+"Current Status",
+"தற்போதைய நிலை"
+],
+
+versionHistory:[
+"09. පැරණි අනුවාද",
+"09. Version History",
+"09. பதிப்பு வரலாறு"
+],
+
+versionDetails:[
+"10. පැරණි කොන්දේසි විස්තර",
+"10. Historical Version Details",
+"10. பழைய பதிப்பு விவரங்கள்"
+],
+
+copyOldVersion:[
+"මෙම කොන්දේසි නව කෙටුම්පතකට පිටපත් කරන්න",
+"Copy Into New Draft",
+"புதிய வரைவிற்கு நகலெடுக்கவும்"
+],
+
+auditHistory:[
+"11. වෙනස්කම් ඉතිහාසය",
+"11. Terms Audit History",
+"11. மாற்றங்களின் தணிக்கை வரலாறு"
+],
+
+relatedPages:[
+"අදාළ කළමනාකරණ පිටු",
+"Related Management Pages",
+"தொடர்புடைய மேலாண்மை பக்கங்கள்"
+],
+
+customerManagement:[
+"පාරිභෝගික කළමනාකරණය",
+"Customer Management",
+"பயணி மேலாண்மை"
+],
+
+driverManagement:[
+"රියදුරු කළමනාකරණය",
+"Driver Management",
+"சாரதி மேலாண்மை"
+],
+
+securityManagement:[
+"ආරක්ෂක කළමනාකරණය",
+"Security Management",
+"பாதுகாப்பு மேலாண்மை"
+],
+
+systemSettings:[
+"පද්ධති සැකසුම්",
+"System Settings",
+"அமைப்பு அமைப்புகள்"
+],
+
+version:["අනුවාදය","Version","பதிப்பு"],
+
+revision:["සංශෝධනය","Revision","திருத்தம்"],
+
+created:[
+"නිර්මාණය කළ වේලාව",
+"Created At",
+"உருவாக்கிய நேரம்"
+],
+
+updated:[
+"යාවත්කාලීන කළ වේලාව",
+"Updated At",
+"புதுப்பித்த நேரம்"
+],
+
+effective:[
+"ක්‍රියාත්මක වන වේලාව",
+"Effective At",
+"நடைமுறை நேரம்"
+],
+
+published:[
+"ප්‍රකාශයට පත් කර ඇත",
+"Published",
+"வெளியிடப்பட்டது"
+],
+
+scheduled:[
+"සැලසුම් කර ඇත",
+"Scheduled",
+"திட்டமிடப்பட்டது"
+],
+
+superseded:[
+"පැරණි අනුවාදය",
+"Superseded",
+"முந்தைய பதிப்பு"
+],
+
+cancelled:[
+"අවලංගු කර ඇත",
+"Cancelled",
+"ரத்து செய்யப்பட்டது"
+],
+
+draft:[
+"කෙටුම්පත",
+"Draft",
+"வரைவு"
+],
+
+yes:["ඔව්","Yes","ஆம்"],
+
+no:["නැහැ","No","இல்லை"],
+
+action:[
+"ක්‍රියාමාර්ගය",
+"Action",
+"நடவடிக்கை"
+],
+
+confirmAction:[
+"මෙම ක්‍රියාමාර්ගය තහවුරු කරමි.",
+"I confirm this action.",
+"இந்த நடவடிக்கையை உறுதிப்படுத்துகிறேன்."
+],
+
+search:["සොයන්න","Search","தேடவும்"],
+
+more:[
+"තවත් වාර්තා",
+"Load More",
+"மேலும் பதிவுகள்"
+],
+
+viewHistory:[
+"ඉතිහාසය බලන්න",
+"View History",
+"வரலாற்றை பார்க்கவும்"
+],
+
+viewDetails:[
+"විස්තර බලන්න",
+"View Details",
+"விவரங்களை பார்க்கவும்"
+],
+
+refresh:[
+"යාවත්කාලීන කරන්න",
+"Refresh",
+"புதுப்பிக்கவும்"
+],
+
+close:["වසන්න","Close","மூடவும்"],
+
+back:[
+"Admin Dashboard වෙත",
+"Back to Admin Dashboard",
+"நிர்வாக முதன்மைப் பக்கத்திற்கு"
+],
+
+login:[
+"Admin Login",
+"Admin Login",
+"நிர்வாக உள்நுழைவு"
+],
+
+checking:[
+"ආරක්ෂාව පරීක්ෂා කරමින්...",
+"Checking security...",
+"பாதுகாப்பு சரிபார்க்கப்படுகிறது..."
+],
+
+denied:[
+"Owner Admin අවසරය තහවුරු කර නොමැත.",
+"Owner Admin authorization is not verified.",
+"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை."
+],
+
+verified:[
+"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+"Owner authorization verified.",
+"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது."
+],
+
+offline:[
+"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+"No internet connection.",
+"இணைய இணைப்பு இல்லை."
+],
+
+loading:[
+"Server දත්ත ලබාගනිමින්...",
+"Loading server data...",
+"சேவையக தரவு பெறப்படுகிறது..."
+],
+
+error:[
+"Server දත්ත තහවුරු කළ නොහැක.",
+"Unable to verify server data.",
+"சேவையக தரவை உறுதிப்படுத்த முடியவில்லை."
+],
+
+invalid:[
+"ඇතුළත් කළ තොරතුරු සහ දිනය පරීක්ෂා කරන්න.",
+"Check the entered information and effective date.",
+"உள்ளிட்ட தகவல் மற்றும் தேதியை சரிபார்க்கவும்."
+],
+
+saving:[
+"Server වෙත යොමු කරමින්...",
+"Submitting to server...",
+"சேவையகத்திற்கு அனுப்பப்படுகிறது..."
+],
+
+saved:[
+"කෙටුම්පත Server මගින් සුරකින ලදී.",
+"Draft saved by server.",
+"வரைவு சேவையகத்தில் சேமிக்கப்பட்டது."
+],
+
+publishSuccess:[
+"ප්‍රකාශන සැලසුම Server මගින් තහවුරු කර ඇත.",
+"Publication schedule confirmed by server.",
+"வெளியீட்டு திட்டம் உறுதிப்படுத்தப்பட்டது."
+],
+
+cancelSuccess:[
+"ප්‍රකාශන සැලසුම අවලංගු කර ඇත.",
+"Publication schedule cancelled.",
+"வெளியீட்டு திட்டம் ரத்து செய்யப்பட்டது."
+],
+
+saveError:[
+"ක්‍රියාමාර්ගය තහවුරු කළ නොහැක. නැවත උත්සාහ කිරීමට පෙර Server වාර්තා පරීක්ෂා කරන්න.",
+"Action not confirmed. Check server records before retrying.",
+"நடவடிக்கை உறுதிப்படுத்தப்படவில்லை. மீண்டும் முயற்சிக்கும் முன் பதிவுகளை சரிபார்க்கவும்."
+],
+
+noRecords:[
+"වාර්තා නොමැත.",
+"No records found.",
+"பதிவுகள் இல்லை."
+],
+
+noDocument:[
+"ක්‍රියාත්මක ලේඛනයක් තවම නොමැත.",
+"No effective document exists yet.",
+"நடைமுறை ஆவணம் இன்னும் இல்லை."
+],
+
+discard:[
+"සුරැකී නැති වෙනස්කම් ඉවත් කරන්නද?",
+"Discard unsaved changes?",
+"சேமிக்காத மாற்றங்களை நீக்கவா?"
+],
+
+selectFirst:[
+"පළමුව ලේඛනයක් විවෘත කරන්න.",
+"Open a document first.",
+"முதலில் ஆவணத்தை திறக்கவும்."
+]
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+
+new URLSearchParams(location.search).get("lang")
+
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected)){
+
+lang=selected;
+
+}
+
+}catch(e){}
+
+const t=key=>
+
+dictionary[key]?.[languages.indexOf(lang)]
+
+||key;
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+
+let busy=false;
+let mutationBusy=false;
+let checking=false;
+
+let overview=null;
+let clockOffset=0;
+
+let selectedType=null;
+
+let currentDocument=null;
+let savedDraft=null;
+let scheduledDocument=null;
+
+let editorOpen=false;
+let editorDirty=false;
+let editorBaseVersion=0;
+let editorDraftRevision=0;
+
+let previewData=null;
+
+let acceptanceStats=null;
+let acceptanceRecords=[];
+let acceptanceCursor=null;
+let acceptanceQuery=null;
+
+let versionRecords=[];
+let versionCursor=null;
+let selectedVersion=null;
+
+let auditRecords=[];
+let auditCursor=null;
+
+let pendingMutation=null;
+
+const overviewKeys=[
+
+"publishedDocuments",
+"draftDocuments",
+"scheduledDocuments",
+"totalVersions"
+
+];
+
+const acceptanceKeys=[
+
+"eligibleCustomers",
+"acceptedCustomers",
+"eligibleDrivers",
+"acceptedDrivers"
+
+];
+
+const messages={
+
+status:"checking",
+result:"",
+editorResult:"",
+publishResult:""
+
+};
+
+function message(id,key){
+
+messages[id]=key;
+
+$(id).textContent=key?t(key):"";
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,max){
+
+return typeof value==="string"
+
+&&value.length<=max;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+
+&&value>=0;
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+
+&&value>0
+
+&&value<=8640000000000000;
+
+}
+
+function nullableTime(value){
+
+return value===null||validTime(value);
+
+}
+
+function validCursor(value){
+
+return value===null
+
+||validText(value,4000);
+
+}
+
+function serverNow(){
+
+return Date.now()+clockOffset;
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+
+dateStyle:"medium",
+
+timeStyle:"short"
+
+}
+
+).format(new Date(value));
+
+}
+
+function sriLankaDateParts(value){
+
+const parts=new Intl.DateTimeFormat(
+
+"en-CA",
+
+{
+
+timeZone:"Asia/Colombo",
+
+year:"numeric",
+
+month:"2-digit",
+
+day:"2-digit",
+
+hour:"2-digit",
+
+minute:"2-digit",
+
+hourCycle:"h23"
+
+}
+
+).formatToParts(new Date(value));
+
+const result={};
+
+parts.forEach(part=>{
+
+result[part.type]=part.value;
+
+});
+
+return {
+
+date:
+
+result.year+"-"+result.month+"-"+result.day,
+
+time:
+
+result.hour+":"+result.minute
+
+};
+
+}
+
+function effectiveTimestamp(){
+
+const date=$("effectiveDate").value;
+
+const time=$("effectiveTime").value;
+
+if(!/^\d{4}-\d{2}-\d{2}$/.test(date)
+
+||!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)){
+
+return null;
+
+}
+
+const timestamp=Date.parse(
+
+date+"T"+time+":00+05:30"
+
+);
+
+if(!validTime(timestamp))return null;
+
+const parts=sriLankaDateParts(timestamp);
+
+if(parts.date!==date||parts.time!==time){
+
+return null;
+
+}
+
+return timestamp;
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+encodeURIComponent(lang);
+
+}
+
+function isOwner(){
+
+return authorized
+
+&&ownerUid!==null
+
+&&auth?.currentUser?.uid===ownerUid
+
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+
+&&data.uid===uid
+
+&&data.role==="owner"
+
+&&data.ownerUidVerified===true
+
+&&data.sessionValid===true;
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=
+
+t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function makeRecord(){
+
+const box=document.createElement("div");
+
+box.className="record";
+
+return box;
+
+}
+
+function makeButton(label,callback){
+
+const button=document.createElement("button");
+
+button.textContent=t(label);
+
+button.dataset.dynamic="true";
+
+button.onclick=callback;
+
+button.disabled=
+
+busy||mutationBusy||!isOwner()
+
+||!!pendingMutation;
+
+return button;
+
+}
+
+function mergeRecords(previous,next,key){
+
+const map=new Map(
+
+previous.map(record=>[record[key],record])
+
+);
+
+next.forEach(record=>{
+
+map.set(record[key],record);
+
+});
+
+return [...map.values()];
+
+}
+
+async function serverCall(name,data={}){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+
+name,
+
+{timeout:30000}
+
+)(data);
+
+if(currentGeneration!==generation
+
+||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+if(response.data?.success!==true
+
+||response.data.ownerUid!==ownerUid){
+
+throw new Error("Invalid response");
+
+}
+
+return response.data;
+
+}
+
+async function freshOwnerAuthentication(){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const user=auth.currentUser;
+
+const uid=user.uid;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=await reauthenticateWithPopup(
+
+user,
+
+provider
+
+);
+
+if(credential.user.uid!==uid
+
+||auth.currentUser?.uid!==uid
+
+||!isOwner()){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Invalid owner");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(!validOwner(response.data,uid)
+
+||!isOwner()){
+
+throw new Error("Owner verification failed");
+
+}
+
+}
+
+function validTranslations(data){
+
+return data
+
+&&languages.every(language=>{
+
+const item=data[language];
+
+return item
+
+&&validText(item.title,200)
+
+&&item.title.trim().length>0
+
+&&validText(item.body,50000)
+
+&&item.body.trim().length>=20;
+
+});
+
+}
+
+function validDocument(record){
+
+return record
+
+&&documentTypes.includes(record.documentType)
+
+&&validCount(record.version)
+
+&&record.version>0
+
+&&validTranslations(record.translations)
+
+&&["minor","material"].includes(record.changeType)
+
+&&typeof record.requireReaccept==="boolean"
+
+&&(
+
+record.changeType!=="material"
+
+||record.requireReaccept===true
+
+)
+
+&&validText(record.reason,1000)
+
+&&validTime(record.createdAtMs)
+
+&&validTime(record.effectiveAtMs)
+
+&&[
+
+"published",
+"scheduled",
+"superseded",
+"cancelled"
+
+].includes(record.status);
+
+}
+
+function validDraft(record){
+
+return record
+
+&&validId(record.draftId)
+
+&&documentTypes.includes(record.documentType)
+
+&&validCount(record.baseVersion)
+
+&&validCount(record.revision)
+
+&&validTranslations(record.translations)
+
+&&["minor","material"].includes(record.changeType)
+
+&&typeof record.requireReaccept==="boolean"
+
+&&(
+
+record.changeType!=="material"
+
+||record.requireReaccept===true
+
+)
+
+&&validTime(record.effectiveAtMs)
+
+&&validText(record.reason,1000)
+
+&&record.reason.trim().length>=10
+
+&&record.translationConfirmed===true
+
+&&record.legalConfirmed===true
+
+&&validTime(record.updatedAtMs);
+
+}
+
+function renderStats(containerId,keys,data){
+
+const container=$(containerId);
+
+container.replaceChildren();
+
+keys.forEach(key=>{
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const label=document.createElement("span");
+
+label.textContent=t(key);
+
+const value=document.createElement("strong");
+
+value.textContent=String(data?.[key]??"—");
+
+box.append(label,value);
+
+container.appendChild(box);
+
+});
+
+}
+
+function renderOverview(){
+
+renderStats(
+
+"overview",
+
+overviewKeys,
+
+overview
+
+);
+
+$("lastUpdate").textContent=
+
+overview
+
+?t("updated")+": "
+
++formatDate(overview.serverTimeMs)
+
+:"";
+
+}
+
+async function loadOverview(){
+
+try{
+
+const response=await serverCall(
+
+"getAdminTermsOverview"
+
+);
+
+if(!response.overview
+
+||!overviewKeys.every(key=>
+
+validCount(response.overview[key]))
+
+||!validTime(response.serverTimeMs)){
+
+throw new Error("Invalid overview");
+
+}
+
+overview={
+
+...response.overview,
+
+serverTimeMs:response.serverTimeMs
+
+};
+
+clockOffset=response.serverTimeMs-Date.now();
+
+renderOverview();
+
+}catch(e){
+
+overview=null;
+
+renderOverview();
+
+throw e;
+
+}
+
+}
+
+function documentLines(container,record){
+
+addLine(
+
+container,
+
+"documentType",
+
+t(record.documentType)
+
+);
+
+addLine(container,"version",record.version);
+
+addLine(container,"currentStatus",t(record.status));
+
+addLine(container,"changeType",t(record.changeType));
+
+addLine(
+
+container,
+
+"requireReaccept",
+
+t(record.requireReaccept?"yes":"no")
+
+);
+
+addLine(
+
+container,
+
+"effective",
+
+formatDate(record.effectiveAtMs)
+
+);
+
+addLine(container,"changeReason",record.reason);
+
+}
+
+function showTranslation(
+
+record,
+
+language,
+
+titleId,
+
+bodyId
+
+){
+
+const content=
+
+record?.translations?.[language];
+
+$(titleId).textContent=content?.title||"";
+
+$(bodyId).textContent=content?.body||"";
+
+}
+
+function renderCurrent(){
+
+$("currentPanel").hidden=
+
+!selectedType||!isOwner();
+
+const container=$("currentInfo");
+
+container.replaceChildren();
+
+if(!currentDocument){
+
+container.textContent=t("noDocument");
+
+}else{
+
+documentLines(container,currentDocument);
+
+}
+
+showTranslation(
+
+currentDocument,
+
+$("viewLanguage").value,
+
+"currentTitle",
+
+"currentBody"
+
+);
+
+}
+
+function renderDraft(){
+
+$("draftPanel").hidden=
+
+!savedDraft||!isOwner();
+
+const container=$("draftInfo");
+
+container.replaceChildren();
+
+if(savedDraft){
+
+addLine(
+
+container,
+
+"documentType",
+
+t(savedDraft.documentType)
+
+);
+
+addLine(
+
+container,
+
+"revision",
+
+savedDraft.revision
+
+);
+
+addLine(
+
+container,
+
+"changeType",
+
+t(savedDraft.changeType)
+
+);
+
+addLine(
+
+container,
+
+"effective",
+
+formatDate(savedDraft.effectiveAtMs)
+
+);
+
+addLine(
+
+container,
+
+"updated",
+
+formatDate(savedDraft.updatedAtMs)
+
+);
+
+addLine(
+
+container,
+
+"changeReason",
+
+savedDraft.reason
+
+);
+
+addLine(
+
+container,
+
+"requireReaccept",
+
+t(savedDraft.requireReaccept?"yes":"no")
+
+);
+
+}
+
+showTranslation(
+
+savedDraft,
+
+$("draftLanguage").value,
+
+"draftTitle",
+
+"draftBody"
+
+);
+
+}
+
+function renderScheduled(){
+
+$("scheduledPanel").hidden=
+
+!scheduledDocument||!isOwner();
+
+const container=$("scheduledInfo");
+
+container.replaceChildren();
+
+if(scheduledDocument){
+
+documentLines(container,scheduledDocument);
+
+}
+
+}
+
+function clearDocumentRecords(){
+
+acceptanceStats=null;
+
+acceptanceRecords=[];
+
+acceptanceCursor=null;
+
+acceptanceQuery=null;
+
+versionRecords=[];
+
+versionCursor=null;
+
+selectedVersion=null;
+
+renderAcceptanceStats();
+
+renderAcceptance();
+
+renderVersions();
+
+renderVersionDetails();
+
+}
+
+async function loadDocument(type){
+
+if(!documentTypes.includes(type)){
+
+throw new Error("Invalid document type");
+
+}
+
+const response=await serverCall(
+
+"getAdminTermsDocument",
+
+{documentType:type}
+
+);
+
+const current=response.current;
+
+const draft=response.draft;
+
+const scheduled=response.scheduled;
+
+if(current!==null
+
+&&(
+
+!validDocument(current)
+
+||current.documentType!==type
+
+||current.status!=="published"
+
+)){
+
+throw new Error("Invalid current document");
+
+}
+
+if(draft!==null
+
+&&(
+
+!validDraft(draft)
+
+||draft.documentType!==type
+
+)){
+
+throw new Error("Invalid draft");
+
+}
+
+if(scheduled!==null
+
+&&(
+
+!validDocument(scheduled)
+
+||scheduled.documentType!==type
+
+||scheduled.status!=="scheduled"
+
+)){
+
+throw new Error("Invalid scheduled document");
+
+}
+
+selectedType=type;
+
+currentDocument=current;
+
+savedDraft=draft;
+
+scheduledDocument=scheduled;
+
+$("documentType").value=type;
+
+$("publishConfirmation").value="";
+
+$("confirmPublish").checked=false;
+
+$("cancelScheduleReason").value="";
+
+$("confirmCancelSchedule").checked=false;
+
+clearDocumentRecords();
+
+renderCurrent();
+
+renderDraft();
+
+renderScheduled();
+
+}
+
+async function runRead(callback){
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+message("result","loading");
+
+try{
+
+await callback();
+
+if(currentGeneration===generation){
+
+message("result","");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message("result","error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+async function runMutation(
+
+name,
+
+payload,
+
+validate,
+
+onSuccess,
+
+resultId="result"
+
+){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const fingerprint=JSON.stringify({
+
+name,payload
+
+});
+
+if(pendingMutation
+
+&&pendingMutation.fingerprint!==fingerprint){
+
+message(resultId,"saveError");
+
+return;
+
+}
+
+if(!pendingMutation){
+
+pendingMutation={
+
+fingerprint,
+
+name,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const currentGeneration=generation;
+
+mutationBusy=true;
+
+updateControls();
+
+message(resultId,"saving");
+
+try{
+
+await freshOwnerAuthentication();
+
+if(currentGeneration!==generation
+
+||!isOwner())return;
+
+const response=await serverCall(
+
+name,
+
+{
+
+...payload,
+
+requestId:pendingMutation.requestId
+
+}
+
+);
+
+if(!validate(response)){
+
+throw new Error("Action not confirmed");
+
+}
+
+pendingMutation=null;
+
+await onSuccess(response);
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message(resultId,"saveError");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("loadDocument").onclick=()=>{
+
+if(editorDirty
+
+&&!window.confirm(t("discard")))return;
+
+const type=$("documentType").value;
+
+runRead(async()=>{
+
+closeEditor();
+
+await loadDocument(type);
+
+await loadAcceptanceStats();
+
+});
+
+};
+
+$("viewLanguage").onchange=renderCurrent;
+
+$("draftLanguage").onchange=renderDraft;
+
+const translationFields={
+
+si:["titleSi","bodySi"],
+
+en:["titleEn","bodyEn"],
+
+ta:["titleTa","bodyTa"]
+
+};
+
+const editorFields=[
+
+"titleSi",
+"bodySi",
+"titleEn",
+"bodyEn",
+"titleTa",
+"bodyTa",
+"changeType",
+"requireReaccept",
+"effectiveDate",
+"effectiveTime",
+"changeReason",
+"translationConfirmed",
+"legalConfirmed"
+
+];
+
+function openEditor(source=null){
+
+if(!isOwner()
+
+||!selectedType
+
+||busy
+
+||mutationBusy
+
+||pendingMutation
+
+||scheduledDocument)return;
+
+if(editorDirty
+
+&&!window.confirm(t("discard")))return;
+
+editorOpen=true;
+
+editorDirty=false;
+
+editorBaseVersion=
+
+currentDocument?.version||0;
+
+editorDraftRevision=
+
+savedDraft?.revision||0;
+
+languages.forEach(language=>{
+
+const fields=translationFields[language];
+
+$(fields[0]).value=
+
+source?.translations?.[language]?.title||"";
+
+$(fields[1]).value=
+
+source?.translations?.[language]?.body||"";
+
+});
+
+$("changeType").value=
+
+source?.changeType||"";
+
+$("requireReaccept").checked=
+
+source?.requireReaccept===true;
+
+const timestamp=
+
+source?.effectiveAtMs>serverNow()
+
+?source.effectiveAtMs
+
+:serverNow()+86400000;
+
+const parts=sriLankaDateParts(timestamp);
+
+$("effectiveDate").value=parts.date;
+
+$("effectiveTime").value=parts.time;
+
+$("effectiveDate").min=
+
+sriLankaDateParts(serverNow()).date;
+
+$("changeReason").value="";
+
+$("translationConfirmed").checked=false;
+
+$("legalConfirmed").checked=false;
+
+$("editorPanel").hidden=false;
+
+$("previewPanel").hidden=true;
+
+previewData=null;
+
+message("editorResult","");
+
+renderEditorVersion();
+
+updateControls();
+
+$("editorPanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+function renderEditorVersion(){
+
+$("editorVersion").textContent=
+
+t("version")+": "+editorBaseVersion
+
++" | "+t("revision")+": "+editorDraftRevision;
+
+}
+
+function closeEditor(){
+
+editorOpen=false;
+
+editorDirty=false;
+
+editorBaseVersion=0;
+
+editorDraftRevision=0;
+
+previewData=null;
+
+editorFields.forEach(id=>{
+
+const element=$(id);
+
+if(element.type==="checkbox"){
+
+element.checked=false;
+
+}else{
+
+element.value="";
+
+}
+
+});
+
+$("editorPanel").hidden=true;
+
+$("previewPanel").hidden=true;
+
+$("previewTitle").textContent="";
+
+$("previewBody").textContent="";
+
+message("editorResult","");
+
+}
+
+$("editDocument").onclick=()=>{
+
+openEditor(savedDraft||currentDocument);
+
+};
+
+$("editDraft").onclick=()=>{
+
+openEditor(savedDraft);
+
+};
+
+$("closeEditor").onclick=()=>{
+
+if(busy||mutationBusy||pendingMutation)return;
+
+if(editorDirty
+
+&&!window.confirm(t("discard")))return;
+
+closeEditor();
+
+updateControls();
+
+};
+
+editorFields.forEach(id=>{
+
+$(id).addEventListener("input",()=>{
+
+if(!editorOpen)return;
+
+editorDirty=true;
+
+if(id==="changeType"
+
+&&$("changeType").value==="material"){
+
+$("requireReaccept").checked=true;
+
+}
+
+if([
+
+"titleSi","bodySi",
+
+"titleEn","bodyEn",
+
+"titleTa","bodyTa"
+
+].includes(id)){
+
+$("translationConfirmed").checked=false;
+
+$("legalConfirmed").checked=false;
+
+}
+
+previewData=null;
+
+$("previewPanel").hidden=true;
+
+$("previewTitle").textContent="";
+
+$("previewBody").textContent="";
+
+updateControls();
+
+});
+
+});
+
+function readTranslations(){
+
+const translations={};
+
+languages.forEach(language=>{
+
+const fields=translationFields[language];
+
+translations[language]={
+
+title:$(fields[0]).value.trim(),
+
+body:$(fields[1]).value.trim()
+
+};
+
+});
+
+return translations;
+
+}
+
+function readDraft(){
+
+if(!editorOpen
+
+||!selectedType
+
+||!editorDirty
+
+||scheduledDocument)return null;
+
+const translations=readTranslations();
+
+const changeType=$("changeType").value;
+
+const requireReaccept=
+
+$("requireReaccept").checked;
+
+const effectiveAtMs=effectiveTimestamp();
+
+const reason=$("changeReason").value.trim();
+
+if(!validTranslations(translations)
+
+||!["minor","material"].includes(changeType)
+
+||(changeType==="material"&&!requireReaccept)
+
+||!validTime(effectiveAtMs)
+
+||effectiveAtMs<serverNow()+300000
+
+||effectiveAtMs>serverNow()+366*86400000
+
+||reason.length<10
+
+||reason.length>1000
+
+||!$("translationConfirmed").checked
+
+||!$("legalConfirmed").checked){
+
+return null;
+
+}
+
+return {
+
+documentType:selectedType,
+
+expectedBaseVersion:editorBaseVersion,
+
+expectedDraftRevision:editorDraftRevision,
+
+translations,
+
+changeType,
+
+requireReaccept,
+
+effectiveAtMs,
+
+reason,
+
+translationConfirmed:true,
+
+legalConfirmed:true
+
+};
+
+}
+
+function renderPreview(){
+
+showTranslation(
+
+previewData,
+
+$("previewLanguage").value,
+
+"previewTitle",
+
+"previewBody"
+
+);
+
+}
+
+$("previewButton").onclick=()=>{
+
+const translations=readTranslations();
+
+if(!validTranslations(translations)){
+
+message("editorResult","invalid");
+
+return;
+
+}
+
+previewData={translations};
+
+$("previewPanel").hidden=false;
+
+renderPreview();
+
+$("previewPanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+};
+
+$("previewLanguage").onchange=renderPreview;
+
+$("closePreview").onclick=()=>{
+
+$("previewPanel").hidden=true;
+
+previewData=null;
+
+$("previewTitle").textContent="";
+
+$("previewBody").textContent="";
+
+};
+
+$("saveDraft").onclick=()=>{
+
+const payload=readDraft();
+
+if(!payload){
+
+message("editorResult","invalid");
+
+return;
+
+}
+
+runMutation(
+
+"saveAdminTermsDraft",
+
+payload,
+
+response=>
+
+validDraft(response.draft)
+
+&&response.draft.documentType===payload.documentType
+
+&&response.draft.baseVersion===payload.expectedBaseVersion
+
+&&response.draft.revision>payload.expectedDraftRevision
+
+&&response.draft.effectiveAtMs===payload.effectiveAtMs
+
+&&response.draft.changeType===payload.changeType
+
+&&response.draft.requireReaccept===payload.requireReaccept
+
+&&response.draft.reason===payload.reason
+
+&&languages.every(language=>
+
+response.draft.translations[language].title
+
+===payload.translations[language].title
+
+&&response.draft.translations[language].body
+
+===payload.translations[language].body
+
+),
+
+async response=>{
+
+savedDraft=response.draft;
+
+editorDirty=false;
+
+editorDraftRevision=savedDraft.revision;
+
+renderEditorVersion();
+
+renderDraft();
+
+$("publishConfirmation").value="";
+
+$("confirmPublish").checked=false;
+
+message("editorResult","saved");
+
+try{
+
+await loadOverview();
+
+}catch(e){
+
+message("result","error");
+
+}
+
+},
+
+"editorResult"
+
+);
+
+};
+
+function readPublish(){
+
+if(!savedDraft
+
+||!selectedType
+
+||scheduledDocument
+
+||editorDirty
+
+||savedDraft.baseVersion!==(currentDocument?.version||0)
+
+||savedDraft.effectiveAtMs<serverNow()+300000
+
+||$("publishConfirmation").value.trim()!=="PUBLISH"
+
+||!$("confirmPublish").checked){
+
+return null;
+
+}
+
+return {
+
+documentType:selectedType,
+
+draftId:savedDraft.draftId,
+
+expectedDraftRevision:savedDraft.revision,
+
+expectedBaseVersion:savedDraft.baseVersion,
+
+effectiveAtMs:savedDraft.effectiveAtMs,
+
+applyTo:"future_actions",
+
+preserveActiveTrips:true
+
+};
+
+}
+
+$("publishDocument").onclick=()=>{
+
+const payload=readPublish();
+
+if(!payload){
+
+message("publishResult","invalid");
+
+return;
+
+}
+
+const draftSnapshot=savedDraft;
+
+runMutation(
+
+"publishAdminTermsDocument",
+
+payload,
+
+response=>
+
+validDocument(response.document)
+
+&&response.document.documentType===payload.documentType
+
+&&response.document.version>payload.expectedBaseVersion
+
+&&response.document.status==="scheduled"
+
+&&response.document.effectiveAtMs===payload.effectiveAtMs
+
+&&response.document.changeType===draftSnapshot.changeType
+
+&&response.document.requireReaccept===draftSnapshot.requireReaccept
+
+&&languages.every(language=>
+
+response.document.translations[language].title
+
+===draftSnapshot.translations[language].title
+
+&&response.document.translations[language].body
+
+===draftSnapshot.translations[language].body
+
+),
+
+async response=>{
+
+scheduledDocument=response.document;
+
+savedDraft=null;
+
+closeEditor();
+
+$("publishConfirmation").value="";
+
+$("confirmPublish").checked=false;
+
+renderDraft();
+
+renderScheduled();
+
+message("result","publishSuccess");
+
+try{
+
+await loadOverview();
+
+}catch(e){
+
+message("result","error");
+
+}
+
+},
+
+"publishResult"
+
+);
+
+};
+
+function readCancelSchedule(){
+
+if(!scheduledDocument
+
+||scheduledDocument.effectiveAtMs<=serverNow()
+
+||!$("confirmCancelSchedule").checked){
+
+return null;
+
+}
+
+const reason=
+
+$("cancelScheduleReason").value.trim();
+
+if(reason.length<10||reason.length>500){
+
+return null;
+
+}
+
+return {
+
+documentType:selectedType,
+
+version:scheduledDocument.version,
+
+reason
+
+};
+
+}
+
+$("cancelSchedule").onclick=()=>{
+
+const payload=readCancelSchedule();
+
+if(!payload){
+
+message("result","invalid");
+
+return;
+
+}
+
+runMutation(
+
+"cancelAdminTermsPublication",
+
+payload,
+
+response=>
+
+response.cancelled===true
+
+&&response.documentType===payload.documentType
+
+&&response.version===payload.version,
+
+async()=>{
+
+scheduledDocument=null;
+
+$("cancelScheduleReason").value="";
+
+$("confirmCancelSchedule").checked=false;
+
+renderScheduled();
+
+message("result","cancelSuccess");
+
+try{
+
+await loadOverview();
+
+}catch(e){
+
+message("result","error");
+
+}
+
+}
+
+);
+
+};
+
+function validAcceptanceStats(data){
+
+return data
+
+&&acceptanceKeys.every(key=>
+
+validCount(data[key]))
+
+&&data.acceptedCustomers<=data.eligibleCustomers
+
+&&data.acceptedDrivers<=data.eligibleDrivers;
+
+}
+
+function renderAcceptanceStats(){
+
+renderStats(
+
+"acceptanceStats",
+
+acceptanceKeys,
+
+acceptanceStats
+
+);
+
+}
+
+async function loadAcceptanceStats(){
+
+acceptanceStats=null;
+
+renderAcceptanceStats();
+
+if(!selectedType||!currentDocument)return;
+
+const response=await serverCall(
+
+"getAdminTermsAcceptanceOverview",
+
+{
+
+documentType:selectedType,
+
+version:currentDocument.version
+
+}
+
+);
+
+if(response.documentType!==selectedType
+
+||response.version!==currentDocument.version
+
+||!validAcceptanceStats(response.stats)){
+
+throw new Error("Invalid acceptance stats");
+
+}
+
+acceptanceStats=response.stats;
+
+renderAcceptanceStats();
+
+}
+
+$("loadAcceptance").onclick=()=>{
+
+if(!selectedType){
+
+message("result","selectFirst");
+
+return;
+
+}
+
+runRead(loadAcceptanceStats);
+
+};
+
+const acceptanceStatuses=[
+
+"accepted",
+"pending",
+"declined",
+"withdrawn"
+
+];
+
+function validAcceptance(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&validId(record.accountId)
+
+&&["customer","driver"].includes(record.role)
+
+&&documentTypes.includes(record.documentType)
+
+&&validCount(record.version)
+
+&&record.version>0
+
+&&acceptanceStatuses.includes(record.status)
+
+&&languages.includes(record.language)
+
+&&nullableTime(record.acceptedAtMs)
+
+&&validTime(record.updatedAtMs)
+
+&&(record.status!=="accepted"
+
+||validTime(record.acceptedAtMs));
+
+}
+
+function renderAcceptance(){
+
+const container=$("acceptanceList");
+
+container.replaceChildren();
+
+$("moreAcceptance").hidden=
+
+acceptanceCursor===null;
+
+if(!acceptanceQuery||!isOwner())return;
+
+if(!acceptanceRecords.length){
+
+container.textContent=t("noRecords");
+
+return;
+
+}
+
+acceptanceRecords.forEach(record=>{
+
+const box=makeRecord();
+
+addLine(box,"accountId",record.accountId);
+
+addLine(box,"role",t(record.role));
+
+addLine(box,"documentType",t(record.documentType));
+
+addLine(box,"version",record.version);
+
+addLine(box,"currentStatus",t(record.status));
+
+addLine(box,"documentLanguage",record.language);
+
+addLine(box,"accepted",formatDate(record.acceptedAtMs));
+
+addLine(box,"updated",formatDate(record.updatedAtMs));
+
+container.appendChild(box);
+
+});
+
+}
+
+async function loadAcceptance(reset=true){
+
+if(!acceptanceQuery)return;
+
+const response=await serverCall(
+
+"getAdminTermsAcceptanceRecords",
+
+{
+
+...acceptanceQuery,
+
+limit:30,
+
+cursor:reset?null:acceptanceCursor
+
+}
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validAcceptance)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid acceptance records");
+
+}
+
+if(response.records.some(record=>
+
+record.documentType!==acceptanceQuery.documentType
+
+||record.version!==acceptanceQuery.version
+
+||(acceptanceQuery.role!=="all"
+
+&&record.role!==acceptanceQuery.role)
+
+||(acceptanceQuery.status!=="all"
+
+&&record.status!==acceptanceQuery.status)
+
+||(acceptanceQuery.accountId
+
+&&record.accountId!==acceptanceQuery.accountId)
+
+)){
+
+throw new Error("Invalid filters");
+
+}
+
+acceptanceRecords=mergeRecords(
+
+reset?[]:acceptanceRecords,
+
+response.records,
+
+"recordId"
+
+);
+
+acceptanceCursor=response.nextCursor;
+
+renderAcceptance();
+
+}
+
+$("searchAcceptance").onclick=()=>{
+
+if(!selectedType||!currentDocument){
+
+message("result","selectFirst");
+
+return;
+
+}
+
+const role=$("acceptanceRole").value;
+
+const status=$("acceptanceStatus").value;
+
+const accountId=
+
+$("acceptanceSearch").value.trim();
+
+if(!["all","customer","driver"].includes(role)
+
+||!["all",...acceptanceStatuses].includes(status)
+
+||(accountId&&!validId(accountId))){
+
+message("result","invalid");
+
+return;
+
+}
+
+runRead(async()=>{
+
+acceptanceQuery={
+
+documentType:selectedType,
+
+version:currentDocument.version,
+
+role,
+
+status,
+
+accountId:accountId||null
+
+};
+
+acceptanceRecords=[];
+
+acceptanceCursor=null;
+
+renderAcceptance();
+
+await loadAcceptance(true);
+
+});
+
+};
+
+$("moreAcceptance").onclick=()=>{
+
+if(acceptanceCursor!==null){
+
+runRead(()=>loadAcceptance(false));
+
+}
+
+};
+
+function validVersionSummary(record){
+
+return record
+
+&&documentTypes.includes(record.documentType)
+
+&&validCount(record.version)
+
+&&record.version>0
+
+&&["minor","material"].includes(record.changeType)
+
+&&typeof record.requireReaccept==="boolean"
+
+&&validTime(record.createdAtMs)
+
+&&validTime(record.effectiveAtMs)
+
+&&validText(record.reason,1000)
+
+&&[
+
+"published",
+"scheduled",
+"superseded",
+"cancelled"
+
+].includes(record.status);
+
+}
+
+function renderVersions(){
+
+const container=$("versionList");
+
+container.replaceChildren();
+
+$("moreVersions").hidden=versionCursor===null;
+
+versionRecords.forEach(record=>{
+
+const box=makeRecord();
+
+documentLines(box,record);
+
+box.appendChild(
+
+makeButton(
+
+"viewDetails",
+
+()=>openVersion(record.version)
+
+)
+
+);
+
+container.appendChild(box);
+
+});
+
+}
+
+async function loadVersions(reset=true){
+
+if(!selectedType){
+
+throw new Error("No document selected");
+
+}
+
+const response=await serverCall(
+
+"getAdminTermsVersionHistory",
+
+{
+
+documentType:selectedType,
+
+limit:30,
+
+cursor:reset?null:versionCursor
+
+}
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validVersionSummary)
+
+||!validCursor(response.nextCursor)
+
+||response.records.some(record=>
+
+record.documentType!==selectedType)){
+
+throw new Error("Invalid version history");
+
+}
+
+versionRecords=mergeRecords(
+
+reset?[]:versionRecords,
+
+response.records,
+
+"version"
+
+);
+
+versionCursor=response.nextCursor;
+
+renderVersions();
+
+if(!versionRecords.length){
+
+$("versionList").textContent=t("noRecords");
+
+}
+
+}
+
+$("loadVersions").onclick=()=>{
+
+if(!selectedType){
+
+message("result","selectFirst");
+
+return;
+
+}
+
+runRead(()=>loadVersions(true));
+
+};
+
+$("moreVersions").onclick=()=>{
+
+if(versionCursor!==null){
+
+runRead(()=>loadVersions(false));
+
+}
+
+};
+
+function renderVersionDetails(){
+
+$("versionDetailsPanel").hidden=
+
+!selectedVersion||!isOwner();
+
+const container=$("versionDetailsInfo");
+
+container.replaceChildren();
+
+if(selectedVersion){
+
+documentLines(container,selectedVersion);
+
+}
+
+showTranslation(
+
+selectedVersion,
+
+$("historyLanguage").value,
+
+"historyTitle",
+
+"historyBody"
+
+);
+
+}
+
+function openVersion(version){
+
+runRead(async()=>{
+
+const response=await serverCall(
+
+"getAdminTermsVersionDetails",
+
+{
+
+documentType:selectedType,
+
+version
+
+}
+
+);
+
+if(!validDocument(response.document)
+
+||response.document.documentType!==selectedType
+
+||response.document.version!==version){
+
+throw new Error("Invalid version");
+
+}
+
+selectedVersion=response.document;
+
+renderVersionDetails();
+
+$("versionDetailsPanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+});
+
+}
+
+$("historyLanguage").onchange=
+
+renderVersionDetails;
+
+$("copyOldVersion").onclick=()=>{
+
+if(!selectedVersion||scheduledDocument)return;
+
+const source={
+
+translations:selectedVersion.translations,
+
+changeType:"material",
+
+requireReaccept:true,
+
+effectiveAtMs:serverNow()+86400000
+
+};
+
+openEditor(source);
+
+};
+
+$("closeVersion").onclick=()=>{
+
+selectedVersion=null;
+
+renderVersionDetails();
+
+updateControls();
+
+};
+
+function validAudit(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&documentTypes.includes(record.documentType)
+
+&&validText(record.action,150)
+
+&&validText(record.reason,1000)
+
+&&validTime(record.createdAtMs)
+
+&&(record.version===null
+
+||validCount(record.version));
+
+}
+
+function renderAudit(){
+
+const container=$("auditList");
+
+container.replaceChildren();
+
+$("moreAudit").hidden=auditCursor===null;
+
+auditRecords.forEach(record=>{
+
+const box=makeRecord();
+
+addLine(box,"action",record.action);
+
+addLine(box,"documentType",t(record.documentType));
+
+addLine(box,"version",record.version);
+
+addLine(box,"changeReason",record.reason);
+
+addLine(box,"created",formatDate(record.createdAtMs));
+
+container.appendChild(box);
+
+});
+
+}
+
+async function loadAudit(reset=true){
+
+const response=await serverCall(
+
+"getAdminTermsAuditHistory",
+
+{
+
+limit:30,
+
+cursor:reset?null:auditCursor
+
+}
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validAudit)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid audit history");
+
+}
+
+auditRecords=mergeRecords(
+
+reset?[]:auditRecords,
+
+response.records,
+
+"recordId"
+
+);
+
+auditCursor=response.nextCursor;
+
+renderAudit();
+
+if(!auditRecords.length){
+
+$("auditList").textContent=t("noRecords");
+
+}
+
+}
+
+$("loadAudit").onclick=()=>{
+
+runRead(()=>loadAudit(true));
+
+};
+
+$("moreAudit").onclick=()=>{
+
+if(auditCursor!==null){
+
+runRead(()=>loadAudit(false));
+
+}
+
+};
+
+$("refreshButton").onclick=()=>{
+
+runRead(async()=>{
+
+await loadOverview();
+
+if(selectedType&&!editorDirty&&!editorOpen){
+
+await loadDocument(selectedType);
+
+await loadAcceptanceStats();
+
+}
+
+});
+
+};
+
+const mutationInputs=[
+
+...editorFields,
+
+"publishConfirmation",
+
+"confirmPublish",
+
+"cancelScheduleReason",
+
+"confirmCancelSchedule"
+
+];
+
+mutationInputs.forEach(id=>{
+
+$(id).addEventListener("input",updateControls);
+
+$(id).addEventListener("change",updateControls);
+
+});
+
+[
+
+["publishConfirmation","confirmPublish"],
+
+["cancelScheduleReason","confirmCancelSchedule"]
+
+].forEach(([id,confirmId])=>{
+
+$(id).addEventListener("input",()=>{
+
+$(confirmId).checked=false;
+
+updateControls();
+
+});
+
+});
+
+function updateControls(){
+
+const locked=
+
+busy||mutationBusy||!isOwner();
+
+const pending=!!pendingMutation;
+
+[
+
+"refreshButton",
+"documentType",
+"loadDocument",
+"editDocument",
+"editDraft",
+"closeEditor",
+"previewButton",
+"loadAcceptance",
+"acceptanceRole",
+"acceptanceStatus",
+"acceptanceSearch",
+"searchAcceptance",
+"moreAcceptance",
+"loadVersions",
+"moreVersions",
+"copyOldVersion",
+"closeVersion",
+"loadAudit",
+"moreAudit"
+
+].forEach(id=>{
+
+$(id).disabled=locked||pending;
+
+});
+
+document.querySelectorAll("[data-dynamic]")
+
+.forEach(button=>{
+
+button.disabled=locked||pending;
+
+});
+
+mutationInputs.forEach(id=>{
+
+$(id).disabled=locked||pending;
+
+});
+
+$("editDocument").disabled=
+
+locked||pending||!selectedType
+
+||!!scheduledDocument;
+
+$("editDraft").disabled=
+
+locked||pending||!savedDraft
+
+||!!scheduledDocument;
+
+$("copyOldVersion").disabled=
+
+locked||pending||!selectedVersion
+
+||!!scheduledDocument;
+
+$("requireReaccept").disabled=
+
+locked||pending
+
+||$("changeType").value==="material";
+
+function mutationAllowed(name){
+
+return !locked
+
+&&(!pendingMutation
+
+||pendingMutation.name===name);
+
+}
+
+$("saveDraft").disabled=
+
+!mutationAllowed("saveAdminTermsDraft")
+
+||!readDraft();
+
+$("publishDocument").disabled=
+
+!mutationAllowed("publishAdminTermsDocument")
+
+||!readPublish();
+
+$("cancelSchedule").disabled=
+
+!mutationAllowed("cancelAdminTermsPublication")
+
+||!readCancelSchedule();
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+const links={
+
+loginLink:"admin-login.html",
+
+dashboardLink:"admin-dashboard.html",
+
+backLink:"admin-dashboard.html",
+
+customerLink:"admin-customers.html",
+
+driverLink:"admin-drivers.html",
+
+securityLink:"admin-security.html",
+
+settingsLink:"admin-settings.html"
+
+};
+
+Object.entries(links).forEach(([id,page])=>{
+
+$(id).href=pageLink(page);
+
+});
+
+Object.keys(messages).forEach(id=>{
+
+message(id,messages[id]);
+
+});
+
+renderOverview();
+
+renderCurrent();
+
+renderDraft();
+
+renderScheduled();
+
+renderEditorVersion();
+
+renderPreview();
+
+renderAcceptanceStats();
+
+renderAcceptance();
+
+renderVersions();
+
+renderVersionDetails();
+
+renderAudit();
+
+updateControls();
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+
+"myride_admin_language",
+
+lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+ownerUid=null;
+
+busy=false;
+
+mutationBusy=false;
+
+overview=null;
+
+clockOffset=0;
+
+selectedType=null;
+
+currentDocument=null;
+
+savedDraft=null;
+
+scheduledDocument=null;
+
+pendingMutation=null;
+
+auditRecords=[];
+
+auditCursor=null;
+
+closeEditor();
+
+clearDocumentRecords();
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("currentPanel").hidden=true;
+
+$("draftPanel").hidden=true;
+
+$("scheduledPanel").hidden=true;
+
+$("versionDetailsPanel").hidden=true;
+
+$("publishConfirmation").value="";
+
+$("confirmPublish").checked=false;
+
+$("cancelScheduleReason").value="";
+
+$("confirmCancelSchedule").checked=false;
+
+$("acceptanceSearch").value="";
+
+$("acceptanceRole").value="all";
+
+$("acceptanceStatus").value="all";
+
+$("documentType").value="customerTerms";
+
+[
+
+"result",
+"editorResult",
+"publishResult"
+
+].forEach(id=>{
+
+message(id,"");
+
+});
+
+renderLanguage();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+message("status","denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+message("status","offline");
+
+return;
+
+}
+
+message("status","checking");
+
+try{
+
+const appToken=await getToken(
+
+appCheck,
+
+false
+
+);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+message("status","verified");
+
+updateControls();
+
+await runRead(async()=>{
+
+await loadOverview();
+
+await loadDocument("customerTerms");
+
+await loadAcceptanceStats();
+
+});
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+setInterval(async()=>{
+
+if(!isOwner()
+
+||checking
+
+||mutationBusy)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation)return;
+
+if(!validOwner(response.data,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+setInterval(()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||pendingMutation
+
+||document.hidden)return;
+
+runRead(async()=>{
+
+await loadOverview();
+
+if(selectedType
+
+&&!editorOpen
+
+&&!editorDirty
+
+&&!selectedVersion
+
+&&!$("confirmPublish").checked
+
+&&!$("publishConfirmation").value.trim()
+
+&&!$("cancelScheduleReason").value.trim()
+
+&&versionRecords.length===0
+
+&&acceptanceRecords.length===0){
+
+await loadDocument(selectedType);
+
+await loadAcceptanceStats();
+
+}
+
+});
+
+},60000);
+
+setInterval(()=>{
+
+if(isOwner()){
+
+updateControls();
+
+}
+
+},15000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+message("status","offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("beforeunload",event=>{
+
+if(editorDirty
+
+||mutationBusy
+
+||pendingMutation
+
+||$("cancelScheduleReason").value.trim()){
+
+event.preventDefault();
+
+event.returnValue="";
+
+}
+
+});
+
+window.addEventListener(
+
+"pagehide",
+
+clearSession
+
+);
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+renderLanguage();
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
