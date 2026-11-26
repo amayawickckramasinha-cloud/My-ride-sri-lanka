@@ -1,0 +1,3275 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+<meta name="google" content="notranslate">
+<meta name="referrer" content="no-referrer">
+
+<title>MY RIDE - Payment Management</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:1000px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+text-align:center;
+font-size:38px;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3,h4{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:16px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:14px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:15px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+input,select,textarea{
+width:100%;
+padding:13px;
+margin:8px 0;
+background:#292929;
+color:white;
+border:1px solid #666;
+border-radius:8px;
+font-size:16px;
+}
+
+textarea{
+min-height:90px;
+resize:vertical;
+}
+
+label{
+display:block;
+margin-top:12px;
+line-height:1.7;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+}
+
+.stat{
+background:#292929;
+border-radius:9px;
+padding:15px;
+overflow-wrap:anywhere;
+}
+
+.stat strong{
+display:block;
+font-size:20px;
+margin-top:10px;
+color:#FFD600;
+}
+
+.record{
+background:#292929;
+border:1px solid #555;
+border-radius:10px;
+padding:15px;
+margin:12px 0;
+line-height:1.9;
+overflow-wrap:anywhere;
+}
+
+.good{
+color:#55E68A;
+}
+
+.warning{
+color:#FFB347;
+}
+
+.bad{
+color:#FF7777;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.checkRow{
+display:flex;
+align-items:flex-start;
+gap:10px;
+}
+
+.checkRow input{
+width:20px;
+height:20px;
+flex-shrink:0;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+.message{
+color:#FFD600;
+line-height:1.8;
+text-align:center;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading">
+Payment Management
+</h2>
+
+<div class="languages">
+
+<button data-lang="si">සිංහල</button>
+<button data-lang="en">English</button>
+<button data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+class="message"
+role="status"
+aria-live="polite">
+Checking security...
+</p>
+
+<section id="accessPanel"
+class="panel" hidden>
+
+<h3>🔒 Owner Admin Only</h3>
+
+<p data-t="denied"></p>
+
+<a id="loginLink"
+class="action"
+data-t="login"></a>
+
+</section>
+
+<div id="adminContent" hidden>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<section class="panel">
+
+<h3 data-t="overview"></h3>
+
+<div id="overview" class="grid"></div>
+
+<p id="lastUpdate" class="note"></p>
+
+<button id="refreshButton"
+data-t="refresh"></button>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="income"></h3>
+
+<div id="incomeSummary"
+class="grid"></div>
+
+<p class="note"
+data-t="incomeNotice"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="payments"></h3>
+
+<label for="search"
+data-t="search"></label>
+
+<input id="search"
+type="search"
+maxlength="100"
+autocomplete="off">
+
+<label for="paymentStatus"
+data-t="paymentStatus"></label>
+
+<select id="paymentStatus">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="paid"
+data-t="paid"></option>
+
+<option value="unpaid"
+data-t="unpaid"></option>
+
+<option value="pending"
+data-t="pending"></option>
+
+<option value="partial"
+data-t="partial"></option>
+
+<option value="rejected"
+data-t="rejected"></option>
+
+</select>
+
+<label for="paymentMethod"
+data-t="method"></label>
+
+<select id="paymentMethod">
+
+<option value="all"
+data-t="all"></option>
+
+<option value="cash"
+data-t="cash"></option>
+
+<option value="bank"
+data-t="bank"></option>
+
+</select>
+
+<label for="fromDate"
+data-t="fromDate"></label>
+
+<input id="fromDate" type="date">
+
+<label for="toDate"
+data-t="toDate"></label>
+
+<input id="toDate" type="date">
+
+<button id="searchButton"
+data-t="searchButton"></button>
+
+<p id="listResult"
+class="message"
+role="status"></p>
+
+<div id="paymentList"></div>
+
+<button id="morePayments"
+data-t="more"
+hidden></button>
+
+</section>
+
+<section id="detailsPanel"
+class="panel"
+hidden>
+
+<h3 data-t="details"></h3>
+
+<div id="paymentDetails"></div>
+
+<h4 data-t="transactions"></h4>
+
+<div id="transactionList"></div>
+
+<button id="moreTransactions"
+data-t="more"
+hidden></button>
+
+<button id="closeDetails"
+class="back"
+data-t="close"></button>
+
+</section>
+
+<section id="reviewPanel"
+class="panel"
+hidden>
+
+<h3 data-t="review"></h3>
+
+<div id="reviewDetails"></div>
+
+<p class="warning"
+data-t="reviewNotice"></p>
+
+<label for="decision"
+data-t="decision"></label>
+
+<select id="decision">
+
+<option value=""
+data-t="choose"></option>
+
+<option value="approved"
+data-t="approved"></option>
+
+<option value="rejected"
+data-t="rejected"></option>
+
+</select>
+
+<label for="verifiedReference"
+data-t="verifiedReference"></label>
+
+<input id="verifiedReference"
+maxlength="150"
+autocomplete="off">
+
+<label for="reviewReason"
+data-t="reason"></label>
+
+<textarea id="reviewReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="reviewConsent"
+type="checkbox">
+
+<span data-t="confirmReview"></span>
+
+</label>
+
+<button id="submitReview"
+data-t="confirm"
+disabled></button>
+
+<button id="closeReview"
+class="back"
+data-t="close"></button>
+
+<p id="reviewResult"
+class="message"
+role="status"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="bankSettings"></h3>
+
+<div id="currentBank"
+class="record"></div>
+
+<label for="bankName"
+data-t="bankName"></label>
+
+<input id="bankName"
+maxlength="100"
+autocomplete="off">
+
+<label for="accountName"
+data-t="accountName"></label>
+
+<input id="accountName"
+maxlength="150"
+autocomplete="off">
+
+<label for="accountNumber"
+data-t="accountNumber"></label>
+
+<input id="accountNumber"
+inputmode="numeric"
+maxlength="30"
+autocomplete="off">
+
+<label for="branch"
+data-t="branch"></label>
+
+<input id="branch"
+maxlength="100"
+autocomplete="off">
+
+<label class="checkRow">
+
+<input id="cashEnabled"
+type="checkbox">
+
+<span data-t="cashEnabled"></span>
+
+</label>
+
+<label class="checkRow">
+
+<input id="bankEnabled"
+type="checkbox">
+
+<span data-t="bankEnabled"></span>
+
+</label>
+
+<p class="note"
+data-t="bankNotice"></p>
+
+<label for="settingsReason"
+data-t="reason"></label>
+
+<textarea id="settingsReason"
+maxlength="500"></textarea>
+
+<label class="checkRow">
+
+<input id="settingsConsent"
+type="checkbox">
+
+<span data-t="confirmSettings"></span>
+
+</label>
+
+<button id="saveSettings"
+data-t="save"
+disabled></button>
+
+<p id="settingsResult"
+class="message"
+role="status"></p>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="history"></h3>
+
+<button id="loadHistory"
+data-t="loadHistory"></button>
+
+<div id="historyList"></div>
+
+<button id="moreHistory"
+data-t="more"
+hidden></button>
+
+</section>
+
+<a id="commissionLink"
+class="action"
+data-t="commissionPage"></a>
+
+<p id="result"
+class="message"
+role="status"></p>
+
+<a id="backLink"
+class="action back"
+data-t="back"></a>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+setPersistence,
+browserSessionPersistence,
+GoogleAuthProvider,
+reauthenticateWithPopup
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const words={
+
+si:{
+
+heading:"ගෙවීම් කළමනාකරණය",
+overview:"01. ගෙවීම් සාරාංශය",
+totalFare:"මුළු අවසන් හයර් ගාස්තු",
+totalPaid:"තහවුරු කළ ගෙවීම්",
+totalUnpaid:"ගෙවීමට ඇති මුදල්",
+cashTotal:"මුදල් ගෙවීම්",
+bankTotal:"බැංකු ගෙවීම්",
+pendingCount:"පරීක්ෂා කළ යුතු ගෙවීම්",
+income:"02. කාලසීමා අනුව ගෙවීම්",
+today:"අද",
+week:"මෙම සතිය",
+month:"මෙම මාසය",
+incomeNotice:"මෙහි පෙන්වන්නේ පාරිභෝගික හයර් ගෙවීම්ය. මෙය MY RIDE කොමිස් ආදායම නොවේ. කාලසීමා ශ්‍රී ලංකා වේලාව අනුවයි.",
+payments:"03. පාරිභෝගික ගෙවීම්",
+search:"හයර් ID / නම / දුරකථන අංකය",
+paymentStatus:"ගෙවීම් තත්ත්වය",
+all:"සියල්ල",
+paid:"ගෙවා ඇත",
+unpaid:"ගෙවා නැත",
+pending:"පරීක්ෂා කිරීමට ඇත",
+partial:"අර්ධ වශයෙන් ගෙවා ඇත",
+rejected:"ප්‍රතික්ෂේප කළ",
+approved:"අනුමත කළ",
+method:"ගෙවීම් ක්‍රමය",
+cash:"මුදල්",
+bank:"බැංකු හුවමාරු",
+fromDate:"ආරම්භක දිනය",
+toDate:"අවසාන දිනය",
+searchButton:"සොයන්න",
+more:"තවත් වාර්තා",
+details:"04. ගෙවීම් විස්තර",
+transactions:"ගනුදෙනු ඉතිහාසය",
+close:"වසන්න",
+review:"05. ගෙවීම පරීක්ෂා කිරීම",
+reviewNotice:"බැංකු මුදල් ලැබී ඇති බව හෝ රියදුරු මුදල් ලබාගෙන ඇති බව වෙනම තහවුරු කිරීමෙන් පසුව පමණක් අනුමත කරන්න.",
+decision:"තීරණය",
+choose:"තෝරන්න",
+verifiedReference:"තහවුරු කළ බැංකු ගනුදෙනු අංකය",
+reason:"හේතුව",
+confirmReview:"මෙම ගනුදෙනුව පරීක්ෂා කර තීරණය තහවුරු කරමි.",
+confirm:"තහවුරු කරන්න",
+bankSettings:"06. බැංකු ගිණුම් සැකසුම්",
+bankName:"බැංකුවේ නම",
+accountName:"ගිණුම් හිමියාගේ නම",
+accountNumber:"ගිණුම් අංකය",
+branch:"ශාඛාව",
+cashEnabled:"Cash ගෙවීම් සක්‍රීය කරන්න",
+bankEnabled:"Bank Transfer සක්‍රීය කරන්න",
+bankNotice:"බැංකු ගිණුම් වෙනස්කම් අනාගත හයර් සඳහා පමණක් ක්‍රියාත්මක කළ යුතුය. රියදුරුට අයත් මුදල් වෙනම ගිණුම්ගත කළ යුතුය.",
+confirmSettings:"බැංකු ගිණුම් විස්තර සහ ගෙවීම් සැකසුම් නිවැරදි බව තහවුරු කරමි.",
+save:"සැකසුම් සුරකින්න",
+history:"07. ක්‍රියාමාර්ග ඉතිහාසය",
+loadHistory:"ඉතිහාසය බලන්න",
+commissionPage:"රියදුරු කොමිස් කළමනාකරණය",
+bookingId:"හයර් ID",
+paymentId:"ගෙවීම් ID",
+transactionId:"ගනුදෙනු ID",
+customerName:"පාරිභෝගික නම",
+phone:"දුරකථන අංකය",
+driverId:"රියදුරු ID",
+finalFare:"අවසන් හයර් ගාස්තුව",
+paidAmount:"ගෙවූ මුදල",
+balance:"ඉතිරි මුදල",
+amount:"මුදල",
+reference:"ගෙවීම් යොමු අංකය",
+receipt:"රිසිට්පත් අංකය",
+date:"දිනය",
+updated:"අවසන් යාවත්කාලීනය",
+viewDetails:"විස්තර බලන්න",
+reviewButton:"පරීක්ෂා කරන්න",
+action:"ක්‍රියාමාර්ගය",
+paymentReview:"ගෙවීම් පරීක්ෂාව",
+settingsChange:"බැංකු සැකසුම් වෙනස් කිරීම",
+version:"සංස්කරණ අංකය",
+on:"සක්‍රීයයි",
+off:"අක්‍රීයයි",
+back:"Admin Dashboard වෙත",
+login:"Admin Login",
+refresh:"යාවත්කාලීන කරන්න",
+checking:"ආරක්ෂාව පරීක්ෂා කරමින්...",
+denied:"Owner Admin අවසරය තහවුරු කර නොමැත.",
+verified:"හිමිකරුගේ අවසරය තහවුරු කර ඇත.",
+loading:"Server දත්ත ලබාගනිමින්...",
+error:"Server දත්ත ලබාගත නොහැක.",
+offline:"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+invalid:"ඇතුළත් කළ දත්ත පරීක්ෂා කරන්න.",
+saving:"Server වෙත යොමු කරමින්...",
+saved:"Server මගින් තහවුරු කර ඇත.",
+saveError:"ක්‍රියාමාර්ගය තහවුරු කළ නොහැක. නැවත Server දත්ත පරීක්ෂා කරන්න.",
+noRecords:"වාර්තා නොමැත.",
+discard:"සුරැකී නැති වෙනස්කම් ඉවත් කරන්නද?",
+noChanges:"වෙනස්කම් නොමැත."
+
+},
+
+en:{
+
+heading:"Payment Management",
+overview:"01. Payment Overview",
+totalFare:"Total Final Ride Fares",
+totalPaid:"Confirmed Payments",
+totalUnpaid:"Outstanding Payments",
+cashTotal:"Cash Payments",
+bankTotal:"Bank Transfer Payments",
+pendingCount:"Pending Payment Reviews",
+income:"02. Payments by Period",
+today:"Today",
+week:"This Week",
+month:"This Month",
+incomeNotice:"Customer ride payments, not MY RIDE commission revenue. Reporting periods use Sri Lanka time.",
+payments:"03. Customer Payments",
+search:"Booking ID / Name / Phone Number",
+paymentStatus:"Payment Status",
+all:"All",
+paid:"Paid",
+unpaid:"Unpaid",
+pending:"Pending Review",
+partial:"Partially Paid",
+rejected:"Rejected",
+approved:"Approved",
+method:"Payment Method",
+cash:"Cash",
+bank:"Bank Transfer",
+fromDate:"From Date",
+toDate:"To Date",
+searchButton:"Search",
+more:"Load More",
+details:"04. Payment Details",
+transactions:"Transaction History",
+close:"Close",
+review:"05. Review Payment",
+reviewNotice:"Approve only after independently confirming receipt of bank funds or cash received by the driver.",
+decision:"Decision",
+choose:"Select",
+verifiedReference:"Verified Bank Transaction ID",
+reason:"Reason",
+confirmReview:"I have reviewed this transaction and confirm the decision.",
+confirm:"Confirm",
+bankSettings:"06. Bank Account Settings",
+bankName:"Bank Name",
+accountName:"Account Holder Name",
+accountNumber:"Account Number",
+branch:"Branch",
+cashEnabled:"Enable Cash Payments",
+bankEnabled:"Enable Bank Transfers",
+bankNotice:"Bank account changes must apply to future bookings only. Driver funds must be accounted for separately.",
+confirmSettings:"I confirm these bank details and payment settings are correct.",
+save:"Save Settings",
+history:"07. Audit History",
+loadHistory:"View History",
+commissionPage:"Driver Commission Management",
+bookingId:"Booking ID",
+paymentId:"Payment ID",
+transactionId:"Transaction ID",
+customerName:"Customer Name",
+phone:"Phone Number",
+driverId:"Driver ID",
+finalFare:"Final Ride Fare",
+paidAmount:"Paid Amount",
+balance:"Outstanding Balance",
+amount:"Amount",
+reference:"Payment Reference",
+receipt:"Receipt Number",
+date:"Date",
+updated:"Last Updated",
+viewDetails:"View Details",
+reviewButton:"Review",
+action:"Action",
+paymentReview:"Payment Review",
+settingsChange:"Bank Settings Change",
+version:"Version",
+on:"Enabled",
+off:"Disabled",
+back:"Back to Admin Dashboard",
+login:"Admin Login",
+refresh:"Refresh",
+checking:"Checking security...",
+denied:"Owner Admin authorization is not verified.",
+verified:"Owner authorization verified.",
+loading:"Loading server data...",
+error:"Unable to retrieve server data.",
+offline:"No internet connection.",
+invalid:"Check the entered information.",
+saving:"Submitting to server...",
+saved:"Confirmed by server.",
+saveError:"Action could not be confirmed. Check server records before retrying.",
+noRecords:"No records found.",
+discard:"Discard unsaved changes?",
+noChanges:"No changes."
+
+},
+
+ta:{
+
+heading:"கட்டண மேலாண்மை",
+overview:"01. கட்டண சுருக்கம்",
+totalFare:"மொத்த இறுதி பயண கட்டணம்",
+totalPaid:"உறுதிப்படுத்தப்பட்ட கட்டணங்கள்",
+totalUnpaid:"நிலுவை கட்டணங்கள்",
+cashTotal:"பண கட்டணங்கள்",
+bankTotal:"வங்கி பரிமாற்றங்கள்",
+pendingCount:"நிலுவை சரிபார்ப்புகள்",
+income:"02. கால அடிப்படையிலான கட்டணங்கள்",
+today:"இன்று",
+week:"இந்த வாரம்",
+month:"இந்த மாதம்",
+incomeNotice:"இவை பயணிகளின் கட்டணங்கள். MY RIDE கமிஷன் வருமானம் அல்ல. இலங்கை நேரப்படி.",
+payments:"03. பயணிகள் கட்டணங்கள்",
+search:"பயண ID / பெயர் / தொலைபேசி",
+paymentStatus:"கட்டண நிலை",
+all:"அனைத்தும்",
+paid:"செலுத்தப்பட்டது",
+unpaid:"செலுத்தப்படவில்லை",
+pending:"சரிபார்ப்பு நிலுவை",
+partial:"பகுதி கட்டணம்",
+rejected:"நிராகரிக்கப்பட்டது",
+approved:"அங்கீகரிக்கப்பட்டது",
+method:"கட்டண முறை",
+cash:"பணம்",
+bank:"வங்கி பரிமாற்றம்",
+fromDate:"தொடக்க தேதி",
+toDate:"இறுதி தேதி",
+searchButton:"தேடவும்",
+more:"மேலும் பதிவுகள்",
+details:"04. கட்டண விவரங்கள்",
+transactions:"பரிவர்த்தனை வரலாறு",
+close:"மூடவும்",
+review:"05. கட்டண சரிபார்ப்பு",
+reviewNotice:"வங்கி பணம் அல்லது சாரதி பெற்ற பணத்தை தனியாக உறுதிப்படுத்திய பின் மட்டும் அங்கீகரிக்கவும்.",
+decision:"தீர்மானம்",
+choose:"தேர்ந்தெடுக்கவும்",
+verifiedReference:"உறுதிப்படுத்திய வங்கி பரிவர்த்தனை ID",
+reason:"காரணம்",
+confirmReview:"பரிவர்த்தனையை சரிபார்த்து தீர்மானத்தை உறுதிப்படுத்துகிறேன்.",
+confirm:"உறுதிப்படுத்தவும்",
+bankSettings:"06. வங்கி கணக்கு அமைப்புகள்",
+bankName:"வங்கி பெயர்",
+accountName:"கணக்கு உரிமையாளர் பெயர்",
+accountNumber:"கணக்கு எண்",
+branch:"கிளை",
+cashEnabled:"பண கட்டணங்களை இயக்கவும்",
+bankEnabled:"வங்கி பரிமாற்றங்களை இயக்கவும்",
+bankNotice:"வங்கி மாற்றங்கள் எதிர்கால பயணங்களுக்கு மட்டும். சாரதி பணத்தை தனியாக கணக்கிட வேண்டும்.",
+confirmSettings:"வங்கி விவரங்களும் கட்டண அமைப்புகளும் சரியானவை.",
+save:"சேமிக்கவும்",
+history:"07. நடவடிக்கை வரலாறு",
+loadHistory:"வரலாற்றை பார்க்கவும்",
+commissionPage:"சாரதி கமிஷன் மேலாண்மை",
+bookingId:"பயண ID",
+paymentId:"கட்டண ID",
+transactionId:"பரிவர்த்தனை ID",
+customerName:"பயணி பெயர்",
+phone:"தொலைபேசி எண்",
+driverId:"சாரதி ID",
+finalFare:"இறுதி பயண கட்டணம்",
+paidAmount:"செலுத்திய தொகை",
+balance:"நிலுவை தொகை",
+amount:"தொகை",
+reference:"கட்டண குறிப்பு",
+receipt:"ரசீது எண்",
+date:"தேதி",
+updated:"கடைசி புதுப்பிப்பு",
+viewDetails:"விவரங்களை பார்க்கவும்",
+reviewButton:"சரிபார்க்கவும்",
+action:"நடவடிக்கை",
+paymentReview:"கட்டண சரிபார்ப்பு",
+settingsChange:"வங்கி அமைப்பு மாற்றம்",
+version:"பதிப்பு",
+on:"இயக்கப்பட்டுள்ளது",
+off:"முடக்கப்பட்டுள்ளது",
+back:"நிர்வாக முதன்மைப் பக்கத்திற்கு",
+login:"நிர்வாக உள்நுழைவு",
+refresh:"புதுப்பிக்கவும்",
+checking:"பாதுகாப்பு சரிபார்க்கப்படுகிறது...",
+denied:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்படவில்லை.",
+verified:"உரிமையாளர் அனுமதி உறுதிப்படுத்தப்பட்டது.",
+loading:"சேவையக தரவு பெறப்படுகிறது...",
+error:"சேவையக தரவை பெற முடியவில்லை.",
+offline:"இணைய இணைப்பு இல்லை.",
+invalid:"உள்ளிட்ட தகவல்களை சரிபார்க்கவும்.",
+saving:"சேவையகத்திற்கு அனுப்பப்படுகிறது...",
+saved:"சேவையகம் உறுதிப்படுத்தியது.",
+saveError:"நடவடிக்கையை உறுதிப்படுத்த முடியவில்லை. சேவையக பதிவுகளை சரிபார்க்கவும்.",
+noRecords:"பதிவுகள் இல்லை.",
+discard:"சேமிக்காத மாற்றங்களை நீக்கவா?",
+noChanges:"மாற்றங்கள் இல்லை."
+
+}
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+new URLSearchParams(location.search).get("lang")
+||localStorage.getItem("myride_admin_language");
+
+if(languages.includes(selected)){
+lang=selected;
+}
+
+}catch(e){}
+
+const t=key=>words[lang][key]||key;
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let auth=null;
+let functions=null;
+let appCheck=null;
+
+let authorized=false;
+let ownerUid=null;
+let generation=0;
+
+let busy=false;
+let mutationBusy=false;
+
+let overview=null;
+let settings=null;
+let lastSync=null;
+
+let payments=[];
+let transactions=[];
+let historyRecords=[];
+
+let paymentCursor=null;
+let transactionCursor=null;
+let historyCursor=null;
+
+let paymentQuery=null;
+
+let selectedPayment=null;
+let selectedTransaction=null;
+
+let pendingMutation=null;
+let dirty=false;
+
+const messages={
+
+status:"checking",
+result:"",
+listResult:"",
+reviewResult:"",
+settingsResult:""
+
+};
+
+function message(id,key){
+
+messages[id]=key;
+
+$(id).textContent=key?t(key):"";
+
+}
+
+function isOwner(){
+
+return authorized
+&&ownerUid!==null
+&&auth?.currentUser?.uid===ownerUid
+&&navigator.onLine;
+
+}
+
+function validOwner(data,uid){
+
+return data?.authorized===true
+&&data.uid===uid
+&&data.role==="owner"
+&&data.ownerUidVerified===true
+&&data.sessionValid===true;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function validText(value,max=500){
+
+return typeof value==="string"
+&&value.length<=max;
+
+}
+
+function validCount(value){
+
+return Number.isSafeInteger(value)
+&&value>=0;
+
+}
+
+function validAmount(value){
+
+return Number.isSafeInteger(value)
+&&value>=0
+&&value<=1000000000000;
+
+}
+
+function validTime(value){
+
+return Number.isFinite(value)
+&&value>0
+&&value<=8640000000000000;
+
+}
+
+function validCursor(value){
+
+return value===null
+||validText(value,4000);
+
+}
+
+function validDate(value){
+
+if(!/^\d{4}-\d{2}-\d{2}$/.test(value)){
+
+return false;
+
+}
+
+const date=new Date(value+"T00:00:00Z");
+
+return Number.isFinite(date.getTime())
+&&date.toISOString().slice(0,10)===value;
+
+}
+
+function money(cents){
+
+if(!validAmount(cents))return "—";
+
+return new Intl.NumberFormat("en-LK",{
+
+style:"currency",
+currency:"LKR",
+minimumFractionDigits:2
+
+}).format(cents/100);
+
+}
+
+function formatDate(value){
+
+if(!validTime(value))return "—";
+
+return new Intl.DateTimeFormat(
+
+lang==="si"?"si-LK":
+lang==="ta"?"ta-LK":"en-LK",
+
+{
+
+timeZone:"Asia/Colombo",
+dateStyle:"medium",
+timeStyle:"short"
+
+}
+
+).format(new Date(value));
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="+encodeURIComponent(lang);
+
+}
+
+function addLine(container,label,value){
+
+const line=document.createElement("div");
+
+line.textContent=t(label)+": "+String(value??"—");
+
+container.appendChild(line);
+
+}
+
+function createStat(label,value){
+
+const box=document.createElement("div");
+
+box.className="stat";
+
+const name=document.createElement("span");
+
+name.textContent=t(label);
+
+const number=document.createElement("strong");
+
+number.textContent=String(value??"—");
+
+box.append(name,number);
+
+return box;
+
+}
+
+function recordBox(){
+
+const panel=document.createElement("div");
+
+panel.className="record";
+
+return panel;
+
+}
+
+function createButton(label,callback){
+
+const button=document.createElement("button");
+
+button.textContent=t(label);
+
+button.dataset.dynamic="true";
+
+button.onclick=callback;
+
+button.disabled=busy||mutationBusy||!isOwner();
+
+return button;
+
+}
+
+function mergeRecords(oldRecords,newRecords,key){
+
+const unique=new Map(
+
+oldRecords.map(record=>[record[key],record])
+
+);
+
+newRecords.forEach(record=>{
+
+unique.set(record[key],record);
+
+});
+
+return [...unique.values()];
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+$("loginLink").href=pageLink("admin-login.html");
+
+$("dashboardLink").href=
+pageLink("admin-dashboard.html");
+
+$("backLink").href=
+pageLink("admin-dashboard.html");
+
+$("commissionLink").href=
+pageLink("admin-commission.html");
+
+$("search").placeholder=t("search");
+
+$("reviewReason").placeholder=t("reason");
+
+$("settingsReason").placeholder=t("reason");
+
+Object.keys(messages).forEach(id=>{
+
+message(id,messages[id]);
+
+});
+
+renderOverview();
+renderPayments();
+renderDetails();
+renderReview();
+renderBankSettings();
+renderHistory();
+updateControls();
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(!languages.includes(button.dataset.lang))return;
+
+lang=button.dataset.lang;
+
+try{
+
+localStorage.setItem(
+"myride_admin_language",
+lang
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+async function serverCall(name,data={}){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+name,
+{timeout:30000}
+
+)(data);
+
+if(currentGeneration!==generation
+||!isOwner()){
+
+throw new Error("Session changed");
+
+}
+
+return response.data;
+
+}
+
+function requireSuccess(response){
+
+if(response?.success!==true
+||response.ownerUid!==ownerUid){
+
+throw new Error("Invalid server response");
+
+}
+
+return response;
+
+}
+
+function validOverview(data){
+
+return data
+
+&&[
+
+"totalFareCents",
+"totalPaidCents",
+"totalUnpaidCents",
+"cashPaidCents",
+"bankPaidCents",
+"todayPaidCents",
+"weekPaidCents",
+"monthPaidCents"
+
+].every(key=>validAmount(data[key]))
+
+&&data.totalFareCents===
+
+data.totalPaidCents+data.totalUnpaidCents
+
+&&data.totalPaidCents===
+
+data.cashPaidCents+data.bankPaidCents
+
+&&validCount(data.pendingCount);
+
+}
+
+function validSettings(data){
+
+return data
+
+&&validCount(data.version)
+
+&&validText(data.bankName,100)
+
+&&validText(data.accountName,150)
+
+&&validText(data.accountNumber,30)
+
+&&validText(data.branch,100)
+
+&&typeof data.cashEnabled==="boolean"
+
+&&typeof data.bankEnabled==="boolean"
+
+&&(data.cashEnabled||data.bankEnabled)
+
+&&(!data.bankEnabled||
+
+(
+
+data.bankName.trim().length>=2
+
+&&data.accountName.trim().length>=2
+
+&&/^\d{5,30}$/.test(data.accountNumber)
+
+&&data.branch.trim().length>=2
+
+)
+
+);
+
+}
+
+function renderOverview(){
+
+const container=$("overview");
+
+container.replaceChildren();
+
+[
+
+["totalFare","totalFareCents"],
+["totalPaid","totalPaidCents"],
+["totalUnpaid","totalUnpaidCents"],
+["cashTotal","cashPaidCents"],
+["bankTotal","bankPaidCents"]
+
+].forEach(([label,key])=>{
+
+container.appendChild(
+
+createStat(
+
+label,
+
+overview?money(overview[key]):"—"
+
+)
+
+);
+
+});
+
+container.appendChild(
+
+createStat(
+
+"pendingCount",
+
+overview?.pendingCount??"—"
+
+)
+
+);
+
+const income=$("incomeSummary");
+
+income.replaceChildren();
+
+[
+
+["today","todayPaidCents"],
+["week","weekPaidCents"],
+["month","monthPaidCents"]
+
+].forEach(([label,key])=>{
+
+income.appendChild(
+
+createStat(
+
+label,
+
+overview?money(overview[key]):"—"
+
+)
+
+);
+
+});
+
+$("lastUpdate").textContent=
+
+lastSync
+
+?t("updated")+": "+formatDate(lastSync)
+
+:"";
+
+}
+
+function renderBankSettings(){
+
+const container=$("currentBank");
+
+container.replaceChildren();
+
+if(!settings||!isOwner())return;
+
+addLine(container,"bankName",settings.bankName);
+
+addLine(container,"accountName",settings.accountName);
+
+addLine(container,"accountNumber",settings.accountNumber);
+
+addLine(container,"branch",settings.branch);
+
+addLine(container,"cash",
+
+t(settings.cashEnabled?"on":"off"));
+
+addLine(container,"bank",
+
+t(settings.bankEnabled?"on":"off"));
+
+addLine(container,"version",settings.version);
+
+}
+
+function populateSettings(){
+
+if(!settings)return;
+
+$("bankName").value=settings.bankName;
+
+$("accountName").value=settings.accountName;
+
+$("accountNumber").value=settings.accountNumber;
+
+$("branch").value=settings.branch;
+
+$("cashEnabled").checked=settings.cashEnabled;
+
+$("bankEnabled").checked=settings.bankEnabled;
+
+$("settingsReason").value="";
+
+$("settingsConsent").checked=false;
+
+dirty=false;
+
+renderBankSettings();
+
+updateControls();
+
+}
+
+async function loadOverview(preserveDraft=false){
+
+const response=requireSuccess(
+
+await serverCall("getAdminPaymentOverview")
+
+);
+
+if(!validOverview(response.overview)
+
+||!validSettings(response.settings)
+
+||!validTime(response.serverTimeMs)){
+
+throw new Error("Invalid overview");
+
+}
+
+overview=response.overview;
+
+lastSync=response.serverTimeMs;
+
+if(!preserveDraft||!dirty){
+
+settings=response.settings;
+
+populateSettings();
+
+}else if(settings.version!==response.settings.version){
+
+message("settingsResult","saveError");
+
+}
+
+renderOverview();
+
+}
+
+async function runRead(callback,resultId="result"){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+updateControls();
+
+message(resultId,"loading");
+
+try{
+
+await callback();
+
+if(currentGeneration===generation){
+
+message(resultId,"");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message(resultId,"error");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("refreshButton").onclick=()=>{
+
+if(dirty&&!window.confirm(t("discard")))return;
+
+runRead(async()=>{
+
+overview=null;
+
+renderOverview();
+
+await loadOverview(false);
+
+});
+
+};
+
+const statuses=[
+
+"paid",
+"unpaid",
+"pending",
+"partial",
+"rejected"
+
+];
+
+function validPayment(record){
+
+return record
+
+&&validId(record.bookingId)
+
+&&validText(record.customerName,200)
+
+&&validText(record.customerPhone,30)
+
+&&(record.driverId===null
+||validId(record.driverId))
+
+&&validAmount(record.finalFareCents)
+
+&&validAmount(record.paidAmountCents)
+
+&&validAmount(record.balanceCents)
+
+&&record.finalFareCents===
+
+record.paidAmountCents+record.balanceCents
+
+&&statuses.includes(record.status)
+
+&&(record.method===null
+
+||["cash","bank","mixed"].includes(record.method))
+
+&&validCount(record.revision)
+
+&&validTime(record.updatedAtMs);
+
+}
+
+function methodName(method){
+
+if(method==="mixed"){
+
+return t("cash")+" / "+t("bank");
+
+}
+
+return method?t(method):"—";
+
+}
+
+function paymentLines(container,record){
+
+addLine(container,"bookingId",record.bookingId);
+
+addLine(container,"customerName",record.customerName);
+
+addLine(container,"phone",record.customerPhone);
+
+addLine(container,"driverId",record.driverId||"—");
+
+addLine(container,"finalFare",
+
+money(record.finalFareCents));
+
+addLine(container,"paidAmount",
+
+money(record.paidAmountCents));
+
+addLine(container,"balance",
+
+money(record.balanceCents));
+
+addLine(container,"method",methodName(record.method));
+
+addLine(container,"paymentStatus",t(record.status));
+
+addLine(container,"updated",
+
+formatDate(record.updatedAtMs));
+
+}
+
+function renderPayments(){
+
+const container=$("paymentList");
+
+container.replaceChildren();
+
+$("morePayments").hidden=paymentCursor===null;
+
+if(!isOwner()||!paymentQuery)return;
+
+if(!payments.length){
+
+container.textContent=t("noRecords");
+
+return;
+
+}
+
+payments.forEach(record=>{
+
+const panel=recordBox();
+
+paymentLines(panel,record);
+
+panel.appendChild(
+
+createButton(
+
+"viewDetails",
+
+()=>openPayment(record.bookingId)
+
+)
+
+);
+
+container.appendChild(panel);
+
+});
+
+}
+
+async function loadPayments(reset=true){
+
+if(reset){
+
+const fromDate=$("fromDate").value;
+
+const toDate=$("toDate").value;
+
+if(
+
+(fromDate&&!validDate(fromDate))
+
+||(toDate&&!validDate(toDate))
+
+||(fromDate&&toDate&&fromDate>toDate)
+
+){
+
+message("listResult","invalid");
+
+return;
+
+}
+
+}
+
+await runRead(async()=>{
+
+if(reset){
+
+paymentQuery={
+
+search:$("search").value.trim(),
+
+status:$("paymentStatus").value,
+
+method:$("paymentMethod").value,
+
+fromDate:$("fromDate").value||null,
+
+toDate:$("toDate").value||null
+
+};
+
+payments=[];
+
+paymentCursor=null;
+
+renderPayments();
+
+}
+
+const response=requireSuccess(
+
+await serverCall("getAdminCustomerPayments",{
+
+...paymentQuery,
+
+limit:30,
+
+cursor:reset?null:paymentCursor
+
+})
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validPayment)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid payments");
+
+}
+
+payments=mergeRecords(
+
+payments,
+
+response.records,
+
+"bookingId"
+
+);
+
+paymentCursor=response.nextCursor;
+
+renderPayments();
+
+},"listResult");
+
+}
+
+$("searchButton").onclick=()=>loadPayments(true);
+
+$("morePayments").onclick=()=>{
+
+if(paymentCursor!==null){
+
+loadPayments(false);
+
+}
+
+};
+
+function validTransaction(record){
+
+return record
+
+&&validId(record.transactionId)
+
+&&validId(record.bookingId)
+
+&&validAmount(record.amountCents)
+
+&&record.amountCents>0
+
+&&["cash","bank"].includes(record.method)
+
+&&["pending","approved","rejected"]
+
+.includes(record.status)
+
+&&validText(record.reference,150)
+
+&&validCount(record.revision)
+
+&&validTime(record.createdAtMs)
+
+&&(record.receiptId===null
+
+||validId(record.receiptId))
+
+&&(record.status!=="approved"
+
+||validId(record.receiptId));
+
+}
+
+function transactionLines(container,record){
+
+addLine(container,"transactionId",
+
+record.transactionId);
+
+addLine(container,"bookingId",
+
+record.bookingId);
+
+addLine(container,"amount",
+
+money(record.amountCents));
+
+addLine(container,"method",
+
+t(record.method));
+
+addLine(container,"reference",
+
+record.reference||"—");
+
+addLine(container,"paymentStatus",
+
+t(record.status));
+
+addLine(container,"date",
+
+formatDate(record.createdAtMs));
+
+if(record.receiptId){
+
+addLine(container,"receipt",record.receiptId);
+
+}
+
+}
+
+function renderDetails(){
+
+const container=$("paymentDetails");
+
+const list=$("transactionList");
+
+container.replaceChildren();
+
+list.replaceChildren();
+
+$("detailsPanel").hidden=
+
+!selectedPayment||!isOwner();
+
+$("moreTransactions").hidden=
+
+transactionCursor===null;
+
+if(!selectedPayment||!isOwner())return;
+
+paymentLines(container,selectedPayment);
+
+if(!transactions.length){
+
+list.textContent=t("noRecords");
+
+}
+
+transactions.forEach(record=>{
+
+const panel=recordBox();
+
+transactionLines(panel,record);
+
+if(record.status==="pending"){
+
+panel.appendChild(
+
+createButton(
+
+"reviewButton",
+
+()=>openReview(record)
+
+)
+
+);
+
+}
+
+list.appendChild(panel);
+
+});
+
+}
+
+async function loadPaymentDetails(bookingId,reset=true){
+
+const response=requireSuccess(
+
+await serverCall(
+
+"getAdminCustomerPaymentDetails",
+
+{
+
+bookingId,
+
+limit:30,
+
+cursor:reset?null:transactionCursor
+
+}
+
+)
+
+);
+
+if(!validPayment(response.payment)
+
+||response.payment.bookingId!==bookingId
+
+||!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(record=>
+
+validTransaction(record)
+
+&&record.bookingId===bookingId
+
+)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid details");
+
+}
+
+selectedPayment=response.payment;
+
+transactions=mergeRecords(
+
+reset?[]:transactions,
+
+response.records,
+
+"transactionId"
+
+);
+
+transactionCursor=response.nextCursor;
+
+renderDetails();
+
+}
+
+function openPayment(bookingId){
+
+runRead(async()=>{
+
+closeReview();
+
+selectedPayment=null;
+
+transactions=[];
+
+transactionCursor=null;
+
+renderDetails();
+
+await loadPaymentDetails(bookingId,true);
+
+$("detailsPanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+});
+
+}
+
+$("moreTransactions").onclick=()=>{
+
+if(!selectedPayment
+
+||transactionCursor===null)return;
+
+const bookingId=selectedPayment.bookingId;
+
+runRead(()=>loadPaymentDetails(bookingId,false));
+
+};
+
+$("closeDetails").onclick=()=>{
+
+if(busy||mutationBusy)return;
+
+closeReview();
+
+selectedPayment=null;
+
+transactions=[];
+
+transactionCursor=null;
+
+renderDetails();
+
+updateControls();
+
+};
+
+function renderReview(){
+
+const container=$("reviewDetails");
+
+container.replaceChildren();
+
+$("reviewPanel").hidden=
+
+!selectedTransaction||!isOwner();
+
+if(!selectedTransaction||!isOwner())return;
+
+transactionLines(container,selectedTransaction);
+
+if(selectedPayment){
+
+addLine(container,"balance",
+
+money(selectedPayment.balanceCents));
+
+}
+
+}
+
+function openReview(record){
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||record.status!=="pending"
+
+||!selectedPayment
+
+||record.bookingId!==selectedPayment.bookingId)return;
+
+selectedTransaction=record;
+
+$("decision").value="";
+
+$("verifiedReference").value="";
+
+$("reviewReason").value="";
+
+$("reviewConsent").checked=false;
+
+message("reviewResult","");
+
+renderReview();
+
+updateControls();
+
+$("reviewPanel").scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+function closeReview(){
+
+selectedTransaction=null;
+
+$("decision").value="";
+
+$("verifiedReference").value="";
+
+$("reviewReason").value="";
+
+$("reviewConsent").checked=false;
+
+renderReview();
+
+updateControls();
+
+}
+
+$("closeReview").onclick=()=>{
+
+if(!busy&&!mutationBusy){
+
+closeReview();
+
+}
+
+};
+
+async function freshOwnerAuthentication(){
+
+if(!isOwner()){
+
+throw new Error("Unauthorized");
+
+}
+
+const user=auth.currentUser;
+
+const uid=user.uid;
+
+const provider=new GoogleAuthProvider();
+
+provider.setCustomParameters({
+
+prompt:"select_account"
+
+});
+
+const credential=await reauthenticateWithPopup(
+
+user,
+
+provider
+
+);
+
+if(credential.user.uid!==uid
+
+||auth.currentUser?.uid!==uid
+
+||!isOwner()){
+
+throw new Error("Owner changed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Invalid owner");
+
+}
+
+const response=await serverCall("verifyOwnerAdmin");
+
+if(!validOwner(response,uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+}
+
+async function runMutation(
+
+name,
+
+payload,
+
+onSuccess,
+
+resultId
+
+){
+
+if(!isOwner()||busy||mutationBusy)return;
+
+const currentGeneration=generation;
+
+const fingerprint=JSON.stringify([name,payload]);
+
+if(pendingMutation
+
+&&pendingMutation.fingerprint!==fingerprint){
+
+message(resultId,"saveError");
+
+return;
+
+}
+
+if(!pendingMutation){
+
+pendingMutation={
+
+fingerprint,
+
+requestId:crypto.randomUUID()
+
+};
+
+}
+
+const requestId=pendingMutation.requestId;
+
+mutationBusy=true;
+
+updateControls();
+
+message(resultId,"saving");
+
+try{
+
+await freshOwnerAuthentication();
+
+const response=requireSuccess(
+
+await serverCall(name,{
+
+...payload,
+
+requestId
+
+})
+
+);
+
+await onSuccess(response);
+
+if(currentGeneration!==generation)return;
+
+pendingMutation=null;
+
+message(resultId,"saved");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message(resultId,"saveError");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+mutationBusy=false;
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("submitReview").onclick=()=>{
+
+if(!selectedPayment
+
+||!selectedTransaction
+
+||selectedTransaction.status!=="pending"
+
+||!$("reviewConsent").checked)return;
+
+const decision=$("decision").value;
+
+const reason=$("reviewReason").value.trim();
+
+const bankApproval=
+
+decision==="approved"
+
+&&selectedTransaction.method==="bank";
+
+const verifiedReference=
+
+bankApproval
+
+?$("verifiedReference").value.trim()
+
+:null;
+
+if(!["approved","rejected"].includes(decision)
+
+||reason.length<10
+
+||reason.length>500
+
+||(bankApproval
+
+&&(!verifiedReference
+
+||verifiedReference.length<3
+
+||verifiedReference.length>150))
+
+||(decision==="approved"
+
+&&selectedTransaction.amountCents>
+
+selectedPayment.balanceCents)){
+
+message("reviewResult","invalid");
+
+return;
+
+}
+
+const bookingId=selectedPayment.bookingId;
+
+const transactionId=
+
+selectedTransaction.transactionId;
+
+const expectedPaymentRevision=
+
+selectedPayment.revision;
+
+const expectedTransactionRevision=
+
+selectedTransaction.revision;
+
+runMutation(
+
+"reviewAdminCustomerPayment",
+
+{
+
+bookingId,
+
+transactionId,
+
+decision,
+
+reason,
+
+verifiedReference,
+
+expectedPaymentRevision,
+
+expectedTransactionRevision
+
+},
+
+async response=>{
+
+if(!validPayment(response.payment)
+
+||response.payment.bookingId!==bookingId
+
+||response.payment.revision<=expectedPaymentRevision
+
+||!validTransaction(response.transaction)
+
+||response.transaction.transactionId!==transactionId
+
+||response.transaction.bookingId!==bookingId
+
+||response.transaction.status!==decision
+
+||response.transaction.revision<=
+
+expectedTransactionRevision){
+
+throw new Error("Review not confirmed");
+
+}
+
+selectedPayment=response.payment;
+
+transactions=transactions.map(record=>
+
+record.transactionId===transactionId
+
+?response.transaction
+
+:record
+
+);
+
+payments=payments.map(record=>
+
+record.bookingId===bookingId
+
+?response.payment
+
+:record
+
+);
+
+if(paymentQuery?.status!=="all"){
+
+payments=payments.filter(record=>
+
+record.status===paymentQuery?.status
+
+);
+
+}
+
+closeReview();
+
+renderDetails();
+
+renderPayments();
+
+overview=null;
+
+renderOverview();
+
+message("result","saved");
+
+try{
+
+await loadOverview(true);
+
+}catch(e){
+
+message("result","error");
+
+}
+
+},
+
+"reviewResult"
+
+);
+
+};
+
+const bankFields=[
+
+"bankName",
+"accountName",
+"accountNumber",
+"branch",
+"cashEnabled",
+"bankEnabled"
+
+];
+
+function readSettings(){
+
+return {
+
+bankName:$("bankName").value.trim(),
+
+accountName:$("accountName").value.trim(),
+
+accountNumber:$("accountNumber").value.trim(),
+
+branch:$("branch").value.trim(),
+
+cashEnabled:$("cashEnabled").checked,
+
+bankEnabled:$("bankEnabled").checked
+
+};
+
+}
+
+function settingsFingerprint(data){
+
+return JSON.stringify([
+
+data.bankName,
+data.accountName,
+data.accountNumber,
+data.branch,
+data.cashEnabled,
+data.bankEnabled
+
+]);
+
+}
+
+bankFields.forEach(id=>{
+
+$(id).addEventListener("input",()=>{
+
+dirty=!!settings
+
+&&settingsFingerprint(readSettings())
+
+!==settingsFingerprint(settings);
+
+$("settingsConsent").checked=false;
+
+message("settingsResult","");
+
+updateControls();
+
+});
+
+});
+
+[
+
+"settingsReason",
+"settingsConsent",
+"decision",
+"verifiedReference",
+"reviewReason",
+"reviewConsent"
+
+].forEach(id=>{
+
+$(id).addEventListener("input",updateControls);
+
+});
+
+$("saveSettings").onclick=()=>{
+
+if(!settings
+
+||!dirty
+
+||!$("settingsConsent").checked)return;
+
+const data=readSettings();
+
+const reason=$("settingsReason").value.trim();
+
+if(!validSettings({
+
+...data,
+
+version:settings.version
+
+})
+
+||reason.length<10
+
+||reason.length>500){
+
+message("settingsResult","invalid");
+
+return;
+
+}
+
+const expectedVersion=settings.version;
+
+runMutation(
+
+"saveAdminCustomerPaymentSettings",
+
+{
+
+settings:data,
+
+reason,
+
+expectedVersion,
+
+applyTo:"future_confirmed_bookings"
+
+},
+
+async response=>{
+
+if(!validSettings(response.settings)
+
+||response.settings.version<=expectedVersion
+
+||settingsFingerprint(response.settings)
+
+!==settingsFingerprint(data)){
+
+throw new Error("Save not confirmed");
+
+}
+
+settings=response.settings;
+
+populateSettings();
+
+},
+
+"settingsResult"
+
+);
+
+};
+
+function validHistory(record){
+
+return record
+
+&&validId(record.recordId)
+
+&&["paymentReview","settingsChange"]
+
+.includes(record.action)
+
+&&validText(record.reason,500)
+
+&&validTime(record.createdAtMs)
+
+&&(record.bookingId===null
+
+||validId(record.bookingId))
+
+&&(record.transactionId===null
+
+||validId(record.transactionId))
+
+&&(record.amountCents===null
+
+||validAmount(record.amountCents))
+
+&&(record.version===null
+
+||validCount(record.version));
+
+}
+
+function renderHistory(){
+
+const container=$("historyList");
+
+container.replaceChildren();
+
+$("moreHistory").hidden=historyCursor===null;
+
+if(!isOwner())return;
+
+historyRecords.forEach(record=>{
+
+const panel=recordBox();
+
+addLine(panel,"action",t(record.action));
+
+addLine(panel,"date",formatDate(record.createdAtMs));
+
+addLine(panel,"reason",record.reason);
+
+if(record.bookingId){
+
+addLine(panel,"bookingId",record.bookingId);
+
+}
+
+if(record.transactionId){
+
+addLine(panel,"transactionId",record.transactionId);
+
+}
+
+if(record.amountCents!==null){
+
+addLine(panel,"amount",money(record.amountCents));
+
+}
+
+if(record.version!==null){
+
+addLine(panel,"version",record.version);
+
+}
+
+container.appendChild(panel);
+
+});
+
+}
+
+async function loadHistory(reset=true){
+
+await runRead(async()=>{
+
+if(reset){
+
+historyRecords=[];
+
+historyCursor=null;
+
+renderHistory();
+
+}
+
+const response=requireSuccess(
+
+await serverCall(
+
+"getAdminCustomerPaymentHistory",
+
+{
+
+limit:30,
+
+cursor:reset?null:historyCursor
+
+}
+
+)
+
+);
+
+if(!Array.isArray(response.records)
+
+||response.records.length>30
+
+||!response.records.every(validHistory)
+
+||!validCursor(response.nextCursor)){
+
+throw new Error("Invalid history");
+
+}
+
+historyRecords=mergeRecords(
+
+historyRecords,
+
+response.records,
+
+"recordId"
+
+);
+
+historyCursor=response.nextCursor;
+
+renderHistory();
+
+if(!historyRecords.length){
+
+$("historyList").textContent=t("noRecords");
+
+}
+
+});
+
+}
+
+$("loadHistory").onclick=()=>loadHistory(true);
+
+$("moreHistory").onclick=()=>{
+
+if(historyCursor!==null){
+
+loadHistory(false);
+
+}
+
+};
+
+function updateControls(){
+
+const locked=busy||mutationBusy||!isOwner();
+
+[
+
+"refreshButton",
+"search",
+"paymentStatus",
+"paymentMethod",
+"fromDate",
+"toDate",
+"searchButton",
+"morePayments",
+"moreTransactions",
+"closeDetails",
+"decision",
+"reviewReason",
+"reviewConsent",
+"closeReview",
+"loadHistory",
+"moreHistory"
+
+].forEach(id=>{
+
+$(id).disabled=locked;
+
+});
+
+document.querySelectorAll("[data-dynamic]")
+
+.forEach(button=>{
+
+button.disabled=locked;
+
+});
+
+bankFields.forEach(id=>{
+
+$(id).disabled=locked||!settings;
+
+});
+
+$("settingsReason").disabled=locked||!settings;
+
+$("settingsConsent").disabled=locked||!settings;
+
+const validDraft=
+
+!!settings&&validSettings({
+
+...readSettings(),
+
+version:settings.version
+
+});
+
+$("saveSettings").disabled=
+
+locked
+
+||!settings
+
+||!dirty
+
+||!validDraft
+
+||!$("settingsConsent").checked
+
+||$("settingsReason").value.trim().length<10;
+
+const decision=$("decision").value;
+
+const bankApproval=
+
+decision==="approved"
+
+&&selectedTransaction?.method==="bank";
+
+$("verifiedReference").disabled=
+
+locked||!bankApproval;
+
+$("submitReview").disabled=
+
+locked
+
+||!selectedPayment
+
+||!selectedTransaction
+
+||selectedTransaction.status!=="pending"
+
+||!["approved","rejected"].includes(decision)
+
+||!$("reviewConsent").checked
+
+||$("reviewReason").value.trim().length<10
+
+||(bankApproval
+
+&&$("verifiedReference").value.trim().length<3)
+
+||(decision==="approved"
+
+&&selectedTransaction.amountCents>
+
+selectedPayment.balanceCents);
+
+}
+
+function clearSession(){
+
+generation++;
+
+authorized=false;
+
+ownerUid=null;
+
+busy=false;
+
+mutationBusy=false;
+
+overview=null;
+
+settings=null;
+
+lastSync=null;
+
+payments=[];
+
+transactions=[];
+
+historyRecords=[];
+
+paymentCursor=null;
+
+transactionCursor=null;
+
+historyCursor=null;
+
+paymentQuery=null;
+
+selectedPayment=null;
+
+selectedTransaction=null;
+
+pendingMutation=null;
+
+dirty=false;
+
+$("adminContent").hidden=true;
+
+$("accessPanel").hidden=true;
+
+$("detailsPanel").hidden=true;
+
+$("reviewPanel").hidden=true;
+
+[
+
+"search",
+"fromDate",
+"toDate",
+"bankName",
+"accountName",
+"accountNumber",
+"branch",
+"settingsReason",
+"verifiedReference",
+"reviewReason"
+
+].forEach(id=>{
+
+$(id).value="";
+
+});
+
+[
+
+"cashEnabled",
+"bankEnabled",
+"settingsConsent",
+"reviewConsent"
+
+].forEach(id=>{
+
+$(id).checked=false;
+
+});
+
+$("decision").value="";
+
+$("paymentStatus").value="all";
+
+$("paymentMethod").value="all";
+
+[
+
+"result",
+"listResult",
+"reviewResult",
+"settingsResult"
+
+].forEach(id=>{
+
+message(id,"");
+
+});
+
+renderOverview();
+
+renderPayments();
+
+renderDetails();
+
+renderReview();
+
+renderBankSettings();
+
+renderHistory();
+
+updateControls();
+
+}
+
+function denyAccess(){
+
+clearSession();
+
+$("accessPanel").hidden=false;
+
+message("status","denied");
+
+}
+
+async function verifyOwner(user){
+
+clearSession();
+
+const currentGeneration=generation;
+
+if(!user){
+
+denyAccess();
+
+return;
+
+}
+
+if(!navigator.onLine){
+
+message("status","offline");
+
+return;
+
+}
+
+message("status","checking");
+
+try{
+
+const appToken=await getToken(appCheck,false);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+const token=await user.getIdTokenResult(true);
+
+if(token.claims.ownerAdmin!==true
+
+||token.claims.email_verified!==true
+
+||token.signInProvider!=="google.com"){
+
+throw new Error("Access denied");
+
+}
+
+const response=await httpsCallable(
+
+functions,
+
+"verifyOwnerAdmin",
+
+{timeout:15000}
+
+)({});
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid)return;
+
+if(!validOwner(response.data,user.uid)){
+
+throw new Error("Owner verification failed");
+
+}
+
+ownerUid=user.uid;
+
+authorized=true;
+
+$("adminContent").hidden=false;
+
+message("status","verified");
+
+await runRead(()=>loadOverview(false));
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}
+
+}
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(
+
+firebaseConfig,
+
+"myride-owner-admin"
+
+);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+await setPersistence(
+
+auth,
+
+browserSessionPersistence
+
+);
+
+onAuthStateChanged(auth,verifyOwner);
+
+}catch(e){
+
+denyAccess();
+
+}
+
+}
+
+let checking=false;
+
+setInterval(async()=>{
+
+if(!isOwner()||checking||mutationBusy)return;
+
+const currentGeneration=generation;
+
+checking=true;
+
+try{
+
+const response=await serverCall(
+
+"verifyOwnerAdmin"
+
+);
+
+if(!validOwner(response,ownerUid)){
+
+throw new Error("Access revoked");
+
+}
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+denyAccess();
+
+}
+
+}finally{
+
+checking=false;
+
+}
+
+},60000);
+
+setInterval(()=>{
+
+if(!isOwner()
+
+||busy
+
+||mutationBusy
+
+||document.hidden)return;
+
+runRead(()=>loadOverview(true));
+
+},60000);
+
+window.addEventListener("offline",()=>{
+
+clearSession();
+
+message("status","offline");
+
+});
+
+window.addEventListener("online",()=>{
+
+if(auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+window.addEventListener("beforeunload",event=>{
+
+if(dirty||mutationBusy||pendingMutation){
+
+event.preventDefault();
+
+event.returnValue="";
+
+}
+
+});
+
+window.addEventListener(
+
+"pagehide",
+
+clearSession
+
+);
+
+window.addEventListener("pageshow",event=>{
+
+if(event.persisted&&auth){
+
+verifyOwner(auth.currentUser);
+
+}
+
+});
+
+renderLanguage();
+
+updateControls();
+
+initializeSecurity();
+
+</script>
+
+</body>
+</html>
