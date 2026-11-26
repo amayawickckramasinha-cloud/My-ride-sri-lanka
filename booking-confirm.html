@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="si" translate="no">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<meta name="robots"
+content="noindex,nofollow,noarchive">
+
+<meta name="referrer"
+content="no-referrer">
+
+<title>MY RIDE - Booking Confirmation</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+background:#111;
+color:#fff;
+font-family:Arial,sans-serif;
+}
+
+main{
+max-width:650px;
+margin:auto;
+padding:16px;
+}
+
+h1{
+color:#FFD600;
+font-size:38px;
+text-align:center;
+margin-bottom:5px;
+}
+
+.country{
+color:#FFD600;
+text-align:center;
+letter-spacing:5px;
+}
+
+h2{
+text-align:center;
+}
+
+h3{
+color:#FFD600;
+}
+
+.panel{
+background:#202020;
+border:1px solid #555;
+border-radius:12px;
+padding:16px;
+margin:15px 0;
+}
+
+.languages{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+}
+
+button,.action{
+display:block;
+width:100%;
+padding:15px;
+margin:10px 0;
+background:#FFD600;
+color:#111;
+border:0;
+border-radius:9px;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+text-decoration:none;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.45;
+cursor:not-allowed;
+}
+
+.back{
+background:transparent;
+color:#FFD600;
+border:1px solid #FFD600;
+}
+
+.row{
+padding:12px 0;
+border-bottom:1px solid #444;
+overflow-wrap:anywhere;
+}
+
+.row span{
+display:block;
+color:#BBB;
+font-size:13px;
+margin-bottom:6px;
+}
+
+.row strong{
+font-size:17px;
+}
+
+.fare{
+background:#FFD600;
+color:#111;
+padding:20px;
+border-radius:12px;
+text-align:center;
+margin:15px 0;
+}
+
+.fare strong{
+display:block;
+font-size:32px;
+margin-top:10px;
+}
+
+.checkRow{
+display:flex;
+align-items:flex-start;
+gap:12px;
+margin:15px 0;
+line-height:1.8;
+}
+
+.checkRow input{
+width:23px;
+height:23px;
+flex-shrink:0;
+accent-color:#FFD600;
+}
+
+.terms{
+background:#292929;
+padding:15px;
+border-radius:8px;
+max-height:300px;
+overflow:auto;
+white-space:pre-wrap;
+line-height:1.9;
+font-size:14px;
+}
+
+.note{
+color:#CCC;
+font-size:13px;
+line-height:1.8;
+}
+
+.warning{
+color:#FFB347;
+line-height:1.8;
+}
+
+.message{
+color:#FFD600;
+text-align:center;
+line-height:1.8;
+overflow-wrap:anywhere;
+}
+
+footer{
+text-align:center;
+color:#AAA;
+font-size:12px;
+padding:20px;
+}
+
+[hidden]{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>MY RIDE</h1>
+
+<div class="country">
+SRI LANKA
+</div>
+
+<h2 data-t="heading"></h2>
+
+<div class="languages">
+
+<button data-lang="si">සිංහල</button>
+
+<button data-lang="en">English</button>
+
+<button data-lang="ta">தமிழ்</button>
+
+</div>
+
+<p id="status"
+class="message"
+role="status"
+aria-live="polite"></p>
+
+<section id="errorPanel"
+class="panel"
+hidden>
+
+<p data-t="missingDraft"
+class="warning"></p>
+
+<a id="errorBack"
+class="action"
+data-t="editBooking"></a>
+
+</section>
+
+<div id="bookingContent" hidden>
+
+<section class="panel">
+
+<h3 data-t="customerDetails"></h3>
+
+<div class="row">
+
+<span data-t="customerName"></span>
+
+<strong id="customerName"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="phone"></span>
+
+<strong id="customerPhone"></strong>
+
+</div>
+
+</section>
+
+<section class="panel">
+
+<h3 data-t="tripDetails"></h3>
+
+<div class="row">
+
+<span data-t="pickup"></span>
+
+<strong id="pickup"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="destination"></span>
+
+<strong id="destination"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="date"></span>
+
+<strong id="bookingDate"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="time"></span>
+
+<strong id="bookingTime"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="vehicle"></span>
+
+<strong id="vehicleType"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="passengers"></span>
+
+<strong id="passengerCount"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="distance"></span>
+
+<strong id="tripDistance"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="duration"></span>
+
+<strong id="tripDuration"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="period"></span>
+
+<strong id="tripPeriod"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="weather"></span>
+
+<strong id="weatherStatus"></strong>
+
+</div>
+
+<div class="row">
+
+<span data-t="road"></span>
+
+<strong id="roadStatus"></strong>
+
+</div>
+
+</section>
+
+<div class="fare">
+
+<span data-t="estimatedFare"></span>
+
+<strong id="estimatedFare">—</strong>
+
+</div>
+
+<p class="note"
+data-t="fareNotice"></p>
+
+<section class="panel">
+
+<h3 data-t="termsHeading"></h3>
+
+<div id="termsText"
+class="terms"></div>
+
+<p id="termsVersion"
+class="note"></p>
+
+<label class="checkRow">
+
+<input id="acceptTerms"
+type="checkbox"
+disabled>
+
+<span data-t="acceptTerms"></span>
+
+</label>
+
+<label class="checkRow">
+
+<input id="whatsappConsent"
+type="checkbox">
+
+<span data-t="whatsappConsent"></span>
+
+</label>
+
+<p class="warning"
+data-t="cancelNotice"></p>
+
+</section>
+
+<button id="confirmBooking"
+disabled
+data-t="confirmBooking"></button>
+
+<button id="refreshQuote"
+class="back"
+data-t="refreshQuote"></button>
+
+<a id="editBooking"
+class="action back"
+data-t="editBooking"></a>
+
+<a id="dashboardLink"
+class="action back"
+data-t="back"></a>
+
+<p id="result"
+class="message"
+role="status"
+aria-live="polite"></p>
+
+</div>
+
+<footer>
+© MY RIDE SRI LANKA
+</footer>
+
+</main>
+
+<script type="module">
+
+import {
+initializeApp
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+getAuth,
+signInAnonymously,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+getFunctions,
+httpsCallable
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
+
+import {
+initializeAppCheck,
+ReCaptchaEnterpriseProvider,
+getToken
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app-check.js";
+
+const $=id=>document.getElementById(id);
+
+const languages=["si","en","ta"];
+
+const dictionary={
+
+heading:[
+"හයර් එක තහවුරු කිරීම",
+"Booking Confirmation",
+"பயண முன்பதிவு உறுதிப்படுத்தல்"
+],
+
+customerDetails:[
+"පාරිභෝගික විස්තර",
+"Customer Details",
+"பயணி விவரங்கள்"
+],
+
+customerName:[
+"පාරිභෝගිකයාගේ නම",
+"Customer Name",
+"பயணியின் பெயர்"
+],
+
+phone:[
+"දුරකථන අංකය",
+"Phone Number",
+"தொலைபேசி எண்"
+],
+
+tripDetails:[
+"ගමන් විස්තර",
+"Trip Details",
+"பயண விவரங்கள்"
+],
+
+pickup:[
+"ගමන ආරම්භ කරන ස්ථානය",
+"Pickup Location",
+"புறப்படும் இடம்"
+],
+
+destination:[
+"ගමනාන්තය",
+"Destination",
+"செல்லும் இடம்"
+],
+
+date:[
+"දිනය",
+"Date",
+"திகதி"
+],
+
+time:[
+"වේලාව",
+"Time",
+"நேரம்"
+],
+
+vehicle:[
+"වාහන වර්ගය",
+"Vehicle Type",
+"வாகன வகை"
+],
+
+passengers:[
+"මගීන් ගණන",
+"Number of Passengers",
+"பயணிகள் எண்ணிக்கை"
+],
+
+distance:[
+"ඇස්තමේන්තුගත ගමන් දුර",
+"Estimated Distance",
+"மதிப்பிடப்பட்ட தூரம்"
+],
+
+duration:[
+"ඇස්තමේන්තුගත ගමන් කාලය",
+"Estimated Duration",
+"மதிப்பிடப்பட்ட பயண நேரம்"
+],
+
+period:[
+"දිවා / රාත්‍රී",
+"Day / Night",
+"பகல் / இரவு"
+],
+
+weather:[
+"කාලගුණ තත්ත්වය",
+"Weather Condition",
+"வானிலை நிலை"
+],
+
+road:[
+"මාර්ග තත්ත්වය",
+"Road Condition",
+"சாலை நிலை"
+],
+
+estimatedFare:[
+"ඇස්තමේන්තුගත ගාස්තුව",
+"Estimated Fare",
+"மதிப்பிடப்பட்ட கட்டணம்"
+],
+
+fareNotice:[
+"මෙය ඇස්තමේන්තුගත ගාස්තුවකි. අවසන් ගාස්තුව සැබෑ ගමන් දුර සහ අදාළ තහවුරු කළ ගාස්තු අනුව වෙනස් විය හැකිය.",
+"This is an estimated fare. The final fare may change according to actual distance and applicable verified charges.",
+"இது மதிப்பிடப்பட்ட கட்டணம். உண்மையான தூரம் மற்றும் உறுதிப்படுத்தப்பட்ட கட்டணங்களின் அடிப்படையில் இறுதிக் கட்டணம் மாறலாம்."
+],
+
+termsHeading:[
+"නීති හා කොන්දේසි",
+"Terms and Conditions",
+"விதிமுறைகள் மற்றும் நிபந்தனைகள்"
+],
+
+acceptTerms:[
+"මම නීති හා කොන්දේසි කියවා පිළිගනිමි.",
+"I have read and accept the terms and conditions.",
+"விதிமுறைகளை படித்து ஏற்றுக்கொள்கிறேன்."
+],
+
+whatsappConsent:[
+"මෙම හයර් එකට අදාළ WhatsApp පණිවිඩ ලබාගැනීමට අවසර දෙමි. මෙය අනිවාර්ය නොවේ.",
+"I consent to receiving WhatsApp messages about this booking. This is optional.",
+"இந்த பயணம் தொடர்பான WhatsApp செய்திகளை பெற சம்மதிக்கிறேன். இது கட்டாயமல்ல."
+],
+
+cancelNotice:[
+"හයර් එක තහවුරු කිරීමට පෙර සියලු විස්තර පරීක්ෂා කරන්න. තහවුරු කිරීමෙන් පසු හදිසි වෙනස්කම් සඳහා සහාය සේවාව අමතන්න.",
+"Check all details before confirming. Contact support for emergency changes after confirmation.",
+"உறுதிப்படுத்தும் முன் அனைத்து விவரங்களையும் சரிபார்க்கவும். பின்னர் அவசர மாற்றங்களுக்கு உதவி சேவையை அணுகவும்."
+],
+
+confirmBooking:[
+"හයර් එක තහවුරු කරන්න",
+"Confirm Booking",
+"முன்பதிவை உறுதிப்படுத்தவும்"
+],
+
+refreshQuote:[
+"ගාස්තුව නැවත පරීක්ෂා කරන්න",
+"Refresh Fare Estimate",
+"கட்டண மதிப்பீட்டை புதுப்பிக்கவும்"
+],
+
+editBooking:[
+"හයර් විස්තර වෙනස් කරන්න",
+"Edit Booking Details",
+"பயண விவரங்களை மாற்றவும்"
+],
+
+back:[
+"Customer Dashboard වෙත",
+"Back to Customer Dashboard",
+"பயணி முதன்மைப் பக்கத்திற்கு"
+],
+
+bike:[
+"Scooter / Bike",
+"Scooter / Bike",
+"மோட்டார் சைக்கிள்"
+],
+
+tuk:[
+"ත්‍රිරෝද රථය",
+"Three Wheeler",
+"முச்சக்கர வண்டி"
+],
+
+car:[
+"කාර්",
+"Car",
+"கார்"
+],
+
+van:[
+"වෑන්",
+"Van",
+"வேன்"
+],
+
+day:[
+"දිවා",
+"Day",
+"பகல்"
+],
+
+night:[
+"රාත්‍රී",
+"Night",
+"இரவு"
+],
+
+normal:[
+"සාමාන්‍ය",
+"Normal",
+"சாதாரணம்"
+],
+
+rain:[
+"වැසි සහිත",
+"Rainy",
+"மழை"
+],
+
+difficult:[
+"දුෂ්කර මාර්ග",
+"Difficult Road",
+"கடினமான சாலை"
+],
+
+unknown:[
+"තහවුරු කර නැත",
+"Not Verified",
+"உறுதிப்படுத்தப்படவில்லை"
+],
+
+checking:[
+"හයර් විස්තර පරීක්ෂා කරමින්...",
+"Checking booking details...",
+"பயண விவரங்கள் சரிபார்க்கப்படுகின்றன..."
+],
+
+missingDraft:[
+"හයර් විස්තර සම්පූර්ණ නැත. නැවත Booking පිටුවට ගොස් විස්තර ඇතුළත් කරන්න.",
+"Booking details are incomplete. Return to the booking page.",
+"பயண விவரங்கள் முழுமையாக இல்லை. முன்பதிவு பக்கத்திற்கு திரும்பவும்."
+],
+
+loadingQuote:[
+"Server ගාස්තු සහ කොන්දේසි ලබාගනිමින්...",
+"Loading server fare and terms...",
+"சேவையக கட்டணம் மற்றும் விதிமுறைகள் பெறப்படுகின்றன..."
+],
+
+termsUnavailable:[
+"Server කොන්දේසි තවම ලබාගත නොහැක.",
+"Server terms are not available.",
+"சேவையக விதிமுறைகள் கிடைக்கவில்லை."
+],
+
+ready:[
+"විස්තර පරීක්ෂා කර හයර් එක තහවුරු කරන්න.",
+"Review the details and confirm your booking.",
+"விவரங்களை சரிபார்த்து முன்பதிவை உறுதிப்படுத்தவும்."
+],
+
+serverError:[
+"Server සම්බන්ධතාව හෝ ගාස්තුව තහවුරු කළ නොහැක. හයර් එක තහවුරු කර නැත.",
+"Server connection or fare could not be verified. Booking has not been confirmed.",
+"சேவையக இணைப்பு அல்லது கட்டணம் உறுதிப்படுத்தப்படவில்லை."
+],
+
+expired:[
+"ගාස්තු ඇස්තමේන්තුවේ කාලය අවසන්. නැවත ගාස්තුව ලබාගන්න.",
+"Fare estimate expired. Refresh the estimate.",
+"கட்டண மதிப்பீடு காலாவதியானது. மீண்டும் புதுப்பிக்கவும்."
+],
+
+submitting:[
+"හයර් එක Server වෙත යොමු කරමින්...",
+"Submitting booking to server...",
+"முன்பதிவு சேவையகத்திற்கு அனுப்பப்படுகிறது..."
+],
+
+confirmed:[
+"හයර් එක තහවුරු කර ඇත.",
+"Booking confirmed.",
+"முன்பதிவு உறுதிப்படுத்தப்பட்டது."
+],
+
+unconfirmed:[
+"හයර් එකේ තත්ත්වය තහවුරු කළ නොහැක. එම බොත්තමෙන්ම නැවත උත්සාහ කරන්න. අලුත් හයර් එකක් නිර්මාණය නොකරන්න.",
+"Booking status is uncertain. Retry using the same button. Do not create another booking.",
+"முன்பதிவு நிலை உறுதியாகவில்லை. அதே பொத்தானை பயன்படுத்தி மீண்டும் முயற்சிக்கவும்."
+],
+
+offline:[
+"අන්තර්ජාල සම්බන්ධතාව නොමැත.",
+"No internet connection.",
+"இணைய இணைப்பு இல்லை."
+],
+
+retry:[
+"තහවුරු කිරීම නැවත පරීක්ෂා කරන්න",
+"Retry Booking Confirmation",
+"முன்பதிவை மீண்டும் சரிபார்க்கவும்"
+],
+
+version:[
+"කොන්දේසි අනුවාදය",
+"Terms Version",
+"விதிமுறைகள் பதிப்பு"
+]
+
+};
+
+const firebaseConfig={
+
+apiKey:"AIzaSyDzrAZ7sc-c7CYIIwOpsiC9xdCPNHO7Km4",
+
+authDomain:"my-ride-sri-lanka.firebaseapp.com",
+
+projectId:"my-ride-sri-lanka",
+
+storageBucket:"my-ride-sri-lanka.firebasestorage.app",
+
+messagingSenderId:"88909447786",
+
+appId:"1:88909447786:web:f8f7b8ccce99ea390a4013"
+
+};
+
+let lang="si";
+
+try{
+
+const selected=
+
+new URLSearchParams(location.search).get("lang")
+
+||localStorage.getItem("myride_language");
+
+if(languages.includes(selected)){
+
+lang=selected;
+
+}
+
+}catch(e){}
+
+const t=key=>
+
+dictionary[key]?.[languages.indexOf(lang)]
+
+||key;
+
+const draftKey="myride_booking_draft";
+
+const pendingKey="myride_pending_confirmation";
+
+const confirmedKey="myride_confirmed_booking_id";
+
+let draft=null;
+let booking=null;
+let quote=null;
+let terms=null;
+
+let auth=null;
+let functions=null;
+let appCheck=null;
+
+let busy=false;
+let ready=false;
+let pending=null;
+let completed=false;
+let generation=0;
+
+let serverClockOffset=0;
+
+const messages={
+
+status:"checking",
+
+result:""
+
+};
+
+function message(id,key){
+
+messages[id]=key;
+
+$(id).textContent=key?t(key):"";
+
+}
+
+function validText(value,min,max){
+
+return typeof value==="string"
+
+&&value.trim().length>=min
+
+&&value.length<=max;
+
+}
+
+function validNumber(value,min,max){
+
+return typeof value==="number"
+
+&&Number.isFinite(value)
+
+&&value>=min
+
+&&value<=max;
+
+}
+
+function validId(value){
+
+return typeof value==="string"
+
+&&/^[A-Za-z0-9_-]{1,128}$/.test(value);
+
+}
+
+function normalizePhone(value){
+
+let phone=String(value??"")
+
+.replace(/[\s()-]/g,"");
+
+if(/^0\d{9}$/.test(phone)){
+
+phone="+94"+phone.slice(1);
+
+}else if(/^94\d{9}$/.test(phone)){
+
+phone="+"+phone;
+
+}
+
+return /^\+94\d{9}$/.test(phone)
+
+?phone:null;
+
+}
+
+function normalizeVehicle(value){
+
+const type=String(value??"")
+
+.toLowerCase().trim()
+
+.replace(/[\s_/-]+/g,"");
+
+const map={
+
+bike:"bike",
+
+scooter:"bike",
+
+scooterbike:"bike",
+
+motorbike:"bike",
+
+tuk:"tuk",
+
+tuktuk:"tuk",
+
+threewheeler:"tuk",
+
+car:"car",
+
+van:"van"
+
+};
+
+return map[type]||null;
+
+}
+
+function normalizePoint(value){
+
+if(!value||typeof value!=="object"){
+
+return null;
+
+}
+
+const rawLat=value.lat??value.latitude;
+
+const rawLon=
+
+value.lon??value.lng??value.longitude;
+
+if(rawLat===null
+
+||rawLat===undefined
+
+||rawLat===""
+
+||rawLon===null
+
+||rawLon===undefined
+
+||rawLon===""){
+
+return null;
+
+}
+
+const lat=Number(rawLat);
+
+const lon=Number(rawLon);
+
+if(!validNumber(lat,5.8,10)
+
+||!validNumber(lon,79.4,82)){
+
+return null;
+
+}
+
+return {lat,lon};
+
+}
+
+function normalizeDraft(data){
+
+if(!data||typeof data!=="object"){
+
+return null;
+
+}
+
+const name=String(
+
+data.customerName??data.name??data.fullName??""
+
+).trim();
+
+const phone=normalizePhone(
+
+data.customerPhone
+
+??data.phone
+
+??data.phoneNumber
+
+??data.whatsapp
+
+);
+
+const pickupName=String(
+
+data.pickupName
+
+??data.pickupAddress
+
+??data.pickup?.name
+
+??data.pickup?.address
+
+??(
+
+typeof data.pickup==="string"
+
+?data.pickup:""
+
+)
+
+).trim();
+
+const destinationName=String(
+
+data.destinationName
+
+??data.destinationAddress
+
+??data.dropoffAddress
+
+??data.destination?.name
+
+??data.destination?.address
+
+??(
+
+typeof data.destination==="string"
+
+?data.destination:""
+
+)
+
+).trim();
+
+const pickup=normalizePoint(
+
+data.pickupCoordinates
+
+??data.pickupLocation
+
+??(
+
+typeof data.pickup==="object"
+
+?data.pickup:null
+
+)
+
+??{
+
+lat:data.pickupLat,
+
+lon:data.pickupLon??data.pickupLng
+
+}
+
+);
+
+const destination=normalizePoint(
+
+data.destinationCoordinates
+
+??data.dropoffCoordinates
+
+??data.destinationLocation
+
+??(
+
+typeof data.destination==="object"
+
+?data.destination:null
+
+)
+
+??{
+
+lat:data.destinationLat??data.dropoffLat,
+
+lon:data.destinationLon
+
+??data.destinationLng
+
+??data.dropoffLon
+
+??data.dropoffLng
+
+}
+
+);
+
+const date=String(
+
+data.date??data.bookingDate??""
+
+);
+
+const time=String(
+
+data.time??data.bookingTime??""
+
+);
+
+const vehicleType=normalizeVehicle(
+
+data.vehicleType??data.vehicle
+
+);
+
+const passengers=Number(
+
+data.passengers??data.passengerCount
+
+);
+
+const capacities={
+
+bike:1,
+
+tuk:3,
+
+car:4,
+
+van:10
+
+};
+
+if(!validText(name,2,150)
+
+||!phone
+
+||!validText(pickupName,1,500)
+
+||!validText(destinationName,1,500)
+
+||!pickup
+
+||!destination
+
+||!/^\d{4}-\d{2}-\d{2}$/.test(date)
+
+||!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)
+
+||!vehicleType
+
+||!Number.isInteger(passengers)
+
+||passengers<1
+
+||passengers>capacities[vehicleType]){
+
+return null;
+
+}
+
+const parsedDate=new Date(date+"T00:00:00Z");
+
+if(!Number.isFinite(parsedDate.getTime())
+
+||parsedDate.toISOString().slice(0,10)!==date){
+
+return null;
+
+}
+
+return {
+
+customerName:name,
+
+customerPhone:phone,
+
+pickupName,
+
+destinationName,
+
+pickup,
+
+destination,
+
+date,
+
+time,
+
+vehicleType,
+
+passengers,
+
+timeZone:"Asia/Colombo"
+
+};
+
+}
+
+function pageLink(page){
+
+return "./"+page+"?lang="
+
++encodeURIComponent(lang);
+
+}
+
+function serverNow(){
+
+return Date.now()+serverClockOffset;
+
+}
+
+function formatMoney(cents){
+
+if(!Number.isSafeInteger(cents)
+
+||cents<0)return "—";
+
+return "LKR "+new Intl.NumberFormat(
+
+"en-LK",
+
+{
+
+minimumFractionDigits:2,
+
+maximumFractionDigits:2
+
+}
+
+).format(cents/100);
+
+}
+
+function validQuote(data){
+
+return data
+
+&&validId(data.quoteId)
+
+&&Number.isSafeInteger(data.fareVersion)
+
+&&data.fareVersion>=0
+
+&&Number.isSafeInteger(data.estimatedFareCents)
+
+&&data.estimatedFareCents>=0
+
+&&validNumber(data.distanceMeters,1,2000000)
+
+&&validNumber(data.durationSeconds,1,172800)
+
+&&["day","night"].includes(data.period)
+
+&&["normal","rain","unknown"]
+
+.includes(data.weatherStatus)
+
+&&["normal","difficult","unknown"]
+
+.includes(data.roadStatus)
+
+&&Number.isFinite(data.expiresAtMs)
+
+&&data.expiresAtMs>serverNow();
+
+}
+
+function validTerms(data){
+
+return data
+
+&&Number.isSafeInteger(data.version)
+
+&&data.version>=0
+
+&&data.translations
+
+&&languages.every(language=>
+
+validText(
+
+data.translations[language],
+
+1,
+
+100000
+
+));
+
+}
+
+function renderBooking(){
+
+if(!booking)return;
+
+$("customerName").textContent=
+
+booking.customerName;
+
+$("customerPhone").textContent=
+
+booking.customerPhone;
+
+$("pickup").textContent=
+
+booking.pickupName;
+
+$("destination").textContent=
+
+booking.destinationName;
+
+$("bookingDate").textContent=
+
+booking.date;
+
+$("bookingTime").textContent=
+
+booking.time;
+
+$("vehicleType").textContent=
+
+t(booking.vehicleType);
+
+$("passengerCount").textContent=
+
+booking.passengers;
+
+$("tripDistance").textContent=
+
+quote
+
+?(quote.distanceMeters/1000).toFixed(2)+" KM"
+
+:"—";
+
+$("tripDuration").textContent=
+
+quote
+
+?Math.ceil(quote.durationSeconds/60)+" min"
+
+:"—";
+
+$("tripPeriod").textContent=
+
+quote?t(quote.period):"—";
+
+$("weatherStatus").textContent=
+
+quote?t(quote.weatherStatus):"—";
+
+$("roadStatus").textContent=
+
+quote?t(quote.roadStatus):"—";
+
+$("estimatedFare").textContent=
+
+quote
+
+?formatMoney(quote.estimatedFareCents)
+
+:"—";
+
+$("termsText").textContent=
+
+terms
+
+?terms.translations[lang]
+
+:t("termsUnavailable");
+
+$("termsVersion").textContent=
+
+terms
+
+?t("version")+": "+terms.version
+
+:"";
+
+}
+
+function updateControls(){
+
+const expired=
+
+!quote||quote.expiresAtMs<=serverNow();
+
+$("acceptTerms").disabled=
+
+busy||!!pending||!terms||!ready;
+
+$("whatsappConsent").disabled=
+
+busy||!!pending||completed;
+
+$("confirmBooking").disabled=
+
+busy
+
+||completed
+
+||!navigator.onLine
+
+||!auth?.currentUser
+
+||(
+
+!pending
+
+&&(
+
+!ready
+
+||expired
+
+||!terms
+
+||!$("acceptTerms").checked
+
+)
+
+);
+
+$("confirmBooking").textContent=
+
+t(pending?"retry":"confirmBooking");
+
+$("refreshQuote").disabled=
+
+busy||!!pending||completed
+
+||!navigator.onLine
+
+||!auth?.currentUser;
+
+["editBooking","dashboardLink"]
+
+.forEach(id=>{
+
+const link=$(id);
+
+const locked=busy||!!pending||completed;
+
+link.setAttribute(
+
+"aria-disabled",
+
+String(locked)
+
+);
+
+link.style.opacity=locked?".45":"1";
+
+});
+
+}
+
+function renderLanguage(){
+
+document.documentElement.lang=lang;
+
+document.querySelectorAll("[data-t]")
+
+.forEach(element=>{
+
+element.textContent=t(element.dataset.t);
+
+});
+
+$("editBooking").href=
+
+pageLink("booking.html");
+
+$("errorBack").href=
+
+pageLink("booking.html");
+
+$("dashboardLink").href=
+
+pageLink("customer.html");
+
+Object.keys(messages).forEach(id=>{
+
+message(id,messages[id]);
+
+});
+
+renderBooking();
+
+updateControls();
+
+}
+
+document.querySelectorAll("[data-lang]")
+
+.forEach(button=>{
+
+button.onclick=()=>{
+
+if(busy||pending)return;
+
+const selected=button.dataset.lang;
+
+if(!languages.includes(selected))return;
+
+lang=selected;
+
+$("acceptTerms").checked=false;
+
+try{
+
+localStorage.setItem(
+
+"myride_language",
+
+lang
+
+);
+
+const url=new URL(location.href);
+
+url.searchParams.set("lang",lang);
+
+history.replaceState(null,"",url);
+
+}catch(e){}
+
+renderLanguage();
+
+};
+
+});
+
+["editBooking","dashboardLink"]
+
+.forEach(id=>{
+
+$(id).addEventListener("click",event=>{
+
+if(busy||pending||completed){
+
+event.preventDefault();
+
+}
+
+});
+
+});
+
+$("acceptTerms").onchange=updateControls;
+
+$("whatsappConsent").onchange=updateControls;
+
+async function serverCall(name,data){
+
+const user=auth?.currentUser;
+
+if(!user||!navigator.onLine){
+
+throw new Error("Unavailable");
+
+}
+
+const currentGeneration=generation;
+
+const response=await httpsCallable(
+
+functions,
+
+name,
+
+{timeout:30000}
+
+)(data);
+
+if(currentGeneration!==generation
+
+||auth.currentUser?.uid!==user.uid){
+
+throw new Error("Session changed");
+
+}
+
+if(response.data?.success!==true
+
+||response.data.customerUid!==user.uid){
+
+throw new Error("Invalid response");
+
+}
+
+return response.data;
+
+}
+
+async function loadQuote(){
+
+if(busy
+
+||pending
+
+||completed
+
+||!booking
+
+||!auth?.currentUser)return;
+
+const currentGeneration=generation;
+
+busy=true;
+
+ready=false;
+
+quote=null;
+
+terms=null;
+
+$("acceptTerms").checked=false;
+
+message("status","loadingQuote");
+
+message("result","");
+
+renderBooking();
+
+updateControls();
+
+try{
+
+const response=await serverCall(
+
+"prepareCustomerBooking",
+
+{
+
+booking,
+
+language:lang
+
+}
+
+);
+
+if(!Number.isFinite(response.serverTimeMs)){
+
+throw new Error("Invalid server time");
+
+}
+
+serverClockOffset=
+
+response.serverTimeMs-Date.now();
+
+if(!validQuote(response.quote)
+
+||!validTerms(response.terms)){
+
+throw new Error("Invalid quote or terms");
+
+}
+
+quote=response.quote;
+
+terms=response.terms;
+
+ready=true;
+
+message("status","ready");
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+quote=null;
+
+terms=null;
+
+ready=false;
+
+message("status","serverError");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+renderBooking();
+
+updateControls();
+
+}
+
+}
+
+}
+
+$("refreshQuote").onclick=loadQuote;
+
+function validPending(data){
+
+return data
+
+&&validId(data.requestId)
+
+&&validId(data.customerUid)
+
+&&data.payload
+
+&&validId(data.payload.quoteId)
+
+&&Number.isSafeInteger(data.payload.termsVersion)
+
+&&data.payload.acceptedTerms===true
+
+&&typeof data.payload.whatsappConsent==="boolean"
+
+&&languages.includes(data.payload.language);
+
+}
+
+$("confirmBooking").onclick=async()=>{
+
+if(busy
+
+||completed
+
+||!navigator.onLine
+
+||!auth?.currentUser)return;
+
+if(!pending){
+
+if(!ready
+
+||!quote
+
+||!terms
+
+||!$("acceptTerms").checked){
+
+return;
+
+}
+
+if(quote.expiresAtMs<=serverNow()){
+
+message("result","expired");
+
+updateControls();
+
+return;
+
+}
+
+pending={
+
+requestId:crypto.randomUUID(),
+
+customerUid:auth.currentUser.uid,
+
+payload:{
+
+quoteId:quote.quoteId,
+
+termsVersion:terms.version,
+
+acceptedTerms:true,
+
+whatsappConsent:
+
+$("whatsappConsent").checked,
+
+language:lang
+
+}
+
+};
+
+try{
+
+sessionStorage.setItem(
+
+pendingKey,
+
+JSON.stringify(pending)
+
+);
+
+}catch(e){
+
+pending=null;
+
+message("result","serverError");
+
+updateControls();
+
+return;
+
+}
+
+}
+
+if(!validPending(pending)
+
+||pending.customerUid!==auth.currentUser.uid){
+
+message("result","unconfirmed");
+
+return;
+
+}
+
+const currentGeneration=generation;
+
+busy=true;
+
+message("result","submitting");
+
+updateControls();
+
+try{
+
+const response=await serverCall(
+
+"confirmCustomerBooking",
+
+{
+
+...pending.payload,
+
+requestId:pending.requestId
+
+}
+
+);
+
+if(!validId(response.bookingId)
+
+||response.requestId!==pending.requestId
+
+||![
+
+"confirmed",
+
+"searching",
+
+"offered",
+
+"accepted",
+
+"scheduled"
+
+].includes(response.status)){
+
+throw new Error("Booking not confirmed");
+
+}
+
+sessionStorage.setItem(
+
+confirmedKey,
+
+response.bookingId
+
+);
+
+sessionStorage.removeItem(pendingKey);
+
+sessionStorage.removeItem(draftKey);
+
+pending=null;
+
+completed=true;
+
+message("result","confirmed");
+
+location.replace(
+
+"./driver-search.html?booking="
+
++encodeURIComponent(response.bookingId)
+
++"&lang="+encodeURIComponent(lang)
+
+);
+
+}catch(e){
+
+if(currentGeneration===generation){
+
+message("result","unconfirmed");
+
+}
+
+}finally{
+
+if(currentGeneration===generation){
+
+busy=false;
+
+updateControls();
+
+}
+
+}
+
+};
+
+async function initializeSecurity(){
+
+try{
+
+const app=initializeApp(firebaseConfig);
+
+appCheck=initializeAppCheck(app,{
+
+provider:new ReCaptchaEnterpriseProvider(
+
+"6LchbTEuAAAAAGB1TGOyiRljtmY9oxMhBpo2dBAa"
+
+),
+
+isTokenAutoRefreshEnabled:true
+
+});
+
+auth=getAuth(app);
+
+functions=getFunctions(app);
+
+const appToken=await getToken(
+
+appCheck,
+
+false
+
+);
+
+if(!appToken?.token){
+
+throw new Error("App Check failed");
+
+}
+
+await auth.authStateReady();
+
+if(!auth.currentUser){
+
+if(pending){
+
+throw new Error("Previous session missing");
+
+}
+
+await signInAnonymously(auth);
+
+}
+
+if(!auth.currentUser){
+
+throw new Error("Authentication failed");
+
+}
+
+if(pending){
+
+if(pending.customerUid!==auth.currentUser.uid){
+
+throw new Error("Customer changed");
+
+}
+
+message("status","unconfirmed");
+
+updateControls();
+
+}else{
+
+await loadQuote();
+
+}
+
+onAuthStateChanged(auth,user=>{
+
+if(!user
+
+||(pending&&pending.customerUid!==user.uid)){
+
+generation++;
+
+busy=false;
+
+ready=false;
+
+quote=null;
+
+terms=null;
+
+$("acceptTerms").checked=false;
+
+message("status","serverError");
+
+renderBooking();
+
+updateControls();
+
+}
+
+});
+
+}catch(e){
+
+ready=false;
+
+message("status","serverError");
+
+updateControls();
+
+}
+
+}
+
+window.addEventListener("offline",()=>{
+
+message("status","offline");
+
+updateControls();
+
+});
+
+window.addEventListener("online",()=>{
+
+if(pending){
+
+message("status","unconfirmed");
+
+updateControls();
+
+}else if(auth?.currentUser){
+
+loadQuote();
+
+}else{
+
+location.reload();
+
+}
+
+});
+
+window.addEventListener("beforeunload",event=>{
+
+if(busy||pending){
+
+event.preventDefault();
+
+event.returnValue="";
+
+}
+
+});
+
+setInterval(()=>{
+
+if(ready
+
+&&quote
+
+&&!pending
+
+&&!completed
+
+&&quote.expiresAtMs<=serverNow()){
+
+ready=false;
+
+$("acceptTerms").checked=false;
+
+message("status","expired");
+
+updateControls();
+
+}
+
+},1000);
+
+function start(){
+
+try{
+
+const saved=sessionStorage.getItem(draftKey);
+
+draft=saved?JSON.parse(saved):null;
+
+booking=normalizeDraft(draft);
+
+const savedPending=
+
+sessionStorage.getItem(pendingKey);
+
+if(savedPending){
+
+pending=JSON.parse(savedPending);
+
+if(!validPending(pending)){
+
+throw new Error("Invalid pending request");
+
+}
+
+}
+
+}catch(e){
+
+message("status","serverError");
+
+return;
+
+}
+
+renderLanguage();
+
+if(!booking&&!pending){
+
+$("errorPanel").hidden=false;
+
+$("bookingContent").hidden=true;
+
+message("status","missingDraft");
+
+return;
+
+}
+
+$("bookingContent").hidden=false;
+
+if(!navigator.onLine){
+
+message("status","offline");
+
+return;
+
+}
+
+initializeSecurity();
+
+}
+
+start();
+
+</script>
+
+</body>
+</html>
